@@ -6,13 +6,16 @@ const objectToParams = (obj) => Object.keys(obj).reduce(function(previousValue, 
 }, []).join('&')
 
 class ApiFactory {
-    static callApi(api,payload={}, params){
+    static callApi(api, httpMethod,payload={}, params){
         let url
         if(params){
-            url = `${api[`url`]}?${objectToParams(params)}`
-        } else  url = `${api[`url`]}`
+            url = `${api}?${objectToParams(params)}`
+        } else  url = api
         return axios({
-            method: api[`method`],
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            method: httpMethod,
             baseURL: url,
             data: payload,
         }).then(res => {

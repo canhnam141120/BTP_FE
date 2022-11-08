@@ -6,9 +6,166 @@ Vue.use(VueRouter)
 const routers = [
     {
         path:'/',
-        name:'homepage',
+        name:'HomePage',
         component: () => import('@/pages/HomePage'),
-    }
+    },
+    {
+        path:'/Login',
+        name:'Login',
+        component: () => import('@/pages/Authorize/Login'),
+    },
+    {
+        path:'/Register',
+        name:'Register',
+        component: () => import('@/pages/Authorize/Register'),
+    },
+    {
+        path:'/VerifyRegister',
+        name:'VerifyRegister',
+        component: () => import('@/pages/Authorize/VerifyRegister'),
+    },
+    {
+        path:'/ResetPassword',
+        name:'ResetPassword',
+        component: () => import('@/pages/Authorize/ResetPassword'),
+    },
+
+    // {
+    //     path:'/ManageBook',
+    //     name:'ManageBook',
+    //     component: () => import('@/pages/ManageBook'),
+    // },
+    {
+        path:'/Admin_Management',
+        name:'Admin_Management',
+        component: () => import('@/pages/ManagePage/Admin_Management'),
+    },
+    {
+        path:'/Book_Detail/',
+        name:'Book_Detail',
+        component: () => import('@/pages/Book_Detail'),
+    },
+
+    {
+        path:'/ManageAdmin',
+        name:'GetAdmins',
+        component: () => import('@/pages/ManageAdmin/GetAdmins'),
+    },
+    {
+        path:'/ManageBook',
+        name:'GetBooks',
+        component: () => import('@/pages/ManageBook/GetBooks'),
+    },
+    {
+        path:'/ManageBook/detail',
+        name:'DetailBook',
+        component: () => import('@/pages/ManageBook/DetailBook'),
+    },
+    {
+        path:'/ManageBook/feedback',
+        name:'GetFeedbacks',
+        component: () => import('@/pages/ManageBook/GetFeedbacks'),
+    },
+    {
+        path:'/ManageCategory',
+        name:'GetCategories',
+        component: () => import('@/pages/ManageCategory/GetCategories'),
+    },
+    {
+        path:'/ManageCategory/create',
+        name:'CreateCategory',
+        component: () => import('@/pages/ManageCategory/CreateCategory'),
+    },
+    {
+        path:'/ManageFee',
+        name:'GetFees',
+        component: () => import('@/pages/ManageFee/GetFees'),
+    },
+    {
+        path:'/ManageFee/create',
+        name:'CreateFee',
+        component: () => import('@/pages/ManageFee/CreateFee'),
+    },
+    {
+        path:'/ManageIndex',
+        name:'ManageIndex',
+        component: () => import('@/pages/ManagePage/ManageIndex'),
+    },
+    {
+        path:'/ManagePost',
+        name:'GetPosts',
+        component: () => import('@/pages/ManagePost/GetPosts'),
+    },
+    {
+        path:'/ManagePost/detail',
+        name:'DetailPost',
+        component: () => import('@/pages/ManagePost/DetailPost'),
+    },
+    {
+        path:'/ManagePost/comment',
+        name:'GetComments',
+        component: () => import('@/pages/ManagePost/GetComments'),
+    },
+    {
+        path:'/ManageUser',
+        name:'GetUsers',
+        component: () => import('@/pages/ManageUser/GetUsers'),
+    },
+    {
+        path:'/ManageUser/detail',
+        name:'DetailUser',
+        component: () => import('@/pages/ManageUser/DetailUser'),
+    },
+    {
+        path:'/ManageBill/exchange-bill',
+        name:'GetExchangeBills',
+        component: () => import('@/pages/ManageBill/GetExchangeBills'),
+    },
+    {
+        path:'/ManageBill/exchange-bill/detail',
+        name:'DetailExchangeBill',
+        component: () => import('@/pages/ManageBill/DetailExchangeBill'),
+    },
+    {
+        path:'/ManageBill/rent-bill',
+        name:'GetRentBills',
+        component: () => import('@/pages/ManageBill/GetRentBills'),
+    },
+    {
+        path:'/ManageBill/rent-bill/detail',
+        name:'DetailRentBill',
+        component: () => import('@/pages/ManageBill/DetailRentBill'),
+    },
+    {
+        path:'/ManageTransaction/exchange',
+        name:'GetExchanges',
+        component: () => import('@/pages/ManageTransaction/GetExchanges'),
+    },
+    {
+        path:'/ManageTransaction/exchange/detail',
+        name:'DetailExchange',
+        component: () => import('@/pages/ManageTransaction/DetailExchange'),
+    },
+    {
+        path:'/ManageTransaction/exchange/bill',
+        name:'ExchangeBill',
+        component: () => import('@/pages/ManageTransaction/ExchangeBill'),
+    },
+    {
+        path:'/ManageTransaction/rent',
+        name:'GetRents',
+        component: () => import('@/pages/ManageTransaction/GetRents'),
+    },
+    {
+        path:'/ManageTransaction/rent/detail',
+        name:'DetailRent',
+        component: () => import('@/pages/ManageTransaction/DetailRent'),
+    },
+    {
+        path:'/ManageTransaction/rent/bill',
+        name:'RentBill',
+        component: () => import('@/pages/ManageTransaction/RentBill'),
+    },
 ]
 
 export const constantRoutes = [...routers]
