@@ -34,6 +34,11 @@ const routers = [
         name:'MyInformation',
         component: () => import('@/pages/Personal/MyInformation'),
     },
+    {
+        path:'/Personal/MyBooks',
+        name:'MyBooks',
+        component: () => import('@/pages/Personal/MyBooks'),
+    },
     // {
     //     path:'/ManageBook',
     //     name:'ManageBook',
