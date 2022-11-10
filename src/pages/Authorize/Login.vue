@@ -39,7 +39,7 @@ export default {
         if (res.data.message === 'LOGIN_SUCCESS') {
           this.$cookies.set("token", res.data.data.accessToken);
           this.$router.push({
-            name: 'MyInformation'
+            name: 'PersonalIndex'
           })
         }
         console.log(res)

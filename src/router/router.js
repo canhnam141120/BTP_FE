@@ -30,6 +30,11 @@ const routers = [
         component: () => import('@/pages/Authorize/ResetPassword'),
     },
     {
+        path:'/Personal/',
+        name:'PersonalIndex',
+        component: () => import('@/pages/Personal/PersonalIndex'),
+    },
+    {
         path:'/Personal/MyInformation',
         name:'MyInformation',
         component: () => import('@/pages/Personal/MyInformation'),
