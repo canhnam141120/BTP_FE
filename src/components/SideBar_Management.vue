@@ -1,180 +1,49 @@
 <template>
-    <div class="GetExchanges">
-      <div class="row">
-        <div class="col-lg-6">
-          <div class="user-data m-b-30">
-            <h3 class="title-3 m-b-30">
-              <i class="zmdi zmdi-account-calendar"></i>Danh sách tất cả giao dịch đổi</h3>
-<!--            <div class="filters m-b-45">-->
-<!--              <br>-->
-<!--              <form class="form-header" action="" method="POST">-->
-<!--                <input class="au-input au-input&#45;&#45;xl" type="text"-->
-<!--                       placeholder="Nhập email hoặc số điện thoại" v-model="search" required/>-->
-<!--                <button class="au-btn&#45;&#45;submit" v-on:click="HandleSearch">-->
-<!--                  Tìm kiếm-->
-<!--                </button>-->
-<!--              </form>-->
-<!--            </div>-->
-            <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-              <router-link to="/ManageTransaction/rent" class="zmdi zmdi-plus">Xem giao dịch thuê</router-link>
-            </button>
-            <div class="table-responsive table-data">
-              <table class="table">
-                <thead>
-                <tr>
-                  <td>
-                    <label class="au-checkbox">
-                      <input type="checkbox">
-                      <span class="au-checkmark"></span>
-                    </label>
-                  </td>
-                  <td>Mã giao dịch</td>
-                  <td>Mã khách hàng 1</td>
-                  <td>Tên khách hàng 1</td>
-                  <td>Mã khách hàng 2</td>
-                  <td>Tên khách hàng 2</td>
-                  <td>Ngày tạo</td>
-                  <td>Trạng thái hoạt động</td>
-                </tr>
-                </thead>
-
-                <tbody v-for="item of listExchanges" :key="item.id">
-                <tr>
-                  <td>
-                    <label class="au-checkbox">
-                      <input type="checkbox">
-                      <span class="au-checkmark"></span>
-                    </label>
-                  </td>
-                  <td>
-                    <div class="table-data__info">
-                      <h6>{{ item.id }}</h6>
-                    </div>
-                  </td>
-
-                  <td>
-                    <span>{{ item.userId1 }}</span>
-                  </td>
-                  <td>
-                              <span>
-                                  <i>{{ item.userId1Navigation.fullname }}</i>
-                              </span>
-                  </td>
-                  <td>
-                              <span>
-                                  {{ item.userId2 }}
-                              </span>
-                  </td>
-                  <td>
-                    <span >{{ item.userId2Navigation.fullname }}</span>
-                  </td>
-                  <td>
-                              <span>
-                                  {{ item.date }}
-                              </span>
-                  </td>
-                  <td>
-                              <span class="role admin">
-                                  <i>{{ item.status }}</i>
-                              </span>
-                  </td>
-
-                  <td>
-                    <span>
-                      <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                        <router-link :to="{ name: 'DetailExchange', query: { id:item.id }}">Chi tiết</router-link>
-                      </button>
-                              </span>
-                  </td>
-                </tr>
-
-                </tbody>
-              </table>
-            </div>
-            <br>
-            <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-              <router-link to="/ManageIndex" class="zmdi zmdi-plus">Quay lại</router-link>
-            </button>
-            <br><br>
-          </div>
-
-        </div>
+  <div>
+    <aside class="menu-sidebar d-none d-lg-block">
+      <div class="logo">
+        <a href="#">
+          <img src="src/image/logo-tramsach.png" alt="Trạm Sách"/>
+        </a>
       </div>
-    </div>
+      <div class="menu-sidebar__content js-scrollbar1">
+        <nav class="navbar-sidebar">
+          <ul class="list-unstyled navbar__list">
 
-<!--          ==========-->
-<!--          <h1>Danh sách tất cả giao dịch đổi</h1>-->
-<!--          <button>-->
-<!--            <router-link to="/ManageTransaction/rent">Xem giao dịch thuê</router-link>-->
-<!--          </button>-->
-<!--          <br><br>-->
-<!--          <table border="1px">-->
-<!--            <tr>-->
-<!--              <td></td>-->
-<!--              <td>Mã giao dịch</td>-->
-<!--              <td>Mã khách hàng 1</td>-->
-<!--              <td>Tên khách hàng 1</td>-->
-<!--              <td>Mã khách hàng 2</td>-->
-<!--              <td>Tên khách hàng 2</td>-->
-<!--              <td>Ngày tạo</td>-->
-<!--              <td>Trạng thái</td>-->
-<!--              <td></td>-->
-<!--              <td></td>-->
-<!--            </tr>-->
-<!--            <tr v-for="item of listExchanges" :key="item.id">-->
-<!--              <td>-->
-<!--                <router-link :to="{ name: 'DetailExchange', query: { id:item.id }}">-->
-<!--                  <button>Chi tiết</button>-->
-<!--                </router-link>-->
-<!--              </td>-->
-<!--              <td>{{ item.id }}</td>-->
-<!--              <td>{{ item.userId1 }}</td>-->
-<!--              <td>{{ item.userId1Navigation.fullname }}</td>-->
-<!--              <td>{{ item.userId2 }}</td>-->
-<!--              <td>{{ item.userId2Navigation.fullname }}</td>-->
-<!--              <td>{{ item.date }}</td>-->
-<!--              <td>{{ item.status }}</td>-->
-<!--              <td>-->
-<!--                <router-link :to="{ name: 'ExchangeBill', query: { id:item.id }}">-->
-<!--                  <button>Hóa đơn</button>-->
-<!--                </router-link>-->
-<!--              </td>-->
-<!--              <td>-->
-<!--                <button>Hủy</button>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--          </table>-->
-
-<!--        <br>-->
-<!--        <button>-->
-<!--          <router-link to="/ManageIndex">Quay lại</router-link>-->
-<!--        </button>-->
-<!--        <br><br>-->
-
+            <li class="active">
+              <button><router-link to="ManageAdmin">Quản lý quản trị viên</router-link></button><br><br>
+            </li>
+            <li class="active">
+              <button><router-link to="ManageTransaction/exchange">Quản lý giao dịch</router-link></button><br><br>
+            </li>
+            <li class="active">
+              <button><router-link to="/ManageBill/exchange-bill">Quản lý hóa đơn</router-link></button><br><br>
+            </li>
+            <li class="active">
+              <button><router-link to="ManageUser">Quản lý người dùng</router-link></button><br><br>
+            </li>
+            <li class="active">
+              <button><router-link to="/ManageBook">Quản lý sách</router-link></button><br><br>
+            </li>
+            <li class="active">
+              <button><router-link to="/ManagePost">Quản lý bài đăng</router-link></button><br><br>
+            </li>
+            <li class="active">
+              <button><router-link to="/ManageCategory">Quản lý thể loại</router-link></button><br><br>
+            </li>
+            <li class="active">
+              <button><router-link to="/ManageFee">Quản lý phí</router-link></button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </aside>
+  </div>
 </template>
 
 <script>
-import apiFactory from "@/config/apiFactory";
-import {API_MANAGE_TRANSACTION} from "@/constant/constant-api";
-
 export default {
-  name: "GetExchanges",
-  data() {
-    return {
-      listExchanges: ''
-    }
-  },
-  created() {
-    this.getExchanges()
-  },
-  methods: {
-    getExchanges() {
-      apiFactory.callApi(API_MANAGE_TRANSACTION.LIST_EXCHANGE, 'GET', {}).then((res) => {
-        this.listExchanges = res.data.data
-      }).catch(() => {
-      });
-    }
-  }
+  name: 'SideBar_Management',
 }
 </script>
 
@@ -704,8 +573,8 @@ section {
 
 .au-btn--small {
   padding: 0 20px;
-  line-height: 20px;
-  font-size: 13px;
+  line-height: 40px;
+  font-size: 14px;
 }
 
 /*Page Loader*/
@@ -1718,7 +1587,7 @@ section {
 }
 
 .menu-sidebar {
-  width: 300px;
+  width: 100%;
   position: fixed;
   left: 0;
   top: 0;
@@ -1729,7 +1598,7 @@ section {
 
 .menu-sidebar .logo {
   background: #f5f5f5;
-  height: 75px;
+  height: 40px;
   padding: 0 35px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -4491,7 +4360,7 @@ section {
 }
 
 .table-data {
-  height: auto;
+  height: 472px;
   overflow-y: auto;
 }
 
@@ -14790,5 +14659,4 @@ section {
 .vue-lists ul, .vue-lists ol {
   padding-left: 30px;
 }
-
 </style>

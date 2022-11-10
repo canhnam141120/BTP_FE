@@ -47,7 +47,7 @@ export default {
       apiFactory.callApi(url, 'DELETE', {}).then((res) => {
         if (res.data.message === 'DELETE_SUCCESS') {
           alert('Xóa thành công!')
-          this.$router.push({name:"GetCategories"}).catch(()=>{});
+          this.$router.go();
         }
         console.log(res)
       }).catch(() => {

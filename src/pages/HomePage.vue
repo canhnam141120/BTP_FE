@@ -12,8 +12,9 @@
       <RouterLink to="/ManageIndex">Quản trị</RouterLink>
     </div>
     <div class="header-right">
-      <router-link to="/register" class="header-button">Đăng ký</router-link>
-      <router-link to="/login" class="header-button">Đăng nhập</router-link>
+        <router-link v-if="!this.$cookies.get('token')" to="/register" class="header-button">Đăng ký</router-link>
+        <router-link v-if="!this.$cookies.get('token')" to="/login" class="header-button">Đăng nhập</router-link>
+        <button v-else v-on:click="HandleLogout">Đăng xuất</button>
     </div>
   </div>
 <!--==============header=============-->
@@ -107,6 +108,11 @@ export default {
         this.listPost = res.data.data
       }).catch(() => {
       });
+    },
+    HandleLogout(){
+          this.$cookies.remove('token')
+          alert('Đăng xuất thành công!')
+          this.$router.go();
     }
   }
 }

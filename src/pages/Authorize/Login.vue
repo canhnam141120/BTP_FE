@@ -37,8 +37,9 @@ export default {
         email: this.email, password: this.password
       }).then((res) => {
         if (res.data.message === 'LOGIN_SUCCESS') {
+          this.$cookies.set("token", res.data.data.accessToken);
           this.$router.push({
-            name: 'HomePage'
+            name: 'MyInformation'
           })
         }
         console.log(res)

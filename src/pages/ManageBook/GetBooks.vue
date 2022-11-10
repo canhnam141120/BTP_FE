@@ -87,7 +87,7 @@ export default {
       const url = API_MANAGE_BOOK.APPROVED_BOOK + id
       apiFactory.callApi(url, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
-          this.$router.push({name:"GetBooks"}).catch(()=>{});
+          this.$router.go();
         }
         console.log(res)
       }).catch(() => {
@@ -98,7 +98,7 @@ export default {
       const url = API_MANAGE_BOOK.DENIED_BOOK + id
       apiFactory.callApi(url, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
-          this.$router.push({name:"GetBooks"}).catch(()=>{});
+          this.$router.go();
         }
         console.log(res)
       }).catch(() => {

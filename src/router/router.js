@@ -1,6 +1,6 @@
 import Vue from "vue"
 import VueRouter from 'vue-router'
-
+import GetAdmins from '@/pages/ManageAdmin/GetAdmins'
 Vue.use(VueRouter)
 
 const routers = [
@@ -29,23 +29,26 @@ const routers = [
         name:'ResetPassword',
         component: () => import('@/pages/Authorize/ResetPassword'),
     },
-
+    {
+        path:'/Personal/MyInformation',
+        name:'MyInformation',
+        component: () => import('@/pages/Personal/MyInformation'),
+    },
     // {
     //     path:'/ManageBook',
     //     name:'ManageBook',
     //     component: () => import('@/pages/ManageBook'),
     // },
-    {
-        path:'/Admin_Management',
-        name:'Admin_Management',
-        component: () => import('@/pages/ManagePage/Admin_Management'),
-    },
+    // {
+    //     path:'/Admin_Management',
+    //     name:'Admin_Management',
+    //     component: () => import('@/pages/ManagePage/Admin_Management'),
+    // },
     {
         path:'/Book_Detail/',
         name:'Book_Detail',
         component: () => import('@/pages/Book_Detail'),
     },
-
     {
         path:'/ManageAdmin',
         name:'GetAdmins',
@@ -86,11 +89,7 @@ const routers = [
         name:'CreateFee',
         component: () => import('@/pages/ManageFee/CreateFee'),
     },
-    {
-        path:'/ManageIndex',
-        name:'ManageIndex',
-        component: () => import('@/pages/ManagePage/ManageIndex'),
-    },
+
     {
         path:'/ManagePost',
         name:'GetPosts',
@@ -166,6 +165,50 @@ const routers = [
         name:'RentBill',
         component: () => import('@/pages/ManageTransaction/RentBill'),
     },
+    {
+        path:'/ManageTransaction/exchange',
+        name:'GetExchanges',
+        component: () => import('@/pages/ManageTransaction/GetExchanges'),
+    },
+    {
+        path:'/ManageIndex',
+        name:'ManageIndex',
+        component: () => import('@/pages/ManagePage/ManageIndex'),
+    },
+    {
+        path:'/ManageUser',
+        name:'GetUsers',
+        component: () => import('@/pages/ManageUser/GetUsers'),
+    },
+    {
+                path:'/ManageAdmin',
+                name:'GetAdmins',
+                component: GetAdmins,
+            },
+    // {
+    //
+    //     path: '/ManageIndex',
+    //     component: () => import('@/pages/ManagePage/ManageIndex'),
+    //     name: 'ManageIndex',
+    //     redirect: '/home',
+    //     children: [
+    //         {
+    //             path: '/home',
+    //             component: () => import('@/pages/HomePage'),
+    //         },
+    //         {
+    //             path:'/ManageUser',
+    //             name:'GetUsers',
+    //             component: () => import('@/pages/ManageUser/GetUsers'),
+    //         },
+    //         {
+    //             path:'/ManageAdmin',
+    //             name:'GetAdmins',
+    //             component: GetAdmins,
+    //         },
+    //
+    //     ]
+    // }
 ]
 
 export const constantRoutes = [...routers]
