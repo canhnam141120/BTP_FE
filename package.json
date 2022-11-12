@@ -17,6 +17,7 @@
     "core-js": "^3.6.5",
     "express": "^4.18.2",
     "node": "^16.18.1",
+    "restore-npm-cache": "^0.1.0",
     "serve-static": "^1.15.0",
     "vue": "^2.7.13",
     "vue-axios": "^3.5.2",
