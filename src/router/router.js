@@ -1,6 +1,5 @@
 import Vue from "vue"
 import VueRouter from 'vue-router'
-import GetAdmins from '@/pages/ManageAdmin/GetAdmins'
 Vue.use(VueRouter)
 
 const routers = [
@@ -30,7 +29,7 @@ const routers = [
         component: () => import('@/pages/Authorize/ResetPassword'),
     },
     {
-        path:'/Personal/',
+        path:'/PersonalIndex',
         name:'PersonalIndex',
         component: () => import('@/pages/Personal/PersonalIndex'),
     },
@@ -44,16 +43,11 @@ const routers = [
         name:'MyBooks',
         component: () => import('@/pages/Personal/MyBooks'),
     },
-    // {
-    //     path:'/ManageBook',
-    //     name:'ManageBook',
-    //     component: () => import('@/pages/ManageBook'),
-    // },
-    // {
-    //     path:'/Admin_Management',
-    //     name:'Admin_Management',
-    //     component: () => import('@/pages/ManagePage/Admin_Management'),
-    // },
+    {
+        path:'/Personal/MyPosts',
+        name:'MyPosts',
+        component: () => import('@/pages/Personal/MyPosts'),
+    },
     {
         path:'/Book_Detail/',
         name:'Book_Detail',
@@ -190,11 +184,6 @@ const routers = [
         name:'GetUsers',
         component: () => import('@/pages/ManageUser/GetUsers'),
     },
-    {
-                path:'/ManageAdmin',
-                name:'GetAdmins',
-                component: GetAdmins,
-            },
     // {
     //
     //     path: '/ManageIndex',

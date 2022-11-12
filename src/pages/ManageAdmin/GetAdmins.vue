@@ -9,13 +9,11 @@
               <i class="zmdi zmdi-account-calendar"></i>Danh sách quản trị viên</h3>
             <div class="filters m-b-45">
               <br>
-              <form class="form-header" action="" method="POST">
                 <input class="au-input au-input--xl" type="text"
                        placeholder="Nhập email hoặc số điện thoại" v-model="search" required/>
                 <button class="au-btn--submit" v-on:click="HandleSearch">
                   Tìm kiếm
                 </button>
-              </form>
             </div>
             <div class="table-responsive table-data">
               <table class="table">

@@ -1,28 +1,12 @@
 <template>
   <div>
     <!--==============header=============-->
-  <div class="header">
-    <a href="#default" class="logo"><img src="/image/logo-tramsach.png"></a>
-    <div class="header-menu">
-      <a class="active" href="#aboutus">Về trạm sách</a>
-      <a href="#booklist">Tủ sách</a>
-      <a href="#blog">Blog</a>
-      <a href="#term">Chính sách & Điều khoản</a>
-      <a href="#process">Quy trình</a>
-      <RouterLink to="/ManageIndex">Quản trị</RouterLink>
-    </div>
-    <div class="header-right">
-        <router-link v-if="!this.$cookies.get('token')" to="/register" class="header-button">Đăng ký</router-link>
-        <router-link v-if="!this.$cookies.get('token')" to="/login" class="header-button">Đăng nhập</router-link>
-        <button v-else v-on:click="HandleLogout">Đăng xuất</button>
-    </div>
-  </div>
-<!--==============header=============-->
+    <Header></Header>
     <!--==============banner=============-->
     <div class="banner">
       <img src="../image/banner.png">
     </div>
-    <!--==============banner=============-->
+    <!--==============body=============-->
     <div class="listbook">
       <h1>Sách mới đăng</h1>
       <div class="grid-container" v-for="item of listBook" :key="item.id">
@@ -42,7 +26,6 @@
 
       </div>
     </div>
-
     <div class="listbook">
       <h1>Bài đăng mới</h1>
       <div class="grid-container" v-for="item of listPost" :key="item.id">
@@ -58,7 +41,6 @@
 
       </div>
     </div>
-
 <!--    <transition-group tag="main" name="card">-->
 <!--      <article v-for="(album, index) in albums" :key="index" class="card" >-->
 <!--        <a :href="album.url" target="_blank">-->
@@ -76,16 +58,20 @@
 <!--        </a>-->
 <!--      </article>-->
 <!--    </transition-group>-->
+    <!--==============footer=============-->
+    <Footer></Footer>
   </div>
-
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_BOOK, API_POST} from "@/constant/constant-api";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default {
   name: "HomePage",
+  components: {Header, Footer},
   data(){
     return{
       listBook:'',
@@ -94,7 +80,7 @@ export default {
   },
   created() {
     this.getListBook(),
-        this.getListPost()
+    this.getListPost()
   },
   methods:{
     getListBook(){
@@ -108,11 +94,6 @@ export default {
         this.listPost = res.data.data
       }).catch(() => {
       });
-    },
-    HandleLogout(){
-          this.$cookies.remove('token')
-          alert('Đăng xuất thành công!')
-          this.$router.go();
     }
   }
 }
@@ -126,57 +107,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.header {
-  overflow: hidden;
-  background-color: #f1f1f1;
-  padding: 24px 8px;
-}
-
-.header a {
-  float: left;
-  color: black;
-  text-align: center;
-  padding: 12px;
-  text-decoration: none;
-  font-size: 18px;
-  line-height: 25px;
-  border-radius: 4px;
-}
-
-.header a.logo img{
-  width: 100%;
-  height: auto;
-}
-
-.header a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-.header a.active {
-  background-color: dodgerblue;
-  color: white;
-}
-
-.header-menu {
-  margin-left: 100px;
-  padding-right: 10px;
-
-}
-.header-menu a{
-  margin-left: 30px;
-  padding-right: 15px;
-  /*justify-content: center;*/
-}
-.header-right {
-  float: right;
-  margin-right: 30px;
-}
-.header-button{
-  border: burlywood;
-  border-radius: 2px;
-  padding-left: 10px;
-}
 .banner{
   margin: 24px;
   justify-content: center;

@@ -1,11 +1,6 @@
 <template>
   <div>
     <aside class="menu-sidebar d-none d-lg-block">
-      <div class="logo">
-        <a href="#">
-          <img src="src/image/logo-tramsach.png" alt="Trạm Sách"/>
-        </a>
-      </div>
       <div class="menu-sidebar__content js-scrollbar1">
         <nav class="navbar-sidebar">
           <ul class="list-unstyled navbar__list">
@@ -33,6 +28,9 @@
             </li>
             <li class="active">
               <button><router-link to="/ManageFee">Quản lý phí</router-link></button>
+            </li>
+            <li class="active">
+              <button><router-link to="/">Về trang chủ</router-link></button>
             </li>
           </ul>
         </nav>

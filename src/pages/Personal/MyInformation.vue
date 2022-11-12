@@ -12,7 +12,7 @@
         <div><label>Trạng thái hoạt động: </label><span>{{info.isActive}}</span></div>
         <div><label>Số người thích: </label><span>{{info.likeNumber}}</span></div>
         <div><label>Số giao dịch đã thực hiện:  </label><span>{{info.numberOfTransaction}}</span></div>
-        <button><router-link to="/">Quay lại</router-link></button>
+        <button><router-link to="/PersonalIndex">Quay lại</router-link></button>
       </div>
     </div>
   </div>

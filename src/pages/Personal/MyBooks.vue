@@ -36,7 +36,7 @@
       </table>
     </div>
     <br>
-    <button><router-link to="/ManageIndex">Quay lại</router-link></button>
+    <button><router-link to="/PersonalIndex">Quay lại</router-link></button>
   </div>
 </template>
 
