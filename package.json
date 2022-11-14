@@ -17,12 +17,14 @@
     "core-js": "^3.6.5",
     "express": "^4.18.2",
     "node": "^16.18.1",
+    "node-sass": "^7.0.3",
     "restore-npm-cache": "^0.1.0",
     "serve-static": "^1.15.0",
     "vue": "^2.7.13",
     "vue-axios": "^3.5.2",
     "vue-cookies": "^1.8.2",
-    "vue-jwt-decode": "^0.1.0"
+    "vue-jwt-decode": "^0.1.0",
+    "vue-slick-carousel": "^1.0.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.10",
@@ -32,6 +34,8 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "sass": "^1.49.7",
+    "sass-loader": "^10.2.1",
     "vue-router": "^3.5.3",
     "vue-template-compiler": "^2.6.11"
   },
