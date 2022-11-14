@@ -1,11 +1,17 @@
 <template>
-  <div>
     <!--==============header=============-->
-    <Header></Header>
+    <Layout>
+      <main style="flex-grow: 1; padding: 32px 0 45px">
     <!--==============banner=============-->
     <div class="banner">
-      <img src="../image/banner.png">
     </div>
+
+        <VueSlickCarousel v-bind="settings" :arrows="true">
+          <img src="../image/banner.png">
+          <img src="../image/banner.png">
+          <img src="../image/banner.png">
+          <img src="../image/banner.png">
+        </VueSlickCarousel>
     <!--==============body=============-->
     <div class="listbook">
       <h1>Sách mới đăng</h1>
@@ -59,23 +65,38 @@
 <!--      </article>-->
 <!--    </transition-group>-->
     <!--==============footer=============-->
-    <Footer></Footer>
-  </div>
+      </main>
+    </Layout>
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_BOOK, API_POST} from "@/constant/constant-api";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Layout from "@/components/Layout";
+import VueSlickCarousel from 'vue-slick-carousel'
+import 'vue-slick-carousel/dist/vue-slick-carousel.css'
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 
 export default {
   name: "HomePage",
-  components: {Header, Footer},
+  components: { Layout, VueSlickCarousel },
   data(){
     return{
       listBook:'',
-      listPost:''
+      listPost:'',
+      settings: {
+        "dots": true,
+        "infinite": true,
+        "slidesToShow": 1,
+        "slidesToScroll": 1,
+        "pauseOnDotsHover": true,
+        "autoplay": true,
+        "autoplaySpeed": 2000,
+        "pauseOnFocus": true,
+        "pauseOnHover": true,
+        "centerMode": true,
+        "variableWidth": true
+      }
     }
   },
   created() {
@@ -125,5 +146,10 @@ body {
 }
 .grid-container label{
   background-color: #87C1CD;
+}
+.slick-initialized .slick-slide {
+  display: flex !important;
+  justify-content: center;
+  padding: 20px;
 }
 </style>
