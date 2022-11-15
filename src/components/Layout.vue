@@ -95,13 +95,15 @@
                   </router-link>
                   <hr style="margin: 5px" />
                 </div>
-                <button v-on:click="HandleLogout" class="dropdown-item">
-                  <i class="la la-sign-in-alt"></i>
-                  Đăng xuất
-                </button>
-              </b-dropdown>
-            </li>
-          </nav>
+                <div style="float: right; font-size:14px; padding:0 5px 0 0"><i>admin</i></div>
+              </a>
+              <hr/>
+              <a href="/login" class="dropdown-item">
+                <i class="la la-sign-in-alt"></i>
+                Logout
+              </a>
+            </b-dropdown>
+          </li>
         </ul>
       </div>
     </header>
@@ -244,6 +246,7 @@ export default {
 .Main {
   &__site {
     width: 100%;
+    height: auto;
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
@@ -287,6 +290,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      height: auto;
     }
   }
 
@@ -474,6 +478,7 @@ export default {
       max-width: 1230px;
       background-color: #DFD5CB;
       width: 100%;
+      height: auto;
       padding: 45px 15px 25px;
       margin-right: auto;
       margin-left: auto;
