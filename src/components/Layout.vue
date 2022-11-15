@@ -63,16 +63,23 @@
                   <span class="Main__avatar">T</span>
                 </label>
               </template>
+
+              <!--              <div class="header-right">-->
+              <!--                <button v-if="!this.$cookies.get('token')"><router-link  to="/register" class="header-button">Đăng ký</router-link></button>-->
+              <!--                <button v-else v-on:click="HandleLogout" >Đăng xuất</button>-->
+              <!--                <button v-if="!this.$cookies.get('token')"><router-link to="/login" class="header-button">Đăng nhập</router-link></button>-->
+              <!--                <button v-else><router-link to="/PersonalIndex" class="header-button">Xin chào {{user.name}}</router-link></button>-->
+              <!--              </div>-->
               <a href="/user-profile" class="dropdown-item">
                 <div style="display: flex; align-items: center; width: 100%">
                   <span class="Main__avatar">T</span>
                   <p class="Main__email">
-                    thang@emailaaaaaaaaaaaaaaaaaaaaaa.com
+                    tramsachhn@gmail.com
                   </p>
                 </div>
                 <div style="float: right; font-size:14px; padding:0 5px 0 0"><i>admin</i></div>
               </a>
-              <hr />
+              <hr/>
               <a href="/login" class="dropdown-item">
                 <i class="la la-sign-in-alt"></i>
                 Logout
@@ -85,7 +92,10 @@
     <slot/>
     <footer class="Main__footer">
       <div class="Main__footer__container">
-
+        <!--          <label>Liên hệ với Trạm sách</label><br>-->
+        <!--          <label>Hotline: 0123456798</label><br>-->
+        <!--          <label>Email: Tramsach@gmail.com</label><br>-->
+        <!--          <label>Địa chỉ trụ sở: 69 Hàng Chuối, Hoàn Kiếm, Hà Nội</label>-->
       </div>
     </footer>
   </div>
@@ -101,6 +111,7 @@ export default {
 .Main {
   &__site {
     width: 100%;
+    height: auto;
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
@@ -143,6 +154,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      height: auto;
     }
   }
 
@@ -297,13 +309,16 @@ export default {
     font-size: 16px;
     line-height: 1.38;
     color: #111111;
-    background: #FAFAFA;
+    background: #DFD5CB;
     bottom: 0;
     left: 0;
     right: 0;
 
+
+
     &__container {
       width: 100%;
+      height: auto;
       padding: 45px 15px 25px;
       margin-right: auto;
       margin-left: auto;
