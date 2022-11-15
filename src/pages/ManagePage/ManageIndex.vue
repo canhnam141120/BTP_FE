@@ -8,7 +8,6 @@
 <!--  </div>-->
 <!--  </div>-->
 <div>
-  <app-sidebar></app-sidebar>
   <main>
     <SideBar_Management></SideBar_Management>
     <router-view></router-view>

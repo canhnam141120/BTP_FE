@@ -1,27 +1,30 @@
 <template>
-  <div id="register">
-
-    <h1>Cài lại mật khẩu</h1>
-
-    <label for="email"><b>Email</b></label>
-    <p><input type="text" required placeholder="Nhập email" v-model="email"></p>
-
-    <label for="forgotPasswordCode"><b>Code</b></label>
-    <p><input type="text" required placeholder="Nhập mã" v-model="forgotPasswordCode"></p>
-
-    <label for="newPassword"><b>Mật khẩu mới</b></label>
-    <p><input type="password" required placeholder="Nhập mật khẩu mới" v-model="newPassword"></p>
-
-    <button v-on:click="HandleResetPassword">Xác nhận</button>
-  </div>
+  <Layout>
+    <main style="flex-grow: 1;">
+      <div class="body">
+        <div class="container">
+          <h1>Cài lại mật khẩu</h1>
+          <label for="email"><b>Email</b></label>
+          <p><input type="text" required placeholder="Nhập email" v-model="email"></p>
+          <label for="forgotPasswordCode"><b>Code</b></label>
+          <p><input type="text" required placeholder="Nhập mã" v-model="forgotPasswordCode"></p>
+          <label for="newPassword"><b>Mật khẩu mới</b></label>
+          <p><input type="password" required placeholder="Nhập mật khẩu mới" v-model="newPassword"></p>
+          <button v-on:click="HandleResetPassword">Xác nhận</button>
+        </div>
+      </div>
+    </main>
+  </Layout>
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_USER} from "@/constant/constant-api";
+import Layout from "@/components/Layout";
 
 export default {
   name: "ResetPassword",
+  components: {Layout},
   data() {
     return {
       email: '',
@@ -52,15 +55,15 @@ export default {
 </script>
 
 <style scoped>
-body {
-  background: #f4f4f4;
-  color: #5a5656;
-  display: grid;
-  font-family: 'Open Sans', sans-serif;
-  line-height: 1.5;
-  margin: 0;
-  min-height: 100vh;
-  place-items: center;
+
+.body {
+  background-color: #F0F0F0;
+}
+
+.container {
+  max-width: 1230px;
+  background: #F0ECE4;
+  border-radius: 10px;
 }
 
 a {

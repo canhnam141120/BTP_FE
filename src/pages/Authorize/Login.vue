@@ -1,30 +1,33 @@
 <template>
-  <div id="login">
-
-    <h1><strong>Chào bạn</strong> Hãy đăng nhập nhé!</h1>
-
-    <label for="email"><b>Email</b></label>
-    <p><input type="text" placeholder="Username" v-model="email" required></p>
-
-    <label for="password"><b>Password</b></label>
-    <p><input type="password" required placeholder="Mật khẩu" v-model="password"></p>
-
-    <button @click="HandleLogin">Đăng nhập</button>
-    <hr>
-    <br>
-    <label for="email"><b>Chưa có tài khoản?</b></label> &nbsp;
-    <button><router-link to="/register">Đăng ký</router-link></button>
-    <button v-on:click="HandleForgotPassword">Quên mật khẩu?</button>
-
-  </div>
+  <Layout>
+    <main style="flex-grow: 1;">
+      <div class="body">
+        <div class="container">
+          <h1><strong>Chào bạn</strong> Hãy đăng nhập nhé!</h1>
+          <label for="email"><b>Email</b></label>
+          <p><input type="text" placeholder="Username" v-model="email" required></p>
+          <label for="password"><b>Password</b></label>
+          <p><input type="password" required placeholder="Mật khẩu" v-model="password"></p>
+          <button @click="HandleLogin">Đăng nhập</button>
+          <hr>
+          <br>
+          <label for="email"><b>Chưa có tài khoản?</b></label> &nbsp;
+          <button><router-link to="/register">Đăng ký</router-link></button>
+          <button v-on:click="HandleForgotPassword">Quên mật khẩu?</button>
+        </div>
+      </div>
+    </main>
+  </Layout>
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_USER} from "@/constant/constant-api";
+import Layout from "@/components/Layout";
 
 export default {
   name: "Login",
+  components: {Layout},
   data() {
     return {
       email: '',
@@ -67,15 +70,9 @@ export default {
 </script>
 
 <style scoped>
-body {
-  background: #f4f4f4;
-  color: #5a5656;
-  display: grid;
-  font-family: 'Open Sans', sans-serif;
-  line-height: 1.5;
-  margin: 0;
-  min-height: 100vh;
-  place-items: center;
+
+* {
+  box-sizing: border-box;
 }
 
 a {
@@ -92,11 +89,6 @@ h1, p {
 
 strong {
   font-weight: bold;
-}
-
-#login {
-  margin: 50px auto;
-  width: 300px;
 }
 
 form fieldset input[type="text"],

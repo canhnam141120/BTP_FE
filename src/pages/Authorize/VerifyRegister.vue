@@ -1,18 +1,26 @@
 <template>
-<div>
-  <h1>Vui lòng xác thực tài khoản nhé!</h1>
-  <label for="email"><b>Mã xác thực</b></label>
-  <p><input type="text" placeholder="code" v-model="verifyCode" required></p>
-  <button @click="HandleVerifyRegister">Xac nhan</button>
-</div>
+  <Layout>
+    <main style="flex-grow: 1;">
+      <div class="body">
+        <div class="container">
+          <h1>Vui lòng xác thực tài khoản nhé!</h1>
+          <label for="email"><b>Mã xác thực</b></label>
+          <p><input type="text" placeholder="code" v-model="verifyCode" required></p>
+          <button @click="HandleVerifyRegister">Xac nhan</button>
+        </div>
+      </div>
+    </main>
+  </Layout>
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_USER} from "@/constant/constant-api";
+import Layout from "@/components/Layout";
 
 export default {
   name: "VerifyRegister",
+  components: {Layout},
   data(){
     return{
       verifyCode: ''

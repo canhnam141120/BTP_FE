@@ -1,37 +1,46 @@
 <template>
-  <div id="register">
+  <Layout>
+    <main style="flex-grow: 1;">
+      <div class="body">
+        <div class="container">
 
-    <h1><strong>Chào bạn</strong> Hãy đăng ký nhé!</h1>
+          <h1><strong>Chào bạn</strong> Hãy đăng ký nhé!</h1>
 
-    <label for="email"><b>Email</b></label>
-    <p><input type="text" required placeholder="Username" v-model="username"></p>
+          <label for="email"><b>Email</b></label>
+          <p><input type="text" required placeholder="Username" v-model="username"></p>
 
-    <label for="password"><b>Password</b></label>
-    <p><input type="password" required placeholder="Mật khẩu" v-model="password"></p>
+          <label for="password"><b>Password</b></label>
+          <p><input type="password" required placeholder="Mật khẩu" v-model="password"></p>
 
-    <label for="email"><b>Phone Number</b></label>
-    <p><input type="text" required placeholder="Phone" v-model="phone"></p>
+          <label for="email"><b>Phone Number</b></label>
+          <p><input type="text" required placeholder="Phone" v-model="phone"></p>
 
-    <label for="email"><b>Full Name</b></label>
-    <p><input type="text" required placeholder="FullName" v-model="fullName"></p>
+          <label for="email"><b>Full Name</b></label>
+          <p><input type="text" required placeholder="FullName" v-model="fullName"></p>
 
-    <label for="email"><b>Address</b></label>
-    <p><input type="text" required placeholder="Address" v-model="address"></p>
+          <label for="email"><b>Address</b></label>
+          <p><input type="text" required placeholder="Address" v-model="address"></p>
 
-    <button @click="HandleRegister">Đăng ký</button>
-    <hr>
-    <br>
-    <label for="email"><b>Đã có tài khoản?</b></label> &nbsp;
-    <button><router-link to="/login">Đăng nhập</router-link></button>
-  </div>
+          <button @click="HandleRegister">Đăng ký</button>
+          <hr>
+          <br>
+          <label for="email"><b>Đã có tài khoản?</b></label> &nbsp;
+          <button><router-link to="/login">Đăng nhập</router-link></button>
+        </div>
+      </div>
+    </main>
+  </Layout>
+
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_USER} from "@/constant/constant-api";
+import Layout from "@/components/Layout";
 
 export default {
   name: "Register",
+  components: {Layout},
   data() {
     return {
       username: '',
@@ -70,17 +79,6 @@ export default {
 </script>
 
 <style scoped>
-body {
-  background: #f4f4f4;
-  color: #5a5656;
-  display: grid;
-  font-family: 'Open Sans', sans-serif;
-  line-height: 1.5;
-  margin: 0;
-  min-height: 100vh;
-  place-items: center;
-}
-
 a {
   text-decoration: none;
 }

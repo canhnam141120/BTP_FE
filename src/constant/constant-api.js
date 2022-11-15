@@ -115,6 +115,8 @@ export const API_TRANSACTION = Object.freeze({
     CANCEL_EXCHANGE_DETAIL: "https://book-trading-platform.herokuapp.com/api/Transaction/exchange-detail/cancel/",
     CANCEL_RENT: "https://book-trading-platform.herokuapp.com/api/Transaction/rent/cancel/",
     CANCEL_RENT_DETAIL: "https://book-trading-platform.herokuapp.com/api/Transaction/rent-detail/cancel/",
+    CREATE_URL_PAY: "https://localhost:7006/api/Transaction/payment/",
+    UPDATE_PAY: "https://localhost:7006/api/Transaction/payment/update?"
 })
 
 export const API_MANAGE_USER= Object.freeze({

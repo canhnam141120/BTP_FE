@@ -4,6 +4,11 @@ Vue.use(VueRouter)
 
 const routers = [
     {
+        path:'/ResultPayment',
+        name:'ResultPayment',
+        component: () => import('@/pages/ResultPayment'),
+    },
+    {
         path:'/',
         name:'HomePage',
         component: () => import('@/pages/HomePage'),
@@ -170,19 +175,9 @@ const routers = [
         component: () => import('@/pages/ManageTransaction/RentBill'),
     },
     {
-        path:'/ManageTransaction/exchange',
-        name:'GetExchanges',
-        component: () => import('@/pages/ManageTransaction/GetExchanges'),
-    },
-    {
         path:'/ManageIndex',
         name:'ManageIndex',
         component: () => import('@/pages/ManagePage/ManageIndex'),
-    },
-    {
-        path:'/ManageUser',
-        name:'GetUsers',
-        component: () => import('@/pages/ManageUser/GetUsers'),
     },
     // {
     //
