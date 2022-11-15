@@ -125,7 +125,6 @@
                 <a href="/">
                   <img src="../image/logo.png" alt="Logo Trạm Sách"/>
                 </a><br>
-                <font-awesome-icon icon="fa-regular fa-bell" />
                 <span>Tất cả các giao dịch ở Trạm Sách được</span><br>
                 <span>chúng tôi đảm bảo kiểm duyệt qua </span><br>
                 <span>hình thức và giao hàng tận nơi trong </span><br>
