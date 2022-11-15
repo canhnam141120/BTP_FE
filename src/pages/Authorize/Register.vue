@@ -1,6 +1,6 @@
 <template>
   <Layout>
-    <main style="flex-grow: 1; padding: 32px 0 45px; background-image: url('https://lh3.googleusercontent.com/sXC0un20rHcGgJJxnnZGjcD5d-MLiDE4OpJYrluyoHpJdPvJg3lfbgxUCHLQHxag50e7nAOW6AjtONQhL8GFndit_T2-mXhYdTCDrcM0Bv2bHmr3u89VWF-UhvD9B4Y3kB_LrE5zaWv2EH-JMfQfiXYqq3IQG3C3jX3McRmD6I6KIHJz6pbzEc6vNdiFiMg6EA6pV9NXeoMVx3jWYJaB0FaC5ckajjuwbCCe51b41dkCXicw19W4oFayVrbyV2Ntyr0YuIflzrsJbIGe8OlwX63kFD1yx2Qod1boVq8ON0tkuHqueV1dHKlnSONl4_dIFc05aJiuz7IuQk-UOZNt1hbCitJogKDOwFEJXcj_Fz0YMlVwKESHiko7DVARjzKtn_Vg45wrUYGy1mU01_D0VRqUSNqstXauprSGqqAYpIJX5CS7uiylx_BUNlL1G36MvtZGfhJAMeqY3tB01l01XtvdevWIStyQsrgDoKBeIDZM1vaRdjLnbyytFDLNabJZxO5hFsYg-kRUN6bN9l0-3VMia44aBmCH7VhF90iKa03qjmwK_oGgYEHscEFWyjZKFygAKmuZmw2Uf5-Cgv4PrPNVxlFI1EAEe_q2OsVsn7_GmqXBRTC3chJCb4xC5QR-BkiA6IZnag4xmYi7tjrnteUOqhFchcLR0gRA9iN2ElTiRPPa-M1jAksEkuwWT88Oxf3aFIou_FkuQTNW1jy25B_slTZbsUI6lwSzL3vn6tweN8StXlpck0LapS9d_G-Oepw3EA5T54XVE-q36_sEagL2LZTTmlz-6q860N8Tgm5XWTrIIQ40htcD2cUAx1REG06A4VtNF0S_AkIjC6Uv2z-7WTMwOQxfpc2P4CBdw1KyBc4zR-jRDEF4JoRq1i8CXuiRlzkBTKQyUCDeLGSHiklQwRwMVx8avaqD0Avsh-yAnQ5qXDUfJkynZxi916HPIWBwQF9kqzj1oBOP-t1QzA=w1264-h667-no?authuser=0');">
+    <main style="flex-grow: 1; padding: 32px 0 45px; background-image: url('https://lh3.googleusercontent.com/sXC0un20rHcGgJJxnnZGjcD5d-MLiDE4OpJYrluyoHpJdPvJg3lfbgxUCHLQHxag50e7nAOW6AjtONQhL8GFndit_T2-mXhYdTCDrcM0Bv2bHmr3u89VWF-UhvD9B4Y3kB_LrE5zaWv2EH-JMfQfiXYqq3IQG3C3jX3McRmD6I6KIHJz6pbzEc6vNdiFiMg6EA6pV9NXeoMVx3jWYJaB0FaC5ckajjuwbCCe51b41dkCXicw19W4oFayVrbyV2Ntyr0YuIflzrsJbIGe8OlwX63kFD1yx2Qod1boVq8ON0tkuHqueV1dHKlnSONl4_dIFc05aJiuz7IuQk-UOZNt1hbCitJogKDOwFEJXcj_Fz0YMlVwKESHiko7DVARjzKtn_Vg45wrUYGy1mU01_D0VRqUSNqstXauprSGqqAYpIJX5CS7uiylx_BUNlL1G36MvtZGfhJAMeqY3tB01l01XtvdevWIStyQsrgDoKBeIDZM1vaRdjLnbyytFDLNabJZxO5hFsYg-kRUN6bN9l0-3VMia44aBmCH7VhF90iKa03qjmwK_oGgYEHscEFWyjZKFygAKmuZmw2Uf5-Cgv4PrPNVxlFI1EAEe_q2OsVsn7_GmqXBRTC3chJCb4xC5QR-BkiA6IZnag4xmYi7tjrnteUOqhFchcLR0gRA9iN2ElTiRPPa-M1jAksEkuwWT88Oxf3aFIou_FkuQTNW1jy25B_slTZbsUI6lwSzL3vn6tweN8StXlpck0LapS9d_G-Oepw3EA5T54XVE-q36_sEagL2LZTTmlz-6q860N8Tgm5XWTrIIQ40htcD2cUAx1REG06A4VtNF0S_AkIjC6Uv2z-7WTMwOQxfpc2P4CBdw1KyBc4zR-jRDEF4JoRq1i8CXuiRlzkBTKQyUCDeLGSHiklQwRwMVx8avaqD0Avsh-yAnQ5qXDUfJkynZxi916HPIWBwQF9kqzj1oBOP-t1QzA=w1264-h667-no?authuser=0'); background-size: cover">
       <div id="login" >
         <div class="container">
           <label for="show" class="close-btn fas fa-times" title="close"></label>
@@ -185,16 +185,16 @@ form .btn button{
 form .btn:hover .inner{
   left: 0;
 }
-form .btn .inner{
-  height: 100%;
-  width: 300%;
-  position: absolute;
-  left: -100%;
-  z-index: -1;
-  background-color: #9D6B54;
-  /*background: -webkit-linear-gradient(right, #56d8e4, #9f01ea, #56d8e4, #9f01ea);*/
-  transition: all 0.4s;
-}
+/*form .btn .inner{*/
+/*  height: 100%;*/
+/*  width: 300%;*/
+/*  position: absolute;*/
+/*  left: -100%;*/
+/*  z-index: -1;*/
+/*  background-color: #9D6B54;*/
+/*  !*background: -webkit-linear-gradient(right, #56d8e4, #9f01ea, #56d8e4, #9f01ea);*!*/
+/*  transition: all 0.4s;*/
+/*}*/
 form .data label{
   font-size: 14px;
 }
@@ -218,8 +218,8 @@ form .forgot-pass a{
   text-decoration: none;
 }
 .container {
-  position: absolute;
-  right: 150px;
+  position: relative;
+  left: 800px;
   top: 10%;
   font-size: 14px;
   cursor: pointer;
