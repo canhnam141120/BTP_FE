@@ -3,79 +3,97 @@
     <header class="Main__header">
       <div class="Main__header__container">
         <div class="Main__logo">
-          <a>
-            <img src="@/assets/image/logo.svg" alt="Login with google"/>
+          <a href="/">
+            <img src="../image/logo.png" alt="Logo Trạm Sách"/>
           </a>
         </div>
         <div>
           <nav class="Main__nav">
             <router-link
-                to="/home"
+                to="/"
                 class="Main__list__item home"
-                active-color="#0078d4"
+                active-color="#9D6B54"
             >Trang Chủ
             </router-link>
             <router-link
                 to="/course-management"
                 class="Main__list__item course-management"
-                active-color="#0078d4"
+                active-color="#9D6B54"
             >Tủ sách
             </router-link>
             <router-link
                 to="/class-management"
                 class="Main__list__item class-management"
-                active-color="#0078d4"
+                active-color="#9D6B54"
             >Blog
             </router-link>
             <router-link
                 to="/users-management"
                 class="Main__list__item musers-management"
-                active-color="#0078d4"
+                active-color="#9D6B54"
             >Chính sách và điều khoản
             </router-link>
             <router-link
                 to="/users-management"
                 class="Main__list__item musers-management"
-                active-color="#0078d4"
+                active-color="#9D6B54"
             >Quy trình
             </router-link>
             <router-link
                 to="/users-management"
                 class="Main__list__item musers-management"
-                active-color="#0078d4"
+                active-color="#9D6B54"
             >Giới thiệu
-            </router-link>
-            <router-link
-                to="/users-management"
-                class="Main__list__item musers-management"
-                active-color="#0078d4"
-            >Event
             </router-link>
             <span class="Main__indicator"></span>
           </nav>
         </div>
         <ul class="Main__account">
 
-          <li>
-            <b-dropdown right text="Right align" variant="black" no-caret style="padding: 0">
-              <template v-slot:button-content style="padding: 0">
-                <label style="margin-bottom: 0">
-                  <span class="Main__avatar">T</span>
-                </label>
-              </template>
-
-              <!--              <div class="header-right">-->
-              <!--                <button v-if="!this.$cookies.get('token')"><router-link  to="/register" class="header-button">Đăng ký</router-link></button>-->
-              <!--                <button v-else v-on:click="HandleLogout" >Đăng xuất</button>-->
-              <!--                <button v-if="!this.$cookies.get('token')"><router-link to="/login" class="header-button">Đăng nhập</router-link></button>-->
-              <!--                <button v-else><router-link to="/PersonalIndex" class="header-button">Xin chào {{user.name}}</router-link></button>-->
-              <!--              </div>-->
-              <a href="/user-profile" class="dropdown-item">
-                <div style="display: flex; align-items: center; width: 100%">
-                  <span class="Main__avatar">T</span>
-                  <p class="Main__email">
-                    tramsachhn@gmail.com
-                  </p>
+          <nav v-if="!this.$cookies.get('token')">
+            <router-link to="/login" class="Main__list__item musers-management">Đăng nhập</router-link>
+            <router-link to="/register" class="Main__list__item musers-management">Đăng ký</router-link>
+          </nav>
+          <nav  v-else>
+            <li>
+              <b-dropdown right text="Right align" variant="black" no-caret style="padding: 0">
+                <template v-slot:button-content style="padding: 0">
+                  <label style="margin-bottom: 0">
+                    <span class="Main__avatar">TB</span>
+                  </label>
+                </template>
+                <p class="dropdown-item">
+                  Thông báo 1
+                </p>
+                <hr style="margin: 5px" />
+                <p class="dropdown-item">
+                  Thông báo 2
+                </p>
+              </b-dropdown>
+            </li>
+            <li>
+              <b-dropdown right text="Right align" variant="black" no-caret style="padding: 0">
+                <template v-slot:button-content style="padding: 0">
+                  <label style="margin-bottom: 0">
+                    <span class="Main__avatar">T</span>
+                  </label>
+                </template>
+                <a href="/PersonalIndex" class="dropdown-item">
+                  <div style="display: flex; align-items: center; width: 100%">
+                    <span class="Main__avatar">T</span>
+                    <p class="Main__name">
+                      {{user.name}}
+                    </p>
+                  </div>
+                  <div style="float: right; font-size:14px; padding:0 5px 0 0"></div>
+                </a>
+                <hr style="margin: 5px" />
+                <div v-if="user.role == 1 || user.role == 2">
+                  <router-link  to="/ManageIndex" class="dropdown-item">
+                    <i class="la la-sign-in-alt"></i>
+                    Quản trị
+                  </router-link>
+                  <hr style="margin: 5px" />
                 </div>
                 <div style="float: right; font-size:14px; padding:0 5px 0 0"><i>admin</i></div>
               </a>
@@ -90,20 +108,137 @@
       </div>
     </header>
     <slot/>
-    <footer class="Main__footer">
-      <div class="Main__footer__container">
-        <!--          <label>Liên hệ với Trạm sách</label><br>-->
-        <!--          <label>Hotline: 0123456798</label><br>-->
-        <!--          <label>Email: Tramsach@gmail.com</label><br>-->
-        <!--          <label>Địa chỉ trụ sở: 69 Hàng Chuối, Hoàn Kiếm, Hà Nội</label>-->
+    <footer >
+      <div class="Main__subfooter">
+          <div class="Main__subfooter__container">
+            <div class="contact">
+              <span >ĐĂNG KÝ NHẬN TIN:</span>
+              <input class="input1" type="text" placeholder="Nhập tên của bạn">
+              <input class="input2" type="text" placeholder="Nhập email của bạn">
+              <button>ĐĂNG KÝ</button>
+            </div>
+          </div>
+      </div>
+      <div class="Main__footer">
+        <div class="Main__footer__container">
+          <div class="grid">
+            <div class="grid-row">
+              <div class="grid-column">
+                <a href="/">
+                  <img src="../image/logo.png" alt="Logo Trạm Sách"/>
+                </a><br>
+                <span>Tất cả các giao dịch ở Trạm Sách được</span><br>
+                <span>chúng tôi đảm bảo kiểm duyệt qua </span><br>
+                <span>hình thức và giao hàng tận nơi trong </span><br>
+                 <span> địa bàn nội thành TP Hà Nội. Không</span><br>
+                <span>hỗ trợ giao dịch trực tiếp tại Trạm.</span>
+              </div>
+              <div class="grid-column">
+                <h3 class="heading">TÀI KHOẢN</h3>
+                <ul class="list">
+                  <li class="item">
+                    <a href="" class="item-link">Đăng nhập/Đăng ký</a>
+                  </li>
+                  <li class="item">
+                    <a href="" class="item-link">Thay đổi thông tin cá nhân</a>
+                  </li>
+                  <li class="item">
+                    <a href="" class="item-link">Thay đổi thông tin giao hàng</a>
+                  </li>
+                  <li class="item">
+                    <a href="" class="item-link">Tủ sách</a>
+                  </li>
+                  <li class="item">
+                    <a href="" class="item-link">Trang cá nhân</a>
+                  </li>
+                  <li class="item">
+                    <span class="contact_info">tramsachhn@gmail.com</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="grid-column">
+                <h3 class="heading">HỖ TRỢ</h3>
+                <ul class="list">
+                  <li class="item">
+                    <a href="" class="item-link">Chính sách kiểm duyệt</a>
+                  </li>
+                  <li class="item">
+                    <a href="" class="item-link">Chính sách cọc - hoàn tiền</a>
+                  </li>
+                  <li class="item">
+                    <a href="" class="item-link">Chính sách bảo mật thanh toán</a>
+                  </li>
+                  <li class="item">
+                    <a href="" class="item-link">Quy trình giao dịch</a>
+                  </li>
+                  <li class="item">
+                    <a href="" class="item-link">Trung tâm hỗ trợ</a>
+                  </li>
+                  <li class="item">
+                    <span class="contact_info">Hotline: 0961284654</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="grid-column">
+                <h3 class="heading">DỊCH VỤ</h3>
+                <ul class="list">
+                  <li class="item">
+                    <a href="" class="item-link">Điều khoản sử dụng</a>
+                  </li>
+                  <li class="item">
+                    <a href="" class="item-link">Chính sách bảo mật thông tin cá nhân</a>
+                  </li>
+                  <li class="item">
+                    <a href="" class="item-link">Chính sách bảo mật thanh toán</a>
+                  </li>
+                  <li class="item">
+                    <a href="" class="item-link">Phương thức thanh toán</a>
+                  </li>
+                  <li class="item">
+                    <a href="" class="item-link">Giới thiệu Trạm Sách</a>
+                  </li>
+                  <li class="item">
+                    <span class="contact_info">Số 1 Đào Duy Anh, Đống Đa, Hà Nội</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </footer>
   </div>
 </template>
 
 <script>
+import VueJwtDecode from 'vue-jwt-decode';
+
 export default {
-  name: "Layout"
+  name: "Layout",
+  data(){
+    return{
+      user: ''
+    }
+  },
+  created() {
+    this.getUserInfo()
+  },
+  methods:{
+    getUserInfo(){
+      let token = this.$cookies.get('token');
+      try{
+        this.user= VueJwtDecode.decode(token, 'utf-8');
+        console.log(this.user);
+      }
+      catch(err){
+        console.log('Not yet Login: ',err);
+      }
+    },
+    HandleLogout(){
+      this.$cookies.remove('token')
+      this.$router.go();
+    }
+  }
 }
 </script>
 
@@ -143,14 +278,15 @@ export default {
     position: sticky;
     top: 0;
     background: white;
-
+    height: 75px;
     &__container {
-      max-width: 1920px;
+      max-width: 1230px;
       margin-left: auto;
       margin-right: auto;
       padding-right: 15px;
       padding-left: 15px;
       width: 100%;
+      height: 55px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -160,13 +296,14 @@ export default {
 
   &__logo {
     padding-right: 20px;
+    height: 55px;
   }
 
   &__logo img {
-    width: 125px;
+    width: 160px;
     height: auto;
     position: unset;
-    margin-right: 15px;
+    padding-bottom: 10px;
   }
 
   &__nav {
@@ -208,7 +345,7 @@ export default {
       left: 0;
       width: 100%;
       height: 3px;
-      background-color: #0078d4;
+      background-color: #9D6B54;
       opacity: 0;
       transition: 0.3s;
     }
@@ -219,7 +356,7 @@ export default {
     }
 
     &__item:not(.is_active):hover {
-      color: #0078d4;
+      color: #9D6B54;
       text-decoration: none;
     }
   }
@@ -305,51 +442,70 @@ export default {
     z-index: 1;
   }
 
+  &__subfooter {
+    font-size: 16px;
+    line-height: 1.38;
+    color: #111111;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #F0F0F0;
+    &__container{
+      height: 75px;
+      max-width: 1230px;
+      background-color: #9D6B54;
+      border-radius: 10px;
+      width: 100%;
+      margin-right: auto;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
   &__footer {
     font-size: 16px;
     line-height: 1.38;
     color: #111111;
-    background: #DFD5CB;
     bottom: 0;
     left: 0;
     right: 0;
-
-
-
-    &__container {
+    background: #F0F0F0;
+    &__container{
+      border-radius: 10px;
+      height: 250px;
+      max-width: 1230px;
+      background-color: #DFD5CB;
       width: 100%;
       height: auto;
       padding: 45px 15px 25px;
       margin-right: auto;
       margin-left: auto;
-      @media (min-width: 576px) {
-        max-width: 540px;
-      }
-      @media (min-width: 768px) {
-        max-width: 720px;
-      }
-      @media (min-width: 992px) {
-        max-width: 960px;
-      }
-      @media (min-width: 1200px) {
-        max-width: 1140px;
-      }
-      @media (min-width: 1500px) {
-        max-width: 1440px;
-      }
-      @media (min-width: 1600px) {
-        max-width: 1560px;
-      }
-    }
-
-    &__logo {
-      margin-bottom: 10px;
-      // height: 24px;
-      width: 153px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
   }
 
-  &__email {
+  &__logo {
+    margin-bottom: 10px;
+    height: 24px;
+    width: 153px;
+  }
+
+  &__name {
+    color: #9D6B54;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 550;
+    white-space: nowrap;
+    padding-left: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden
+  }
+  &__name:hover {
+    color: #9D6B54;
     margin: 0;
     font-size: 14px;
     font-weight: 550;
@@ -372,6 +528,114 @@ export default {
   height: auto;
   transform: unset !important;
   top: 50px !important;
+}
+
+.dropdown-item:hover{
+  background-color: #9D6B54;
+  color: white;
+}
+
+.contact{
+  height: 50px;
+  max-width: 1050px;
+  background-color: #9D6B54;
+  border-radius: 10px;
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 0px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.contact span{
+  color: white;
+  font-size: 22px;
+}
+
+.contact input{
+  border: none;
+  border-radius: 10px;
+  height: 45px;
+  color: #9D6B54;
+  padding: 12px 10px;
+}
+
+.contact .input1{
+  width: 250px;
+}
+
+.contact .input2{
+  width: 400px;
+}
+
+.contact button{
+  height: 45px;
+  border: none;
+  border-radius: 10px;
+  width: 100px;
+  font-weight: bold;
+  color: #9D6B54;
+}
+
+.contact button:hover{
+  background-color: #DFD5CB;
+  color: white;
+}
+
+.grid{
+  width: 1200px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.grid-row{
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -5px;
+  margin-right: -5px;
+  justify-content: space-between;
+}
+
+.grid-column{
+  padding-left: 15px;
+  padding-right: 15px;
+  width: 25%;
+}
+
+.heading{
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  color: #9D6B54;
+}
+
+.list{
+  padding-left: 0;
+  list-style: none;
+}
+
+.item-link{
+  display: flex;
+  text-decoration: none;
+  font-size: 1rem;
+  color: #737373;
+  padding: 3px 0;
+  align-items: center;
+}
+
+.item-link:hover{
+  color: #9D6B54;
+}
+
+.contact_info{
+  font-weight: bold;
+  display: flex;
+  text-decoration: none;
+  font-size: 1rem;
+  color: #9D6B54;
+  padding: 3px 0;
+  align-items: center;
 }
 
 </style>

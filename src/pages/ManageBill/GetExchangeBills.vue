@@ -27,6 +27,7 @@
                 <td>Trạng thái thanh toán</td>
                 <td>Ngày thanh toán</td>
                 <td>Phương thức thanh toán</td>
+                <td></td>
               </tr>
               </thead>
 
@@ -40,50 +41,57 @@
                 </td>
                 <td>
                   <div class="table-data__info">
-                    <h6>{{item.id}}</h6>
+                    <h6>{{ item.id }}</h6>
                   </div>
                 </td>
 
                 <td>
-                  <span>{{item.exchangeId}}</span>
+                  <span>{{ item.exchangeId }}</span>
                 </td>
                 <td>
                   <span>
-                    <i>{{item.user.fullname}}</i>
+                    <i>{{ item.user.fullname }}</i>
                   </span>
                 </td>
                 <td>
                   <span>
-                    {{item.totalBook}}
+                    {{ item.totalBook }}
                   </span>
                 </td>
                 <td>
-                  <span>{{item.totalAmount}}</span>
+                  <span>{{ item.totalAmount }}</span>
                 </td>
                 <td>
                   <span>
-                    {{item.depositFee}}
+                    {{ item.depositFee }}
                   </span>
                 </td>
                 <td>
                   <span class="role admin">
-                    <i>{{item.isPaid}}</i>
+                    <i>{{ item.isPaid }}</i>
                   </span>
                 </td>
                 <td>
                   <span>
-                    {{item.paidDate}}
+                    {{ item.paidDate }}
                   </span>
                 </td>
                 <td>
                   <span>
-                    {{item.payments}}
+                    {{ item.payments }}
                   </span>
                 </td>
                 <td>
                     <span>
                       <button class="au-btn au-btn-icon au-btn--green au-btn--small">
                         <router-link :to="{ name: 'DetailExchangeBill', query: { id:item.id }}">Chi tiết</router-link>
+                      </button>
+                              </span>
+                </td>
+                <td>
+                    <span>
+                      <button class="au-btn au-btn-icon au-btn--green au-btn--small" v-on:click="HandlePayment(item.id)">
+                        Thanh toán
                       </button>
                               </span>
                 </td>
@@ -102,47 +110,47 @@
       </div>
     </div>
   </div>
-<!--  =================-->
-<!--  <div>-->
-<!--    <div class="GetRentBills">-->
-<!--      <h1>Danh sách tất cả hóa đơn đổi</h1>-->
-<!--      <button><router-link to="/ManageBill/rent-bill">Xem hóa đơn thuê</router-link></button>-->
-<!--      <br><br>-->
-<!--      <table border="1px">-->
-<!--        <tr>-->
-<!--          <td></td>-->
-<!--          <td>Mã hóa đơn:</td>-->
-<!--          <td>Mã giao dịch</td>-->
-<!--          <td>Tên khách hàng</td>-->
-<!--          <td>Số cuốn sách</td>-->
-<!--          <td>Số tiền</td>-->
-<!--          <td>Phí đặt cọc</td>-->
-<!--          <td>Trạng thái thanh toán</td>-->
-<!--          <td>Ngày thanh toán</td>-->
-<!--          <td>Phương thức thanh toán</td>-->
-<!--        </tr>-->
-<!--        <tr v-for="item of listBills" :key="item.id">-->
-<!--          <td><router-link :to="{ name: 'DetailExchangeBill', query: { id:item.id }}"><button>Chi tiết</button></router-link></td>-->
-<!--          <td>{{item.id}}</td>-->
-<!--          <td>{{item.exchangeId}}</td>-->
-<!--          <td>{{item.user.fullname}}</td>-->
-<!--          <td>{{item.totalBook}}</td>-->
-<!--          <td>{{item.totalAmount}}</td>-->
-<!--          <td>{{item.depositFee}}</td>-->
-<!--          <td>{{item.isPaid}}</td>-->
-<!--          <td>{{item.paidDate}}</td>-->
-<!--          <td>{{item.payments}}</td>-->
-<!--        </tr>-->
-<!--      </table>-->
-<!--    </div>-->
-<!--    <br>-->
-<!--    <button><router-link to="/ManageIndex">Quay lại</router-link></button><br><br>-->
-<!--  </div>-->
+  <!--  =================-->
+  <!--  <div>-->
+  <!--    <div class="GetRentBills">-->
+  <!--      <h1>Danh sách tất cả hóa đơn đổi</h1>-->
+  <!--      <button><router-link to="/ManageBill/rent-bill">Xem hóa đơn thuê</router-link></button>-->
+  <!--      <br><br>-->
+  <!--      <table border="1px">-->
+  <!--        <tr>-->
+  <!--          <td></td>-->
+  <!--          <td>Mã hóa đơn:</td>-->
+  <!--          <td>Mã giao dịch</td>-->
+  <!--          <td>Tên khách hàng</td>-->
+  <!--          <td>Số cuốn sách</td>-->
+  <!--          <td>Số tiền</td>-->
+  <!--          <td>Phí đặt cọc</td>-->
+  <!--          <td>Trạng thái thanh toán</td>-->
+  <!--          <td>Ngày thanh toán</td>-->
+  <!--          <td>Phương thức thanh toán</td>-->
+  <!--        </tr>-->
+  <!--        <tr v-for="item of listBills" :key="item.id">-->
+  <!--          <td><router-link :to="{ name: 'DetailExchangeBill', query: { id:item.id }}"><button>Chi tiết</button></router-link></td>-->
+  <!--          <td>{{item.id}}</td>-->
+  <!--          <td>{{item.exchangeId}}</td>-->
+  <!--          <td>{{item.user.fullname}}</td>-->
+  <!--          <td>{{item.totalBook}}</td>-->
+  <!--          <td>{{item.totalAmount}}</td>-->
+  <!--          <td>{{item.depositFee}}</td>-->
+  <!--          <td>{{item.isPaid}}</td>-->
+  <!--          <td>{{item.paidDate}}</td>-->
+  <!--          <td>{{item.payments}}</td>-->
+  <!--        </tr>-->
+  <!--      </table>-->
+  <!--    </div>-->
+  <!--    <br>-->
+  <!--    <button><router-link to="/ManageIndex">Quay lại</router-link></button><br><br>-->
+  <!--  </div>-->
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
-import {API_MANAGE_BILL} from "@/constant/constant-api";
+import {API_MANAGE_BILL, API_TRANSACTION} from "@/constant/constant-api";
 
 export default {
   name: "GetExchangeBills",
@@ -160,7 +168,19 @@ export default {
         this.listBills = res.data.data
       }).catch(() => {
       });
-    }
+    },
+    HandlePayment(id) {
+      const url = API_TRANSACTION.CREATE_URL_PAY + id
+      apiFactory.callApi(url, 'POST', {}).then((res) => {
+        if (res.data.message === 'CREATE_SUCCESS') {
+          let url = res.data.data
+          window.location.href = url;
+        }
+        console.log(res)
+      }).catch(() => {
+        alert('CREATE_FAILED!')
+      });
+    },
   }
 }
 </script>
