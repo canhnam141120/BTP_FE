@@ -1,4 +1,5 @@
 <template>
+
   <div>
     <div class="Detail_User">
       <h1>Thông tin cá nhân của tôi</h1>
@@ -16,14 +17,17 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
 import {API_PERSONAL} from "@/constant/constant-api";
 import apiFactory from "@/config/apiFactory";
 
+
 export default {
   name: "MyInformation",
+
   data() {
     return {
       info: '',

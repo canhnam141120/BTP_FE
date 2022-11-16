@@ -1,4 +1,5 @@
 <template>
+  <SideBar>
   <div>
     <div class="Detail_User">
       <h1>Chi tiết người dùng</h1>
@@ -17,14 +18,17 @@
       </div>
     </div>
   </div>
+  </SideBar>
 </template>
 
 <script>
 import {API_MANAGE_USER} from "@/constant/constant-api";
 import apiFactory from "@/config/apiFactory";
+import SideBar from "../../components/SideBar";
 
 export default {
   name: "DetailUser",
+  components: {SideBar},
   data() {
     return {
       user: ''

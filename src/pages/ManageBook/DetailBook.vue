@@ -1,4 +1,5 @@
 <template>
+  <SideBar>
   <div>
     <div class="DetailBook">
       <h1>Chi tiết sách {{book.title}}</h1>
@@ -29,14 +30,17 @@
     </div>
     <button><router-link to="/ManageBook">Quay lại</router-link></button>
   </div>
+  </SideBar>
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
 import { API_MANAGE_BOOK} from "@/constant/constant-api";
+import SideBar from "../../components/SideBar";
 
 export default {
   name: "DetailBook",
+  components: {SideBar},
   data() {
     return {
       book: ''

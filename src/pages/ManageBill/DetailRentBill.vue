@@ -1,4 +1,5 @@
 <template>
+  <SideBar>
   <div>
     <div class="Detail_RentBill">
       <h1>Chi tiết hoá đơn thuê</h1>
@@ -17,14 +18,17 @@
       </div>
     </div>
   </div>
+  </SideBar>
 </template>
 
 <script>
 import {API_MANAGE_BILL} from "@/constant/constant-api";
 import apiFactory from "@/config/apiFactory";
+import SideBar from "../../components/SideBar";
 
 export default {
   name: "DetailRentBill",
+  components: {SideBar},
   data() {
     return {
       bill: ''

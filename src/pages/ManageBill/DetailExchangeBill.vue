@@ -1,4 +1,5 @@
 <template>
+  <SideBar>
   <div>
     <div class="DetailExchangeBill">
       <h1>Chi tiết hoá đơn đổi</h1>
@@ -16,14 +17,17 @@
       </div>
     </div>
   </div>
+  </SideBar>
 </template>
 <script>
 
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_BILL} from "@/constant/constant-api";
+import SideBar from "../../components/SideBar";
 
 export default {
   name: "DetailExchangeBill",
+  components: {SideBar},
   data() {
     return {
       bill: ''

@@ -1,4 +1,5 @@
 <template>
+  <SideBar>
   <div>
     <div class="GetFees">
       <h1>Danh sách phí</h1>
@@ -23,14 +24,17 @@
     <br>
     <button><router-link to="/ManageIndex">Quay lại</router-link></button>
   </div>
+  </SideBar>
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_FEE} from "@/constant/constant-api";
+import SideBar from "../../components/SideBar";
 
 export default {
   name: "GetFees",
+  components: {SideBar},
   data() {
     return {
       listFees: ''

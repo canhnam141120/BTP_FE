@@ -1,4 +1,5 @@
 <template>
+  <SideBar>
   <div>
     <div class="DetailRent">
       <h1>Chi tiết giao dịch thuê</h1><br>
@@ -31,14 +32,17 @@
     <br>
     <button><router-link to="/ManageTransaction/rent">Quay lại</router-link></button>
   </div>
+  </SideBar>
 </template>
 
 <script>
 import {API_MANAGE_TRANSACTION} from "@/constant/constant-api";
 import apiFactory from "@/config/apiFactory";
+import SideBar from "../../components/SideBar";
 
 export default {
   name: "DetailRent",
+  components: {SideBar},
   data() {
     return {
       rent: ''

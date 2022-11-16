@@ -1,4 +1,5 @@
 <template>
+  <SideBar>
   <div>
     <div class="DetailPost">
       <h1>Chi tiết bài đăng</h1>
@@ -15,14 +16,17 @@
         </div>
     </div>
   </div>
+  </SideBar>
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_POST} from "@/constant/constant-api";
+import SideBar from "../../components/SideBar";
 
 export default {
   name: "DetailPost",
+  components: {SideBar},
   data() {
     return {
       post: ''

@@ -1,23 +1,18 @@
 <template>
+  <SideBar>
   <div class="GetRentBills">
     <div class="row">
       <div class="col-lg-6">
         <div class="user-data m-b-30">
           <h3 class="title-3 m-b-30">
             <i class="zmdi zmdi-account-calendar"></i>Danh sách tất cả hóa đơn thuê</h3>
-          <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-            <router-link to="/ManageBill/exchange-bill">Xem hóa đơn đổi</router-link>
+          <button class="au-btn au-btn-icon au-btn--brown au-btn--small">
+            <router-link to="/ManageBill/exchange-bill" class="btn-router">Xem hóa đơn đổi</router-link>
           </button>
           <div class="table-responsive table-data">
             <table class="table">
               <thead>
               <tr>
-                <td>
-                  <label class="au-checkbox">
-                    <input type="checkbox">
-                    <span class="au-checkmark"></span>
-                  </label>
-                </td>
                 <td>Mã hóa đơn:</td>
                 <td>Mã giao dịch</td>
                 <td>Tên khách hàng</td>
@@ -33,12 +28,7 @@
 
               <tbody v-for="item of listBills" :key="item.id">
               <tr>
-                <td>
-                  <label class="au-checkbox">
-                    <input type="checkbox">
-                    <span class="au-checkmark"></span>
-                  </label>
-                </td>
+
                 <td>
                   <div class="table-data__info">
                     <h6>{{item.id}}</h6>
@@ -88,8 +78,8 @@
                 </td>
                 <td>
                     <span>
-                      <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                        <router-link :to="{ name: 'DetailRentBill', query: { id:item.id }}">Chi tiết</router-link>
+                      <button class="au-btn au-btn-icon au-btn--brown au-btn--small">
+                        <router-link :to="{ name: 'DetailRentBill', query: { id:item.id }}" class="btn-router">Chi tiết</router-link>
                       </button>
                               </span>
                 </td>
@@ -99,8 +89,8 @@
             </table>
           </div>
           <br>
-          <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-            <router-link to="/ManageIndex" class="zmdi zmdi-plus">Quay lại</router-link>
+          <button class="au-btn au-btn-icon au-btn--brown au-btn--small">
+            <router-link to="/ManageIndex" class="btn-router">Quay lại</router-link>
           </button>
           <br><br>
         </div>
@@ -108,52 +98,17 @@
       </div>
     </div>
   </div>
-<!--  =============-->
-<!--  <div>-->
-<!--    <div class="GetRentBills">-->
-<!--      <h1>Danh sách tất cả hóa đơn thuê</h1>-->
-<!--      <button><router-link to="/ManageBill/exchange-bill">Xem hóa đơn đổi</router-link></button>-->
-<!--      <br><br>-->
-<!--      <table border="1px">-->
-<!--        <tr>-->
-<!--          <td></td>-->
-<!--          <td>Mã hóa đơn:</td>-->
-<!--          <td>Mã giao dịch</td>-->
-<!--          <td>Tên khách hàng</td>-->
-<!--          <td>Số cuốn sách</td>-->
-<!--          <td>Số tiền</td>-->
-<!--          <td>Phí đặt cọc</td>-->
-<!--          <td>Phí thuê</td>-->
-<!--          <td>Trạng thái thanh toán</td>-->
-<!--          <td>Ngày thanh toán</td>-->
-<!--          <td>Phương thức thanh toán</td>-->
-<!--        </tr>-->
-<!--        <tr v-for="item of listBills" :key="item.id">-->
-<!--          <td><router-link :to="{ name: 'DetailRentBill', query: { id:item.id }}"><button>Chi tiết</button></router-link></td>-->
-<!--          <td>{{item.id}}</td>-->
-<!--          <td>{{item.exchangeId}}</td>-->
-<!--          <td>{{item.user.fullname}}</td>-->
-<!--          <td>{{item.totalBook}}</td>-->
-<!--          <td>{{item.totalAmount}}</td>-->
-<!--          <td>{{item.depositFee}}</td>-->
-<!--          <td>{{item.rentFee}}</td>-->
-<!--          <td>{{item.isPaid}}</td>-->
-<!--          <td>{{item.paidDate}}</td>-->
-<!--          <td>{{item.payments}}</td>-->
-<!--        </tr>-->
-<!--      </table>-->
-<!--    </div>-->
-<!--    <br>-->
-<!--    <button><router-link to="/ManageIndex">Quay lại</router-link></button><br><br>-->
-<!--  </div>-->
+  </SideBar>
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_BILL} from "@/constant/constant-api";
+import SideBar from "../../components/SideBar";
 
 export default {
   name: "GetRentBills",
+  components: {SideBar},
   data() {
     return {
       listBills: ''
@@ -173,13 +128,26 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 * {
   margin: 0;
   padding: 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: calc(-1 * var(--bs-gutter-y));
+  width: 100%;
+  position: relative;
+  left: 90px;
+}
+
+.col-lg-6 {
+  width: 90%;
 }
 
 ul {
@@ -598,10 +566,22 @@ section {
 }
 
 .au-btn:hover {
-  color: #fff;
+  color: #9D6B54;
   background: #3868cd;
+  border: 2px solid #9D6B54;
+  line-height: 45px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
 }
-
+.btn-router{
+  color: white;
+  text-decoration: none;
+}
+.btn-router:hover{
+  color: #9D6B54;
+  text-decoration: none;
+}
 .au-btn--blue2 {
   background: #00aced;
 }
@@ -624,12 +604,13 @@ section {
   background: #4272d7;
 }
 
-.au-btn--green {
-  background: #63c76a;
+.au-btn--brown {
+  background: #9D6B54;
 }
 
-.au-btn--green:hover {
-  background: #59bd60;
+.au-btn--brown:hover {
+  background: white;
+  text-decoration-color: #9D6B54;
 }
 
 .au-btn-plus {
@@ -699,8 +680,9 @@ section {
 
 .au-btn--small {
   padding: 0 20px;
-  line-height: 20px;
-  font-size: 13px;
+  line-height: 40px;
+  font-size: 14px;
+  width: max-content;
 }
 
 /*Page Loader*/
@@ -849,11 +831,11 @@ section {
 
 /* ----- Input ----- */
 .au-input {
-  line-height: 43px;
+  line-height: 40px;
   border: 1px solid #e5e5e5;
   font-size: 14px;
   color: #666;
-  padding: 0 17px;
+  padding: 0 0px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -943,7 +925,7 @@ section {
 }
 
 .au-input--xl {
-  min-width: 935px;
+  min-width: 400px;
 }
 
 @media (max-width: 1600px) {

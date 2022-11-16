@@ -1,4 +1,5 @@
 <template>
+  <SideBar>
   <div>
     <div class="GetComments">
       <h1>Danh sách bình luận</h1>
@@ -24,14 +25,17 @@
     <br>
     <button><router-link to="/ManagePost">Quay lại</router-link></button>
   </div>
+  </SideBar>
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_POST} from "@/constant/constant-api";
+import SideBar from "../../components/SideBar";
 
 export default {
   name: "GetComments",
+  components: {SideBar},
   data() {
     return {
       listComments: ''

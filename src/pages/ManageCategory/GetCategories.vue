@@ -1,4 +1,5 @@
 <template>
+  <SideBar>
   <div>
     <div class="GetCategories">
       <h1>Danh sách thể loại</h1>
@@ -19,14 +20,17 @@
     <br>
     <button><router-link to="/ManageIndex">Quay lại</router-link></button>
   </div>
+  </SideBar>
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_CATEGORY} from "@/constant/constant-api";
+import SideBar from "../../components/SideBar";
 
 export default {
   name: "GetCategories",
+  components: {SideBar},
   data() {
     return {
       listCategories: ''

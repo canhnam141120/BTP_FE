@@ -1,33 +1,18 @@
 <template>
+  <SideBar>
     <div class="GetExchanges">
       <div class="row">
         <div class="col-lg-6">
           <div class="user-data m-b-30">
             <h3 class="title-3 m-b-30">
               <i class="zmdi zmdi-account-calendar"></i>Danh sách tất cả giao dịch đổi</h3>
-<!--            <div class="filters m-b-45">-->
-<!--              <br>-->
-<!--              <form class="form-header" action="" method="POST">-->
-<!--                <input class="au-input au-input&#45;&#45;xl" type="text"-->
-<!--                       placeholder="Nhập email hoặc số điện thoại" v-model="search" required/>-->
-<!--                <button class="au-btn&#45;&#45;submit" v-on:click="HandleSearch">-->
-<!--                  Tìm kiếm-->
-<!--                </button>-->
-<!--              </form>-->
-<!--            </div>-->
-            <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-              <router-link to="/ManageTransaction/rent" class="zmdi zmdi-plus">Xem giao dịch thuê</router-link>
+            &nbsp;<button class="au-btn au-btn-icon au-btn--brown au-btn--small" >
+            <router-link to="/ManageTransaction/rent" class="btn-router">Xem giao dịch thuê</router-link>
             </button>
             <div class="table-responsive table-data">
               <table class="table">
                 <thead>
                 <tr>
-                  <td>
-                    <label class="au-checkbox">
-                      <input type="checkbox">
-                      <span class="au-checkmark"></span>
-                    </label>
-                  </td>
                   <td>Mã giao dịch</td>
                   <td>Mã khách hàng 1</td>
                   <td>Tên khách hàng 1</td>
@@ -40,12 +25,6 @@
 
                 <tbody v-for="item of listExchanges" :key="item.id">
                 <tr>
-                  <td>
-                    <label class="au-checkbox">
-                      <input type="checkbox">
-                      <span class="au-checkmark"></span>
-                    </label>
-                  </td>
                   <td>
                     <div class="table-data__info">
                       <h6>{{ item.id }}</h6>
@@ -66,7 +45,7 @@
                               </span>
                   </td>
                   <td>
-                    <span >{{ item.userId2Navigation.fullname }}</span>
+                    <span>{{ item.userId2Navigation.fullname }}</span>
                   </td>
                   <td>
                               <span>
@@ -81,10 +60,10 @@
 
                   <td>
                     <span>
-                      <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                        <router-link :to="{ name: 'DetailExchange', query: { id:item.id }}">Chi tiết</router-link>
+                      <button class="au-btn au-btn-icon au-btn--brown au-btn--small" :to="{ name: 'DetailExchange', query: { id:item.id }}">
+                        Chi tiết
                       </button>
-                              </span>
+                    </span>
                   </td>
                 </tr>
 
@@ -92,73 +71,28 @@
               </table>
             </div>
             <br>
-            <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-              <router-link to="/ManageIndex" class="zmdi zmdi-plus">Quay lại</router-link>
+            &nbsp;<span>
+            <button class="au-btn au-btn-icon au-btn--brown au-btn--small">
+              <router-link to="/ManageIndex" class="btn-router">Quay lại</router-link>
             </button>
+            </span>
             <br><br>
           </div>
 
         </div>
       </div>
     </div>
-
-<!--          ==========-->
-<!--          <h1>Danh sách tất cả giao dịch đổi</h1>-->
-<!--          <button>-->
-<!--            <router-link to="/ManageTransaction/rent">Xem giao dịch thuê</router-link>-->
-<!--          </button>-->
-<!--          <br><br>-->
-<!--          <table border="1px">-->
-<!--            <tr>-->
-<!--              <td></td>-->
-<!--              <td>Mã giao dịch</td>-->
-<!--              <td>Mã khách hàng 1</td>-->
-<!--              <td>Tên khách hàng 1</td>-->
-<!--              <td>Mã khách hàng 2</td>-->
-<!--              <td>Tên khách hàng 2</td>-->
-<!--              <td>Ngày tạo</td>-->
-<!--              <td>Trạng thái</td>-->
-<!--              <td></td>-->
-<!--              <td></td>-->
-<!--            </tr>-->
-<!--            <tr v-for="item of listExchanges" :key="item.id">-->
-<!--              <td>-->
-<!--                <router-link :to="{ name: 'DetailExchange', query: { id:item.id }}">-->
-<!--                  <button>Chi tiết</button>-->
-<!--                </router-link>-->
-<!--              </td>-->
-<!--              <td>{{ item.id }}</td>-->
-<!--              <td>{{ item.userId1 }}</td>-->
-<!--              <td>{{ item.userId1Navigation.fullname }}</td>-->
-<!--              <td>{{ item.userId2 }}</td>-->
-<!--              <td>{{ item.userId2Navigation.fullname }}</td>-->
-<!--              <td>{{ item.date }}</td>-->
-<!--              <td>{{ item.status }}</td>-->
-<!--              <td>-->
-<!--                <router-link :to="{ name: 'ExchangeBill', query: { id:item.id }}">-->
-<!--                  <button>Hóa đơn</button>-->
-<!--                </router-link>-->
-<!--              </td>-->
-<!--              <td>-->
-<!--                <button>Hủy</button>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--          </table>-->
-
-<!--        <br>-->
-<!--        <button>-->
-<!--          <router-link to="/ManageIndex">Quay lại</router-link>-->
-<!--        </button>-->
-<!--        <br><br>-->
-
+  </SideBar>
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_TRANSACTION} from "@/constant/constant-api";
+import SideBar from "../../components/SideBar";
 
 export default {
   name: "GetExchanges",
+  components: {SideBar},
   data() {
     return {
       listExchanges: ''
@@ -178,13 +112,26 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 * {
   margin: 0;
   padding: 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: calc(-1 * var(--bs-gutter-y));
+  width: 100%;
+  position: relative;
+  left: 90px;
+}
+
+.col-lg-6 {
+  width: 90%;
 }
 
 ul {
@@ -603,10 +550,24 @@ section {
 }
 
 .au-btn:hover {
-  color: #fff;
+  color: #9D6B54;
   background: #3868cd;
+  border: 2px solid #9D6B54;
+  line-height: 45px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
 }
+.btn-router{
+  color: white;
+  text-decoration: none;
 
+}
+.btn-router:hover{
+  color: #9D6B54;
+  text-decoration: none;
+
+}
 .au-btn--blue2 {
   background: #00aced;
 }
@@ -629,12 +590,13 @@ section {
   background: #4272d7;
 }
 
-.au-btn--green {
-  background: #63c76a;
+.au-btn--brown {
+  background: #9D6B54;
 }
 
-.au-btn--green:hover {
-  background: #59bd60;
+.au-btn--brown:hover {
+  background: white;
+  text-decoration-color: #9D6B54;
 }
 
 .au-btn-plus {
@@ -704,8 +666,9 @@ section {
 
 .au-btn--small {
   padding: 0 20px;
-  line-height: 20px;
-  font-size: 13px;
+  line-height: 40px;
+  font-size: 14px;
+  width: max-content;
 }
 
 /*Page Loader*/
@@ -854,11 +817,11 @@ section {
 
 /* ----- Input ----- */
 .au-input {
-  line-height: 43px;
+  line-height: 40px;
   border: 1px solid #e5e5e5;
   font-size: 14px;
   color: #666;
-  padding: 0 17px;
+  padding: 0 0px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -948,7 +911,7 @@ section {
 }
 
 .au-input--xl {
-  min-width: 935px;
+  min-width: 400px;
 }
 
 @media (max-width: 1600px) {

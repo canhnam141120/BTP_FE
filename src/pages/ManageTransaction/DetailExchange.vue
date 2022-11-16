@@ -1,4 +1,5 @@
 <template>
+  <SideBar>
   <div>
     <div class="DetailExchange">
       <h1>Chi tiết giao dịch đổi</h1><br><br>
@@ -40,14 +41,17 @@
     <br>
     <button><router-link to="/ManageTransaction/exchange">Quay lại</router-link></button>
   </div>
+  </SideBar>
 </template>
 
 <script>
 import {API_MANAGE_TRANSACTION} from "@/constant/constant-api";
 import apiFactory from "@/config/apiFactory";
+import SideBar from "../../components/SideBar";
 
 export default {
   name: "DetailExchange",
+  components: {SideBar},
   data() {
     return {
       exchange: ''

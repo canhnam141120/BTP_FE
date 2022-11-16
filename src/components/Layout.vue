@@ -45,6 +45,12 @@
                 active-color="#9D6B54"
             >Giới thiệu
             </router-link>
+            <router-link
+                to="/ManageIndex"
+                class="Main__list__item musers-management"
+                active-color="#9D6B54"
+            >Quản trị
+            </router-link>
             <span class="Main__indicator"></span>
           </nav>
         </div>
@@ -276,12 +282,12 @@ export default {
     background: white;
     height: 75px;
     &__container {
-      max-width: 1230px;
+      //max-width: 1230px;
       margin-left: auto;
       margin-right: auto;
       padding-right: 15px;
       padding-left: 15px;
-      width: 100%;
+      //width: 100%;
       height: 55px;
       display: flex;
       align-items: center;

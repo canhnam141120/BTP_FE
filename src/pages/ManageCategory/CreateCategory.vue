@@ -1,4 +1,5 @@
 <template>
+  <SideBar>
   <div id="CreateCategory">
     <h3>Thêm thể loại!</h3>
     <label for="name"><b>Tên</b></label>
@@ -8,14 +9,17 @@
     <br>
     <button><router-link to="/ManageCategory">Quay lại</router-link></button>
   </div>
+  </SideBar>
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_CATEGORY} from "@/constant/constant-api";
+import SideBar from "../../components/SideBar";
 
 export default {
   name: "CreateCategory",
+  components: {SideBar},
   data() {
     return {
       name: '',

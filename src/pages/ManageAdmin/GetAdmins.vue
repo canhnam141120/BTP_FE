@@ -1,152 +1,138 @@
 <template>
-  <div>
-    <div class="GetAdmins">
-      <!-- USER DATA-->
-      <div class="row">
-        <div class="col-lg-6">
-          <div class="user-data m-b-30">
-            <h3 class="title-3 m-b-30">
-              <i class="zmdi zmdi-account-calendar"></i>Danh sách quản trị viên</h3>
-            <div class="filters m-b-45">
-              <br>
+  <SideBar>
+    <div>
+      <div class="GetAdmins">
+        <!-- USER DATA-->
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="user-data m-b-30">
+              <h3 class="title-3 m-b-30">
+                <i class="zmdi zmdi-account-calendar"></i>Danh sách quản trị viên</h3>
+              <div class="filters m-b-45">
+                <br>
                 <input class="au-input au-input--xl" type="text"
                        placeholder="Nhập email hoặc số điện thoại" v-model="search" required/>
-                <button class="au-btn--submit" v-on:click="HandleSearch">
+                <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleSearch">
                   Tìm kiếm
                 </button>
+              </div>
+              <div>
+                <div class="table-responsive table-data">
+                  <table class="table">
+                    <thead>
+                    <tr>
+                      <td>Mã quản trị viên</td>
+                      <td>Email</td>
+                      <td>Đã xác thực</td>
+                      <td>Tên đầy đủ</td>
+                      <td>Số điện thoại</td>
+                      <td>Địa chỉ</td>
+                      <td>Trạng thái hoạt động</td>
+                    </tr>
+                    </thead>
+
+                    <tbody v-for="item of listAdmins" :key="item.id">
+                    <tr>
+                      <td>
+                        <div class="table-data__info">
+                          <h6>{{ item.id }}</h6>
+                        </div>
+                      </td>
+
+                      <td>
+                                  <span>
+                                    {{ item.email }}
+                                  </span>
+                      </td>
+                      <td>
+                                            <span>
+                                                <i>{{ item.isVerify }}</i>
+                                            </span>
+                      </td>
+                      <td>
+                                            <span>
+                                                {{ item.fullname }}
+                                            </span>
+                      </td>
+                      <td>
+                        <span class="role admin">{{ item.phone }}</span>
+                      </td>
+                      <td>
+                                            <span>
+                                                {{ item.addressMain }}
+                                            </span>
+                      </td>
+                      <td>
+                                            <span>
+                                                <i>{{ item.isActive }}</i>
+                                            </span>
+                      </td>
+
+                      <td>
+                                            <span>
+                                                <button class="au-btn au-btn-icon au-btn--brown au-btn--small"
+                                                        v-on:click="HandleAuthority(item.id)">
+                                        <i class="zmdi zmdi-plus"></i>Huỷ quyền
+                                      </button>
+                                            </span>
+                      </td>
+                    </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <br>
+              <button class="au-btn au-btn-icon au-btn--green au-btn--small">
+                <router-link to="/ManageIndex" class="zmdi zmdi-plus">Quay lại</router-link>
+              </button>
+              <br><br>
             </div>
-            <div class="table-responsive table-data">
-              <table class="table">
-                <thead>
-                <tr>
-                  <td>
-                    <label class="au-checkbox">
-                      <input type="checkbox">
-                      <span class="au-checkmark"></span>
-                    </label>
-                  </td>
-                  <td>Mã quản trị viên</td>
-                  <td>Email</td>
-                  <td>Đã xác thực</td>
-                  <td>Tên đầy đủ</td>
-                  <td>Số điện thoại</td>
-                  <td>Địa chỉ</td>
-                  <td>Trạng thái hoạt động</td>
-                </tr>
-                </thead>
-
-                <tbody v-for="item of listAdmins" :key="item.id">
-                <tr>
-                  <td>
-                    <label class="au-checkbox">
-                      <input type="checkbox">
-                      <span class="au-checkmark"></span>
-                    </label>
-                  </td>
-                  <td>
-                    <div class="table-data__info">
-                      <h6>{{ item.id }}</h6>
-                    </div>
-                  </td>
-
-                  <td>
-                    <span>
-                      {{ item.email }}
-                    </span>
-                  </td>
-                  <td>
-                              <span>
-                                  <i>{{ item.isVerify }}</i>
-                              </span>
-                  </td>
-                  <td>
-                              <span>
-                                  {{ item.fullname }}
-                              </span>
-                  </td>
-                  <td>
-                    <span class="role admin">{{ item.phone }}</span>
-                  </td>
-                  <td>
-                              <span>
-                                  {{ item.addressMain }}
-                              </span>
-                  </td>
-                  <td>
-                              <span>
-                                  <i>{{ item.isActive }}</i>
-                              </span>
-                  </td>
-
-                  <td>
-                              <span>
-                                  <button class="au-btn au-btn-icon au-btn--green au-btn--small"
-                                          v-on:click="HandleAuthority(item.id)">
-                          <i class="zmdi zmdi-plus"></i>Huỷ quyền
-                        </button>
-                              </span>
-                  </td>
-                </tr>
-
-                </tbody>
-              </table>
-            </div>
-            <br>
-            <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-              <router-link to="/ManageIndex" class="zmdi zmdi-plus">Quay lại</router-link>
-            </button>
-            <br><br>
           </div>
-          <!-- END USER DATA-->
-          <!--          <h1>Danh sách quản trị viên</h1>-->
-          <!--          <p><input type="text" placeholder="Nhập email hoặc số điện thoại" v-model="search" required>-->
-          <!--            <button v-on:click="HandleSearch">Tìm kiếm</button>-->
-          <!--          </p>-->
-          <!--          <br>-->
-          <!--          <table border="1px">-->
-          <!--            <tr>-->
-          <!--              <td>Mã quản trị viên</td>-->
-          <!--              <td>Email</td>-->
-          <!--              <td>Đã xác thực</td>-->
-          <!--              <td>Tên đầy đủ</td>-->
-          <!--              <td>Số điện thoại</td>-->
-          <!--              <td>Địa chỉ</td>-->
-          <!--              <td>Trạng thái hoạt động</td>-->
-          <!--              <td></td>-->
-          <!--            </tr>-->
-          <!--            <tr v-for="item of listAdmins" :key="item.id">-->
-          <!--              <td>{{ item.id }}</td>-->
-          <!--              <td>{{ item.email }}</td>-->
-          <!--              <td>{{ item.isVerify }}</td>-->
-          <!--              <td>{{ item.fullname }}</td>-->
-          <!--              <td>{{ item.phone }}</td>-->
-          <!--              <td>{{ item.addressMain }}</td>-->
-          <!--              <td>{{ item.isActive }}</td>-->
-          <!--              <td>-->
-          <!--                <button v-on:click="HandleAuthority(item.id)">Hủy Quyền</button>-->
-          <!--              </td>-->
-          <!--            </tr>-->
-          <!--          </table>-->
         </div>
-        <!--        <br>-->
-        <!--        <button>-->
-        <!--          <router-link to="/ManageIndex">Quay lại</router-link>-->
-        <!--        </button>-->
-        <!--        <br><br>-->
       </div>
     </div>
-  </div>
-
+    <div>
+      <!--            <div>-->
+      <!--              <b-table hover head-variant="dark"-->
+      <!--                       :items="listAdmins"-->
+      <!--                       :fields="fields"-->
+      <!--                       :sort-by.sync="sortBy"-->
+      <!--                       :sort-desc.sync="sortDesc"-->
+      <!--                       responsive="sm"-->
+      <!--              >-->
+      <!--                <template v-slot:cell(delete)="data">-->
+      <!--                  <button class="btn btn-dark" v-on:click="HandleAuthority(item.id)">Huỷ quyền</button>-->
+      <!--                </template>-->
+      <!--              </b-table>-->
+      <!--            </div>-->
+    </div>
+  </SideBar>
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_ADMIN} from "@/constant/constant-api";
+import SideBar from "../../components/SideBar";
+
 
 export default {
   name: "ManageAdmin",
+  components: {SideBar},
   data() {
     return {
+      sortBy: 'name',
+      sortDesc: false,
+      fields: [
+        {key: 'id', sortable: true},
+        {key: 'email', sortable: true},
+        {key: 'isVerify', sortable: false},
+        {key: 'fullname', sortable: true},
+        {key: 'phone', sortable: false},
+        {key: 'addressMain', sortable: false},
+        {key: 'isActive', label: 'active'},
+        {key: 'delete', label: 'delete'},
+      ],
       listAdmins: '',
       search: ''
     }
@@ -183,13 +169,26 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 * {
   margin: 0;
   padding: 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: calc(-1 * var(--bs-gutter-y));
+  width: 100%;
+  position: relative;
+  left: 90px;
+}
+
+.col-lg-6 {
+  width: 90%;
 }
 
 ul {
@@ -608,8 +607,13 @@ section {
 }
 
 .au-btn:hover {
-  color: #fff;
+  color: #9D6B54;
   background: #3868cd;
+  border: 2px solid #9D6B54;
+  line-height: 45px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .au-btn--blue2 {
@@ -634,12 +638,13 @@ section {
   background: #4272d7;
 }
 
-.au-btn--green {
-  background: #63c76a;
+.au-btn--brown {
+  background: #9D6B54;
 }
 
-.au-btn--green:hover {
-  background: #59bd60;
+.au-btn--brown:hover {
+  background: white;
+  text-decoration-color: #9D6B54;
 }
 
 .au-btn-plus {
@@ -711,6 +716,7 @@ section {
   padding: 0 20px;
   line-height: 40px;
   font-size: 14px;
+  width: max-content;
 }
 
 /*Page Loader*/
@@ -859,11 +865,11 @@ section {
 
 /* ----- Input ----- */
 .au-input {
-  line-height: 43px;
+  line-height: 40px;
   border: 1px solid #e5e5e5;
   font-size: 14px;
   color: #666;
-  padding: 0 17px;
+  padding: 0 0px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -953,7 +959,7 @@ section {
 }
 
 .au-input--xl {
-  min-width: 935px;
+  min-width: 400px;
 }
 
 @media (max-width: 1600px) {

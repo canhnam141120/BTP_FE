@@ -1,38 +1,192 @@
 <template>
-<!--  <div>-->
-<!--  <div>-->
-<!--    <app-header></app-header>-->
-<!--    <main class="py-4">-->
-<!--        <router-view></router-view>-->
-<!--    </main>-->
-<!--  </div>-->
-<!--  </div>-->
-<div>
-  <main>
-    <SideBar_Management></SideBar_Management>
-    <router-view></router-view>
-  </main>
-</div>
+  <!--  <div>-->
+  <!--  <div>-->
+  <!--    <app-header></app-header>-->
+  <!--    <main class="py-4">-->
+  <!--        <router-view></router-view>-->
+  <!--    </main>-->
+  <!--  </div>-->
+  <!--  </div>-->
+  <!--<div>-->
+  <!--  <main>-->
+  <!--    <SideBar_Management></SideBar_Management>-->
+  <!--    <router-view></router-view>-->
+  <!--  </main>-->
+  <!--</div>-->
+<SideBar>
+
+    <div class="GetAdmins">
+      <!-- USER DATA-->
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="user-data m-b-30">
+            <h3 class="title-3 m-b-30">
+              <i class="zmdi zmdi-account-calendar"></i>Danh sách quản trị viên</h3>
+            <div class="filters m-b-45">
+              <br>
+              <input class="au-input au-input--xl" type="text"
+                     placeholder="Nhập email hoặc số điện thoại" v-model="search" required/>
+              <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleSearch">
+                Tìm kiếm
+              </button>
+            </div>
+            <div>
+              <div class="table-responsive table-data">
+                <table class="table">
+                  <thead>
+                  <tr>
+                    <td>Mã quản trị viên</td>
+                    <td>Email</td>
+                    <td>Đã xác thực</td>
+                    <td>Tên đầy đủ</td>
+                    <td>Số điện thoại</td>
+                    <td>Địa chỉ</td>
+                    <td>Trạng thái hoạt động</td>
+                  </tr>
+                  </thead>
+
+                  <tbody v-for="item of listAdmins" :key="item.id">
+                  <tr>
+                    <td>
+                      <div class="table-data__info">
+                        <h6>{{ item.id }}</h6>
+                      </div>
+                    </td>
+
+                    <td>
+                                  <span>
+                                    {{ item.email }}
+                                  </span>
+                    </td>
+                    <td>
+                                            <span>
+                                                <i>{{ item.isVerify }}</i>
+                                            </span>
+                    </td>
+                    <td>
+                                            <span>
+                                                {{ item.fullname }}
+                                            </span>
+                    </td>
+                    <td>
+                      <span class="role admin">{{ item.phone }}</span>
+                    </td>
+                    <td>
+                                            <span>
+                                                {{ item.addressMain }}
+                                            </span>
+                    </td>
+                    <td>
+                                            <span>
+                                                <i>{{ item.isActive }}</i>
+                                            </span>
+                    </td>
+
+                    <td>
+                                            <span>
+                                                <button class="au-btn au-btn-icon au-btn--brown au-btn--small"
+                                                        v-on:click="HandleAuthority(item.id)">
+                                        <i class="zmdi zmdi-plus"></i>Huỷ quyền
+                                      </button>
+                                            </span>
+                    </td>
+                  </tr>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <br>
+            <button class="au-btn au-btn-icon au-btn--brown au-btn--small">
+              <router-link to="/ManageIndex" class="btn-router">Quay lại</router-link>
+            </button>
+            <br><br>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</SideBar>
 </template>
 
 <script>
-import SideBar_Management from "@/components/SideBar_Management";
+import apiFactory from "@/config/apiFactory";
+import {API_MANAGE_ADMIN} from "@/constant/constant-api";
+import SideBar from "../../components/SideBar";
 
 export default {
   name: "ManageIndex",
-components:{
-  SideBar_Management,
-},
+  components: {SideBar},
+  data() {
+    return {
+      sortBy: 'name',
+      sortDesc: false,
+      fields: [
+        {key: 'id', sortable: true},
+        {key: 'email', sortable: true},
+        {key: 'isVerify', sortable: false},
+        {key: 'fullname', sortable: true},
+        {key: 'phone', sortable: false},
+        {key: 'addressMain', sortable: false},
+        {key: 'isActive', label: 'active'},
+        {key: 'delete', label: 'delete'},
+      ],
+      listAdmins: '',
+      search: ''
+    }
+  },
+  created() {
+    this.getAdmins()
+  },
+  methods: {
+    getAdmins() {
+      apiFactory.callApi(API_MANAGE_ADMIN.LIST_ADMIN, 'GET', {}).then((res) => {
+        this.listAdmins = res.data.data
+      }).catch(() => {
+      });
+    },
+    HandleAuthority(id) {
+      const url = API_MANAGE_ADMIN.REMOVE_ADMIN + id
+      apiFactory.callApi(url, 'PUT', {}).then((res) => {
+        if (res.data.message === 'SUCCESS') {
+          this.$router.go();
+        }
+      }).catch(() => {
+        alert('Hủy quyền không thành công!')
+      });
+    },
+    HandleSearch() {
+      apiFactory.callApi(API_MANAGE_ADMIN.SEARCH_ADMIN, 'POST', {
+        search: this.search
+      }).then((res) => {
+        this.listAdmins = res.data.data
+      }).catch(() => {
+      });
+    }
+  }
 };
 </script>
 
-<style scoped>
+<style>
 * {
   margin: 0;
   padding: 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: calc(-1 * var(--bs-gutter-y));
+  width: 100%;
+  position: relative;
+  left: 1%;
+}
+
+.col-lg-6 {
+  width: 100%;
 }
 
 ul {
@@ -44,6 +198,15 @@ input[type='button'] {
   cursor: pointer;
 }
 
+.btn-router {
+  color: white;
+  text-decoration: none;
+}
+
+.btn-router:hover {
+  color: #9D6B54;
+  text-decoration: none;
+}
 button:focus,
 input:focus,
 textarea:focus {
@@ -451,8 +614,13 @@ section {
 }
 
 .au-btn:hover {
-  color: #fff;
+  color: #9D6B54;
   background: #3868cd;
+  border: 2px solid #9D6B54;
+  line-height: 45px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .au-btn--blue2 {
@@ -477,12 +645,13 @@ section {
   background: #4272d7;
 }
 
-.au-btn--green {
-  background: #63c76a;
+.au-btn--brown {
+  background: #9D6B54;
 }
 
-.au-btn--green:hover {
-  background: #59bd60;
+.au-btn--brown:hover {
+  background: white;
+  text-decoration-color: #9D6B54;
 }
 
 .au-btn-plus {
@@ -552,8 +721,9 @@ section {
 
 .au-btn--small {
   padding: 0 20px;
-  line-height: 20px;
-  font-size: 13px;
+  line-height: 40px;
+  font-size: 14px;
+  width: max-content;
 }
 
 /*Page Loader*/
@@ -702,11 +872,11 @@ section {
 
 /* ----- Input ----- */
 .au-input {
-  line-height: 43px;
+  line-height: 40px;
   border: 1px solid #e5e5e5;
   font-size: 14px;
   color: #666;
-  padding: 0 17px;
+  padding: 0 0px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -796,7 +966,7 @@ section {
 }
 
 .au-input--xl {
-  min-width: 935px;
+  min-width: 400px;
 }
 
 @media (max-width: 1600px) {
@@ -1566,7 +1736,7 @@ section {
 }
 
 .menu-sidebar {
-  width: 100%;
+  width: 300px;
   position: fixed;
   left: 0;
   top: 0;
@@ -1577,7 +1747,7 @@ section {
 
 .menu-sidebar .logo {
   background: #f5f5f5;
-  height: 40px;
+  height: 75px;
   padding: 0 35px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -4339,7 +4509,7 @@ section {
 }
 
 .table-data {
-  height: 472px;
+  height: auto;
   overflow-y: auto;
 }
 
@@ -14638,4 +14808,5 @@ section {
 .vue-lists ul, .vue-lists ol {
   padding-left: 30px;
 }
+
 </style>
