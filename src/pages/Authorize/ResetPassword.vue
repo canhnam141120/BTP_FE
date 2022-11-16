@@ -24,7 +24,7 @@
               <button v-on:click="HandleResetPassword">Xác nhận</button>
             </div>
             <div class="under">
-                <a href="/register" class="link">Tạo mới tài khoản?</a>
+                <router-link to="/register" class="link">Tạo mới tài khoản?</router-link>
             </div>
           </div>
         </div>

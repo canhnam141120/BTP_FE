@@ -21,7 +21,7 @@
           </div>
           <div class="under">
               <a v-on:click="HandleForgotPassword" class="forgot-pass">Quên mật khẩu?</a>
-              <a href="/register" class="link">Đăng ký</a>
+              <router-link to="/register" class="link">Đăng ký</router-link>
           </div>
         </div>
       </div>

@@ -33,10 +33,10 @@
             </div>
             <div class="term">
               <label>Bằng việc đăng ký, bạn đồng ý với <strong>Trạm Sách</strong> về</label>
-              <label><a href="">Điều khoản dịch vụ</a> & <a href=""> Các chính sách</a></label>
+              <label><router-link to="/">Điều khoản dịch vụ</router-link> & <router-link to="/"> Các chính sách</router-link></label>
             </div>
             <div class="under">
-              <a href="/login" class="link">Đã có tài khoản?</a>
+              <router-link to="/login" class="link">Đã có tài khoản?</router-link>
             </div>
           </div>
         </div>
