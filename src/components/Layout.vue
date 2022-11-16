@@ -95,15 +95,11 @@
                   </router-link>
                   <hr style="margin: 5px" />
                 </div>
-                <div style="float: right; font-size:14px; padding:0 5px 0 0"><i>admin</i></div>
-              </a>
-              <hr/>
-              <a href="/login" class="dropdown-item">
-                <i class="la la-sign-in-alt"></i>
-                Logout
-              </a>
+                <div style="float: right; font-size:14px; padding:0 5px 0 0"></div>
+                <button v-on:click="HandleLogout" class="dropdown-item">Đăng xuất</button>
             </b-dropdown>
           </li>
+          </nav>
         </ul>
       </div>
     </header>
@@ -137,7 +133,8 @@
                 <h3 class="heading">TÀI KHOẢN</h3>
                 <ul class="list">
                   <li class="item">
-                    <a href="" class="item-link">Đăng nhập/Đăng ký</a>
+                    <a v-if="this.$cookies.get('token')" v-on:click="HandleLogout" class="item-link" style="cursor: pointer">Đăng xuất</a>
+                    <a v-else href="/login" class="item-link">Đăng nhập/Đăng ký</a>
                   </li>
                   <li class="item">
                     <a href="" class="item-link">Thay đổi thông tin cá nhân</a>
@@ -228,7 +225,6 @@ export default {
       let token = this.$cookies.get('token');
       try{
         this.user= VueJwtDecode.decode(token, 'utf-8');
-        console.log(this.user);
       }
       catch(err){
         console.log('Not yet Login: ',err);
@@ -290,7 +286,6 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: auto;
     }
   }
 
@@ -474,11 +469,10 @@ export default {
     background: #F0F0F0;
     &__container{
       border-radius: 10px;
-      height: 250px;
+      height: auto;
       max-width: 1230px;
       background-color: #DFD5CB;
       width: 100%;
-      height: auto;
       padding: 45px 15px 25px;
       margin-right: auto;
       margin-left: auto;
@@ -555,11 +549,16 @@ export default {
 }
 
 .contact input{
-  border: none;
+  border: 1px solid silver;
   border-radius: 10px;
+  color: #9D6B54;
   height: 45px;
   color: #9D6B54;
   padding: 12px 10px;
+}
+
+.contact input:focus{
+  border-color: #9D6B54;
 }
 
 .contact .input1{

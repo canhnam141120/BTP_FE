@@ -1,20 +1,109 @@
 <template>
-  <div class="header">
-    <a href="/" class="logo"><img src="@/image/logo-tramsach.png" alt="Logo Trạm Sách"></a>
-    <div class="header-menu">
-      <a class="active" href="/">Về trạm sách</a>
-      <a href="#booklist">Tủ sách</a>
-      <a href="#blog">Blog</a>
-      <a href="#term">Chính sách & Điều khoản</a>
-      <a href="#process">Quy trình</a>
-      <RouterLink v-if="user.role == 1 || user.role == 2" to="/ManageIndex">Quản trị</RouterLink>
-    </div>
-    <div class="header-right">
-      <button v-if="!this.$cookies.get('token')"><router-link  to="/register" class="header-button">Đăng ký</router-link></button>
-      <button v-else v-on:click="HandleLogout" >Đăng xuất</button>
-      <button v-if="!this.$cookies.get('token')"><router-link to="/login" class="header-button">Đăng nhập</router-link></button>
-      <button v-else><router-link to="/PersonalIndex" class="header-button">Xin chào {{user.name}}</router-link></button>
-    </div>
+  <div style="display: flex; flex-direction: column; min-height: 100vh">
+    <header class="Main__header">
+      <div class="Main__header__container">
+        <div class="Main__logo">
+          <a href="/">
+            <img src="../image/logo.png" alt="Logo Trạm Sách"/>
+          </a>
+        </div>
+        <div>
+          <nav class="Main__nav">
+            <router-link
+                to="/"
+                class="Main__list__item home"
+                active-color="#9D6B54"
+            >Trang Chủ
+            </router-link>
+            <router-link
+                to="/course-management"
+                class="Main__list__item course-management"
+                active-color="#9D6B54"
+            >Tủ sách
+            </router-link>
+            <router-link
+                to="/class-management"
+                class="Main__list__item class-management"
+                active-color="#9D6B54"
+            >Blog
+            </router-link>
+            <router-link
+                to="/users-management"
+                class="Main__list__item musers-management"
+                active-color="#9D6B54"
+            >Chính sách và điều khoản
+            </router-link>
+            <router-link
+                to="/users-management"
+                class="Main__list__item musers-management"
+                active-color="#9D6B54"
+            >Quy trình
+            </router-link>
+            <router-link
+                to="/users-management"
+                class="Main__list__item musers-management"
+                active-color="#9D6B54"
+            >Giới thiệu
+            </router-link>
+            <span class="Main__indicator"></span>
+          </nav>
+        </div>
+        <ul class="Main__account">
+
+          <nav v-if="!this.$cookies.get('token')">
+            <router-link to="/login" class="Main__list__item musers-management">Đăng nhập</router-link>
+            <router-link to="/register" class="Main__list__item musers-management">Đăng ký</router-link>
+          </nav>
+          <nav  v-else>
+            <li>
+              <b-dropdown right text="Right align" variant="black" no-caret style="padding: 0">
+                <template v-slot:button-content style="padding: 0">
+                  <label style="margin-bottom: 0">
+                    <span class="Main__avatar">TB</span>
+                  </label>
+                </template>
+                <p class="dropdown-item">
+                  Thông báo 1
+                </p>
+                <hr style="margin: 5px" />
+                <p class="dropdown-item">
+                  Thông báo 2
+                </p>
+              </b-dropdown>
+            </li>
+            <li>
+              <b-dropdown right text="Right align" variant="black" no-caret style="padding: 0">
+                <template v-slot:button-content style="padding: 0">
+                  <label style="margin-bottom: 0">
+                    <span class="Main__avatar">T</span>
+                  </label>
+                </template>
+                <a href="/PersonalIndex" class="dropdown-item">
+                  <div style="display: flex; align-items: center; width: 100%">
+                    <span class="Main__avatar">T</span>
+                    <p class="Main__name">
+                      {{user.name}}
+                    </p>
+                  </div>
+                  <div style="float: right; font-size:14px; padding:0 5px 0 0"></div>
+                </a>
+                <hr style="margin: 5px" />
+                <div v-if="user.role == 1 || user.role == 2">
+                  <router-link  to="/ManageIndex" class="dropdown-item">
+                    <i class="la la-sign-in-alt"></i>
+                    Quản trị
+                  </router-link>
+                  <hr style="margin: 5px" />
+                </div>
+                <div style="float: right; font-size:14px; padding:0 5px 0 0"></div>
+                <button v-on:click="HandleLogout" class="dropdown-item">Đăng xuất</button>
+              </b-dropdown>
+            </li>
+          </nav>
+        </ul>
+      </div>
+    </header>
+    <slot/>
   </div>
 </template>
 
@@ -22,14 +111,14 @@
 import VueJwtDecode from 'vue-jwt-decode';
 
 export default {
-  name: "Header",
+  name: "Layout",
   data(){
     return{
       user: ''
     }
   },
   created() {
-        this.getUserInfo()
+    this.getUserInfo()
   },
   methods:{
     getUserInfo(){
@@ -43,67 +132,409 @@ export default {
     },
     HandleLogout(){
       this.$cookies.remove('token')
-      alert('Đăng xuất thành công!')
       this.$router.go();
     }
   }
 }
 </script>
 
-<style>
-.header {
-  overflow: hidden;
-  background-color: #f1f1f1;
-  padding: 24px 8px;
+<style lang="scss">
+.Main {
+  &__site {
+    width: 100%;
+    height: auto;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    @media (min-width: 576px) {
+      max-width: 540px;
+    }
+    @media (min-width: 768px) {
+      max-width: 720px;
+    }
+    @media (min-width: 992px) {
+      max-width: 960px;
+    }
+    @media (min-width: 1200px) {
+      max-width: 1140px;
+    }
+    @media (min-width: 1500px) {
+      max-width: 1440px;
+    }
+    @media (min-width: 1600px) {
+      max-width: 1560px;
+    }
+  }
+
+  &__header {
+    padding: 10px 0;
+    z-index: 10;
+    border-bottom: 1px solid #D9D9D9;
+    position: sticky;
+    top: 0;
+    background: white;
+    height: 75px;
+    &__container {
+      max-width: 1230px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-right: 15px;
+      padding-left: 15px;
+      width: 100%;
+      height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  &__logo {
+    padding-right: 20px;
+    height: 55px;
+  }
+
+  &__logo img {
+    width: 160px;
+    height: auto;
+    position: unset;
+    padding-bottom: 10px;
+  }
+
+  &__nav {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 20px 0 0;
+    position: relative;
+    height: auto;
+    width: auto;
+    background: inherit;
+    max-width: 100%;
+    transform: none;
+    transition: none;
+  }
+
+  &__list {
+    list-style: none;
+    padding-left: 32px;
+    margin: 0;
+    position: relative;
+
+    &__item {
+      display: inline-block;
+      color: #111111;
+      margin-right: 24px;
+      width: auto;
+      position: relative;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      line-height: 20px;
+    }
+
+    &__item:before {
+      content: '';
+      position: absolute;
+      bottom: -7px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: #9D6B54;
+      opacity: 0;
+      transition: 0.3s;
+    }
+
+    &__item:not(.is_active):hover:before {
+      opacity: 1;
+      bottom: -20px;
+    }
+
+    &__item:not(.is_active):hover {
+      color: #9D6B54;
+      text-decoration: none;
+    }
+  }
+
+  &__account {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    li {
+      font-size: 1rem;
+      display: inline-flex;
+      margin-bottom: 0;
+      margin-left: 12px;
+    }
+
+    &__item h3 {
+      font-weight: 400;
+      transition: all 300ms;
+      margin-bottom: 0;
+      margin-top: 0;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    &__item a {
+      font-weight: 400;
+      transition: all 300ms;
+      margin-bottom: 0;
+      margin-top: 0;
+      text-decoration: none;
+      color: black;
+    }
+  }
+
+  &__chat {
+    background: #E4E6EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 300ms;
+    padding: 4px 8px;
+  }
+
+  &__notify {
+    text-align: center;
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    background: #E4E6EB;
+  }
+
+  &__avatar {
+    cursor: pointer;
+    height: 32px;
+    min-width: 32px;
+    width: 32px;
+    border-radius: 50%;
+    text-transform: uppercase;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__indicator {
+    position: absolute;
+    left: 0;
+    bottom: -20px;
+    transition: 0.4s;
+    height: 3px;
+    z-index: 1;
+  }
+
+  &__subfooter {
+    font-size: 16px;
+    line-height: 1.38;
+    color: #111111;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #F0F0F0;
+    &__container{
+      height: 75px;
+      max-width: 1230px;
+      background-color: #9D6B54;
+      border-radius: 10px;
+      width: 100%;
+      margin-right: auto;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  &__footer {
+    font-size: 16px;
+    line-height: 1.38;
+    color: #111111;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #F0F0F0;
+    &__container{
+      border-radius: 10px;
+      height: auto;
+      max-width: 1230px;
+      background-color: #DFD5CB;
+      width: 100%;
+      padding: 45px 15px 25px;
+      margin-right: auto;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  &__logo {
+    margin-bottom: 10px;
+    height: 24px;
+    width: 153px;
+  }
+
+  &__name {
+    color: #9D6B54;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 550;
+    white-space: nowrap;
+    padding-left: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden
+  }
+  &__name:hover {
+    color: #9D6B54;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 550;
+    white-space: nowrap;
+    padding-left: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden
+  }
 }
 
-.header a {
-  float: left;
-  color: black;
-  text-align: center;
-  padding: 12px;
-  text-decoration: none;
-  font-size: 18px;
-  line-height: 25px;
-  border-radius: 4px;
+.btn-group > .btn {
+  padding: 0;
 }
 
-.header a.logo{
-  padding: 0px;
-}
-
-.header a.logo img{
-  width: 90%;
+.dropdown-menu {
+  min-width: 220px;
+  max-width: 300px;
+  right: 0 !important;
+  left: auto !important;
   height: auto;
+  transform: unset !important;
+  top: 50px !important;
 }
 
-.header a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-.header a.active {
-  background-color: dodgerblue;
+.dropdown-item:hover{
+  background-color: #9D6B54;
   color: white;
 }
 
-.header-menu {
-  margin-left: 100px;
-  padding-right: 10px;
+.contact{
+  height: 50px;
+  max-width: 1050px;
+  background-color: #9D6B54;
+  border-radius: 10px;
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 0px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
+.contact span{
+  color: white;
+  font-size: 22px;
 }
-.header-menu a{
-  margin-left: 30px;
+
+.contact input{
+  border: 1px solid silver;
+  border-radius: 10px;
+  color: #9D6B54;
+  height: 45px;
+  color: #9D6B54;
+  padding: 12px 10px;
+}
+
+.contact input:focus{
+  border-color: #9D6B54;
+}
+
+.contact .input1{
+  width: 250px;
+}
+
+.contact .input2{
+  width: 400px;
+}
+
+.contact button{
+  height: 45px;
+  border: none;
+  border-radius: 10px;
+  width: 100px;
+  font-weight: bold;
+  color: #9D6B54;
+}
+
+.contact button:hover{
+  background-color: #DFD5CB;
+  color: white;
+}
+
+.grid{
+  width: 1200px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.grid-row{
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -5px;
+  margin-right: -5px;
+  justify-content: space-between;
+}
+
+.grid-column{
+  padding-left: 15px;
   padding-right: 15px;
-  /*justify-content: center;*/
+  width: 25%;
 }
-.header-right {
-  float: right;
-  margin-right: 30px;
+
+.heading{
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  color: #9D6B54;
 }
-.header-button{
-  border: burlywood;
-  border-radius: 2px;
-  padding-left: 10px;
+
+.list{
+  padding-left: 0;
+  list-style: none;
 }
+
+.item-link{
+  display: flex;
+  text-decoration: none;
+  font-size: 1rem;
+  color: #737373;
+  padding: 3px 0;
+  align-items: center;
+}
+
+.item-link:hover{
+  color: #9D6B54;
+}
+
+.contact_info{
+  font-weight: bold;
+  display: flex;
+  text-decoration: none;
+  font-size: 1rem;
+  color: #9D6B54;
+  padding: 3px 0;
+  align-items: center;
+}
+
 </style>

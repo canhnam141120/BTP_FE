@@ -1,59 +1,48 @@
 <template>
-  <Layout>
-    <main style="flex-grow: 1; padding: 32px 0 45px; background-image: url('https://lh3.googleusercontent.com/sXC0un20rHcGgJJxnnZGjcD5d-MLiDE4OpJYrluyoHpJdPvJg3lfbgxUCHLQHxag50e7nAOW6AjtONQhL8GFndit_T2-mXhYdTCDrcM0Bv2bHmr3u89VWF-UhvD9B4Y3kB_LrE5zaWv2EH-JMfQfiXYqq3IQG3C3jX3McRmD6I6KIHJz6pbzEc6vNdiFiMg6EA6pV9NXeoMVx3jWYJaB0FaC5ckajjuwbCCe51b41dkCXicw19W4oFayVrbyV2Ntyr0YuIflzrsJbIGe8OlwX63kFD1yx2Qod1boVq8ON0tkuHqueV1dHKlnSONl4_dIFc05aJiuz7IuQk-UOZNt1hbCitJogKDOwFEJXcj_Fz0YMlVwKESHiko7DVARjzKtn_Vg45wrUYGy1mU01_D0VRqUSNqstXauprSGqqAYpIJX5CS7uiylx_BUNlL1G36MvtZGfhJAMeqY3tB01l01XtvdevWIStyQsrgDoKBeIDZM1vaRdjLnbyytFDLNabJZxO5hFsYg-kRUN6bN9l0-3VMia44aBmCH7VhF90iKa03qjmwK_oGgYEHscEFWyjZKFygAKmuZmw2Uf5-Cgv4PrPNVxlFI1EAEe_q2OsVsn7_GmqXBRTC3chJCb4xC5QR-BkiA6IZnag4xmYi7tjrnteUOqhFchcLR0gRA9iN2ElTiRPPa-M1jAksEkuwWT88Oxf3aFIou_FkuQTNW1jy25B_slTZbsUI6lwSzL3vn6tweN8StXlpck0LapS9d_G-Oepw3EA5T54XVE-q36_sEagL2LZTTmlz-6q860N8Tgm5XWTrIIQ40htcD2cUAx1REG06A4VtNF0S_AkIjC6Uv2z-7WTMwOQxfpc2P4CBdw1KyBc4zR-jRDEF4JoRq1i8CXuiRlzkBTKQyUCDeLGSHiklQwRwMVx8avaqD0Avsh-yAnQ5qXDUfJkynZxi916HPIWBwQF9kqzj1oBOP-t1QzA=w1264-h667-no?authuser=0'); background-size: cover">
+  <Header>
+    <main style="flex-grow: 1; padding: 32px 0 45px; background-image: url('https://f5-zpcloud.zdn.vn/2258788996442817451/dd48482006abc0f599ba.jpg'); background-size: cover">
       <div id="login" >
         <div class="container">
           <label for="show" class="close-btn fas fa-times" title="close"></label>
-          <div class="text">
+          <div class="title">
             Đăng ký hệ thống
           </div>
-          <form action="#">
+          <div class="main">
             <div class="data">
               <label>Email</label>
-              <input type="text" required placeholder="Username" v-model="username">
+              <input type="text" required placeholder="Email" v-model="username">
             </div>
             <div class="data">
               <label>Mật khẩu</label>
               <input type="password" required placeholder="Mật khẩu" v-model="password">
             </div>
-            <div class="data">
-              <label>Mật khẩu</label>
-              <input type="password" required placeholder="Mật khẩu" v-model="password">
-            </div>
-
             <div class="data">
               <label>Họ và tên</label>
-              <input type="text" required placeholder="FullName" v-model="fullName">
+              <input type="text" required placeholder="Tên đầy đủ" v-model="fullName">
             </div>
             <div class="data">
               <label>Số điện thoại</label>
-              <input type="text" required placeholder="Phone" v-model="phone">
+              <input type="text" required placeholder="Số điện thoại" v-model="phone">
             </div>
             <div class="data">
               <label>Địa chỉ</label>
-              <input type="text" required placeholder="Address" v-model="address">
+              <input type="text" required placeholder="Địa chỉ" v-model="address">
             </div>
             <div class="btn">
-              <div class="inner"></div>
               <button @click="HandleRegister">Đăng ký</button>
             </div>
             <div class="term">
-              <label>Bằng cách tiếp tục, bạn đồng ý với Tramsach</label>
-              <label>Điều khoản dịch vụ và xác nhận bạn đã đọc chính sách bảo mật</label>
+              <label>Bằng việc đăng ký, bạn đồng ý với <strong>Trạm Sách</strong> về</label>
+              <label><a href="">Điều khoản dịch vụ</a> & <a href=""> Các chính sách</a></label>
             </div>
             <div class="under">
-              <div class="forgot-pass">
-                <a v-on:click="HandleForgotPassword">Quên mật khẩu</a>
-              </div>
-              <div class="signup-link">
-                <a href="#"><router-link to="/login">Đăng nhập</router-link></a>
-              </div>
+              <a href="/login" class="link">Đã có tài khoản?</a>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </main>
-  </Layout>
+  </Header>
 <!--  <div id="register">-->
 
 <!--    <h1><strong>Chào bạn</strong> Hãy đăng ký nhé!</h1>-->
@@ -84,11 +73,11 @@
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_USER} from "@/constant/constant-api";
-import Layout from "../../components/Layout";
+import Header from "../../components/Header";
 
 export default {
   name: "Register",
-  components: {Layout},
+  components: {Header},
   data() {
     return {
       username: '',
@@ -113,30 +102,13 @@ export default {
           password: this.password,
           addressMain: this.address
         }).then((res) => {
-            this.$router.push({
-              name: 'ManageBook'
-                })
-          console.log(res)
-        }).catch(() => {
-        });
+          if(res.data.message === 'REGISTER_SUCCESS - PLEASE GET CODE VERIFY FROM YOUR MAIL BOX!'){
+            this.$router.push({name: 'VerifyRegister'})
+          }
+        }).catch(() => {});
       }
     },
-    HandleForgotPassword() {
-      if (this.email === '') {
-        alert('Vui lòng nhập email của bạn!')
-      }
-      apiFactory.callApi(API_USER.FORGOT_PASSWORD, 'POST', {
-        email: this.email
-      }).then((res) => {
-        if (res.data.message.includes('SUCCESS')) {
-          this.$router.push({
-            name: 'ResetPassword'
-          })
-        }
-        console.log(res)
-      }).catch(() => {
-      });
-    }
+
   }
 }
 </script>
@@ -152,71 +124,15 @@ export default {
   outline: none;
   box-sizing: border-box;
   font-family: 'Roboto', sans-serif;
-
 }
+
 body{
   height: 100vh;
   width: 100%;
   /*background-image: url("../image/cover.png");*/
   /*background: linear-gradient(115deg, #56d8e4 10%, #9f01ea 90%);*/
 }
-form .btn{
-  margin: 30px 0;
-  height: 45px;
-  width: 70%;
-  position: relative;
-  margin-left: 65px;
-  overflow: hidden;
-  background-color: #9D6B54;
-}
-form .btn button{
-  height: 100%;
-  width: 70%;
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 10px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
 
-}
-form .btn:hover .inner{
-  left: 0;
-}
-/*form .btn .inner{*/
-/*  height: 100%;*/
-/*  width: 300%;*/
-/*  position: absolute;*/
-/*  left: -100%;*/
-/*  z-index: -1;*/
-/*  background-color: #9D6B54;*/
-/*  !*background: -webkit-linear-gradient(right, #56d8e4, #9f01ea, #56d8e4, #9f01ea);*!*/
-/*  transition: all 0.4s;*/
-/*}*/
-form .data label{
-  font-size: 14px;
-}
-form .data input{
-  height: 100%;
-  width: 100%;
-  padding-left: 10px;
-  font-size: 10px;
-  border: 1px solid silver;
-  border-radius: 5px;
-}
-form .data input:focus{
-  border-color: #9D6B54;
-  border-bottom-width: 2px;
-}
-form .forgot-pass{
-  margin-top: -8px;
-}
-form .forgot-pass a{
-  color: #9D6B54;
-  text-decoration: none;
-}
 .container {
   position: relative;
   left: 800px;
@@ -224,36 +140,98 @@ form .forgot-pass a{
   font-size: 14px;
   cursor: pointer;
   max-width: 390px;
-
   border-radius: 20px;
   justify-content: center;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   background-color: white;
-
 }
-.container .text{
-  font-size: 20px;
+
+.container .title{
+  font-size: 22px;
   font-weight: 600;
   text-align: center;
+  color: #9D6B54;
 }
-.container form{
-  margin-top: -20px;
+
+.container .main{
+  margin-top: -10px;
+  margin-bottom: -30px;
 }
-.container form .data{
+
+.container .main .data{
   height: 45px;
   width: 70%;
-  margin: 30px 0;
-  margin-left: 65px;
+  margin: 30px 59px 20px 59px;
   justify-content: center;
 }
-.container form .term{
+
+.container .main .data label{
+  font-size: 15px;
+  color: #9D6B54;
+}
+
+.container .main .data input{
+  height: 100%;
+  width: 100%;
+  padding-left: 15px;
+  font-size: 15px;
+  border: 1px solid silver;
+  border-radius: 5px;
+  color: #9D6B54;
+}
+
+.container .main .data input:focus{
+  border-color: #9D6B54;
+  border-bottom-width: 2px;
+}
+
+.container .main .btn{
+  margin: 20px 59px 30px 59px;
+  height: 45px;
+  width: 70%;
+  position: relative;
+  overflow: hidden;
+  background-color: #9D6B54;
+}
+
+.container .main .btn button{
+  height: 100%;
+  width: 100%;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.container .main .btn button:hover{
+  border-color: #9D6B54;
+  background-color: white;
+  color: #9D6B54;
+}
+
+.container .main .term{
   width: 100%;
   /*margin: 30px 0;*/
   /*margin-left: 30px;*/
   justify-content: center;
   text-align: center;
+  color: #9D6B54;
 }
-.container form .under{
+
+.container .main .term strong{
+  color: #9D6B54;
+}
+
+.container .main .term a{
+  color: #9D6B54;
+  font-style: italic;
+}
+
+.container .main .under{
   display: flex;
   width: 100%;
   /*margin: 30px 0;*/
@@ -263,8 +241,15 @@ form .forgot-pass a{
   padding: 3px;
   margin-bottom: 20px;
 }
-form .forgot-pass{
-  margin-top: 0px;
-  margin-right: 30px;
+
+.container .main .under .link{
+  color: #9D6B54;
+  text-decoration: none;
+  width: 130px;
+  height: 30px;
+  padding-top: 5px;
+  color: #9D6B54;
+  text-decoration: none;
 }
+
 </style>
