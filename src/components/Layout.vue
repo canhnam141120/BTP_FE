@@ -45,13 +45,6 @@
                 active-color="#9D6B54"
             >Giới thiệu
             </router-link>
-            <router-link
-                to="/ManageIndex"
-                class="Main__list__item musers-management"
-                active-color="#9D6B54"
-            >Quản trị
-            </router-link>
-            <span class="Main__indicator"></span>
           </nav>
         </div>
         <ul class="Main__account">
@@ -582,11 +575,14 @@ export default {
   width: 100px;
   font-weight: bold;
   color: #9D6B54;
+  background-color: white;
+
 }
 
 .contact button:hover{
   background-color: #DFD5CB;
   color: white;
+  border-color: white;
 }
 
 .grid{

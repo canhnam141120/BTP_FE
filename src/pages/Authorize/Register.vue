@@ -8,32 +8,49 @@
             Đăng ký hệ thống
           </div>
           <div class="main">
-            <div class="data">
-              <label>Email</label>
-              <input type="text" required placeholder="Email" v-model="username">
-            </div>
-            <div class="data">
-              <label>Mật khẩu</label>
-              <input type="password" required placeholder="Mật khẩu" v-model="password">
-            </div>
-            <div class="data">
-              <label>Họ và tên</label>
-              <input type="text" required placeholder="Tên đầy đủ" v-model="fullName">
-            </div>
-            <div class="data">
-              <label>Số điện thoại</label>
-              <input type="text" required placeholder="Số điện thoại" v-model="phone">
-            </div>
-            <div class="data">
-              <label>Địa chỉ</label>
-              <input type="text" required placeholder="Địa chỉ" v-model="address">
+            <div class="row">
+              <div class="column">
+                <div class="data">
+                  <label>Email</label>
+                  <input type="text" maxlength="50" required placeholder="Email" v-model="email">
+                  <label class="err" v-if="errMail.length">{{this.errMail}}</label>
+                </div>
+                <div class="data">
+                  <label>Mật khẩu</label>
+                  <input type="password" maxlength="50" required placeholder="Mật khẩu" v-model="password">
+                  <label class="err" v-if="errPass.length">{{this.errPass}}</label>
+                </div>
+                <div class="data">
+                  <label>Xác nhận mật khẩu</label>
+                  <input type="password" maxlength="50" required placeholder="Xác nhận mật khẩu" v-model="passwordCheck">
+                  <label class="err" v-if="errPassCheck.length">{{this.errPassCheck}}</label>
+                </div>
+              </div>
+              <div class="column">
+                <div class="data">
+                  <label>Họ và tên</label>
+                  <input type="text" maxlength="30" required placeholder="Tên đầy đủ" v-model="fullname">
+                  <label class="err" v-if="errName.length">{{this.errName}}</label>
+                </div>
+                <div class="data">
+                  <label>Số điện thoại</label>
+                  <input type="text" maxlength="10" required placeholder="Số điện thoại" v-model="phone">
+                  <label class="err" v-if="errPhone.length">{{this.errPhone}}</label>
+                </div>
+                <div class="data">
+                  <label>Địa chỉ</label>
+                  <input type="text" maxlength="100" required placeholder="Địa chỉ" v-model="address">
+                  <label class="err" v-if="errAddress.length">{{this.errAddress}}</label>
+                </div>
+              </div>
             </div>
             <div class="btn">
               <button @click="HandleRegister">Đăng ký</button>
             </div>
+            <label class="result" v-if="err.length">{{this.err}}</label>
             <div class="term">
-              <label>Bằng việc đăng ký, bạn đồng ý với <strong>Trạm Sách</strong> về</label>
-              <label><router-link to="/">Điều khoản dịch vụ</router-link> & <router-link to="/"> Các chính sách</router-link></label>
+              <label>Bằng việc đăng ký, bạn đồng ý với <strong>Trạm Sách</strong> về </label>
+              <label><label> </label> <router-link to="/"> Điều khoản dịch vụ</router-link> & <router-link to="/"> Các chính sách</router-link></label>
             </div>
             <div class="under">
               <router-link to="/login" class="link">Đã có tài khoản?</router-link>
@@ -43,31 +60,6 @@
       </div>
     </main>
   </Header>
-<!--  <div id="register">-->
-
-<!--    <h1><strong>Chào bạn</strong> Hãy đăng ký nhé!</h1>-->
-
-<!--    <label for="email"><b>Email</b></label>-->
-<!--    <p><input type="text" required placeholder="Username" v-model="username"></p>-->
-
-<!--    <label for="password"><b>Password</b></label>-->
-<!--    <p><input type="password" required placeholder="Mật khẩu" v-model="password"></p>-->
-
-<!--    <label for="email"><b>Phone Number</b></label>-->
-<!--    <p><input type="text" required placeholder="Phone" v-model="phone"></p>-->
-
-<!--    <label for="email"><b>Full Name</b></label>-->
-<!--    <p><input type="text" required placeholder="FullName" v-model="fullName"></p>-->
-
-<!--    <label for="email"><b>Address</b></label>-->
-<!--    <p><input type="text" required placeholder="Address" v-model="address"></p>-->
-
-<!--    <button @click="HandleRegister">Đăng ký</button>-->
-<!--    <hr>-->
-<!--    <br>-->
-<!--    <label for="email"><b>Đã có tài khoản?</b></label> &nbsp;-->
-<!--    <button><router-link to="/login">Đăng nhập</router-link></button>-->
-<!--  </div>-->
 </template>
 
 <script>
@@ -80,36 +72,81 @@ export default {
   components: {Header},
   data() {
     return {
-      username: '',
+      email: '',
       password: '',
+      passwordCheck: '',
       phone: '',
-      fullName: '',
+      fullname: '',
       address: '',
-      flag: true,
+      errMail: '',
+      errPass: '',
+      errPassCheck: '',
+      errName: '',
+      errPhone: '',
+      errAddress: '',
+      err: ''
     }
   },
   methods: {
     HandleRegister() {
-      if(this.username=== ''){
-        this.flag= false
-        alert('Khong duoc null')
+      let regxMail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+      let regxPhone = /^(0|84)(2(0[3-9]|1[0-6|8|9]|2[0-2|5-9]|3[2-9]|4[0-9]|5[1|2|4-9]|6[0-3|9]|7[0-7]|8[0-9]|9[0-4|6|7|9])|3[2-9]|5[5|6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])([0-9]{7})$/;
+      this.errMail = '';
+      this.errPass = '';
+      this.errPassCheck = '';
+      this.errName = '';
+      this.errPhone = '';
+      this.errAddress = '';
+      this.err = '';
+      if(!this.email){
+        this.errMail = 'Vui lòng nhập email!'
+      }else {
+        if(!regxMail.test(this.email)){
+          this.errMail = 'Email không đúng định dạng!'
+        }
       }
-      if(this.flag){
+      if(!this.password){
+        this.errPass = 'Vui lòng nhập mật khẩu!'
+      }
+      if(!this.passwordCheck){
+        this.errPassCheck = 'Vui lòng xác nhận mật khẩu!'
+      }else{
+        if(this.password != this.passwordCheck){
+          this.errPassCheck = 'Không khớp với mật khẩu!'
+        }
+      }
+      if(!this.fullname){
+        this.errName = 'Vui lòng nhập tên đầy đủ!'
+      }
+      if(!this.phone){
+        this.errPhone = 'Vui lòng nhập số điện thoại!'
+      }else{
+
+        if(!regxPhone.test(this.phone)){
+          this.errPhone = 'Số điện thoại không hợp lệ!'
+        }
+      }
+      if(!this.address){
+        this.errAddress = 'Vui lòng nhập địa chỉ!'
+      }
+      if(regxMail.test(this.email) && this.password && this.fullname && regxPhone.test(this.phone) && this.address ){
         apiFactory.callApi(API_USER.USER_REGISTER, 'POST', {
-          email: this.username,
+          email: this.email,
           phone: this.phone,
-          fullname: this.fullName,
+          fullname: this.fullname,
           password: this.password,
           addressMain: this.address
         }).then((res) => {
           if(res.data.message === 'REGISTER_SUCCESS - PLEASE GET CODE VERIFY FROM YOUR MAIL BOX!'){
             this.$router.push({name: 'VerifyRegister'})
           }
-        }).catch(() => {});
+          if(res.data.message === 'EMAIL_IS_EXIST'){
+            this.err = 'Email đăng ký đã được sử dụng!'
+          }
+        }).catch(() => {this.err = 'Đăng ký không thành công!'});
+      }
       }
     },
-
-  }
 }
 </script>
 
@@ -123,7 +160,6 @@ export default {
   padding: 0;
   outline: none;
   box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
 }
 
 body{
@@ -135,15 +171,17 @@ body{
 
 .container {
   position: relative;
-  left: 800px;
+  left: 600px;
   top: 10%;
+  margin-top: 70px;
   font-size: 14px;
   cursor: pointer;
-  max-width: 390px;
+  max-width: 800px;
   border-radius: 20px;
   justify-content: center;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   background-color: white;
+  font-family: 'Roboto', sans-serif;
 }
 
 .container .title{
@@ -158,10 +196,20 @@ body{
   margin-bottom: -30px;
 }
 
+.container .main .row{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.container .main .column{
+  width: 50%;
+}
+
 .container .main .data{
-  height: 45px;
-  width: 70%;
-  margin: 30px 59px 20px 59px;
+  height: 65px;
+  width: 80%;
+  margin: 30px 10px 30px 40px;
   justify-content: center;
 }
 
@@ -170,8 +218,13 @@ body{
   color: #9D6B54;
 }
 
+.container .main .data .err{
+  margin-top: 2px;
+  color: red;
+}
+
 .container .main .data input{
-  height: 100%;
+  height: 70%;
   width: 100%;
   padding-left: 15px;
   font-size: 15px;
@@ -186,9 +239,9 @@ body{
 }
 
 .container .main .btn{
-  margin: 20px 59px 30px 59px;
+  margin: 20px 59px 5px 200px;
   height: 45px;
-  width: 70%;
+  width: 50%;
   position: relative;
   overflow: hidden;
   background-color: #9D6B54;
@@ -211,6 +264,12 @@ body{
   border-color: #9D6B54;
   background-color: white;
   color: #9D6B54;
+}
+
+.container .main .result{
+  justify-content: center;
+  margin-left: 320px;
+  color: red;
 }
 
 .container .main .term{

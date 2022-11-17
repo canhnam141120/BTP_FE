@@ -10,7 +10,8 @@
           <div class="main">
             <div class="data">
               <label>Mã xác thực</label>
-              <input type="text" placeholder="Nhập mã" v-model="verifyCode" required>
+              <input type="text" maxlength="8" placeholder="Nhập mã" v-model="verifyCode" required>
+              <label class="err" v-if="err.length">{{this.err}}</label>
             </div>
             <div class="btn">
               <button @click="HandleVerifyRegister">Xác nhận</button>
@@ -20,12 +21,6 @@
       </div>
     </main>
   </Header>
-<!--<div>-->
-<!--  <h1>Vui lòng xác thực tài khoản nhé!</h1>-->
-<!--  <label for="email"><b>Mã xác thực</b></label>-->
-<!--  <p><input type="text" placeholder="code" v-model="verifyCode" required></p>-->
-<!--  <button @click="HandleVerifyRegister">Xac nhan</button>-->
-<!--</div>-->
 </template>
 
 <script>
@@ -38,22 +33,27 @@ export default {
   components: {Header},
   data(){
     return{
-      verifyCode: ''
+      verifyCode: '',
+      err:''
     }
   },
   methods: {
     HandleVerifyRegister() {
-      apiFactory.callApi(API_USER.VERIFY_EMAIL, 'PUT', {
-        verifyCode: this.verifyCode
-      }).then((res) => {
-        if(res.data.message === 'VERIFY_SUCCESS'){
-          this.$router.push({
-            name: 'Login'
-          })
-        }
-      }).catch(() => {
-        alert('Xac thực không thành công!')
-      });
+      this.err = '';
+      if(!this.verifyCode){
+        this.err = 'Vui lòng nhập mã xác thực!'
+      }
+      if(this.verifyCode){
+        apiFactory.callApi(API_USER.VERIFY_EMAIL, 'PUT', {
+          verifyCode: this.verifyCode
+        }).then((res) => {
+          if(res.data.message === 'VERIFY_SUCCESS'){
+            this.$router.push({
+              name: 'Login'
+            })
+          }
+        }).catch(() => {this.err = 'Xác thực không thành công!'});
+      }
     }
   }
 }
@@ -66,7 +66,7 @@ export default {
   padding: 0;
   outline: none;
   box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
+
 }
 
 body{
@@ -88,6 +88,7 @@ body{
   justify-content: center;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   background-color: white;
+  font-family: 'Roboto', sans-serif;
 }
 
 .container .title{
@@ -112,6 +113,11 @@ body{
 .container .main .data label{
   font-size: 15px;
   color: #9D6B54;
+}
+
+.container .main .data .err{
+  margin-top: 2px;
+  color: red;
 }
 
 .container .main .data input{
