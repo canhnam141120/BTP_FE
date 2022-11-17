@@ -176,12 +176,12 @@ export default {
     background: white;
     height: 75px;
     &__container {
-      max-width: 1230px;
+      //max-width: 1230px;
       margin-left: auto;
       margin-right: auto;
       padding-right: 15px;
       padding-left: 15px;
-      width: 100%;
+      //width: 100%;
       height: 55px;
       display: flex;
       align-items: center;
@@ -197,7 +197,6 @@ export default {
   &__logo img {
     width: 160px;
     height: auto;
-    position: unset;
     padding-bottom: 10px;
   }
 

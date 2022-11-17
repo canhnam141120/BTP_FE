@@ -10,15 +10,18 @@
         <div class="main">
           <div class="data">
             <label>Email</label>
-            <input type="text" placeholder="Email" v-model="email" required>
+            <input type="text" maxlength="50" placeholder="Email" v-model="email" required>
+            <label class="err" v-if="errMail.length">{{this.errMail}}</label>
           </div>
           <div class="data">
             <label>Mật khẩu</label>
-            <input type="password" required placeholder="Mật khẩu" v-model="password">
+            <input type="password" maxlength="50"  required placeholder="Mật khẩu" v-model="password">
+            <label class="err" v-if="errPass.length">{{this.errPass}}</label>
           </div>
           <div class="btn">
             <button v-on:click="HandleLogin">Đăng nhập</button>
           </div>
+          <label class="result" v-if="err.length">{{this.err}}</label>
           <div class="under">
               <a v-on:click="HandleForgotPassword" class="forgot-pass">Quên mật khẩu?</a>
               <router-link to="/register" class="link">Đăng ký</router-link>
@@ -42,40 +45,67 @@ export default {
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      errMail: '',
+      errPass: '',
+      err: '',
     }
   },
   methods: {
     HandleLogin() {
-      apiFactory.callApi(API_USER.USER_LOGIN, 'POST', {
-        email: this.email, password: this.password
-      }).then((res) => {
-        if (res.data.message === 'LOGIN_SUCCESS') {
-          this.$cookies.set("token", res.data.data.accessToken);
-          this.$router.push({
-            name: 'HomePage'
-          })
+      let regxMail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+      this.errMail = '';
+      this.errPass = '';
+      this.err = ''
+      if(!this.email){
+        this.errMail = 'Vui lòng nhập email!'
+      }
+      else {
+        if(!regxMail.test(this.email)){
+          this.errMail = 'Email không đúng định dạng!'
         }
-        console.log(res)
-      }).catch(() => {
-        alert('Sai tai khoan')
-      });
+      }
+      if(!this.password){
+        this.errPass = 'Vui lòng nhập mật khẩu!'
+      }
+      if(regxMail.test(this.email) && this.password){
+        apiFactory.callApi(API_USER.USER_LOGIN, 'POST', {
+          email: this.email, password: this.password
+        }).then((res) => {
+          if (res.data.message === 'LOGIN_SUCCESS') {
+            this.$cookies.set("token", res.data.data.accessToken);
+            this.$router.push({
+              name: 'HomePage'
+            })
+          }
+        }).catch(() => {this.err = 'Email hoặc mật khẩu không chính xác!'});
+      }
     },
     HandleForgotPassword() {
-      if (this.email === '') {
-        alert('Vui lòng nhập email của bạn!')
+      let regxMail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+      this.errMail = '';
+      this.errPass = '';
+      this.err = ''
+      if(!this.email){
+        this.errMail = 'Vui lòng nhập email!'
       }
-      apiFactory.callApi(API_USER.FORGOT_PASSWORD, 'POST', {
-        email: this.email
-      }).then((res) => {
-        if (res.data.message.includes('SUCCESS')) {
-          this.$router.push({
-            name: 'ResetPassword'
-          })
+      else {
+        if(!regxMail.test(this.email)){
+          this.errMail = 'Email không đúng định dạng!'
         }
-        console.log(res)
-      }).catch(() => {
-      });
+      }
+      if(this.email){
+        apiFactory.callApi(API_USER.FORGOT_PASSWORD, 'POST', {
+          email: this.email
+        }).then((res) => {
+          if (res.data.message.includes('SUCCESS')) {
+            this.$router.push({
+              name: 'ResetPassword'
+            })
+          }
+          console.log(res)
+        }).catch(() => {this.err = 'Email chưa đăng ký!'});
+      }
     }
   }
 }
@@ -88,7 +118,6 @@ export default {
   padding: 0;
   outline: none;
   box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
 }
 
 body{
@@ -110,6 +139,7 @@ body{
   justify-content: center;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   background-color: white;
+  font-family: 'Roboto', sans-serif;
 }
 
 .container .title{
@@ -127,13 +157,18 @@ body{
 .container .main .data{
   height: 45px;
   width: 70%;
-  margin: 30px 59px 30px 59px;
+  margin: 30px 59px 45px 59px;
   justify-content: center;
 }
 
 .container .main .data label{
   font-size: 15px;
   color: #9D6B54;
+}
+
+.container .main .data .err{
+  margin-top: 2px;
+  color: red;
 }
 
 .container .main .data input{
@@ -152,7 +187,7 @@ body{
 }
 
 .container .main .btn{
-  margin: 20px 59px 30px 59px;
+  margin: 10px 59px 10px 59px;
   height: 45px;
   width: 70%;
   position: relative;
@@ -177,6 +212,12 @@ body{
   border-color: #9D6B54;
   background-color: white;
   color: #9D6B54;
+}
+
+.container .main .result{
+  justify-content: center;
+  margin-left: 75px;
+  color: red;
 }
 
 .container .main .under{
