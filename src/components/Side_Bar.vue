@@ -134,6 +134,12 @@ export default {
       type: Array,
       default: () => [
         {
+          link: '/ManageIndex',
+          name: 'Trang quản lý admin',
+          tooltip: 'Setting',
+          icon: 'bx-cog',
+        },
+        {
           link: '/ManageTransaction/exchange',
           name: 'Quản lý giao dịch',
           tooltip: 'Dashboard',
@@ -143,7 +149,7 @@ export default {
           link: '/ManageBill/exchange-bill',
           name: 'Quản lý hóa đơn',
           tooltip: 'User',
-          icon: 'bx-user',
+          icon: 'bx-receipt',
         },
         {
           link: '/ManageUser',
@@ -155,31 +161,31 @@ export default {
           link: '/ManageBook',
           name: 'Quản lý sách',
           tooltip: 'Analytics',
-          icon: 'bx-pie-chart-alt-2',
+          icon: 'bx-book',
         },
         {
           link: '/ManagePost',
           name: 'Quản lý bài đăng',
           tooltip: 'Files',
-          icon: 'bx-folder',
+          icon: 'bx-book-content',
         },
         {
           link: '/ManageCategory',
           name: 'Quản lý thể loại',
           tooltip: 'Order',
-          icon: 'bx-cart-alt',
+          icon: 'bx-category',
         },
         {
           link: '/ManageFee',
           name: 'Quản lý phí',
           tooltip: 'Saved',
-          icon: 'bx-heart',
+          icon: 'bx-money',
         },
         {
-          link: '/ManageIndex',
-          name: 'Trang quản lý',
-          tooltip: 'Setting',
-          icon: 'bx-cog',
+          link: '/',
+          name: 'Trang chủ',
+          tooltip: 'Saved',
+          icon: 'bx-home',
         },
       ],
     },
@@ -330,6 +336,7 @@ body {
   font-weight: 600;
   opacity: 0;
   transition: all 0.5s ease;
+  text-decoration: none;
 }
 .sidebar.open .logo-details .icon,
 .sidebar.open .logo-details .logo_name {
