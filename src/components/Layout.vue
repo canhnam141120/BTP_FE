@@ -16,7 +16,7 @@
             >Trang Chủ
             </router-link>
             <router-link
-                to="/course-management"
+                to="/AllBooks"
                 class="Main__list__item course-management"
                 active-color="#9D6B54"
             >Tủ sách

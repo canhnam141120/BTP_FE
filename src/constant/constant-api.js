@@ -1,12 +1,13 @@
 
 export const API_BOOK = Object.freeze({
     LIST_BOOK_FOLLOW: "https://book-trading-platform.herokuapp.com/api/Book/from-favorite-users",
-    LIST_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/all",
+    TOP_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/top-book",
+    LIST_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/all?page=",
     DETAIL_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/",
     CATEGORY_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/category{id}",
     GET_FEEDBACK_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/feedback/",
     USER_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/user{id}",
-    SEARCH_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/search-by-title/",
+    SEARCH_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/search-by-title?page=",
     CREATE_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/create",
     FEEDBACK_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/feedback/create/",
     EDIT_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/edit/{id}",
@@ -82,6 +83,7 @@ export const API_PERSONAL = Object.freeze({
 })
 
 export const API_POST = Object.freeze({
+    TOP_POST: "https://book-trading-platform.herokuapp.com/api/Post/top-post",
     LIST_POST: "https://book-trading-platform.herokuapp.com/api/Post/all",
     DETAIL_POST: "https://book-trading-platform.herokuapp.com/api/Post/",
     COMMENT_OF_POST: "https://book-trading-platform.herokuapp.com/api/Post/comment/",
