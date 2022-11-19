@@ -13,12 +13,7 @@
             <table class="table">
               <thead>
               <tr>
-                <td>
-                  <label class="au-checkbox">
-                    <input type="checkbox">
-                    <span class="au-checkmark"></span>
-                  </label>
-                </td>
+
                 <td>Mã hóa đơn:</td>
                 <td>Mã giao dịch</td>
                 <td>Tên khách hàng</td>
@@ -34,12 +29,6 @@
 
               <tbody v-for="item of listBills" :key="item.id">
               <tr>
-                <td>
-                  <label class="au-checkbox">
-                    <input type="checkbox">
-                    <span class="au-checkmark"></span>
-                  </label>
-                </td>
                 <td>
                   <div class="table-data__info">
                     <h6>{{ item.id }}</h6>
