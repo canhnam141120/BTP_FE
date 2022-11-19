@@ -2,14 +2,16 @@
   <Layout>
     <main style="flex-grow: 1;">
       <!--==============banner=============-->
-      <div class="banner">
-      </div>
-      <VueSlickCarousel v-bind="settings" :arrows="true">
-        <img src="../image/banner.png">
-        <img src="../image/banner1.png">
-        <img src="../image/banner2.png">
-        <img src="../image/banner3.png">
-      </VueSlickCarousel>
+<!--      <div class="banner">-->
+<!--      </div>-->
+<!--      <VueSlickCarousel v-bind="settings" :arrows="true">-->
+<!--        <img src="../image/banner.png">-->
+<!--        <img src="../image/banner1.png">-->
+<!--        <img src="../image/banner2.png">-->
+<!--        <img src="../image/banner3.png">-->
+<!--      </VueSlickCarousel>-->
+
+          <SlidePicture></SlidePicture>
       <!--==============body=============-->
       <div class="body">
         <div class="container">
@@ -50,13 +52,14 @@
 import apiFactory from "@/config/apiFactory";
 import {API_BOOK, API_POST} from "@/constant/constant-api";
 import Layout from "@/components/Layout";
-import VueSlickCarousel from 'vue-slick-carousel'
+// import VueSlickCarousel from 'vue-slick-carousel'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
+import SlidePicture from "../components/SlidePicture";
 
 export default {
   name: "HomePage",
-  components: {Layout, VueSlickCarousel},
+  components: {SlidePicture, Layout},
   data() {
     return {
       listBook: '',
