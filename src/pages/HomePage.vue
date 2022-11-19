@@ -17,7 +17,7 @@
             <h1>Sách mới đăng</h1>
             <div class="grid-container-book" >
               <div class="grid-item-book" v-for="item of listBook" :key="item.id">
-                <router-link :to="{ name: 'Book_Detail', query: { id:item.id }}">
+                <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">
                   <img v-bind:src="item.image">
                 </router-link>
                 <div class="grid-item-book-info">
@@ -82,13 +82,13 @@ export default {
   },
   methods: {
     getListBook() {
-      apiFactory.callApi(API_BOOK.LIST_BOOK, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_BOOK.TOP_BOOK, 'GET', {}).then((res) => {
         this.listBook = res.data.data
       }).catch(() => {
       });
     },
     getListPost() {
-      apiFactory.callApi(API_POST.LIST_POST, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_POST.TOP_POST, 'GET', {}).then((res) => {
         this.listPost = res.data.data
       }).catch(() => {
       });
@@ -120,6 +120,8 @@ main {
   max-width: 1230px;
   background: #F0ECE4;
   border-radius: 10px;
+  display: block;
+  padding-bottom: 30px;
 }
 
 .grid-container-book {

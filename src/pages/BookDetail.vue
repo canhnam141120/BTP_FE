@@ -1,48 +1,24 @@
 <template>
-  <div>
-    <!--==============header=============-->
-    <div class="header">
-      <router-link to="/ManageBook" class="logo"><img src="/image/logo-tramsach.png"></router-link>
-      <div class="header-menu">
-        <a class="active" href="#aboutus">Về trạm sách</a>
-        <router-link to="/ManageBook">Tủ sách</router-link>
-        <a href="#blog">Blog</a>
-        <a href="#term">Chính sách & Điều khoản</a>
-        <a href="#process">Quy trình</a>
-        <RouterLink to="/Admin_Management">Management Admin</RouterLink>
-      </div>
-      <div class="header-right">
-        <router-link to="/register" class="header-button">Dang ky</router-link>
-        <router-link to="/login" class="header-button">Dang nhap</router-link>
-      </div>
-    </div>
-    <!--==============header=============-->
+  <Layout>
     <main class="container">
-
       <!-- Left Column / Headphones Image -->
       <div class="left-column">
         <img src="../image/cover.png" alt="">
         <img src="../image/cover.png" alt="">
       </div>
-
-
       <!-- Right Column -->
       <div class="right-column">
-
         <!-- Product Description -->
         <div class="product-description">
           <span>Book</span>
           <h1>{{ this.detailBook.title}}</h1>
           <p>{{ this.detailBook.description}}</p>
         </div>
-
         <!-- Product Configuration -->
         <div class="product-configuration">
-
           <!-- Cable Configuration -->
           <div class="cable-config">
             <span>Tác giả</span>
-
             <div class="cable-choose">
               <p>{{ this.detailBook.author}}</p>
             </div>
@@ -57,31 +33,28 @@
         </div>
       </div>
     </main>
-  </div>
+  </Layout>
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_BOOK} from "@/constant/constant-api";
+import Layout from "@/components/Layout";
 
 export default {
-  name: "Book_Detail",
+  name: "BookDetail",
+  components: {Layout},
   data() {
     return {
       detailBook: ''
-      // id: '',
-      // author: '',
-      // title: '',
     }
   },
   created() {
-    this.getDetailBook()
-    // this.id = this.$route.params.id
+    this.getBookById()
   },
   methods: {
-    getDetailBook() {
+    getBookById() {
       const url = API_BOOK.DETAIL_BOOK + this.$route.query.id
-
       apiFactory.callApi(url,'GET',{}).then((res)=>{
         this.detailBook = res.data.data
       }).catch(() => {

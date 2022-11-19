@@ -13,7 +13,11 @@ const routers = [
         name:'HomePage',
         component: () => import('@/pages/HomePage'),
     },
-
+    {
+        path:'/AllBooks',
+        name:'AllBooks',
+        component: () => import('@/pages/AllBooks'),
+    },
     {
         path:'/Login',
         name:'Login',
@@ -55,9 +59,9 @@ const routers = [
         component: () => import('@/pages/Personal/MyPosts'),
     },
     {
-        path:'/Book_Detail/',
-        name:'Book_Detail',
-        component: () => import('@/pages/Book_Detail'),
+        path:'/BookDetail',
+        name:'BookDetail',
+        component: () => import('@/pages/BookDetail'),
     },
     {
         path:'/ManageAdmin',
