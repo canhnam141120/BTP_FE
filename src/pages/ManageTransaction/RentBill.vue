@@ -41,13 +41,12 @@
                 <td>{{ item.paidDate }}</td>
                 <td>{{ item.payments }}</td>
               </tr>
-
               </tbody>
             </table>
           </div>
           <br>
           <button class="au-btn au-btn-icon au-btn--brown au-btn--small">
-            <router-link to="/ManageIndex" class="btn-router">Quay lại</router-link>
+            <router-link to="/ManageTransaction/rent" class="btn-router">Quay lại</router-link>
           </button>
           <br><br>
         </div>

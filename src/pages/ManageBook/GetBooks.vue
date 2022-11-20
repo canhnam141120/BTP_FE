@@ -5,19 +5,12 @@
       <div class="col-lg-6">
         <div class="user-data m-b-30">
           <h3 class="title-3 m-b-30">
-            <i class="zmdi zmdi-account-calendar"></i>Danh sách tất cả giao dịch đổi</h3>
-          &nbsp;<button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getBooksAll">
-          <router-link to="/ManageTransaction/rent" class="btn-router">Tất cả</router-link>
-        </button>
-          &nbsp;&nbsp;<button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getBooksApproved">
-          <router-link to="/ManageTransaction/rent" class="btn-router">Đã duyệt</router-link>
-        </button>
-          &nbsp;&nbsp;<button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getBooksDenied">
-          <router-link to="/ManageTransaction/rent" class="btn-router">Bị huỷ</router-link>
-        </button>
-          &nbsp;&nbsp;<button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getBooksWaiting">
-          <router-link to="/ManageTransaction/rent" class="btn-router">Đang đợi</router-link>
-        </button>
+            <i class="zmdi zmdi-account-calendar"></i>Danh sách sách</h3>
+          <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getBooksAll">Tất cả</button>
+          <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getBooksApproved">Đã duyệt</button>
+          <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getBooksDenied">Đã hủy</button>
+          <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getBooksWaiting">Đang đợi</button>
+          <br><br>
           <div class="table-responsive table-data">
             <table class="table">
               <thead>
@@ -30,64 +23,44 @@
                 <td>Giá cọc</td>
                 <td>Ngày đăng</td>
                 <td>Trạng thái</td>
+                <td>Duyệt/Hủy</td>
+                <td>Chi tiết</td>
                 <td>Đánh giá</td>
               </tr>
               </thead>
-              <tbody v-for="item of listExchanges" :key="item.id">
+              <tbody v-for="item of listBooks" :key="item.id">
               <tr>
                 <td>
                   <div class="table-data__info">
                     <h6>{{ item.id }}</h6>
                   </div>
                 </td>
-
-                <td>
-                  <span>{{ item.user.fullname }}</span>
+                <td>{{ item.user.fullname }}</td>
+                <td>{{ item.title }}</td>
+                <td><img v-bind:src="item.image" height="90px" width="65px"></td>
+                <td>{{ item.coverPrice }}</td>
+                <td>{{ item.depositPrice }}</td>
+                <td>{{ item.postedDate }}</td>
+                <td v-if="item.status == 'Approved'" ><span class="role approved">ĐÃ DUYỆT</span></td>
+                <td v-if="item.status == 'Denied'" ><span class="role denied">ĐÃ HỦY</span></td>
+                <td v-if="item.status == 'Waiting'" ><span class="role waiting">ĐANG ĐỢI</span></td>
+                <td v-if="item.status == 'Waiting'">
+                  <button style="display: block" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleApproved(item.id)">Duyệt</button>
+                  <button style="width: 84px" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDenied(item.id)">Hủy</button>
                 </td>
-                <td>
-                              <span>
-                                  <i>{{ item.title }}</i>
-                              </span>
+                <td v-if="item.status == 'Approved'">
+                  <button style="width: 84px" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDenied(item.id)">Huỷ</button>
                 </td>
-                <td>
-                  <img v-bind:src="item.image" height="90px" width="65px">
+                <td v-if="item.status == 'Denied'">
+                  <button  class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleApproved(item.id)">Duyệt</button>
                 </td>
-                <td>
-                  <span>{{ item.coverPrice }}</span>
-                </td>
-                <td>
-                              <span>
-                                  {{ item.date }}
-                              </span>
-                </td>
-                <td>
-                              <span class="role admin">
-                                  <i>{{ item.status }}</i>
-                              </span>
-                </td>
-
-                <td>
-                    <span>
-                      <button class="au-btn au-btn-icon au-btn--brown au-btn--small"
-                              :to="{ name: 'DetailExchange', query: { id:item.id }}">
-                        Chi tiết
-                      </button>
-                    </span>
-                </td>
+                <td><router-link class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router"  :to="{ name: 'DetailBook', query: { id:item.id }}">Chi tiết</router-link></td>
+                <td><router-link class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router"  :to="{ name: 'GetFeedbacks', query: { id:item.id }}">Xem đánh giá</router-link></td>
               </tr>
-
               </tbody>
             </table>
           </div>
-          <br>
-          &nbsp;<span>
-            <button class="au-btn au-btn-icon au-btn--brown au-btn--small">
-              <router-link to="/ManageIndex" class="btn-router">Quay lại</router-link>
-            </button>
-            </span>
-          <br><br>
         </div>
-
       </div>
     </div>
   </div>

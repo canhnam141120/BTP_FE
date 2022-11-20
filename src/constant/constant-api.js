@@ -84,10 +84,10 @@ export const API_PERSONAL = Object.freeze({
 
 export const API_POST = Object.freeze({
     TOP_POST: "https://book-trading-platform.herokuapp.com/api/Post/top-post",
-    LIST_POST: "https://book-trading-platform.herokuapp.com/api/Post/all",
+    LIST_POST: "https://book-trading-platform.herokuapp.com/api/Post/all?page=",
     DETAIL_POST: "https://book-trading-platform.herokuapp.com/api/Post/",
     COMMENT_OF_POST: "https://book-trading-platform.herokuapp.com/api/Post/comment/",
-    SEARCH_POST: "https://book-trading-platform.herokuapp.com/api/Post/search",
+    SEARCH_POST: "https://book-trading-platform.herokuapp.com/api/Post/search?page=",
     CREATE_POST: "https://book-trading-platform.herokuapp.com/api/Post/create",
     COMMENT_POST: "https://book-trading-platform.herokuapp.com/api/Post/comment/create/",
     HIDE_POST: "https://book-trading-platform.herokuapp.com/api/Post/hide/",

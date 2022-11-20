@@ -22,16 +22,16 @@
             >Tủ sách
             </router-link>
             <router-link
-                to="/class-management"
+                to="/BlogIndex"
                 class="Main__list__item class-management"
                 active-color="#9D6B54"
-            >Blog
+            >Trạm đọc
             </router-link>
             <router-link
                 to="/users-management"
                 class="Main__list__item musers-management"
                 active-color="#9D6B54"
-            >Chính sách và điều khoản
+            >Chính sách & điều khoản
             </router-link>
             <router-link
                 to="/users-management"
@@ -48,53 +48,36 @@
           </nav>
         </div>
         <ul class="Main__account">
-
           <nav v-if="!this.$cookies.get('token')">
             <router-link to="/login" class="Main__list__item musers-management">Đăng nhập</router-link>
             <router-link to="/register" class="Main__list__item musers-management">Đăng ký</router-link>
           </nav>
-          <nav  v-else>
+          <nav v-else>
             <li>
-              <b-dropdown right text="Right align" variant="black" no-caret style="padding: 0">
-                <template v-slot:button-content style="padding: 0">
-                  <label style="margin-bottom: 0">
-                    <span class="Main__avatar">TB</span>
-                  </label>
+              <b-dropdown right text="Right align" variant="black" no-caret>
+                <template v-slot:button-content>
+                    <img class="icon"  src="../image/bell.png">
                 </template>
-                <p class="dropdown-item">
-                  Thông báo 1
-                </p>
-                <hr style="margin: 5px" />
-                <p class="dropdown-item">
-                  Thông báo 2
-                </p>
+                <div v-for="item of noti" :key="item.id" class="dropdown-item notification">
+                  "{{item.content}}"
+                </div>
               </b-dropdown>
             </li>
             <li>
-              <b-dropdown right text="Right align" variant="black" no-caret style="padding: 0">
-                <template v-slot:button-content style="padding: 0">
-                  <label style="margin-bottom: 0">
-                    <span class="Main__avatar">T</span>
-                  </label>
+              <b-dropdown right text="Right align" variant="black" no-caret>
+                <template v-slot:button-content>
+                    <img class="icon" v-bind:src="user.avatar">
                 </template>
-                <a href="/PersonalIndex" class="dropdown-item">
-                  <div style="display: flex; align-items: center; width: 100%">
-                    <span class="Main__avatar">T</span>
-                    <p class="Main__name">
-                      {{user.name}}
-                    </p>
-                  </div>
-                  <div style="float: right; font-size:14px; padding:0 5px 0 0"></div>
-                </a>
+                <router-link to="/PersonalIndex" class="dropdown-item">
+                      {{user.fullname}}
+                </router-link>
                 <hr style="margin: 5px" />
-                <div v-if="user.role == 1 || user.role == 2">
+                <div v-if="userByToken.role == 1 || userByToken.role == 2">
                   <router-link  to="/ManageIndex" class="dropdown-item">
-                    <i class="la la-sign-in-alt"></i>
                     Quản trị
                   </router-link>
                   <hr style="margin: 5px" />
                 </div>
-                <div style="float: right; font-size:14px; padding:0 5px 0 0"></div>
                 <button v-on:click="HandleLogout" class="dropdown-item">Đăng xuất</button>
             </b-dropdown>
           </li>
@@ -208,31 +191,52 @@
 
 <script>
 import VueJwtDecode from 'vue-jwt-decode';
+import {API_PERSONAL} from "@/constant/constant-api";
+import apiFactory from "@/config/apiFactory";
 
 export default {
   name: "Layout",
   data(){
     return{
-      user: ''
+      userByToken: '',
+      user:'',
+      noti: '',
+      token: '',
     }
   },
   created() {
-    this.getUserInfo()
+    this.getUserInfoByToken()
+    this.getNotifications()
   },
   methods:{
-    getUserInfo(){
-      let token = this.$cookies.get('token');
+    getUserInfoByToken(){
+      this.token = this.$cookies.get('token');
       try{
-        this.user= VueJwtDecode.decode(token, 'utf-8');
+        this.userByToken= VueJwtDecode.decode(this.token, 'utf-8');
+        apiFactory.callApi(API_PERSONAL.INFORMATION, 'POST', {
+          token: this.token
+        }).then((res) => {
+          this.user = res.data.data
+        }).catch(() => {
+        });
       }
       catch(err){
         console.log('Not yet Login: ',err);
       }
     },
+    getNotifications() {
+      this.userByToken= VueJwtDecode.decode(this.token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.NOTIFICATION_10, 'POST', {
+        token: this.token
+      }).then((res) => {
+        this.noti = res.data.data
+      }).catch(() => {
+      });
+    },
     HandleLogout(){
       this.$cookies.remove('token')
       this.$router.go();
-    }
+    },
   }
 }
 </script>
@@ -639,4 +643,22 @@ export default {
   align-items: center;
 }
 
+.icon{
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+}
+
+.dropdown-menu{
+  max-width: 400px;
+}
+
+.notification{
+  margin-right: 30px;
+  font-size: 0.7rem;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 </style>
