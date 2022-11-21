@@ -19,10 +19,11 @@
                   <td>Mã khách hàng 2</td>
                   <td>Tên khách hàng 2</td>
                   <td>Ngày tạo</td>
-                  <td>Trạng thái hoạt động</td>
+                  <td>Trạng thái</td>
+                  <td>Xem hóa đơn</td>
+                  <td>Xem chi tiết</td>
                 </tr>
                 </thead>
-
                 <tbody v-for="item of listExchanges" :key="item.id">
                 <tr>
                   <td>
@@ -30,55 +31,21 @@
                       <h6>{{ item.id }}</h6>
                     </div>
                   </td>
-
-                  <td>
-                    <span>{{ item.userId1 }}</span>
-                  </td>
-                  <td>
-                    <span>
-                      <i>{{ item.userId1Navigation.fullname }}</i>
-                    </span>
-                  </td>
-                  <td>
-                    <span>
-                      {{ item.userId2 }}
-                    </span>
-                  </td>
-                  <td>
-                    <span>{{ item.userId2Navigation.fullname }}</span>
-                  </td>
-                  <td>
-                    <span>
-                      {{ item.date }}
-                    </span>
-                  </td>
-                  <td>
-                    <span class="role admin">
-                      <i>{{ item.status }}</i>
-                    </span>
-                  </td>
-
-                  <td>
-                    <span>
-                      <button class="au-btn au-btn-icon au-btn--brown au-btn--small" :to="{ name: 'DetailExchange', query: { id:item.id }}">
-                        Chi tiết
-                      </button>
-                    </span>
-                  </td>
+                  <td>{{ item.userId1 }}</td>
+                  <td>{{ item.userId1Navigation.fullname }}</td>
+                  <td>{{ item.userId2 }}</td>
+                  <td>{{ item.userId2Navigation.fullname }}</td>
+                  <td>{{ item.date }}</td>
+                  <td v-if="item.status == 'Approved'" ><span class="role approved">ĐÃ DUYỆT</span></td>
+                  <td v-if="item.status == 'Denied'" ><span class="role denied">ĐÃ HỦY</span></td>
+                  <td v-if="item.status == 'Waiting'" ><span class="role waiting">ĐANG ĐỢI</span></td>
+                  <td><router-link :to="{ name: 'ExchangeBill', query: { id:item.id }}" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router">Hóa đơn</router-link></td>
+                  <td><router-link :to="{ name: 'DetailExchange', query: { id:item.id }}" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router">Chi tiết</router-link></td>
                 </tr>
-
                 </tbody>
               </table>
             </div>
-            <br>
-            &nbsp;<span>
-            <button class="au-btn au-btn-icon au-btn--brown au-btn--small">
-              <router-link to="/ManageIndex" class="btn-router">Quay lại</router-link>
-            </button>
-            </span>
-            <br><br>
           </div>
-
         </div>
       </div>
     </div>

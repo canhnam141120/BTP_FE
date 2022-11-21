@@ -6,9 +6,6 @@
         <div class="user-data m-b-30">
           <h3 class="title-3 m-b-30">
             <i class="zmdi zmdi-account-calendar"></i>Danh sách phí</h3>
-          <button class="au-btn au-btn-icon au-btn--brown au-btn--small">
-            <router-link to="/ManageFee/create" class="btn-router">Thêm</router-link>
-          </button>
           <div class="table-responsive table-data">
             <table class="table">
               <thead>
@@ -17,45 +14,25 @@
                 <td>Code</td>
                 <td>Tên phí</td>
                 <td>Giá</td>
+                <td></td>
               </tr>
               </thead>
               <tbody>
               <tr v-for="item of listFees" :key="item.id">
-
                 <td>
                   <div class="table-data__info">
                     <h6>{{item.id}}</h6>
                   </div>
                 </td>
-                <td>
-                  <span>{{item.code}}</span>
-                </td>
-                <td>
-                  <span>{{item.name}}</span>
-                </td>
-                <td>
-                  <span>{{item.price}}</span>
-
-                </td>
-                <td>
-                    <span>
-                      <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDelete(item.id)">
-                        Xoá
-                      </button>
-                    </span>
-                </td>
+                <td>{{item.code}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.price}}</td>
+                <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleCreate(item.code)">Sửa giá</button></td>
               </tr>
-
               </tbody>
             </table>
           </div>
-          <br>
-          <button class="au-btn au-btn-icon au-btn--brown au-btn--small">
-            <router-link to="/ManageIndex" class="btn-router">Quay lại</router-link>
-          </button>
-          <br><br>
         </div>
-
       </div>
     </div>
   </div>

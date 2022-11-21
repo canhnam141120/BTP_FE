@@ -19,6 +19,16 @@ const routers = [
         component: () => import('@/pages/AllBooks'),
     },
     {
+        path:'/BlogIndex',
+        name:'BlogIndex',
+        component: () => import('@/pages/BlogIndex'),
+    },
+    {
+        path:'/PostDetail',
+        name:'PostDetail',
+        component: () => import('@/pages/PostDetail'),
+    },
+    {
         path:'/Login',
         name:'Login',
         component: () => import('@/pages/Authorize/Login'),

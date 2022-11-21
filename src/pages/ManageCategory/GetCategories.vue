@@ -15,6 +15,7 @@
                 <tr>
                   <td>Mã thể loại</td>
                   <td>Tên thể loại</td>
+                  <td></td>
                 </tr>
                 </thead>
 
@@ -25,7 +26,6 @@
                       <h6>{{ item.id }}</h6>
                     </div>
                   </td>
-
                   <td>
                     <span>{{ item.name }}</span>
                   </td>
@@ -41,13 +41,7 @@
                 </tbody>
               </table>
             </div>
-            <br>
-            <button class="au-btn au-btn-icon au-btn--brown au-btn--small">
-              <router-link to="/ManageIndex" class="btn-router">Quay lại</router-link>
-            </button>
-            <br><br>
           </div>
-
         </div>
       </div>
     </div>

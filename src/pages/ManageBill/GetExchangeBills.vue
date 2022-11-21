@@ -13,8 +13,7 @@
             <table class="table">
               <thead>
               <tr>
-
-                <td>Mã hóa đơn:</td>
+                <td>Mã hóa đơn</td>
                 <td>Mã giao dịch</td>
                 <td>Tên khách hàng</td>
                 <td>Số cuốn sách</td>
@@ -26,7 +25,6 @@
                 <td></td>
               </tr>
               </thead>
-
               <tbody v-for="item of listBills" :key="item.id">
               <tr>
                 <td>
@@ -34,69 +32,24 @@
                     <h6>{{ item.id }}</h6>
                   </div>
                 </td>
-
+                <td>{{ item.exchangeId }}</td>
+                <td>{{ item.user.fullname }}</td>
+                <td>{{ item.totalBook }}</td>
+                <td>{{ item.totalAmount }}</td>
+                <td>{{ item.depositFee }}</td>
+                <td v-if="item.isPaid" ><span class="role approved">{{item.isPaid}}</span></td>
+                <td v-else ><span class="role denied">{{item.isPaid}}</span></td>
+                <td>{{ item.paidDate }}</td>
+                <td>{{ item.payments }}</td>
                 <td>
-                  <span>{{ item.exchangeId }}</span>
+                  <router-link :to="{ name: 'DetailExchangeBill', query: { id:item.id }}" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router">Chi tiết</router-link>
                 </td>
-                <td>
-                  <span>
-                    <i>{{ item.user.fullname }}</i>
-                  </span>
-                </td>
-                <td>
-                  <span>
-                    {{ item.totalBook }}
-                  </span>
-                </td>
-                <td>
-                  <span>{{ item.totalAmount }}</span>
-                </td>
-                <td>
-                  <span>
-                    {{ item.depositFee }}
-                  </span>
-                </td>
-                <td>
-                  <span class="role admin">
-                    <i>{{ item.isPaid }}</i>
-                  </span>
-                </td>
-                <td>
-                  <span>
-                    {{ item.paidDate }}
-                  </span>
-                </td>
-                <td>
-                  <span>
-                    {{ item.payments }}
-                  </span>
-                </td>
-                <td>
-                    <span>
-                      <button class="au-btn au-btn-icon au-btn--brown au-btn--small">
-                        <router-link :to="{ name: 'DetailExchangeBill', query: { id:item.id }}" class="btn-router">Chi tiết</router-link>
-                      </button>
-                              </span>
-                </td>
-                <td>
-                    <span>
-                      <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandlePayment(item.id)">
-                        Thanh toán
-                      </button>
-                              </span>
-                </td>
+                <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandlePayment(item.id)">Thanh toán</button></td>
               </tr>
-
               </tbody>
             </table>
           </div>
-          <br>
-          <button class="au-btn au-btn-icon au-btn--brown au-btn--small">
-            <router-link to="/ManageIndex" class="btn-router">Quay lại</router-link>
-          </button>
-          <br><br>
         </div>
-
       </div>
     </div>
   </div>
