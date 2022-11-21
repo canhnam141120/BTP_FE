@@ -120,9 +120,6 @@ export default {
           icon: 'bx-money',
         },
         {
-<<<<<<< HEAD
-          link: '/HomePage',
-=======
           link: '/ManageUser',
           name: 'Quản lý người dùng',
           tooltip: 'Messages',
@@ -136,7 +133,6 @@ export default {
         },
         {
           link: '/',
->>>>>>> lichdthe
           name: 'Trang chủ',
           tooltip: 'Saved',
           icon: 'bx-home',
