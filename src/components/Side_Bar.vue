@@ -1,56 +1,23 @@
 <template>
   <div>
-  <div
-      class="sidebar"
-      :class="isOpened ? 'open' : ''"
-      :style="cssVars"
-  >
-    <div
-        class="logo-details"
-        style="margin: 6px 14px 0 14px;"
-    >
-      <img
-          v-if="menuLogo"
-          :src="menuLogo"
-          alt="menu-logo"
-          class="menu-logo icon"
-      >
+  <div class="sidebar" :class="isOpened ? 'open' : ''" :style="cssVars">
+    <div class="logo-details" style="margin: 6px 14px 0 14px;">
+      <img v-if="menuLogo" :src="menuLogo" alt="menu-logo" class="menu-logo icon">
 <!--      <i-->
 <!--          v-else-->
 <!--          class="bx icon"-->
 <!--          :class="menuIcon"-->
 <!--      />-->
-      <div class="logo_name">
-        {{ menuTitle }}
-      </div>
-      <i
-          class="bx"
-          :class="isOpened ? 'bx-menu-alt-right' : 'bx-menu'"
-          id="btn"
-          @click="isOpened = !isOpened"
-      />
+      <div class="logo_name"> {{ menuTitle }}</div>
+      <i class="bx" :class="isOpened ? 'bx-menu-alt-right' : 'bx-menu'" id="btn" @click="isOpened = !isOpened"/>
     </div>
-
     <div style="display: flex ; flex-direction:column; justify-content: space-between; flex-grow: 1; max-height: calc(100% - 60px); ">
-      <div
-          id="my-scroll"
-          style="margin: 6px 14px 0 14px;"
-      >
-        <ul
-            class="nav-list"
-            style="overflow: visible;"
-        >
-
-          <span
-              v-for="(menuItem, index) in menuItems"
-              :key="index"
-          >
+      <div id="my-scroll" style="margin: 6px 14px 0 14px;">
+        <ul class="nav-list" style="overflow: visible;">
+          <span v-for="(menuItem, index) in menuItems" :key="index">
             <li>
               <router-link class="rt-link" :to="menuItem.link">
-                <i
-                    class="bx"
-                    :class="menuItem.icon || 'bx-square-rounded'"
-                />
+                <i class="bx" :class="menuItem.icon || 'bx-square-rounded'"/>
                 <span class="links_name">{{ menuItem.name }}</span>
               </router-link>
               <span class="tooltip">{{ menuItem.tooltip || menuItem.name }}</span>
@@ -59,34 +26,17 @@
         </ul>
       </div>
 
-      <div
-          v-if="isLoggedIn"
-          class="profile"
-      >
+      <div v-if="isLoggedIn" class="profile">
         <div class="profile-details">
-          <img
-              v-if="profileImg"
-              :src="profileImg"
-              alt="profileImg"
-          >
-          <i
-              v-else
-              class="bx bxs-user-rectangle"
-          />
+          <img v-if="profileImg" :src="profileImg" alt="profileImg">
+          <i v-else class="bx bxs-user-rectangle"/>
           <div class="name_job">
-            <div class="name">
-              Trạm sách
-            </div>
             <div class="job">
               admin
             </div>
           </div>
         </div>
-        <i
-            v-if="isExitButton"
-            class="bx bx-log-out"
-            id="log_out"
-            @click.stop="$emit('button-exit-clicked')"
+        <i v-if="isExitButton" class="bx bx-log-out" id="log_out" @click.stop="$emit('button-exit-clicked')"
         />
       </div>
     </div>
@@ -106,7 +56,7 @@ export default {
     },
     menuTitle: {
       type: String,
-      default: 'Trạm sách',
+      default: 'TRẠM SÁCH',
     },
     // menuLogo: {
     //   type: String,
@@ -135,9 +85,15 @@ export default {
       default: () => [
         {
           link: '/ManageIndex',
-          name: 'Trang quản lý admin',
-          tooltip: 'Setting',
-          icon: 'bx-cog',
+          name: 'Quản lý sách',
+          tooltip: 'Analytics',
+          icon: 'bx-book',
+        },
+        {
+          link: '/ManagePost',
+          name: 'Quản lý bài đăng',
+          tooltip: 'Files',
+          icon: 'bx-book-content',
         },
         {
           link: '/ManageTransaction/exchange',
@@ -152,24 +108,6 @@ export default {
           icon: 'bx-receipt',
         },
         {
-          link: '/ManageUser',
-          name: 'Quản lý người dùng',
-          tooltip: 'Messages',
-          icon: 'bx-user',
-        },
-        {
-          link: '/ManageBook',
-          name: 'Quản lý sách',
-          tooltip: 'Analytics',
-          icon: 'bx-book',
-        },
-        {
-          link: '/ManagePost',
-          name: 'Quản lý bài đăng',
-          tooltip: 'Files',
-          icon: 'bx-book-content',
-        },
-        {
           link: '/ManageCategory',
           name: 'Quản lý thể loại',
           tooltip: 'Order',
@@ -180,6 +118,18 @@ export default {
           name: 'Quản lý phí',
           tooltip: 'Saved',
           icon: 'bx-money',
+        },
+        {
+          link: '/ManageUser',
+          name: 'Quản lý người dùng',
+          tooltip: 'Messages',
+          icon: 'bx-user',
+        },
+        {
+          link: '/ManageAdmin',
+          name: 'Quản lý admin',
+          tooltip: 'Messages',
+          icon: 'bx-cog',
         },
         {
           link: '/',
