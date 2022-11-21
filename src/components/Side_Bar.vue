@@ -3,44 +3,44 @@
     <div class="sidebar" :class="isOpened ? 'open' : ''" :style="cssVars">
       <div class="logo-details" style="margin: 6px 14px 0 14px;">
         <img v-if="menuLogo" :src="menuLogo" alt="menu-logo" class="menu-logo icon">
-<!--     <i v-else class="bx icon" :class="menuIcon"/>-->
+        <!--     <i v-else class="bx icon" :class="menuIcon"/>-->
         <div class="logo_name">{{ menuTitle }}</div>
         <i class="bx" :class="isOpened ? 'bx-menu-alt-right' : 'bx-menu'" id="btn" @click="isOpened = !isOpened"/>
       </div>
-      <div style="display: flex ; flex-direction:column; justify-content: space-between; flex-grow: 1; max-height: calc(100% - 60px); ">
-      <div id="my-scroll" style="margin: 6px 14px 0 14px;">
-        <ul class="nav-list" style="overflow: visible;">
+      <div
+          style="display: flex ; flex-direction:column; justify-content: space-between; flex-grow: 1; max-height: calc(100% - 60px); ">
+        <div id="my-scroll" style="margin: 6px 14px 0 14px;">
+          <ul class="nav-list" style="overflow: visible;">
           <span v-for="(menuItem, index) in menuItems" :key="index">
             <li>
-<<<<<<< HEAD
               <router-link class="rt-link" :to="menuItem.link">
                 <i
                     class="bx"
                     :class="menuItem.icon || 'bx-square-rounded'"
                 />
-=======
               <a :href="menuItem.link">
                 <i class="bx" :class="menuItem.icon || 'bx-square-rounded'"/>
->>>>>>> lichdthe
+
                 <span class="links_name">{{ menuItem.name }}</span>
               </router-link>
               <span class="tooltip">{{ menuItem.tooltip || menuItem.name }}</span>
             </li>
           </span>
-        </ul>
-      </div>
-      <div v-if="isLoggedIn" class="profile">
-        <div class="profile-details">
-          <img v-if="profileImg" :src="profileImg" alt="profileImg">
-          <i v-else class="bx bxs-user-rectangle"/>
-          <div class="name_job">
-            <div class="job">{{user.name}}</div>
-          </div>
+          </ul>
         </div>
-        <button v-if="isExitButton" class="bx bx-log-out" id="log_out" style="font-size: 30px; color: #9D6B54;" v-on:click="HandleLogout"/>
+        <div v-if="isLoggedIn" class="profile">
+          <div class="profile-details">
+            <img v-if="profileImg" :src="profileImg" alt="profileImg">
+            <i v-else class="bx bxs-user-rectangle"/>
+            <div class="name_job">
+              <div class="job">{{ user.name }}</div>
+            </div>
+          </div>
+          <button v-if="isExitButton" class="bx bx-log-out" id="log_out" style="font-size: 30px; color: #9D6B54;"
+                  v-on:click="HandleLogout"/>
+        </div>
       </div>
     </div>
-  </div>
     <slot/>
   </div>
 </template>
@@ -212,19 +212,18 @@ export default {
     }
   },
   created() {
-  this.getUserInfo()
+    this.getUserInfo()
   },
-  methods:{
-    getUserInfo(){
+  methods: {
+    getUserInfo() {
       let token = this.$cookies.get('token');
-      try{
-        this.user= VueJwtDecode.decode(token, 'utf-8');
-      }
-      catch(err){
-        console.log('Not yet Login: ',err);
+      try {
+        this.user = VueJwtDecode.decode(token, 'utf-8');
+      } catch (err) {
+        console.log('Not yet Login: ', err);
       }
     },
-    HandleLogout(){
+    HandleLogout() {
       this.$cookies.remove('token')
       this.$router.push('/');
     },
@@ -262,15 +261,18 @@ export default {
 /* Google Font Link */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 @import url('https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
+
 body {
   transition: all 0.5s ease;
 }
+
 .sidebar {
   position: relative;
   display: flex;
@@ -287,19 +289,23 @@ body {
   z-index: 99;
   transition: all 0.5s ease;
 }
+
 .sidebar.open {
   width: 300px;
 }
+
 .sidebar .logo-details {
   height: 60px;
   display: flex;
   align-items: center;
   position: relative;
 }
+
 .sidebar .logo-details .icon {
   opacity: 0;
   transition: all 0.5s ease;
 }
+
 .sidebar .logo-details .logo_name {
   color: var(--logo-title-color);
   font-size: 20px;
@@ -308,11 +314,13 @@ body {
   transition: all 0.5s ease;
   text-decoration: none;
 }
+
 .sidebar.open .logo-details .icon,
 .sidebar.open .logo-details .logo_name {
   opacity: 1;
   margin-left: 10%;
 }
+
 .sidebar .logo-details #btn {
   position: absolute;
   top: 50%;
@@ -325,9 +333,11 @@ body {
   cursor: pointer;
   transition: all 0.5s ease;
 }
+
 .sidebar.open .logo-details #btn {
   text-align: right;
 }
+
 .sidebar i {
   color: var(--icons-color);
   height: 60px;
@@ -336,20 +346,24 @@ body {
   text-align: center;
   line-height: 60px;
 }
+
 .sidebar .nav-list {
   margin-top: 20px;
   /* margin-bottom: 60px; */
   /* height: 100%; */
   /* min-height: min-content; */
 }
-ul{
+
+ul {
   padding-left: 8%;
 }
+
 .sidebar li {
   position: relative;
   margin: 8px 0;
   list-style: none;
 }
+
 .sidebar li .tooltip {
   position: absolute;
   top: -20px;
@@ -366,6 +380,7 @@ ul{
   pointer-events: none;
   transition: 0s;
 }
+
 .sidebar li:hover .tooltip {
   opacity: 1;
   pointer-events: auto;
@@ -373,9 +388,11 @@ ul{
   top: 50%;
   transform: translateY(-50%);
 }
+
 .sidebar.open li .tooltip {
   display: none;
 }
+
 .sidebar input {
   font-size: 15px;
   color: var(--serach-input-text-color);
@@ -389,10 +406,12 @@ ul{
   transition: all 0.5s ease;
   background: var(--secondary-color);
 }
+
 .sidebar.open input {
   padding: 0 20px 0 50px;
   width: 100%;
 }
+
 .sidebar .bx-search {
   position: absolute;
   top: 50%;
@@ -402,14 +421,17 @@ ul{
   background: var(--secondary-color);
   color: var(--icons-color);
 }
+
 .sidebar.open .bx-search:hover {
   background: var(--secondary-color);
   color: var(--icons-color);
 }
+
 .sidebar .bx-search:hover {
   background: var(--menu-items-hover-color);
   color: var(--bg-color);
 }
+
 .sidebar li a {
   display: flex;
   height: 100%;
@@ -420,9 +442,11 @@ ul{
   transition: all 0.4s ease;
   background: var(--bg-color);
 }
+
 .sidebar li a:hover {
   background: var(--menu-items-hover-color);
 }
+
 .sidebar li a .links_name {
   color: var(--menu-items-text-color);
   font-size: 15px;
@@ -432,21 +456,25 @@ ul{
   pointer-events: none;
   transition: 0.4s;
 }
+
 .sidebar.open li a .links_name {
   opacity: 1;
   pointer-events: auto;
 }
+
 .sidebar li a:hover .links_name,
 .sidebar li a:hover i {
   transition: all 0.5s ease;
   color: var(--bg-color);
 }
+
 .sidebar li i {
   height: 50px;
   line-height: 50px;
   font-size: 18px;
   border-radius: 12px;
 }
+
 .sidebar div.profile {
   position: relative;
   height: 60px;
@@ -458,15 +486,18 @@ ul{
   transition: all 0.5s ease;
   overflow: hidden;
 }
+
 .sidebar.open div.profile {
   width: 250px;
   margin-bottom: 5%;
 }
+
 .sidebar div .profile-details {
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
 }
+
 .sidebar div img {
   height: 45px;
   width: 45px;
@@ -474,6 +505,7 @@ ul{
   border-radius: 6px;
   margin-right: 10px;
 }
+
 .sidebar div.profile .name,
 .sidebar div.profile .job {
   font-size: 15px;
@@ -481,9 +513,11 @@ ul{
   color: var(--menu-footer-text-color);
   white-space: nowrap;
 }
+
 .sidebar div.profile .job {
   font-size: 12px;
 }
+
 .sidebar .profile #log_out {
   position: absolute;
   top: 65%;
@@ -496,21 +530,26 @@ ul{
   border-radius: 0px;
   transition: all 0.5s ease;
 }
+
 .sidebar.open .profile #log_out {
   width: 50px;
   background: var(--secondary-color);
   opacity: 60%;
 }
+
 .sidebar.open .profile:hover #log_out {
   opacity: 50%;
 }
+
 .sidebar.open .profile #log_out:hover {
   opacity: 1;
   color: #9D6B54;
 }
+
 .sidebar .profile #log_out:hover {
   color: #9D6B54;
 }
+
 .home-section {
   position: relative;
   background: var(--home-section-color);
@@ -521,10 +560,12 @@ ul{
   transition: all 0.5s ease;
   z-index: 2;
 }
+
 .sidebar.open ~ .home-section {
   left: 250px;
   width: calc(100% - 250px);
 }
+
 .home-section .text {
   display: inline-block;
   color: var(--bg-color);
@@ -532,19 +573,23 @@ ul{
   font-weight: 500;
   margin: 18px;
 }
+
 .my-scroll-active {
   overflow-y: auto;
 }
+
 #my-scroll {
   overflow-y: auto;
   height: calc(100% - 60px);
 }
-#my-scroll::-webkit-scrollbar{
-  display:none;
+
+#my-scroll::-webkit-scrollbar {
+  display: none;
   /* background-color: rgba(255, 255, 255, 0.2);
   width: 10px;
   border-radius:5px  */
 }
+
 /* #my-scroll::-webkit-scrollbar-thumb{
   background-color: red;
   border-radius:5px
