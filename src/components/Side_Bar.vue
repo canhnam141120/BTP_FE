@@ -77,7 +77,7 @@ export default {
       type: Array,
       default: () => [
         {
-          link: '/ManageBook',
+          link: '/ManageIndex',
           name: 'Quản lý sách',
           tooltip: 'Analytics',
           icon: 'bx-book',

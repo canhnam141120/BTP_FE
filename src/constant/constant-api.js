@@ -146,11 +146,12 @@ export const API_MANAGE_POST = Object.freeze({
 })
 
 export const API_MANAGE_BOOK = Object.freeze({
-    LIST_BOOK: "https://book-trading-platform.herokuapp.com/api/ManageBook/all",
+    LIST_BOOK: "https://book-trading-platform.herokuapp.com/api/ManageBook/all?page=",
     LIST_BOOK_APPROVED:"https://book-trading-platform.herokuapp.com/api/ManageBook/approved",
     LIST_BOOK_WAITING: "https://book-trading-platform.herokuapp.com/api/ManageBook/waiting",
     LIST_BOOK_DENIED: "https://book-trading-platform.herokuapp.com/api/ManageBook/denied",
     DETAIL_BOOK: "https://book-trading-platform.herokuapp.com/api/ManageBook/",
+    SEARCH_BOOK: "https://book-trading-platform.herokuapp.com/api/ManageBook/search?page=",
     APPROVED_BOOK: "https://book-trading-platform.herokuapp.com/api/ManageBook/approved/",
     DENIED_BOOK: "https://book-trading-platform.herokuapp.com/api/ManageBook/denied/",
     FEEDBACK_BOOK: "https://book-trading-platform.herokuapp.com/api/ManageBook/feedback/",

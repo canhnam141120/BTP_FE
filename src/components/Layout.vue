@@ -72,7 +72,7 @@
                       {{user.fullname}}
                 </router-link>
                 <hr style="margin: 5px" />
-                <div v-if="userByToken.role == 1 || userByToken.role == 2">
+                <div v-if="user.roleId == 1 || user.roleId == 2">
                   <router-link  to="/ManageIndex" class="dropdown-item">
                     Quản trị
                   </router-link>
@@ -210,23 +210,18 @@ export default {
   },
   methods:{
     getUserInfoByToken(){
-      this.token = this.$cookies.get('token');
-      try{
-        this.userByToken= VueJwtDecode.decode(this.token, 'utf-8');
+        let token = this.$cookies.get('token');
+        this.userByToken= VueJwtDecode.decode(token, 'utf-8');
         apiFactory.callApi(API_PERSONAL.INFORMATION, 'POST', {
           userId: this.userByToken.UserId
         }).then((res) => {
           this.user = res.data.data
         }).catch(() => {
         });
-      }
-      catch(err){
-        console.log('Not yet Login: ',err);
-      }
     },
     getNotifications() {
-      this.token = this.$cookies.get('token');
-      this.userByToken= VueJwtDecode.decode(this.token, 'utf-8');
+      let token = this.$cookies.get('token');
+      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
       apiFactory.callApi(API_PERSONAL.NOTIFICATION_10, 'POST', {
         userId: this.userByToken.UserId
       }).then((res) => {
