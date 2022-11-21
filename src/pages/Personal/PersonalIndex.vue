@@ -47,34 +47,40 @@
             </div>
 
           </div>
-          <div class="profile">
-            <div>
-              <b-avatar badge badge-left class="avatar"></b-avatar>
-            </div>
-            <div class="infor">
-              <h3>Thông tin cá nhân</h3>
+          <div>
+            <div class="profile">
               <div>
-                <span>Trạm sách</span><br>
-                <span>tramsachhn@gmail.com</span><br>
-                <span>0943568972</span><br>
-                <span>Hà Nội, Việt Nam</span><br>
+                <b-avatar badge badge-left class="avatar"></b-avatar>
+              </div>
+              <div class="infor">
+                <h3>Thông tin cá nhân</h3>
+                <div>
+                  <div class="description">
+                    <Icon icon="material-symbols:person"/>
+                    <span>Trạm sách</span><br>
+                  </div>
+                  <div class="description">
+                    <Icon icon="mdi:email" />
+                    <span>tramsachhn@gmail.com</span><br>
+                  </div>
+                  <div class="description">
+                    <Icon icon="material-symbols:call"/>
+                    <span>0943568972</span><br>
+                  </div>
+                  <div class="description">
+                    <Icon icon="material-symbols:location-on"/>
+                    <span>Hà Nội, Việt Nam</span><br>
+                  </div>
+
+                </div>
+                <div class="btn">
+                  <button class="side-btn">
+                    <Icon icon="material-symbols:edit-note"/>&nbsp;Chỉnh sửa trang cá nhân
+                  </button>
+                </div>
               </div>
             </div>
-            <div>
-              <h4>1M lượt theo dõi</h4>
-              <b-avatar-group size="60px">
-                <b-avatar style="background-color: #6C757D"></b-avatar>
-                <b-avatar style="background-color: #6C757D"></b-avatar>
-                <b-avatar style="background-color: #6C757D"></b-avatar>
-                <b-avatar style="background-color: #6C757D"></b-avatar>
-                <b-avatar style="background-color: #6C757D"></b-avatar>
-                <b-avatar style="background-color: #6C757D"></b-avatar>
-                <b-avatar style="background-color: #6C757D"></b-avatar>
-              </b-avatar-group>
-              <p>100 lượt giao dịch</p>
-            </div>
-            <div>
-            </div>
+            <div class="table-content"></div>
           </div>
         </div>
       </div>
@@ -122,6 +128,7 @@ main {
   background: #DFD5CB;
   border-radius: 8px;
   margin-top: 83px;
+  margin-bottom: auto;
 }
 
 .title {
@@ -185,6 +192,13 @@ main {
   background: #9D6B54;
   color: white;
   font-size: 14px;
+
+}
+
+.btn-icon:hover {
+  background: #9D6B54;
+  color: white;
+  font-size: 14px;
 }
 
 .profile {
@@ -199,10 +213,39 @@ main {
   height: 186px;
   margin-top: 45px;
 }
-.infor{
+
+.infor {
   width: 100%;
   margin-left: 79px;
   margin-top: 19px;
   margin-right: 70px;
+}
+
+.infor h3 {
+  color: #9D6B54;
+  font-weight: bold;
+}
+.infor span{
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+}
+.description {
+  display: flex;
+
+}
+.description span{
+  margin-left: 14px;
+}
+
+.table-content {
+  margin-top: 10%;
+  border: white;
+  border-radius: 8px;
+  background-color: white;
+  width: 100%;
+  height: 200px;
 }
 </style>

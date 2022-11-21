@@ -1,35 +1,43 @@
 <template>
   <div>
-    <div class="sidebar" :class="isOpened ? 'open' : ''" :style="cssVars">
-      <div class="logo-details" style="margin: 6px 14px 0 14px;">
-        <img v-if="menuLogo" :src="menuLogo" alt="menu-logo" class="menu-logo icon">
-<!--     <i v-else class="bx icon" :class="menuIcon"/>-->
-        <div class="logo_name">{{ menuTitle }}</div>
-        <i class="bx" :class="isOpened ? 'bx-menu-alt-right' : 'bx-menu'" id="btn" @click="isOpened = !isOpened"/>
-      </div>
-      <div style="display: flex ; flex-direction:column; justify-content: space-between; flex-grow: 1; max-height: calc(100% - 60px); ">
+  <div class="sidebar" :class="isOpened ? 'open' : ''" :style="cssVars">
+    <div class="logo-details" style="margin: 6px 14px 0 14px;">
+      <img v-if="menuLogo" :src="menuLogo" alt="menu-logo" class="menu-logo icon">
+<!--      <i-->
+<!--          v-else-->
+<!--          class="bx icon"-->
+<!--          :class="menuIcon"-->
+<!--      />-->
+      <div class="logo_name"> {{ menuTitle }}</div>
+      <i class="bx" :class="isOpened ? 'bx-menu-alt-right' : 'bx-menu'" id="btn" @click="isOpened = !isOpened"/>
+    </div>
+    <div style="display: flex ; flex-direction:column; justify-content: space-between; flex-grow: 1; max-height: calc(100% - 60px); ">
       <div id="my-scroll" style="margin: 6px 14px 0 14px;">
         <ul class="nav-list" style="overflow: visible;">
           <span v-for="(menuItem, index) in menuItems" :key="index">
             <li>
-              <a :href="menuItem.link">
+              <router-link class="rt-link" :to="menuItem.link">
                 <i class="bx" :class="menuItem.icon || 'bx-square-rounded'"/>
                 <span class="links_name">{{ menuItem.name }}</span>
-              </a>
+              </router-link>
               <span class="tooltip">{{ menuItem.tooltip || menuItem.name }}</span>
             </li>
           </span>
         </ul>
       </div>
+
       <div v-if="isLoggedIn" class="profile">
         <div class="profile-details">
           <img v-if="profileImg" :src="profileImg" alt="profileImg">
           <i v-else class="bx bxs-user-rectangle"/>
           <div class="name_job">
-            <div class="job">{{user.name}}</div>
+            <div class="job">
+              admin
+            </div>
           </div>
         </div>
-        <button v-if="isExitButton" class="bx bx-log-out" id="log_out" style="font-size: 30px; color: #9D6B54;" v-on:click="HandleLogout"/>
+        <i v-if="isExitButton" class="bx bx-log-out" id="log_out" @click.stop="$emit('button-exit-clicked')"
+        />
       </div>
     </div>
   </div>
@@ -38,8 +46,6 @@
 </template>
 
 <script>
-import VueJwtDecode from "vue-jwt-decode";
-
 export default {
   name: "Side_Bar",
   props: {
@@ -72,6 +78,7 @@ export default {
       type: String,
       default: '78px'
     },
+
     //! Menu items
     menuItems: {
       type: Array,
@@ -120,8 +127,8 @@ export default {
         },
         {
           link: '/ManageAdmin',
-          name: 'Quản lý Admin',
-          tooltip: 'Setting',
+          name: 'Quản lý admin',
+          tooltip: 'Messages',
           icon: 'bx-cog',
         },
         {
@@ -199,27 +206,8 @@ export default {
   },
   data() {
     return {
-      user: '',
       isOpened: false
     }
-  },
-  created() {
-  this.getUserInfo()
-  },
-  methods:{
-    getUserInfo(){
-      let token = this.$cookies.get('token');
-      try{
-        this.user= VueJwtDecode.decode(token, 'utf-8');
-      }
-      catch(err){
-        console.log('Not yet Login: ',err);
-      }
-    },
-    HandleLogout(){
-      this.$cookies.remove('token')
-      this.$router.push('/');
-    },
   },
   mounted() {
     this.isOpened = this.isMenuOpen
