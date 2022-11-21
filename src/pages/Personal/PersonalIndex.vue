@@ -74,7 +74,7 @@
 
                 </div>
                 <div class="btn">
-                  <button class="side-btn">
+                  <button class="btn-edit">
                     <Icon icon="material-symbols:edit-note"/>&nbsp;Chỉnh sửa trang cá nhân
                   </button>
                 </div>
@@ -247,5 +247,28 @@ main {
   background-color: white;
   width: 100%;
   height: 200px;
+}
+.btn-edit{
+  height: 36px;
+  width: 191px;
+  border-radius: 12px;
+  border: white;
+  align-items: center;
+  text-decoration: none;
+  transition: all 0.4s ease;
+  background: #9D6B54;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  margin-bottom: 11px;
+  line-height: 16.4px;
+  font-weight: 400;
+  font-family: Roboto;
+}
+.btn-edit:hover {
+  background: white;
+  color: #9D6B54;
+  font-size: 14px;
+border: 1px solid #9D6B54;
 }
 </style>

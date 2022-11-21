@@ -182,7 +182,7 @@ export default {
           icon: 'bx-money',
         },
         {
-          link: '/',
+          link: '/HomePage',
           name: 'Trang chủ',
           tooltip: 'Saved',
           icon: 'bx-home',
