@@ -6,13 +6,13 @@
       <!-- Right Column -->
       <div class="right-content">
       <div class="left-column">
-        <img src="../image/cover.png" alt="">
+        <img src="../image/book1.svg" alt="">
       </div>
       <div class="right-column">
         <!-- Product Description -->
         <div class="product-description">
-          <span>Book</span>
-          <h1>{{ this.detailBook.title}}</h1>
+          <h1>Danh sách sách</h1>
+          <h5>{{ this.detailBook.title}}</h5>
           <p>{{ this.detailBook.description}}</p>
         </div>
         <!-- Product Configuration -->
@@ -28,9 +28,10 @@
         </div>
 
         <!-- Product Pricing -->
-        <div class="product-price">
-          <span></span>
-          <a href="#" class="cart-btn">Trao đổi</a>
+        <div class="edit">
+          <button class="btn-edit">
+            <Icon icon="uil:pen" style="width: 20px; height: 20px; margin-right: 2%"/>&nbsp;Chỉnh sửa bài viết
+          </button>
         </div>
       </div>
       </div>
@@ -43,10 +44,10 @@ import apiFactory from "@/config/apiFactory";
 import {API_BOOK} from "@/constant/constant-api";
 import Layout from "@/components/Layout";
 import SideBar_Personal from "../components/SideBar_Personal";
-
+import {Icon} from '@iconify/vue2';
 export default {
   name: "BookDetail",
-  components: {SideBar_Personal, Layout},
+  components: {SideBar_Personal, Layout, Icon},
   data() {
     return {
       detailBook: ''
@@ -81,23 +82,23 @@ export default {
 }
 /* Columns */
 .left-column {
-  width: 65%;
+  width: 40%;
   position: relative;
 }
 
 .right-column {
-  width: 35%;
+  width: 55%;
   margin-top: 60px;
 }
 
 
 /* Left Column */
 .left-column img {
-  width: 100%;
+  width: 300px;
+  height: 354px;
   position: absolute;
-  left: 0;
-  top: 0;
-  opacity: 0;
+
+  top: 84px;
   transition: all 0.3s ease;
 }
 
@@ -135,7 +136,36 @@ export default {
   color: #86939E;
   line-height: 24px;
 }
+.edit {
+  margin-top: 3%;
+}
 
+.btn-edit {
+  height: 48px;
+  width: 240px;
+  border-radius: 8px;
+  border: white;
+  align-items: center;
+  text-decoration: none;
+  transition: all 0.4s ease;
+  background: #9D6B54;
+  justify-content: center;
+  color: white;
+  font-size: 16px;
+  margin-bottom: 11px;
+  line-height: 16.4px;
+  font-weight: 700;
+  line-height: 18.75px;
+  justify-content: center;
+  text-align: center;
+}
+
+.btn-edit:hover {
+  background: white;
+  color: #9D6B54;
+  font-size: 16px;
+  border: 1px solid #9D6B54;
+}
 /* Product Configuration */
 .product-color span,
 .cable-config span {
