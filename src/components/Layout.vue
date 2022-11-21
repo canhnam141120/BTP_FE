@@ -201,7 +201,7 @@ export default {
       userByToken: '',
       user:'',
       noti: '',
-      token: '',
+      userId: '',
     }
   },
   created() {
@@ -214,7 +214,7 @@ export default {
       try{
         this.userByToken= VueJwtDecode.decode(this.token, 'utf-8');
         apiFactory.callApi(API_PERSONAL.INFORMATION, 'POST', {
-          token: this.token
+          userId: this.userByToken.UserId
         }).then((res) => {
           this.user = res.data.data
         }).catch(() => {
@@ -225,9 +225,10 @@ export default {
       }
     },
     getNotifications() {
+      this.token = this.$cookies.get('token');
       this.userByToken= VueJwtDecode.decode(this.token, 'utf-8');
       apiFactory.callApi(API_PERSONAL.NOTIFICATION_10, 'POST', {
-        token: this.token
+        userId: this.userByToken.UserId
       }).then((res) => {
         this.noti = res.data.data
       }).catch(() => {
