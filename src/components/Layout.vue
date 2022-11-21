@@ -640,9 +640,11 @@ export default {
 }
 
 .icon{
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 20px;
+  margin-left: 14px;
+  margin-right: 14px;
 }
 
 .dropdown-menu{

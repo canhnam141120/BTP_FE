@@ -2,11 +2,12 @@
   <Layout>
     <main class="container">
       <!-- Left Column / Headphones Image -->
+      <SideBar_Personal></SideBar_Personal>
+      <!-- Right Column -->
+      <div class="right-content">
       <div class="left-column">
         <img src="../image/cover.png" alt="">
-        <img src="../image/cover.png" alt="">
       </div>
-      <!-- Right Column -->
       <div class="right-column">
         <!-- Product Description -->
         <div class="product-description">
@@ -32,6 +33,7 @@
           <a href="#" class="cart-btn">Trao đổi</a>
         </div>
       </div>
+      </div>
     </main>
   </Layout>
 </template>
@@ -40,10 +42,11 @@
 import apiFactory from "@/config/apiFactory";
 import {API_BOOK} from "@/constant/constant-api";
 import Layout from "@/components/Layout";
+import SideBar_Personal from "../components/SideBar_Personal";
 
 export default {
   name: "BookDetail",
-  components: {Layout},
+  components: {SideBar_Personal, Layout},
   data() {
     return {
       detailBook: ''
@@ -65,77 +68,17 @@ export default {
 </script>
 
 <style scoped>
-/*Header*/
-.header {
-  overflow: hidden;
-  background-color: #f1f1f1;
-  padding: 24px 8px;
-}
-
-.header a {
-  float: left;
-  color: black;
-  text-align: center;
-  padding: 12px;
-  text-decoration: none;
-  font-size: 18px;
-  line-height: 25px;
-  border-radius: 4px;
-}
-
-.header a.logo img {
-  width: 100%;
-  height: auto;
-}
-
-.header a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-.header a.active {
-  background-color: dodgerblue;
-  color: white;
-}
-
-.header-menu {
-  margin-left: 100px;
-  padding-right: 10px;
-
-}
-
-.header-menu a {
-  margin-left: 30px;
-  padding-right: 15px;
-  /*justify-content: center;*/
-}
-
-.header-right {
-  float: right;
-  margin-right: 30px;
-}
-
-.header-button {
-  border: burlywood;
-  border-radius: 2px;
-  padding-left: 10px;
-}
-
-/* Basic Styling */
-html, body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  font-family: 'Roboto', sans-serif;
-}
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 15px;
   display: flex;
+  background-color: #EFECE3;
 }
-
+.right-content{
+  display: flex;
+}
 /* Columns */
 .left-column {
   width: 65%;

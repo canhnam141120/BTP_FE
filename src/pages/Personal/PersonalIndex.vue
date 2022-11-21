@@ -3,50 +3,7 @@
     <main style="flex-grow: 1">
       <div class="body">
         <div class="container">
-          <div class="menu-sidebar">
-            <div class="title">
-              <h2>Tủ sách của tôi</h2>
-            </div>
-            <div class="group-btn">
-              <div class="btn">
-                <button class="btn-icon">
-                  <Icon icon="material-symbols:menu-book-outline-rounded"/>
-                </button>
-                <button class="side-btn">Tủ sách của tôi</button>
-              </div>
-              <div class="btn">
-                <button class="btn-icon">
-                  <Icon icon="mdi:post-outline"/>
-                </button>
-                <button class="side-btn">Bài đăng của tôi</button>
-              </div>
-              <div class="btn">
-                <button class="btn-icon">
-                  <Icon icon="mdi:cards-heart-outline"/>
-                </button>
-                <button class="side-btn">Danh sách yêu thích</button>
-              </div>
-              <div class="btn">
-                <button class="btn-icon">
-                  <Icon icon="mdi:chat-question-outline"/>
-                </button>
-                <button class="side-btn">Yêu cầu của tôi</button>
-              </div>
-              <div class="btn">
-                <button class="btn-icon">
-                  <Icon icon="ic:outline-swap-horizontal-circle"/>
-                </button>
-                <button class="side-btn">Giao dịch</button>
-              </div>
-              <div class="btn">
-                <button class="btn-icon">
-                  <Icon icon="iconoir:profile-circled"/>
-                </button>
-                <button class="side-btn">Thông tin cá nhân</button>
-              </div>
-            </div>
-
-          </div>
+          <SideBar_Personal></SideBar_Personal>
           <div>
             <div class="profile">
               <div>
@@ -60,7 +17,7 @@
                     <span>Trạm sách</span><br>
                   </div>
                   <div class="description">
-                    <Icon icon="mdi:email" />
+                    <Icon icon="mdi:email"/>
                     <span>tramsachhn@gmail.com</span><br>
                   </div>
                   <div class="description">
@@ -73,9 +30,10 @@
                   </div>
 
                 </div>
-                <div class="btn">
+                <div class="edit">
                   <button class="btn-edit">
-                    <Icon icon="material-symbols:edit-note"/>&nbsp;Chỉnh sửa trang cá nhân
+                    <Icon icon="uil:pen" style="width: 20px; height: 20px; margin-right: 2%"/>&nbsp;Chỉnh sửa trang cá
+                    nhân
                   </button>
                 </div>
               </div>
@@ -91,10 +49,11 @@
 <script>
 import Layout from "@/components/Layout";
 import {Icon} from '@iconify/vue2';
+import SideBar_Personal from "../../components/SideBar_Personal";
 
 export default {
   name: "PersonalIndex",
-  components: {Layout, Icon},
+  components: {SideBar_Personal, Layout, Icon},
   data() {
     return {}
   }
@@ -121,85 +80,6 @@ main {
   display: flex;
 }
 
-.menu-sidebar {
-  width: auto;
-  padding-top: 3%;
-  margin-right: 5%;
-  background: #DFD5CB;
-  border-radius: 8px;
-  margin-top: 83px;
-  margin-bottom: auto;
-}
-
-.title {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 19px;
-  padding-left: 5%;
-  color: #9D6B54;
-}
-
-.group-btn {
-  width: min-content;
-}
-
-.btn {
-  display: flex;
-
-}
-
-.btn-icon {
-  /*width: 100%;*/
-  height: 36px;
-  width: 36px;
-  border-radius: 12px;
-  border: white;
-  align-items: center;
-  text-decoration: none;
-  transition: all 0.4s ease;
-  background: white;
-  justify-content: center;
-  color: #9D6B54;
-  font-size: 14px;
-  margin-bottom: 11px;
-  margin-right: 11px;
-  line-height: 16.4px;
-  font-weight: 400;
-  font-family: Roboto;
-}
-
-.side-btn {
-  height: 36px;
-  width: 191px;
-  border-radius: 12px;
-  border: white;
-  align-items: center;
-  text-decoration: none;
-  transition: all 0.4s ease;
-  background: white;
-  justify-content: center;
-  color: #9D6B54;
-  font-size: 14px;
-  margin-bottom: 11px;
-  line-height: 16.4px;
-  font-weight: 400;
-  font-family: Roboto;
-}
-
-.side-btn:hover {
-  background: #9D6B54;
-  color: white;
-  font-size: 14px;
-
-}
-
-.btn-icon:hover {
-  background: #9D6B54;
-  color: white;
-  font-size: 14px;
-}
 
 .profile {
   margin-top: 3%;
@@ -225,18 +105,21 @@ main {
   color: #9D6B54;
   font-weight: bold;
 }
-.infor span{
-  font-family: 'Roboto';
+
+.infor span {
+
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
   line-height: 19px;
 }
+
 .description {
   display: flex;
 
 }
-.description span{
+
+.description span {
   margin-left: 14px;
 }
 
@@ -248,10 +131,15 @@ main {
   width: 100%;
   height: 200px;
 }
-.btn-edit{
-  height: 36px;
-  width: 191px;
-  border-radius: 12px;
+
+.edit {
+  margin-top: 3%;
+}
+
+.btn-edit {
+  height: 48px;
+  width: 240px;
+  border-radius: 8px;
   border: white;
   align-items: center;
   text-decoration: none;
@@ -259,16 +147,20 @@ main {
   background: #9D6B54;
   justify-content: center;
   color: white;
-  font-size: 14px;
+  font-size: 16px;
   margin-bottom: 11px;
   line-height: 16.4px;
-  font-weight: 400;
-  font-family: Roboto;
+  font-weight: 700;
+  line-height: 18.75px;
+  justify-content: center;
+  text-align: center;
 }
+
 .btn-edit:hover {
   background: white;
   color: #9D6B54;
-  font-size: 14px;
-border: 1px solid #9D6B54;
+  font-size: 16px;
+  border: 1px solid #9D6B54;
 }
+
 </style>

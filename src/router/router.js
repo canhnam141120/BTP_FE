@@ -9,7 +9,7 @@ const routers = [
         component: () => import('@/pages/ResultPayment'),
     },
     {
-        path:'/HomePage',
+        path:'/',
         name:'HomePage',
         component: () => import('@/pages/HomePage'),
     },
