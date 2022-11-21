@@ -46,13 +46,13 @@
               :key="index"
           >
             <li>
-              <a :href="menuItem.link">
+              <router-link class="rt-link" :to="menuItem.link">
                 <i
                     class="bx"
                     :class="menuItem.icon || 'bx-square-rounded'"
                 />
                 <span class="links_name">{{ menuItem.name }}</span>
-              </a>
+              </router-link>
               <span class="tooltip">{{ menuItem.tooltip || menuItem.name }}</span>
             </li>
           </span>
