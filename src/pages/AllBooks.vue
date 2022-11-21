@@ -3,8 +3,8 @@
     <main style="flex-grow: 1;">
       <!--==============body=============-->
       <div class="body">
-        <div class="title">DANH SÁCH SẢN PHẨM</div>
-        <div class="container">
+        <div class="title">TỦ SÁCH</div>
+        <div class="container-book">
           <div class="sidebar"></div>
           <div class="content">
             <div class="search">
@@ -49,18 +49,16 @@
               </div>
             </b-skeleton-wrapper>
             <div class="paging">
-              <div class="page">
-                <b-pagination @input="ChangePage" v-model="page" :total-rows="totalBook" :per-page="9">
-                  <template #first-text><span style="color: #9D6B54;">First</span></template>
-                  <template #prev-text><span style="color: #9D6B54;">Prev</span></template>
-                  <template #next-text><span style="color: #9D6B54;">Next</span></template>
-                  <template #last-text><span style="color: #9D6B54;">Last</span></template>
+                <b-pagination class="page-number" @input="ChangePage" v-model="page" :total-rows="totalBook" :per-page="9">
+                  <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                  <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                  <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                  <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
                   <template #page="{ page, active }">
                     <b v-if="active" style="color: white;">{{ page }} </b>
                     <b v-else style="color: #9D6B54;">{{ page }}</b>
                   </template>
                 </b-pagination>
-              </div>
             </div>
           </div>
         </div>
@@ -144,12 +142,11 @@ strong {
   background: #F0F0F0;
 }
 
-.body .container {
+.body .container-book {
   background: #F0F0F0;
   max-width: 1230px;
   border-radius: 10px;
-  margin-top: 5px;
-  margin-bottom: 30px;
+  margin: 5px auto 30px auto;
   display: flex;
   justify-content: space-between;
 }
@@ -159,10 +156,9 @@ strong {
   color: #9D6B54;
   font-size: 2rem;
   text-align: center;
-  margin-left: 350px;
 }
 
-.body .container .sidebar {
+.body .container-book .sidebar {
   width: 25%;
   height: 1000px;
   background: #F0ECE4;
@@ -170,19 +166,19 @@ strong {
   box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }
 
-.body .container .content {
+.body .container-book .content {
   width: 73%;
   background: #F0ECE4;
   border-radius: 10px;
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }
 
-.body .container .search {
+.body .container-book .search {
   margin: 20px 0px 10px 20px;
   width: 80%;
 }
 
-.body .container .search input {
+.body .container-book .search input {
   border-radius: 7px;
   border: 1px solid grey;
   height: 45px;
@@ -191,7 +187,7 @@ strong {
   color: #9D6B54;
 }
 
-.body .container .search button {
+.body .container-book .search button {
   border-radius: 7px;
   background-color: #9D6B54;
   color: white;
@@ -202,50 +198,50 @@ strong {
   margin-left: 10px;
 }
 
-.body .container .search button:hover {
+.body .container-book .search button:hover {
   border-color: #9D6B54;
   background-color: white;
   color: #9D6B54;
 }
 
-.body .container .content .grid {
+.body .container-book .content .grid {
   display: inline-grid;
   grid-template-columns: 1fr 1fr 1fr;
 }
 
-.body .container .content .grid .item {
+.body .container-book .content .grid .item {
   border-radius: 10px;
   background: white;
   width: 260px;
   margin: 10px 0px 10px 20px;
 }
 
-.body .container .content .grid .item:hover {
+.body .container-book .content .grid .item:hover {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }
 
-.body .container .content .grid .item img {
+.body .container-book .content .grid .item img {
   margin-left: 20px;
   height: 290px;
   width: 220px;
 }
 
-.body .container .content .grid .info {
+.body .container-book .content .grid .info {
   height: 120px;
   padding: 5px;
 }
 
-.body .container .content .grid .info img {
+.body .container-book .content .grid .info img {
   width: 20px;
   height: 20px;
   margin-left: 15px;
 }
 
-.body .container .content .grid .info label {
+.body .container-book .content .grid .info label {
   margin-left: 15px;
 }
 
-.body .container .content .grid .info .book-title {
+.body .container-book .content .grid .info .book-title {
   margin-left: 15px;
   margin-right: 10px;
   display: block;
@@ -254,7 +250,7 @@ strong {
   white-space: nowrap;
 }
 
-.body .container .content .grid .info .book-status {
+.body .container-book .content .grid .info .book-status {
   margin-left: 15px;
   margin-right: 10px;
   font-size: 0.8rem;
@@ -265,11 +261,11 @@ strong {
   -webkit-line-clamp: 2;
 }
 
-.body .container .content .grid .action {
+.body .container-book .content .grid .action {
   margin-bottom: 10px;
 }
 
-.body .container .content .grid .action .active {
+.body .container-book .content .grid .action .active {
   border-radius: 5px;
   background-color: #9D6B54;
   color: white;
@@ -279,13 +275,13 @@ strong {
   margin-left: 34px;
 }
 
-.body .container .content .grid .action .active:hover {
+.body .container-book .content .grid .action .active:hover {
   border-color: #9D6B54;
   background-color: white;
   color: #9D6B54;
 }
 
-.body .container .content .grid .action .disable {
+.body .container-book .content .grid .action .disable {
   border-radius: 5px;
   background-color: grey;
   color: white;
@@ -296,13 +292,14 @@ strong {
   cursor: not-allowed;
 }
 
-.body .container .content .paging {
+.body .container-book .content .paging {
   margin-top: 10px;
 }
 
-.body .container .content .paging .page {
-  width: 40%;
+.body .container-book .content .paging ul {
   margin-right: auto;
   margin-left: auto;
+  width: 30%;
 }
+
 </style>

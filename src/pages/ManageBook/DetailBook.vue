@@ -1,4 +1,5 @@
 <template>
+<!--
 <Side_Bar>
     <div class="GetAdmins">
       <div class="row">
@@ -8,9 +9,9 @@
               <i class="zmdi zmdi-account-calendar"></i>Chi tiết sách {{book.title}}</h3>
             <div class="filters m-b-45">
               <br>
-              <input class="au-input au-input--xl" type="text"
+              <input class="au-input au-input&#45;&#45;xl" type="text"
                      placeholder="Nhập email hoặc số điện thoại" v-model="search" required/>
-              <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleSearch">
+              <button class="au-btn au-btn-icon au-btn&#45;&#45;brown au-btn&#45;&#45;small" v-on:click="HandleSearch">
                 Tìm kiếm
               </button>
             </div>
@@ -85,48 +86,47 @@
               </div>
             </div>
             <br>
-            <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-              <router-link to="/ManageIndex" class="btn-router">Quay lại</router-link>
-            </button>
+              <router-link to="/ManageIndex"  class="au-btn au-btn-icon au-btn&#45;&#45;green au-btn&#45;&#45;small btn-router">Quay lại</router-link>
             <br><br>
           </div>
         </div>
       </div>
     </div>
 </Side_Bar>
+-->
 
-<!--  <Side_Bar>-->
-<!--  <div>-->
-<!--    <div class="DetailBook">-->
-<!--      <h1>Chi tiết sách {{book.title}}</h1>-->
-<!--        <div>-->
-<!--          <div><label>Mã sách: </label><span>{{book.id}}</span></div>-->
-<!--          <div><label>Người đăng: </label><span>{{book.user.fullname}}</span></div>-->
-<!--          <div><label>Tên sách: </label><span>{{book.title}}</span></div>-->
-<!--          <div><label>Ảnh: </label><img v-bind:src="book.image" height="90px" width="65px"></div>-->
-<!--          <div><label>Thể loại: </label><span>{{book.category.name}}</span></div>-->
-<!--          <div><label>Nội dung: </label><span>{{book.description}}</span></div>-->
-<!--          <div><label>Tác giả: </label><span>{{book.author}}</span></div>-->
-<!--          <div><label>Nhà xuất bản: </label><span>{{book.publisher}}</span></div>-->
-<!--          <div><label>Năm xuất bản: </label><span>{{book.year}}</span></div>-->
-<!--          <div><label>Ngôn ngữ: </label><span>{{book.language}}</span></div>-->
-<!--          <div><label>Số trang: </label><span>{{book.numberOfPages}}</span></div>-->
-<!--          <div><label>Khối lượng: </label><span>{{book.weight}}</span></div>-->
-<!--          <div><label>Giá bìa: </label><span>{{book.coverPrice}}</span></div>-->
-<!--          <div><label>Giá cọc: </label><span>{{book.depositPrice}}</span></div>-->
-<!--          <div><label>Tình trạng: </label><span>{{book.statusBook}}</span></div>-->
-<!--          <div><label>Ngày đăng: </label><span>{{book.postedDate}}</span></div>-->
-<!--          <div><label>Cho phép đổi: </label><span>{{book.isExchange}}</span></div>-->
-<!--          <div><label>Cho phép thuê: </label><span>{{book.isRent}}</span></div>-->
-<!--          <div><label>Phí thuê: </label><span>{{book.rentFee}}</span></div>-->
-<!--          <div><label>Số ngày: </label><span>{{book.numberOfDays}}</span></div>-->
-<!--          <div><label>Trạng thái:  </label><span>{{book.status}}</span></div>-->
-<!--          <br>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <button><router-link to="/ManageBook">Quay lại</router-link></button>-->
-<!--  </div>-->
-<!--  </Side_Bar>-->
+  <Side_Bar>
+  <div>
+    <div class="DetailBook">
+      <h1>Chi tiết sách {{book.title}}</h1>
+        <div>
+          <div><label>Mã sách: </label><span>{{book.id}}</span></div>
+          <div><label>Người đăng: </label><span>{{book.user.fullname}}</span></div>
+          <div><label>Tên sách: </label><span>{{book.title}}</span></div>
+          <div><label>Ảnh: </label><img v-bind:src="book.image" height="90px" width="65px"></div>
+          <div><label>Thể loại: </label><span>{{book.category.name}}</span></div>
+          <div><label>Nội dung: </label><span>{{book.description}}</span></div>
+          <div><label>Tác giả: </label><span>{{book.author}}</span></div>
+          <div><label>Nhà xuất bản: </label><span>{{book.publisher}}</span></div>
+          <div><label>Năm xuất bản: </label><span>{{book.year}}</span></div>
+          <div><label>Ngôn ngữ: </label><span>{{book.language}}</span></div>
+          <div><label>Số trang: </label><span>{{book.numberOfPages}}</span></div>
+          <div><label>Khối lượng: </label><span>{{book.weight}}</span></div>
+          <div><label>Giá bìa: </label><span>{{book.coverPrice}}</span></div>
+          <div><label>Giá cọc: </label><span>{{book.depositPrice}}</span></div>
+          <div><label>Tình trạng: </label><span>{{book.statusBook}}</span></div>
+          <div><label>Ngày đăng: </label><span>{{book.postedDate}}</span></div>
+          <div><label>Cho phép đổi: </label><span>{{book.isExchange}}</span></div>
+          <div><label>Cho phép thuê: </label><span>{{book.isRent}}</span></div>
+          <div><label>Phí thuê: </label><span>{{book.rentFee}}</span></div>
+          <div><label>Số ngày: </label><span>{{book.numberOfDays}}</span></div>
+          <div><label>Trạng thái:  </label><span>{{book.status}}</span></div>
+          <br>
+        </div>
+    </div>
+    <button><router-link to="/ManageBook" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router">Quay lại</router-link></button>
+  </div>
+  </Side_Bar>
 
 </template>
 

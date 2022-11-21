@@ -11,7 +11,7 @@
               <div><label>Hashtag: </label><span>{{post.hashtag}}</span></div>
               <div><label>Thời gian đăng: </label><span>{{post.createdDate}}</span></div>
               <div><label>Trạng thái: </label><span>{{post.status}}</span></div>
-              <button><router-link to="/ManagePost">Quay lại</router-link></button>
+              <button><router-link to="/ManagePost" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router">Quay lại</router-link></button>
             </div>
         </div>
   </Side_Bar>

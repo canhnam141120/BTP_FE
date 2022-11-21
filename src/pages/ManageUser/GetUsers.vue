@@ -14,6 +14,10 @@
               <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleSearch">
                 Tìm kiếm
               </button>
+              <br><br>
+              &nbsp;<button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getUsersAll">Tất cả</button>
+              &nbsp;<button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getUsersActive">Đang hoạt động</button>
+              &nbsp;<button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getUsersBan">Đang khóa</button>
             </div>
             <div>
               <div class="table-responsive table-data">
@@ -28,8 +32,8 @@
                     <td>Địa chỉ</td>
                     <td>Số người thích</td>
                     <td>Số lần giao dịch</td>
-                    <td>Trạng thái hoạt động</td>
                     <td>Kích hoạt/Khóa</td>
+                    <td>Ủy quyền</td>
                   </tr>
                   </thead>
 
@@ -40,71 +44,23 @@
 <!--                        <h6>{{ item.id }}</h6>-->
 <!--                      </div>-->
 <!--                    </td>-->
-
-                    <td>
-                      <span>{{ item.email }}</span>
+                    <td>{{ item.email }}</td>
+                    <td>{{ item.isVerify }}</td>
+                    <td>{{ item.fullname }}</td>
+                    <td>{{ item.phone }}</td>
+                    <td>{{ item.addressMain }}</td>
+                    <td>{{ item.likeNumber }}</td>
+                    <td>{{ item.numberOfTransaction }}</td>
+                    <td >
+                      <button v-if="item.isActive" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleBan(item.id)">Khóa</button>
+                      <button v-else class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleActive(item.id)">Kích hoạt</button>
                     </td>
-                    <td>
-                      <span><i>{{ item.isVerify }}</i></span>
-                    </td>
-                    <td>
-                      <span>{{ item.fullname }}</span>
-                    </td>
-                    <td>
-                      <span class="role admin">{{ item.phone }}</span>
-                    </td>
-                    <td>
-                      <span>{{ item.addressMain }}</span>
-                    </td>
-                    <td>
-                      <span><i>{{ item.likeNumber }}</i></span>
-                    </td>
-                    <td>
-                      <span><i>{{ item.numberOfTransaction }}</i></span>
-                    </td>
-                    <td>
-                      <span><i>{{ item.isActive }}</i></span>
-                    </td>
-                    <td v-if="item.isActive">
-                      <button v-on:click="HandleBan(item.id)">Khóa</button>
-                    </td>
-                    <td v-else>
-                      <button v-on:click="HandleActive(item.id)">Kích hoạt</button>
-                    </td>
-                    <td>
-                      <span>
-                        <button class="au-btn au-btn-icon au-btn--brown au-btn--small"
-                                v-on:click="HandleBan(item.id)">
-                          Khóa
-                        </button>
-                      </span>
-                    </td>
-                    <td>
-                      <span>
-                        <button class="au-btn au-btn-icon au-btn--brown au-btn--small"
-                                v-on:click="HandleActive(item.id)">
-                          Kích hoạt
-                        </button>
-                      </span>
-                    </td>
-                    <td>
-                      <span>
-                        <button class="au-btn au-btn-icon au-btn--brown au-btn--small"
-                                v-on:click="HandleAuthority(item.id)">
-                          Uỷ quyền
-                        </button>
-                      </span>
-                    </td>
+                    <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleAuthority(item.id)">Uỷ quyền</button></td>
                   </tr>
                   </tbody>
                 </table>
               </div>
             </div>
-            <br>
-            <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-              <router-link to="/ManageIndex" class="btn-router">Quay lại</router-link>
-            </button>
-            <br><br>
           </div>
         </div>
       </div>

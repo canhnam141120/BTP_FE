@@ -558,8 +558,8 @@ section {
 
 .au-btn--small {
     padding: 0 20px;
-    line-height: 40px;
-    font-size: 14px;
+    line-height: 30px;
+    font-size: 12px;
     width: max-content;
 }
 
@@ -4353,17 +4353,17 @@ section {
 }
 
 .table-data thead tr td {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 600;
-    color: #808080;
+    color: #9D6B54;
     text-transform: uppercase;
 }
 
 .table-data .table td {
     border-top: none;
     border-bottom: 1px solid #f2f2f2;
-    padding-top: 23px;
-    padding-bottom: 33px;
+    font-size: 12px;
+    padding-bottom: 3px;
     /*padding-left: 40px;*/
     /*padding-right: 10px;*/
 }
@@ -4388,7 +4388,7 @@ section {
 }
 
 .table-data__info span a {
-    font-size: 12px;
+    font-size: 10px;
     color: #999;
 }
 
@@ -4433,9 +4433,11 @@ section {
 .role {
     display: inline-block;
     line-height: 30px;
-    font-size: 14px;
+    font-size: 10px;
+    width: 70px;
+    text-align: center;
     color: #fff;
-    padding: 0 15px;
+    padding: 0 5px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
@@ -4452,6 +4454,20 @@ section {
 
 .role.member {
     background: #57b846;
+}
+
+.role.approved{
+    background: green;
+
+}
+
+.role.denied{
+    background: red;
+}
+
+.role.waiting{
+    background: yellow;
+    color: black;
 }
 
 .table-top-campaign.table td {
