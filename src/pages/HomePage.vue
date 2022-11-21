@@ -132,7 +132,7 @@ export default {
       this.loading = true;
       apiFactory.callApi(API_POST.TOP_POST, 'GET', {}).then((res) => {
         this.listPost = res.data.data
-        this.loading = true
+        this.loading = false
       }).catch(() => {
       });
     }
