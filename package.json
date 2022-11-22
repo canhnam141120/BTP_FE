@@ -28,6 +28,7 @@
     "vue-axios": "^3.5.2",
     "vue-cookies": "^1.8.2",
     "vue-jwt-decode": "^0.1.0",
+    "vue-show-more-text": "^2.0.2",
     "vue-slick-carousel": "^1.0.6"
   },
   "devDependencies": {
