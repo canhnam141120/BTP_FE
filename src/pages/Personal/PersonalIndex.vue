@@ -7,7 +7,7 @@
           <div>
             <div class="profile">
               <div>
-                <b-avatar badge badge-left class="avatar"></b-avatar>
+                <b-avatar badge badge-left class="avatar-personal"></b-avatar>
               </div>
               <div class="infor">
                 <h3>Thông tin cá nhân</h3>
@@ -87,7 +87,7 @@ main {
 
 }
 
-.avatar {
+.avatar-personal {
   background-color: #6C757D;
   width: 186px;
   height: 186px;
