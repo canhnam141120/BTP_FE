@@ -77,6 +77,8 @@ export default {
             this.$router.push({
               name: 'HomePage'
             })
+          }else{
+            this.err = 'Email hoặc mật khẩu không chính xác!'
           }
         }).catch(() => {this.err = 'Email hoặc mật khẩu không chính xác!'});
       }

@@ -1,11 +1,11 @@
 <template>
   <Side_Bar>
-    <div class="GetRentBills">
+    <div class="ml">
       <div class="row">
         <div class="col-lg-6">
           <div class="user-data m-b-30">
             <h3 class="title-3 m-b-30">
-              <i class="zmdi zmdi-account-calendar"></i>Danh sách tất cả hóa đơn thuê</h3>
+              <i class="zmdi zmdi-account-calendar"></i>Danh sách thể loại</h3>
             <button class="au-btn au-btn-icon au-btn--brown au-btn--small">
               <router-link to="/ManageCategory/create" class="btn-router">Thêm</router-link>
             </button>
@@ -18,7 +18,6 @@
                   <td></td>
                 </tr>
                 </thead>
-
                 <tbody>
                 <tr v-for="item of listCategories" :key="item.id">
                   <td>

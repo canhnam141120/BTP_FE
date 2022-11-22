@@ -1,11 +1,11 @@
 <template>
-  <div class="GetExchanges">
+  <div class="ml">
     <div class="row">
       <div class="col-lg-6">
         <div class="user-data m-b-30">
           <h3 class="title-3 m-b-30">
             <i class="zmdi zmdi-account-calendar"></i>Danh sách sách</h3>
-          <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getBooksAll">Tất cả</button>
+          <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getBooksAll(1)">Tất cả</button>
           <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getBooksApproved">Đã duyệt</button>
           <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getBooksDenied">Đã hủy</button>
           <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getBooksWaiting">Đang đợi</button>
@@ -39,20 +39,20 @@
                   </div>
                 </td>
                 <td>{{ item.user.fullname }}</td>
-                <td>{{ item.title }}</td>
+                <td style="max-width: 300px">{{ item.title }}</td>
                 <td><img v-bind:src="item.image" height="90px" width="65px"></td>
-                <td>{{ item.coverPrice }}</td>
-                <td>{{ item.depositPrice }}</td>
-                <td>{{ item.postedDate }}</td>
+                <td>{{ item.coverPrice.toLocaleString()}}đ</td>
+                <td>{{ item.depositPrice.toLocaleString()}}đ</td>
+                <td>{{item.postedDate }}</td>
                 <td v-if="item.status == 'Approved'" ><span class="role approved">ĐÃ DUYỆT</span></td>
                 <td v-if="item.status == 'Denied'" ><span class="role denied">ĐÃ HỦY</span></td>
                 <td v-if="item.status == 'Waiting'" ><span class="role waiting">ĐANG ĐỢI</span></td>
                 <td v-if="item.status == 'Waiting'">
                   <button style="display: block" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleApproved(item.id)">Duyệt</button>
-                  <button style="width: 84px" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDenied(item.id)">Hủy</button>
+                  <button style="width: 53.5px" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDenied(item.id)">Hủy</button>
                 </td>
                 <td v-if="item.status == 'Approved'">
-                  <button style="width: 84px" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDenied(item.id)">Huỷ</button>
+                  <button style="width: 53.5px"  class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDenied(item.id)">Huỷ</button>
                 </td>
                 <td v-if="item.status == 'Denied'">
                   <button  class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleApproved(item.id)">Duyệt</button>

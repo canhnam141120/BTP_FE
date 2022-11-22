@@ -5,7 +5,7 @@
       <div class="body">
         <div class="title">TỦ SÁCH</div>
         <div class="container-book">
-          <div class="sidebar"></div>
+          <div class="sidebar-book"></div>
           <div class="content">
             <div class="search">
               <input type="text" v-model="search" placeholder="Nhập tên sản phẩm">
@@ -18,7 +18,10 @@
                   <div class="item" v-for='i in 9' :key="i">
                     <b-card no-body img-top style="height: 450px">
                       <b-skeleton-img card-img="top" aspect="3:1" height="290px"></b-skeleton-img>
-                      <b-card style="height: 160px">
+                      <b-card style="height: 170px">
+                        <b-skeleton animation="wave" width="85%"></b-skeleton>
+                        <b-skeleton animation="wave" width="55%"></b-skeleton>
+                        <b-skeleton animation="wave" width="70%"></b-skeleton>
                         <b-skeleton animation="wave" width="85%"></b-skeleton>
                         <b-skeleton animation="wave" width="55%"></b-skeleton>
                         <b-skeleton animation="wave" width="70%"></b-skeleton>
@@ -158,7 +161,7 @@ strong {
   text-align: center;
 }
 
-.body .container-book .sidebar {
+.body .container-book .sidebar-book {
   width: 25%;
   height: 1000px;
   background: #F0ECE4;
@@ -213,6 +216,7 @@ strong {
   border-radius: 10px;
   background: white;
   width: 260px;
+  height: 450px;
   margin: 10px 0px 10px 20px;
 }
 

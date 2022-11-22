@@ -231,7 +231,10 @@ export default {
     },
     HandleLogout(){
       this.$cookies.remove('token')
-      this.$router.go();
+      this.$router.push({
+        name: 'HomePage'
+      })
+      window.location.reload();
     },
   }
 }

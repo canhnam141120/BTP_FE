@@ -15,6 +15,10 @@
     /*left: 90px;*/
 }
 
+.ml{
+    margin-left: 65px;
+}
+
 .col-lg-6 {
     width: 100%;
 }
@@ -44,7 +48,6 @@ button {
 }
 
 img {
-    max-width: 100%;
     height: auto;
 }
 
@@ -70,10 +73,6 @@ p {
 
 /* ----- Typography ----- */
 body {
-    font-family: "Poppins", sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 1.625;
     color: #666;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -477,7 +476,7 @@ section {
 .au-btn--brown {
     background: #9D6B54;
     color: white;
-    border: 2px solid white;
+    border: 1px solid white;
     border-radius: 5px;
     font-weight: bold;
 
@@ -486,7 +485,7 @@ section {
 .au-btn--brown:hover {
     background: white;
     color: #9D6B54;
-    border: 2px solid #9D6B54;
+    border: 1px solid #9D6B54;
     border-radius: 3px;
     font-weight: bolder;
 }
@@ -557,9 +556,10 @@ section {
 }
 
 .au-btn--small {
-    padding: 0 20px;
+    width: auto;
+    padding: 0 10px;
     line-height: 30px;
-    font-size: 12px;
+    font-size: 10px;
     width: max-content;
 }
 
@@ -4458,15 +4458,17 @@ section {
 
 .role.approved{
     background: green;
-
+    border: 1px solid green
 }
 
 .role.denied{
     background: red;
+    border: 1px solid red;
 }
 
 .role.waiting{
     background: yellow;
+    border: 1px solid yellow;
     color: black;
 }
 
