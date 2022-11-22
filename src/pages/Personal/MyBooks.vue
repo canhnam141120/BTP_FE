@@ -1,87 +1,133 @@
 <template>
+  <Layout>
+    <main style="flex-grow: 1">
+      <div class="body">
+        <div class="container">
+          <SideBar_Personal></SideBar_Personal>
+          <div class="right-content">
+<!--            ===========edit ni here-->
 
-  <div>
-    <div class="MyBooks">
-      <h1>Danh sách sách của tôi</h1>
-      <button v-on:click="getBooksAll">Tất cả</button>
-      <button v-on:click="getBooksApproved">Đã duyệt</button>
-      <button v-on:click="getBooksDenied">Bị hủy</button>
-      <button v-on:click="getBooksWaiting">Đang đợi</button>
-      <br><br>
-      <table border="1px">
-        <tr>
-          <td></td>
-          <td>Mã sách</td>
-          <td>Người đăng</td>
-          <td>Tên sách</td>
-          <td>Ảnh</td>
-          <td>Giá bìa</td>
-          <td>Giá cọc</td>
-          <td>Ngày đăng</td>
-          <td>Trạng thái</td>
-          <td>Đánh giá</td>
-          <td></td>
-        </tr>
-        <tr v-for="item of listBooks" :key="item.id">
-          <td><router-link :to="{ name: 'DetailBook', query: { id:item.id }}"><button>Chi tiết</button> </router-link></td>
-          <td>{{item.id}}</td>
-          <td>{{item.userId}}</td>
-          <td>{{item.title}}</td>
-          <td><img v-bind:src="item.image" height="90px" width="65px"></td>
-          <td>{{item.coverPrice}}</td>
-          <td>{{item.depositPrice}}</td>
-          <td>{{item.postedDate}}</td>
-          <td>{{item.status}}</td>
-          <td><router-link :to="{ name: 'GetFeedbacks', query: { id:item.id }}"><button>Xem</button> </router-link></td>
-        </tr>
-      </table>
-    </div>
-    <br>
-    <button><router-link to="/PersonalIndex">Quay lại</router-link></button>
-  </div>
-
+          </div>
+        </div>
+      </div>
+    </main>
+  </Layout>
 </template>
 
 <script>
-import apiFactory from "@/config/apiFactory";
-import {API_PERSONAL} from "@/constant/constant-api";
-
+import Layout from "@/components/Layout";
+import SideBar_Personal from "../../components/SideBar_Personal";
 
 export default {
-  name: "MyBooks",
+  name: "MyBook",
+  components: {SideBar_Personal, Layout},
   data() {
-    return {
-      listBooks: ''
-    }
-  },
-  created() {
-    this.getBooksAll()
-  },
-  methods: {
-    getBooksAll() {
-      apiFactory.callApi(API_PERSONAL.LIST_BOOK, 'POST', {token: this.$cookies.get('token')}).then((res) => {
-        this.listBooks = res.data.data
-      }).catch(() => {
-      });
-    },
-    getBooksApproved() {
-      apiFactory.callApi(API_PERSONAL.LIST_BOOK_APPROVED, 'POST', {token: this.$cookies.get('token')}).then((res) => {
-        this.listBooks = res.data.data
-      }).catch(() => {
-      });
-    },
-    getBooksDenied() {
-      apiFactory.callApi(API_PERSONAL.LIST_BOOK_DENIED, 'POST', {token: this.$cookies.get('token')}).then((res) => {
-        this.listBooks = res.data.data
-      }).catch(() => {
-      });
-    },
-    getBooksWaiting() {
-      apiFactory.callApi(API_PERSONAL.LIST_BOOK_WAITING, 'POST', {token: this.$cookies.get('token')}).then((res) => {
-        this.listBooks = res.data.data
-      }).catch(() => {
-      });
-    }
+    return {}
   }
-}
+};
 </script>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+main {
+  background: #F0F0F0;
+}
+
+.body {
+  background: #F0F0F0;
+}
+
+.body .container {
+  max-width: 1230px;
+  background: #F0ECE4;
+  border-radius: 10px;
+  display: flex;
+}
+
+
+.profile {
+  margin-top: 3%;
+  display: flex;
+
+}
+
+.avatar {
+  background-color: #6C757D;
+  width: 186px;
+  height: 186px;
+  margin-top: 45px;
+}
+
+.infor {
+  width: 100%;
+  margin-left: 79px;
+  margin-top: 19px;
+  margin-right: 70px;
+}
+
+.infor h3 {
+  color: #9D6B54;
+  font-weight: bold;
+}
+
+.infor span {
+
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+}
+
+.description {
+  display: flex;
+
+}
+
+.description span {
+  margin-left: 14px;
+}
+
+.table-content {
+  margin-top: 10%;
+  border: white;
+  border-radius: 8px;
+  background-color: white;
+  width: 100%;
+  height: 200px;
+}
+
+.edit {
+  margin-top: 3%;
+}
+
+.btn-edit {
+  height: 48px;
+  width: 240px;
+  border-radius: 8px;
+  border: white;
+  align-items: center;
+  text-decoration: none;
+  transition: all 0.4s ease;
+  background: #9D6B54;
+  justify-content: center;
+  color: white;
+  font-size: 16px;
+  margin-bottom: 11px;
+  line-height: 16.4px;
+  font-weight: 700;
+  line-height: 18.75px;
+  justify-content: center;
+  text-align: center;
+}
+
+.btn-edit:hover {
+  background: white;
+  color: #9D6B54;
+  font-size: 16px;
+  border: 1px solid #9D6B54;
+}
+
+</style>

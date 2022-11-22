@@ -8,7 +8,7 @@
         <button class="btn-icon">
           <Icon icon="material-symbols:menu-book-outline-rounded"/>
         </button>
-        <button class="side-btn">Tủ sách của tôi</button>
+        <router-link class="side-btn" to="/Personal/MyBooks">Tủ sách của tôi</router-link>
       </button>
       <div class="btn">
         <button class="btn-icon">
@@ -55,7 +55,7 @@ export default {
 <style scoped>
 .menu-sidebar {
   width: 292px;
-  height: 930px;
+  height: auto;
   padding-top: 3%;
   margin-right: 5%;
   background: #DFD5CB;
