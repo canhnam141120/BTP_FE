@@ -13,16 +13,17 @@
 
           <SlidePicture></SlidePicture>
       <!--==============body=============-->
-      <div class="body">
+      <div class="homepage">
         <div class="container">
-            <h1>Sách mới đăng</h1>
+          <div class="listBook">
+            <div class="home-title">SÁCH MỚI ĐĂNG</div>
             <b-skeleton-wrapper :loading="loading">
               <template #loading>
                 <div class="grid-book" >
                   <div class="item-book" v-for='i in 6' :key="i">
                     <b-card no-body img-top style="height: 332px">
                       <b-skeleton-img card-img="top" aspect="3:1" height="250px"></b-skeleton-img>
-                      <b-card style="height: 82px">
+                      <b-card style="height: 120px">
                         <b-skeleton animation="wave" width="85%"></b-skeleton>
                         <b-skeleton animation="wave" width="55%"></b-skeleton>
                         <b-skeleton animation="wave" width="70%"></b-skeleton>
@@ -45,15 +46,16 @@
                 </div>
               </div>
             </b-skeleton-wrapper>
-          <div class="listpost">
-            <h1>Bài đăng mới</h1>
+          </div>
+          <div class="listPost">
+            <div class="home-title">BÀI ĐĂNG MỚI</div>
             <b-skeleton-wrapper :loading="loading">
               <template #loading>
                 <div class="grid-post" >
                   <div class="item-post" v-for='i in 3' :key="i">
                     <b-card no-body img-left style="height: 191px">
                       <b-skeleton-img card-img="left" width="191px"></b-skeleton-img>
-                      <b-card style="width: 201px">
+                      <b-card style="width: 201px; height: 191px">
                         <b-skeleton animation="wave" width="85%"></b-skeleton>
                         <b-skeleton animation="wave" width="55%"></b-skeleton>
                         <b-skeleton animation="wave" width="70%"></b-skeleton>
@@ -159,22 +161,47 @@ strong {
   padding-left: 100px;
 }
 
-.body {
+.homepage {
   background: #F0F0F0;
 }
 
-.body .container {
+.home-title{
+  color: #9D6B54;
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-left: 470px;
+}
+
+.homepage .container {
+  max-width: 1250px;
+  background: #F0F0F0;
+  border-radius: 10px;
+  display: block;
+}
+
+.listBook {
   max-width: 1230px;
   background: #F0ECE4;
   border-radius: 10px;
   display: block;
-  padding-bottom: 30px;
+  padding-bottom: 20px;
+}
+
+.listPost {
+  max-width: 1230px;
+  background: #F0ECE4;
+  border-radius: 10px;
+  display: block;
+  margin-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .grid-book {
   display: inline-grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   width: 1206px;
+  margin-left: 10px;
 }
 
 .item-book {
@@ -234,6 +261,7 @@ strong {
   display: inline-grid;
   grid-template-columns: auto auto auto;
   width: 1206px;
+  margin-left: 10px;
 }
 
 .item-post {
@@ -242,6 +270,7 @@ strong {
   display: flex;
   width: 392px;
   margin: 5px;
+  height: 191px
 }
 
 .item-post:hover {

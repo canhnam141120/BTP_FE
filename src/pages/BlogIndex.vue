@@ -16,9 +16,9 @@
               <template #loading>
                 <div class="grid">
                   <div class="item" v-for='i in 10' :key="i">
-                    <b-card no-body img-left style="height: 180px">
+                    <b-card no-body img-left style="height: 180px;">
                       <b-skeleton-img card-img="left" width="180px"></b-skeleton-img>
-                      <b-card style="width: 413px">
+                      <b-card style="width: 413px; height: 180px">
                         <b-skeleton animation="wave" width="85%"></b-skeleton>
                         <b-skeleton animation="wave" width="55%"></b-skeleton>
                         <b-skeleton animation="wave" width="70%"></b-skeleton>
@@ -33,8 +33,8 @@
 
               <div class="grid">
                 <div class="item" v-for="item of listPost" :key="item.id">
-                  <router-link :to="{ name: 'PostDetail', query: { id:item.id }}">
-                    <img v-bind:src="item.image">
+                  <router-link  :to="{ name: 'PostDetail', query: { id:item.id }}">
+                    <img class="post-image" v-bind:src="item.image">
                   </router-link>
                   <button class="action">Xem chi tiết</button>
                   <div class="info">
@@ -216,6 +216,7 @@ strong {
   border-radius: 10px;
   background: white;
   width: 593px;
+  height: 180px;
   margin: 10px 0px 10px 15px;
   display: flex;
 }
@@ -226,10 +227,11 @@ strong {
   opacity: 0.9;
 }
 
-.body-blog .container-blog .content .grid .item img {
+.body-blog .container-blog .content .grid .item .post-image {
   height: 180px;
   width: 180px;
   border-radius: 10px;
+  object-fit: cover;
 }
 
 .body-blog .container-blog .content .grid .info {
@@ -250,6 +252,8 @@ strong {
 }
 
 .body-blog .container-blog .content .grid .info .post-title {
+  color: #9D6B54;
+  font-weight: 600;
   margin-left: 5px;
   margin-right: 10px;
   display: block;

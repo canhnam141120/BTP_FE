@@ -2,7 +2,6 @@
   <div>
   <div class="sidebar" :class="isOpened ? 'open' : ''" :style="cssVars">
     <div class="logo-details" style="margin: 6px 14px 0 14px;">
-      <img v-if="menuLogo" :src="menuLogo" alt="menu-logo" class="menu-logo icon">
 <!--      <i-->
 <!--          v-else-->
 <!--          class="bx icon"-->
@@ -28,16 +27,10 @@
 
       <div v-if="isLoggedIn" class="profile">
         <div class="profile-details">
-          <img v-if="profileImg" :src="profileImg" alt="profileImg">
-          <i v-else class="bx bxs-user-rectangle"/>
-          <div class="name_job">
-            <div class="job">
-              admin
-            </div>
-          </div>
+          <img class="avatar" v-bind:src="user.avatar">
+          <div class="name_job">{{user.fullname}}</div>
         </div>
-        <i v-if="isExitButton" class="bx bx-log-out" id="log_out" @click.stop="$emit('button-exit-clicked')"
-        />
+        <i v-if="isExitButton" class="bx bx-log-out" id="log_out" @click.stop="$emit('button-exit-clicked')"/>
       </div>
     </div>
   </div>
@@ -46,13 +39,17 @@
 </template>
 
 <script>
+import VueJwtDecode from "vue-jwt-decode";
+import apiFactory from "@/config/apiFactory";
+import {API_PERSONAL} from "@/constant/constant-api";
+
 export default {
   name: "Side_Bar",
   props: {
     //! Menu settings
     isMenuOpen: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     menuTitle: {
       type: String,
@@ -72,11 +69,11 @@ export default {
     },
     menuOpenedPaddingLeftBody: {
       type: String,
-      default: '300px'
+      default: '0px'
     },
     menuClosedPaddingLeftBody: {
       type: String,
-      default: '78px'
+      default: '0px'
     },
 
     //! Menu items
@@ -206,8 +203,24 @@ export default {
   },
   data() {
     return {
-      isOpened: false
+      isOpened: false,
+      user: '',
     }
+  },
+  created() {
+    this.getUserInfoByToken()
+  },
+  methods: {
+    getUserInfoByToken(){
+      let token = this.$cookies.get('token');
+      let userByToken= VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.INFORMATION, 'POST', {
+        userId: userByToken.UserId
+      }).then((res) => {
+        this.user = res.data.data
+      }).catch(() => {
+      });
+    },
   },
   mounted() {
     this.isOpened = this.isMenuOpen
@@ -240,13 +253,11 @@ export default {
 
 <style>
 /* Google Font Link */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 @import url('https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css');
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
 }
 body {
   transition: all 0.5s ease;
@@ -268,7 +279,7 @@ body {
   transition: all 0.5s ease;
 }
 .sidebar.open {
-  width: 300px;
+  width: 280px;
 }
 .sidebar .logo-details {
   height: 60px;
@@ -447,12 +458,13 @@ ul{
   align-items: center;
   flex-wrap: nowrap;
 }
-.sidebar div img {
+.sidebar div .avatar {
   height: 45px;
   width: 45px;
   object-fit: cover;
-  border-radius: 6px;
+  margin-left: 30px;
   margin-right: 10px;
+  border-radius: 1px;
 }
 .sidebar div.profile .name,
 .sidebar div.profile .job {
@@ -475,8 +487,10 @@ ul{
   line-height: 60px;
   border-radius: 0px;
   transition: all 0.5s ease;
+  padding-bottom: 90px;
 }
 .sidebar.open .profile #log_out {
+  padding-bottom: 70px;
   width: 50px;
   background: var(--secondary-color);
   opacity: 60%;
@@ -539,6 +553,11 @@ ul{
   .sidebar li .tooltip {
     display: none;
   }
+}
+
+.name_job{
+  color: #9D6B54;
+  font-weight: bold;
 }
 
 

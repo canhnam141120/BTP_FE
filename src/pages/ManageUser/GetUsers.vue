@@ -1,6 +1,6 @@
 <template>
   <Side_Bar>
-    <div class="GetAdmins">
+    <div class="ml">
       <!-- USER DATA-->
       <div class="row">
         <div class="col-lg-6">
@@ -52,7 +52,7 @@
                     <td>{{ item.likeNumber }}</td>
                     <td>{{ item.numberOfTransaction }}</td>
                     <td >
-                      <button v-if="item.isActive" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleBan(item.id)">Khóa</button>
+                      <button v-if="item.isActive" class="au-btn au-btn-icon au-btn--brown au-btn--small" style="width: 76px;" v-on:click="HandleBan(item.id)">Khóa</button>
                       <button v-else class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleActive(item.id)">Kích hoạt</button>
                     </td>
                     <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleAuthority(item.id)">Uỷ quyền</button></td>

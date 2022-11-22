@@ -1,6 +1,6 @@
 <template>
   <Side_Bar>
-  <div class="GetExchanges">
+  <div class="ml">
     <div class="row">
       <div class="col-lg-6">
         <div class="user-data m-b-30">

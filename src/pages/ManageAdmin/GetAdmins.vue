@@ -1,6 +1,6 @@
 <template>
   <Side_Bar>
-    <div class="GetAdmins">
+    <div class="ml">
       <!-- USER DATA-->
       <div class="row">
         <div class="col-lg-6">

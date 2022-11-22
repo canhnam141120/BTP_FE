@@ -1,6 +1,6 @@
 <template>
   <Side_Bar>
-    <div class="GetRentBills">
+    <div class="ml">
       <div class="row">
         <div class="col-lg-6">
           <div class="user-data m-b-30">
@@ -43,9 +43,15 @@
                   <td v-if="item.status == 'Waiting'" ><span class="role waiting">ĐANG ĐỢI</span></td>
                   <td v-if="item.status == 'Waiting'">
                     <button style="display: block" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleApproved(item.id)">Duyệt</button>
-                    <button style="width: 84px" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDenied(item.id)">Hủy</button>
+                    <button style="width: 53.5px" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDenied(item.id)">Hủy</button>
                   </td>
-                  <td v-else></td>
+                  <td v-if="item.status == 'Approved'">
+                    <button style="width: 53.5px"  class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDenied(item.id)">Huỷ</button>
+                  </td>
+                  <td v-if="item.status == 'Denied'">
+                    <button  class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleApproved(item.id)">Duyệt</button>
+                  </td>
+                  <td><router-link class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router"  :to="{ name: 'GetComments', query: { id:item.id }}">Xem bình luận</router-link></td>
 <!--                  <td v-if="item.status == 'Approved'">
                     <button style="width: 84px" class="au-btn au-btn-icon au-btn&#45;&#45;brown au-btn&#45;&#45;small" v-on:click="HandleDenied(item.id)">Huỷ</button>
                   </td>
@@ -89,7 +95,7 @@
   <!--          <td>{{item.title}}</td>-->
   <!--          <td>{{item.createdDate}}</td>-->
   <!--          <td>{{item.status}}</td>-->
-  <!--          <td><router-link :to="{ name: 'GetComments', query: { id:item.id }}"><button>Xem</button></router-link></td>-->
+  <!--          <td></td>-->
   <!--          <td v-if="item.status == 'Waiting'">-->
   <!--            <button v-on:click="HandleApproved(item.id)">Duyệt</button>-->
   <!--            <button v-on:click="HandleDenied(item.id)">Hủy</button>-->
