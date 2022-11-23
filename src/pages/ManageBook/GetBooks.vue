@@ -125,9 +125,8 @@ export default {
       const url = API_MANAGE_BOOK.APPROVED_BOOK + id
       apiFactory.callApi(url, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
-          this.$router.go();
+          this.getBooksAll(1)
         }
-        console.log(res)
       }).catch(() => {
         alert('Duyệt không thành công!')
       });
@@ -136,9 +135,8 @@ export default {
       const url = API_MANAGE_BOOK.DENIED_BOOK + id
       apiFactory.callApi(url, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
-          this.$router.go();
+          this.getBooksAll(1)
         }
-        console.log(res)
       }).catch(() => {
         alert('Hủy không thành công!')
       });

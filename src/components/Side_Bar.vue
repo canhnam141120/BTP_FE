@@ -2,11 +2,6 @@
   <div>
   <div class="sidebar" :class="isOpened ? 'open' : ''" :style="cssVars">
     <div class="logo-details" style="margin: 6px 14px 0 14px;">
-<!--      <i-->
-<!--          v-else-->
-<!--          class="bx icon"-->
-<!--          :class="menuIcon"-->
-<!--      />-->
       <div class="logo_name"> {{ menuTitle }}</div>
       <i class="bx" :class="isOpened ? 'bx-menu-alt-right' : 'bx-menu'" id="btn" @click="isOpened = !isOpened"/>
     </div>

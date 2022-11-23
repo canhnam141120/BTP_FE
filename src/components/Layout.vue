@@ -68,7 +68,7 @@
                 <template v-slot:button-content>
                     <img class="icon" v-bind:src="user.avatar">
                 </template>
-                <router-link to="/PersonalIndex" class="dropdown-item">
+                <router-link to="/MyBooks" class="dropdown-item">
                       {{user.fullname}}
                 </router-link>
                 <hr style="margin: 5px" />

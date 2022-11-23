@@ -23,10 +23,6 @@
     width: 100%;
 }
 
-ul {
-    margin: 0;
-}
-
 button,
 input[type='button'] {
     cursor: pointer;
@@ -1571,16 +1567,6 @@ section {
     margin-right: 20px;
     font-size: 18px;
     vertical-align: middle;
-}
-
-.menu-sidebar {
-    width: 300px;
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    background: #fff;
-    overflow-y: auto;
 }
 
 .menu-sidebar .logo {
