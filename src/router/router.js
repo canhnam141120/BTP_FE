@@ -64,6 +64,11 @@ const routers = [
         component: () => import('@/pages/Personal/MyBooks'),
     },
     {
+        path:'/Visit/Other-Person',
+        name:'Other-Person',
+        component: () => import('@/pages/Visit/Other-Person'),
+    },
+    {
         path:'/Personal/MyPosts',
         name:'MyPosts',
         component: () => import('@/pages/Personal/MyPosts'),
