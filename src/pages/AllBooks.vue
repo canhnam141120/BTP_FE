@@ -43,7 +43,7 @@
                     <label class="book-status">{{ item.statusBook }}</label>
                   </div>
                   <div class="action">
-                    <button v-if="item.isTrade" class="active">Trao đổi</button>
+                    <button v-if="item.isExchange" class="active">Trao đổi</button>
                     <button v-else class="disable">Trao đổi</button>
                     <button v-if="item.isRent" class="active">Thuê</button>
                     <button v-else class="disable">Thuê</button>
@@ -252,6 +252,7 @@ strong {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: #9D6B54;
 }
 
 .body .container-book .content .grid .info .book-status {

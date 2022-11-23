@@ -1,44 +1,42 @@
 <template>
-  <div class="menu-sidebar">
-    <div class="title">
-      <h4>Tủ sách của tôi</h4>
-    </div>
+  <div class="menu-sidebarPS">
+    <div class="title">TRANG CÁ NHÂN</div>
     <div class="group-btn">
       <button class="btn">
         <button class="btn-icon">
           <Icon icon="material-symbols:menu-book-outline-rounded"/>
         </button>
-        <router-link class="side-btn" to="/Personal/MyBooks">Tủ sách của tôi</router-link>
+        <router-link  class="side-btn" to="/MyBooks">Tủ sách</router-link>
       </button>
       <div class="btn">
         <button class="btn-icon">
           <Icon icon="mdi:post-outline"/>
         </button>
-        <button class="side-btn">Bài đăng của tôi</button>
+        <router-link class="side-btn" to="/MyPosts">Bài đăng</router-link>
       </div>
       <div class="btn">
         <button class="btn-icon">
           <Icon icon="mdi:cards-heart-outline"/>
         </button>
-        <button class="side-btn">Danh sách yêu thích</button>
+        <router-link class="side-btn" to="/MyFavorites">Danh sách yêu thích</router-link>
       </div>
       <div class="btn">
         <button class="btn-icon">
           <Icon icon="mdi:chat-question-outline"/>
         </button>
-        <button class="side-btn">Yêu cầu của tôi</button>
+        <router-link class="side-btn" to="/MyRequests">Yêu cầu đã gửi</router-link>
       </div>
       <div class="btn">
         <button class="btn-icon">
           <Icon icon="ic:outline-swap-horizontal-circle"/>
         </button>
-        <button class="side-btn">Giao dịch</button>
+        <router-link class="side-btn" to="/MyTransaction">Giao dịch</router-link>
       </div>
       <div class="btn">
         <button class="btn-icon">
           <Icon icon="iconoir:profile-circled"/>
         </button>
-        <button class="side-btn">Thông tin cá nhân</button>
+        <router-link class="side-btn" to="/MyInformation">Thông tin cá nhân</router-link>
       </div>
     </div>
   </div>
@@ -53,32 +51,32 @@ export default {
 </script>
 
 <style scoped>
-.menu-sidebar {
-  width: 292px;
+.menu-sidebarPS {
+  width: 350px;
   height: auto;
   padding-top: 3%;
-  margin-right: 5%;
-  background: #DFD5CB;
+  background: #F0ECE4;
+  /*background: #F0ECE4;*/
   border-radius: 8px;
-  margin-top: 83px;
-  margin-bottom: auto;
+  padding-bottom: 50px;
 }
 
 .title {
-  font-style: normal;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 19px;
+  font-weight: bold;
+  font-size: 26px;
+  text-align: center;
+  line-height: 30px;
   padding-left: 5%;
   color: #9D6B54;
+  margin-bottom: 30px;
+  margin-top: 30px;
 }
 h4{
   margin-bottom: 24px;
   margin-left: 20px;
 }
 .group-btn {
-  width: min-content;
-  margin-left: 15px;
+ margin-left: 20px;
 }
 
 .btn {
@@ -87,8 +85,8 @@ h4{
 
 .btn-icon {
   /*width: 100%;*/
-  height: 36px;
-  width: 36px;
+  height: 50px;
+  width: 50px;
   border-radius: 12px;
   border: white;
   align-items: center;
@@ -97,17 +95,16 @@ h4{
   background: white;
   justify-content: center;
   color: #9D6B54;
-  font-size: 14px;
+  font-size: 26px;
   margin-bottom: 11px;
   margin-right: 11px;
   line-height: 16.4px;
-  font-weight: 400;
-
+  font-weight: 600;
 }
 
 .side-btn {
-  height: 36px;
-  width: 191px;
+  height: 50px;
+  width: 210px;
   border-radius: 8px;
   border: white;
   align-items: center;
@@ -116,20 +113,20 @@ h4{
   background: white;
   justify-content: center;
   color: #9D6B54;
-  font-size: 14px;
+  font-size: 18px;
   margin-bottom: 11px;
   line-height: 16.4px;
   font-weight: 400;
-
+  padding-top: 15px;
 }
 .btn:hover .side-btn{
   background: #9D6B54;
   color: white;
-  font-size: 14px;
+  font-size: 18px;
 }
 .btn:hover .btn-icon{
   background: #9D6B54;
   color: white;
-  font-size: 14px;
+  font-size: 26px;
 }
 </style>

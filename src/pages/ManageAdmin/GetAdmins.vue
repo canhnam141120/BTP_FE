@@ -100,7 +100,7 @@ export default {
       const url = API_MANAGE_ADMIN.REMOVE_ADMIN + id
       apiFactory.callApi(url, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
-          this.$router.go();
+          window.location.reload();
         }
       }).catch(() => {
         alert('Hủy quyền không thành công!')

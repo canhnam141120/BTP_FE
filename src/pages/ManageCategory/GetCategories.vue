@@ -99,7 +99,7 @@ export default {
       apiFactory.callApi(url, 'DELETE', {}).then((res) => {
         if (res.data.message === 'DELETE_SUCCESS') {
           alert('Xóa thành công!')
-          this.$router.go();
+          window.location.reload();
         }
         console.log(res)
       }).catch(() => {

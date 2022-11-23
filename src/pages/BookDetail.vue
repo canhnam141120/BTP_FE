@@ -1,6 +1,27 @@
 <template>
   <Layout>
     <main style="flex-grow: 1;">
+      <ExchangeDialog :show="showDialog"
+                      :cancel="cancel"
+                      :confirm="confirm"
+                      v-if="showDialog" class="modal">
+          <div class="dialogBook">
+             <div class="gridMB">
+            <div class="itemMB" v-for="item of bookCanTrade" :key="item.id">
+              <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">
+                <img v-bind:src="item.image">
+              </router-link>
+              <div class="infoMB">
+                <div class="book-titleMB">{{ item.title }}</div>
+                <div class="book-categoryMB">Thể loại: {{ item.categoryId}}</div>
+                <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                <label class="book-statusMB">{{ item.statusBook }}</label>
+              </div>
+                <input type="checkbox" class="checkboxes" v-bind:value="item.id" v-model="listIdBook">
+            </div>
+          </div>
+          </div>
+      </ExchangeDialog>
       <div class="bookDetail">
         <div class="container">
           <div class="bookdetail-top">
@@ -40,7 +61,7 @@
                 </div>
               </div>
               <div class="btn-tran">
-                <button v-if="book.isTrade" class="active">Trao đổi</button>
+                <button v-if="book.isExchange" class="active" v-on:click="openDialog">Trao đổi</button>
                 <button v-else class="disable">Trao đổi</button>
                 <button v-if="book.isRent" class="active">Thuê</button>
                 <button v-else class="disable">Thuê</button>
@@ -202,15 +223,14 @@
 
 <script>
 import apiFactory from "@/config/apiFactory";
-import {API_BOOK} from "@/constant/constant-api";
+import {API_BOOK, API_PERSONAL, API_REQUEST} from "@/constant/constant-api";
 import Layout from "@/components/Layout";
-/*import {Icon} from '@iconify/vue2';
+import ExchangeDialog from "@/components/ExchangeDialog";
+import VueJwtDecode from "vue-jwt-decode";
 
- */
 export default {
   name: "BookDetail",
-  // components: {Layout, Icon, vueShowMoreText},
-  components: {Layout},
+  components: {Layout, ExchangeDialog},
   data() {
     return {
       book: '',
@@ -218,7 +238,11 @@ export default {
       book6category: '',
       feedbacks: '',
       countFeedback: '',
-      showFlag: false
+      showFlag: false,
+      showDialog: false,
+      bookCanTrade: '',
+      loading: false,
+      listIdBook: []
     }
   },
   created() {
@@ -264,9 +288,44 @@ export default {
       }).catch(() => {
       });
     },
+    getBookCanTrade() {
+      this.loading = true;
+      let token = this.$cookies.get('token');
+      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      const url = API_PERSONAL.BOOK_CAN_TRADE
+      apiFactory.callApi(url, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        this.bookCanTrade = res.data.data
+        this.loading = false;
+      }).catch(() => {
+      });
+    },
     loadPage(){
       this.getBookById()
     },
+    openDialog(){
+      this.getBookCanTrade()
+      this.showDialog = true
+    },
+    cancel(){
+      this.showDialog = false
+    },
+    confirm(){
+      console.log(this.listIdBook)
+      let token = this.$cookies.get('token');
+      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      const url = API_REQUEST.REQUEST + this.$route.query.id
+      apiFactory.callApi(url, 'POST', {
+        userId: this.userByToken.UserId,
+        boofOffer: this.listIdBook
+      }).then((res) => {
+        if(res.data.message === 'REQUEST_SUCCESS'){
+          this.showDialog = false
+        }
+      }).catch(() => {
+      });
+    }
   },
   filters:{
     shorttext(value, limit){
@@ -289,6 +348,86 @@ main {
 
 strong {
   color: #9D6B54;
+}
+
+.dialogBook{
+  height: 75%;
+}
+
+.dialogBook .gridMB {
+  display: flex;
+  grid-template-columns: 25% 25% 25% 25%;
+  margin-left: 10px;
+  margin-right: 20px;
+  overflow: auto;
+}
+
+.dialogBook .gridMB .itemMB {
+  display: block;
+  border-radius: 10px;
+  background: white;
+  width: 220px;
+  height: 450px;
+  margin: 10px 0px 10px 20px;
+}
+
+.dialogBook .gridMB .itemMB:hover {
+  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+}
+
+.dialogBook .gridMB .itemMB img {
+  height: 290px;
+  width: 220px;
+  border-radius: 10px;
+}
+
+.dialogBook .gridMB .infoMB {
+  height: 120px;
+  padding: 5px;
+}
+
+.dialogBook .gridMB .infoMB img {
+  width: 20px;
+  height: 20px;
+  margin-left: 15px;
+}
+
+.dialogBook .gridMB .infoMB label {
+  margin-left: 5px;
+}
+
+.dialogBook .gridMB .infoMB .book-titleMB{
+  margin-left: 5px;
+  margin-right: 5px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dialogBook .gridMB .infoMB .book-categoryMB{
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.dialogBook .gridMB .infoMB .book-statusMB {
+  margin-left: 5px;
+  margin-right: 10px;
+  font-size: 0.8rem;
+  display: block;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.checkboxes{
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  float: right;
+  margin-right: 10px;
+  background: grey;
 }
 
 .bookDetail {
@@ -355,7 +494,7 @@ strong {
 .bookdetail-top .right .bookInfoBD .priceBD{
   display: flex;
   height: 50px;
-  width: 370px;
+  width: 420px;
   margin-top: 10px;
   margin-left: 10px;
   font-size: 18px;
@@ -389,6 +528,7 @@ strong {
 }
 
 .bookdetail-top .right .infoBD .userBD{
+  background: whitesmoke;
   border-radius: 10px;
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
   height: 260px;
@@ -430,6 +570,7 @@ strong {
   margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
+  font-size: 20px;
 }
 
 .bookdetail-top .right .btn-tran .active{
@@ -437,8 +578,9 @@ strong {
   background-color: #9D6B54;
   color: white;
   border: 1px solid grey;
-  height: 60px;
-  width: 180px;
+  height: 50px;
+  width: 150px;
+  margin-left: 32px;
 }
 
 .bookdetail-top .right .btn-tran .active:hover {
@@ -452,8 +594,8 @@ strong {
   background-color: grey;
   color: white;
   border: 1px solid grey;
-  height: 60px;
-  width: 180px;
+  height: 50px;
+  width: 150px;
   margin-left: 32px;
   cursor: not-allowed;
 }

@@ -282,8 +282,6 @@ strong {
   border: 1px solid grey;
   margin-left: 270px;
   margin-top: 60px;
-  font-size: 0.8rem;
-  display: block;
   background: #9D6B54;
   color: white;
   display: none;

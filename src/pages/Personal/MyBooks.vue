@@ -1,12 +1,64 @@
 <template>
   <Layout>
     <main style="flex-grow: 1">
-      <div class="body">
-        <div class="container">
-          <SideBar_Personal></SideBar_Personal>
-          <div class="right-content">
-<!--            ===========edit ni here-->
-
+      <div class="MB">
+        <div class="containerMB">
+          <div class="left-contentMB">
+            <SideBar_Personal></SideBar_Personal>
+          </div>
+          <div class="right-contentMB">
+            <div class="searchMB">
+              <input class="inputMB" type="text" v-model="search" placeholder="Nhập tên sản phẩm">
+              <button class="btnMB">Tìm</button>
+            </div>
+            <hr>
+            <b-skeleton-wrapper :loading="loading">
+              <template #loading>
+                <div class="gridMB">
+                  <div class="itemMB" v-for='i in 6' :key="i">
+                    <b-card no-body img-top style="height: 450px">
+                      <b-skeleton-img card-img="top" aspect="3:1" height="290px"></b-skeleton-img>
+                      <b-card style="height: 170px">
+                        <b-skeleton animation="wave" width="85%"></b-skeleton>
+                        <b-skeleton animation="wave" width="55%"></b-skeleton>
+                        <b-skeleton animation="wave" width="70%"></b-skeleton>
+                        <b-skeleton animation="wave" width="85%"></b-skeleton>
+                        <b-skeleton animation="wave" width="55%"></b-skeleton>
+                        <b-skeleton animation="wave" width="70%"></b-skeleton>
+                      </b-card>
+                    </b-card>
+                  </div>
+                </div>
+              </template>
+              <div class="gridMB">
+                <div class="itemMB" v-for="item of listBook" :key="item.id">
+                  <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">
+                    <img v-bind:src="item.image">
+                  </router-link>
+                  <div class="infoMB">
+                    <div class="book-titleMB">{{ item.title }}</div>
+                    <div class="book-categoryMB">Thể loại: {{ item.categoryId}}</div>
+                    <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                    <label class="book-statusMB">{{ item.statusBook }}</label>
+                  </div>
+                  <div class="action">
+                    <button class="active">Xem yêu cầu</button>
+                  </div>
+                </div>
+              </div>
+            </b-skeleton-wrapper>
+            <div class="pagingMB">
+              <b-pagination class="page-numberMB" @input="getMyBooks" v-model="page" :total-rows="totalBook" :per-page="6">
+                <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                <template #page="{ page, active }">
+                  <b v-if="active" style="color: white;">{{ page }} </b>
+                  <b v-else style="color: #9D6B54;">{{ page }}</b>
+                </template>
+              </b-pagination>
+            </div>
           </div>
         </div>
       </div>
@@ -15,16 +67,44 @@
 </template>
 
 <script>
+import apiFactory from "@/config/apiFactory";
+import {API_PERSONAL} from "@/constant/constant-api";
 import Layout from "@/components/Layout";
 import SideBar_Personal from "../../components/SideBar_Personal";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
-  name: "MyBook",
+  name: "MyBooks",
   components: {SideBar_Personal, Layout},
   data() {
-    return {}
+    return {
+      listBook: '',
+      totalBook: '',
+      loading: false,
+      userByToken: '',
+      userId: '',
+    }
+  },
+  created() {
+    this.getMyBooks(1)
+  },
+  methods: {
+    getMyBooks(pageNumber) {
+        this.loading = true;
+        let token = this.$cookies.get('token');
+        this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+        const url = API_PERSONAL.LIST_BOOK + pageNumber
+        apiFactory.callApi(url, 'POST', {
+          userId: this.userByToken.UserId
+        }).then((res) => {
+          this.listBook = res.data.data
+          this.totalBook = res.data.numberOfRecords
+          this.loading = false;
+        }).catch(() => {
+        });
+    },
   }
-};
+}
 </script>
 
 <style>
@@ -36,98 +116,163 @@ main {
   background: #F0F0F0;
 }
 
-.body {
+strong {
+  color: #9D6B54;
+}
+
+.MB {
   background: #F0F0F0;
 }
 
-.body .container {
+.MB .containerMB {
+  background: #F0F0F0;
   max-width: 1230px;
+  border-radius: 10px;
+  margin: 5px auto 30px auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.left-contentMB {
+  width: 28%;
   background: #F0ECE4;
   border-radius: 10px;
   display: flex;
+  margin-top: 30px;
+  padding-bottom: 100px;
+  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+}
+.right-contentMB{
+  width: 71%;
+  background: #F0ECE4;
+  border-radius: 10px;
+  margin-top: 30px;
+  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  display: block;
 }
 
-
-.profile {
-  margin-top: 3%;
-  display: flex;
-
+.right-contentMB .searchMB {
+  margin: 20px 0px 10px 20px;
+  width: 80%;
 }
 
-.avatar {
-  background-color: #6C757D;
-  width: 186px;
-  height: 186px;
-  margin-top: 45px;
-}
-
-.infor {
-  width: 100%;
-  margin-left: 79px;
-  margin-top: 19px;
-  margin-right: 70px;
-}
-
-.infor h3 {
+.right-contentMB .searchMB .inputMB {
+  border-radius: 7px;
+  border: 1px solid grey;
+  height: 45px;
+  width: 400px;
+  padding-left: 15px;
   color: #9D6B54;
-  font-weight: bold;
 }
 
-.infor span {
-
-  font-style: normal;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 19px;
-}
-
-.description {
-  display: flex;
-
-}
-
-.description span {
-  margin-left: 14px;
-}
-
-.table-content {
-  margin-top: 10%;
-  border: white;
-  border-radius: 8px;
-  background-color: white;
-  width: 100%;
-  height: 200px;
-}
-
-.edit {
-  margin-top: 3%;
-}
-
-.btn-edit {
-  height: 48px;
-  width: 240px;
-  border-radius: 8px;
-  border: white;
-  align-items: center;
-  text-decoration: none;
-  transition: all 0.4s ease;
-  background: #9D6B54;
-  justify-content: center;
+.right-contentMB .searchMB .btnMB {
+  border-radius: 7px;
+  background-color: #9D6B54;
   color: white;
-  font-size: 16px;
-  margin-bottom: 11px;
-  line-height: 16.4px;
-  font-weight: 700;
-  line-height: 18.75px;
-  justify-content: center;
-  text-align: center;
+  font-weight: bold;
+  border: 1px solid grey;
+  height: 45px;
+  width: 80px;
+  margin-left: 10px;
 }
 
-.btn-edit:hover {
-  background: white;
+.right-contentMB .searchMB .btnMB:hover {
+  border-color: #9D6B54;
+  background-color: white;
   color: #9D6B54;
-  font-size: 16px;
-  border: 1px solid #9D6B54;
 }
 
+.right-contentMB .gridMB {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-left: 8px;
+}
+
+.right-contentMB .gridMB .itemMB {
+  border-radius: 10px;
+  background: white;
+  width: 260px;
+  height: 450px;
+  margin: 10px 0px 10px 20px;
+}
+
+.right-contentMB .gridMB .itemMB:hover {
+  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+}
+
+.right-contentMB .gridMB .itemMB img {
+  margin-left: 20px;
+  height: 290px;
+  width: 220px;
+}
+
+.right-contentMB .gridMB .infoMB {
+  height: 120px;
+  padding: 5px;
+}
+
+.right-contentMB .gridMB .infoMB img {
+  width: 20px;
+  height: 20px;
+  margin-left: 15px;
+}
+
+.right-contentMB .gridMB .infoMB label {
+  margin-left: 15px;
+}
+
+.right-contentMB .gridMB .infoMB .book-titleMB{
+  margin-left: 15px;
+  margin-right: 10px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.right-contentMB .gridMB .infoMB .book-categoryMB{
+  margin-left: 15px;
+  margin-right: 10px;
+}
+
+.right-contentMB .gridMB .infoMB .book-statusMB {
+  margin-left: 15px;
+  margin-right: 10px;
+  font-size: 0.8rem;
+  display: block;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.right-contentMB  .gridMB .action {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.right-contentMB  .gridMB .action .active {
+  border-radius: 5px;
+  background-color: #9D6B54;
+  color: white;
+  border: 1px solid grey;
+  height: 35px;
+  width: 120px;
+}
+
+.right-contentMB .gridMB .action .active:hover {
+  border-color: #9D6B54;
+  background-color: white;
+  color: #9D6B54;
+}
+
+.right-contentMB .pagingMB {
+  margin-top: 10px;
+}
+
+.right-contentMB .pagingMB ul {
+  justify-content: right;
+  margin-right: 15px;
+}
 </style>

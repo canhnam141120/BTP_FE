@@ -154,7 +154,7 @@ export default {
       const url = API_MANAGE_POST.APPROVED_POST + id
       apiFactory.callApi(url, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
-          this.$router.go();
+          this.getPostsAll()
         }
         console.log(res)
       }).catch(() => {
@@ -165,7 +165,7 @@ export default {
       const url = API_MANAGE_POST.DENIED_POST + id
       apiFactory.callApi(url, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
-          this.$router.go();
+          this.getPostsAll()
         }
         console.log(res)
       }).catch(() => {

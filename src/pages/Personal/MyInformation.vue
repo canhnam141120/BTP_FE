@@ -1,37 +1,75 @@
 <template>
+  <Layout>
+    <main style="flex-grow: 1">
+      <div class="MI">
+        <div class="containerMI">
+          <div class="left-contentMI">
+            <SideBar_Personal></SideBar_Personal>
+          </div>
+          <div class="right-contentMI">
 
-  <div>
-    <div class="Detail_User">
-      <h1>Thông tin cá nhân của tôi</h1>
-      <div>
-        <div><label>Mã người dùng: </label><span>{{info.id}}</span></div>
-        <div><label>Email: </label><span>{{info.email}}</span></div>
-        <div><label>Đã xác thực: </label><span>{{info.isVerify}}</span></div>
-        <div><label>Tên đầy đủ: </label><span>{{info.fullname}}</span></div>
-        <div><label>Số điện thoại: </label><span>{{info.phone}}</span></div>
-        <div><label>Địa chỉ: </label><span>{{info.addressMain}}</span></div>
-        <div><label>Trạng thái hoạt động: </label><span>{{info.isActive}}</span></div>
-        <div><label>Số người thích: </label><span>{{info.likeNumber}}</span></div>
-        <div><label>Số giao dịch đã thực hiện:  </label><span>{{info.numberOfTransaction}}</span></div>
-        <button><router-link to="/PersonalIndex">Quay lại</router-link></button>
+            <b-skeleton-wrapper :loading="loading">
+              <template #loading>
+                <div class="topMI">
+                  <b-card no-body img-right style="width: 742.2px; height: 298px">
+                    <b-skeleton-img class="imgMI" card-img="right" style="border: none"></b-skeleton-img>
+                    <b-card-body style="height: 290px;">
+                      <br><br><br>
+                      <b-skeleton animation="wave" width="80%" height="30px"></b-skeleton>
+                      <b-skeleton animation="wave" width="90%" height="30px">></b-skeleton>
+                      <b-skeleton animation="wave" width="90%" height="30px">></b-skeleton>
+                      <b-skeleton animation="wave" width="60%" height="30px">></b-skeleton>
+                    </b-card-body>
+                  </b-card>
+                </div>
+              </template>
+
+              <div class="topMI">
+                <div class="infoMI">
+                  <div class="nameMI">{{info.fullname}}</div>
+                  <div class="divMI"><Icon icon="mdi:email"/><span >Email: {{info.email}}</span></div>
+                  <div class="divMI"><Icon icon="material-symbols:call"/><span>Số điện thoại: {{info.phone}}</span></div>
+                  <div class="divMI"><Icon icon="material-symbols:location-on"/><span>Địa chỉ: {{info.addressMain}}</span></div>
+                  <button class="editMI">
+                    <Icon icon="uil:pen" style="width: 20px; height: 20px; margin-right: 2%"/>Thay đổi thông tin
+                  </button>
+                </div>
+                <div>
+                  <button class="imgBtn"><Icon icon="material-symbols:flip-camera-ios"/></button>
+                  <img class="imgMI" v-bind:src="info.avatar">
+                  <div class="numberMI">
+                    <div class="">{{info.likeNumber}} người thích</div>
+                    <div class="">{{info.numberOfTransaction}} lượt giao dịch</div>
+                  </div>
+                </div>
+              </div>
+            </b-skeleton-wrapper>
+            <hr>
+            <div class="bottomMI">
+
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-
+    </main>
+  </Layout>
 </template>
-
 <script>
 import {API_PERSONAL} from "@/constant/constant-api";
 import apiFactory from "@/config/apiFactory";
-
+import SideBar_Personal from "@/components/SideBar_Personal";
+import Layout from "@/components/Layout";
+import VueJwtDecode from "vue-jwt-decode";
+import {Icon} from '@iconify/vue2';
 
 export default {
   name: "MyInformation",
-
+  components: {SideBar_Personal, Layout, Icon},
   data() {
     return {
       info: '',
-      token: ''
+      userId: '',
+      loading: false,
     }
   },
   created() {
@@ -39,8 +77,14 @@ export default {
   },
   methods: {
     getMyInformation() {
-      apiFactory.callApi(API_PERSONAL.INFORMATION, 'POST', {token: this.$cookies.get('token')}).then((res) => {
+      this.loading = true
+      let token = this.$cookies.get('token');
+      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.INFORMATION, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
         this.info = res.data.data
+        this.loading = false
       }).catch(() => {
       });
     }
@@ -48,6 +92,165 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+main {
+  background: #F0F0F0;
+}
+
+strong {
+  color: #9D6B54;
+}
+
+.MI {
+  background: #F0F0F0;
+}
+
+.MI .containerMI {
+  background: #F0F0F0;
+  max-width: 1230px;
+  border-radius: 10px;
+  margin: 5px auto 30px auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.left-contentMI{
+  width: 28%;
+  background: #F0ECE4;
+  border-radius: 10px;
+  display: flex;
+  margin-bottom: 20px;
+  margin-top: 30px;
+  padding-bottom: 100px;
+  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+}
+.right-contentMI{
+  width: 71%;
+  background: #F0ECE4;
+  border-radius: 10px;
+  display: flex;
+  margin-bottom: 20px;
+  margin-top: 30px;
+  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  display: block;
+}
+
+.topMI{
+  background: white;
+  width: 85%;
+  display: flex;
+  margin-left: 65px;
+  margin-top: 15px;
+  border-radius: 10px;
+  padding-bottom: 10px;
+  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+}
+
+.infoMI{
+  width: 70%;
+}
+
+.nameMI{
+  font-size: 36px;
+  color: #9D6B54;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding-top: 30px;
+  padding-left: 200px;
+  margin-bottom: 30px;
+}
+
+.divMI{
+  line-height: 30px;
+  font-size: 20px;
+  padding-left: 50px;
+  color: #9D6B54;
+}
+
+.divMI span{
+  line-height: 30px;
+  font-size: 18px;
+  padding-left: 30px;
+  color: grey;
+}
+
+.editMI{
+  height: 48px;
+  width: 200px;
+  border-radius: 8px;
+  border: white;
+  align-items: center;
+  transition: all 0.4s ease;
+  background: #9D6B54;
+  justify-content: center;
+  color: white;
+  font-size: 16px;
+  margin-top: 20px;
+  margin-bottom: 11px;
+  margin-left: 50px;
+  font-weight: 700;
+  line-height: 18.75px;
+  text-align: center;
+}
+
+.editMI:hover {
+  background: #F0ECE4;
+  color: #9D6B54;
+  font-size: 16px;
+  border: 1px solid #9D6B54;
+}
+
+.imgMI{
+  width: 200px;
+  height: 200px;
+  border-radius: 100px;
+  border: 5px groove #9D6B54;
+  margin-top: 40px;
+  margin-right: 50px;
+}
+
+.imgBtn{
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  color: white;
+  background: #9D6B54;
+  border: 1px hidden;
+  margin-top: 200px;
+  margin-left: 120px;
+  font-size: 26px;
+  padding-bottom: 8px;
+  padding-left: 6px;
+}
+
+.imgBtn:hover{
+  border: 1px solid #9D6B54;
+  color: #9D6B54;
+  background: #F0ECE4;
+}
+
+.numberMI{
+  margin-top: 7px;
+  margin-right: 50px;
+  text-align: center;
+  color: #9D6B54;
+}
+
+.bottomMI{
+  background: white;
+  height: 320px;
+  width: 85%;
+  display: flex;
+  margin-left: 65px;
+  margin-top: 15px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+}
+
 
 </style>

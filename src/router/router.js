@@ -54,19 +54,34 @@ const routers = [
         component: () => import('@/pages/Personal/PersonalIndex'),
     },
     {
-        path:'/Personal/MyInformation',
+        path:'/MyInformation',
         name:'MyInformation',
         component: () => import('@/pages/Personal/MyInformation'),
     },
     {
-        path:'/Personal/MyBooks',
+        path:'/MyBooks',
         name:'MyBooks',
         component: () => import('@/pages/Personal/MyBooks'),
     },
     {
-        path:'/Personal/MyPosts',
+        path:'/MyPosts',
         name:'MyPosts',
         component: () => import('@/pages/Personal/MyPosts'),
+    },
+    {
+        path:'/MyFavorites',
+        name:'MyFavorites',
+        component: () => import('@/pages/Personal/MyFavorites'),
+    },
+    {
+        path:'/MyRequests',
+        name:'MyRequests',
+        component: () => import('@/pages/Personal/MyRequests'),
+    },
+    {
+        path:'/MyTransaction',
+        name:'MyTransaction',
+        component: () => import('@/pages/Personal/MyTransaction'),
     },
     {
         path:'/BookDetail',
@@ -194,30 +209,6 @@ const routers = [
         name:'ManageIndex',
         component: () => import('@/pages/ManagePage/ManageIndex'),
     },
-    // {
-    //
-    //     path: '/ManageIndex',
-    //     component: () => import('@/pages/ManagePage/ManageIndex'),
-    //     name: 'ManageIndex',
-    //     redirect: '/home',
-    //     children: [
-    //         {
-    //             path: '/home',
-    //             component: () => import('@/pages/HomePage'),
-    //         },
-    //         {
-    //             path:'/ManageUser',
-    //             name:'GetUsers',
-    //             component: () => import('@/pages/ManageUser/GetUsers'),
-    //         },
-    //         {
-    //             path:'/ManageAdmin',
-    //             name:'GetAdmins',
-    //             component: GetAdmins,
-    //         },
-    //
-    //     ]
-    // }
 ]
 
 export const constantRoutes = [...routers]
