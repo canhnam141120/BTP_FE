@@ -133,12 +133,13 @@ main {
 }
 
 .edit {
-  margin-top: 3%;
+  /*margin-top: 3%;*/
+
 }
 
 .btn-edit {
   height: 48px;
-  width: 240px;
+  width: 187px;
   border-radius: 8px;
   border: white;
   align-items: center;
@@ -148,7 +149,7 @@ main {
   justify-content: center;
   color: white;
   font-size: 16px;
-  margin-bottom: 11px;
+  /*margin-bottom: 11px;*/
   line-height: 16.4px;
   font-weight: 700;
   line-height: 18.75px;

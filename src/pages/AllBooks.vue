@@ -5,7 +5,7 @@
       <div class="body">
         <div class="title">TỦ SÁCH</div>
         <div class="container-book">
-          <div class="sidebar-book"></div>
+          <FilterAllBook></FilterAllBook>
           <div class="content">
             <div class="search">
               <input type="text" v-model="search" placeholder="Nhập tên sản phẩm">
@@ -74,10 +74,11 @@
 import apiFactory from "@/config/apiFactory";
 import {API_BOOK} from "@/constant/constant-api";
 import Layout from "@/components/Layout";
+import FilterAllBook from "../components/Filter-AllBook";
 
 export default {
   name: "AllBooks",
-  components: {Layout},
+  components: {FilterAllBook, Layout},
   data() {
     return {
       listBook: '',
