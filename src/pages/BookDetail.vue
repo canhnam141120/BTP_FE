@@ -13,7 +13,7 @@
               </router-link>
               <div class="infoMB">
                 <div class="book-titleMB">{{ item.title }}</div>
-                <div class="book-categoryMB">Thể loại: {{ item.categoryId}}</div>
+                <div class="book-statusMB">Thể loại: {{ item.category.name}}</div>
                 <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
                 <label class="book-statusMB">{{ item.statusBook }}</label>
               </div>
@@ -176,7 +176,7 @@
                   <div class="info">
                     <div class="book-title">{{ item.title }}</div>
                     <label class="book-status">Thể loại: {{ item.category.name }}</label>
-                    <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                    <label class="book-status">Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
                   </div>
                 </div>
@@ -207,8 +207,8 @@
                   </router-link>
                   <div class="info">
                     <div class="book-title">{{ item.title }}</div>
-                    <div><img src="../image/user.png"> {{ item.user.fullname }}</div>
-                    <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                    <div class="book-status"><img src="../image/user.png"> {{ item.user.fullname }}</div>
+                    <label class="book-status">Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
                   </div>
                 </div>
@@ -656,6 +656,7 @@ strong {
   border-radius: 10px;
   background: white;
   width: 191px;
+  height: 380px;
   margin: 5px;
 }
 
@@ -677,7 +678,7 @@ strong {
 .grid-book .info img {
   width: 20px;
   height: 20px;
-  margin-left: 5px;
+  margin-left: 0px;
 }
 
 .grid-book .info label {

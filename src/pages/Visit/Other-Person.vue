@@ -5,7 +5,7 @@
         <div class="container">
           <div class="profile">
             <div>
-              <b-avatar badge badge-left class="avatar-personal"><img v-bind:src="info.avatar"></b-avatar>
+              <b-avatar badge badge-left class="avatar-personal"><img style="width: 190px; height: 190px;" v-bind:src="info.avatar"></b-avatar>
             </div>
             <div class="infor">
               <p class="name-other-person">{{ info.fullname }}</p>
@@ -43,104 +43,46 @@
                     <input type="text" v-model="search" placeholder="Nhập tên sản phẩm">
                     <button v-on:click="HandleSearch">Tìm</button>
                   </div>
-                  <div class="grid-content">
-                    <div class="background-content">
-                      <img :src="require('@/image/book1.svg')">
-                      <!--                      <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">-->
-                      <!--                        <img v-bind:src="item.image">-->
-                      <!--                      </router-link>-->
-                      <div class="description-book">
-                        <div class="description-book-titleMB">Lịch sử thế giới <label>
-                          <Icon icon="ic:baseline-bookmark-border"/>
-                        </label></div>
-
-                        <div class="description-book-categoryMB">Thể loại: Lịch sử
-                          <br>Tình trạng 99%
+                  <b-skeleton-wrapper :loading="loading">
+                    <template #loading>
+                      <div class="grid-bookOP" >
+                        <div class="item-bookOP" v-for='i in 10' :key="i">
+                          <b-card no-body img-top style="height: 380px">
+                            <b-skeleton-img card-img="top" aspect="3:1" height="250px"></b-skeleton-img>
+                            <b-card style="height: 130px">
+                              <b-skeleton animation="wave" width="85%"></b-skeleton>
+                              <b-skeleton animation="wave" width="55%"></b-skeleton>
+                              <b-skeleton animation="wave" width="70%"></b-skeleton>
+                            </b-card>
+                          </b-card>
                         </div>
-                        <div class="description-book-price"><label>Giá bìa:</label> 120.000VNĐ</div>
                       </div>
-                      <div class="btn-action">
-                        <button>Trao đổi</button>
-                        <button>Thuê</button>
-                      </div>
-                    </div>
-                    <div class="background-content">
-                      <img :src="require('@/image/book1.svg')">
-                      <!--                      <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">-->
-                      <!--                        <img v-bind:src="item.image">-->
-                      <!--                      </router-link>-->
-                      <div class="description-book">
-                        <div class="description-book-titleMB">Lịch sử thế giới</div>
-                        <div class="description-book-categoryMB">Thể loại: Lịch sử</div>
-                        <div class="description-book-categoryMB">Tình trạng 99%</div>
-                        <label>Giá bìa: </label>
-                        <p>120.000VND</p>
+                    </template>
+                    <div class="grid-bookOP">
+                      <div class="item-bookOP" v-for="item of listBook" :key="item.id">
+                        <router-link  :to="{ name: 'BookDetail', query: { id:item.id }}">
+                          <img v-bind:src="item.image">
+                        </router-link>
+                        <div class="infoOP">
+                          <div class="book-titleOP">{{ item.title }}</div>
+                          <label class="book-statusOP">Thể loại: {{ item.category.name}}</label>
+                          <label class="book-statusOP">Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                          <label class="book-statusOP">{{ item.statusBook }}</label>
+                        </div>
                       </div>
                     </div>
-                    <div class="background-content">
-                      <img :src="require('@/image/book1.svg')">
-                      <!--                      <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">-->
-                      <!--                        <img v-bind:src="item.image">-->
-                      <!--                      </router-link>-->
-                      <div class="description-book">
-                        <div class="description-book-titleMB">Lịch sử thế giới</div>
-                        <div class="description-book-categoryMB">Thể loại: Lịch sử</div>
-                        <div class="description-book-categoryMB">Tình trạng 99%</div>
-                        <label>Giá bìa: </label>
-                        <p>120.000VND</p>
-                      </div>
-                    </div>
-                    <div class="background-content">
-                      <img :src="require('@/image/book1.svg')">
-                      <!--                      <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">-->
-                      <!--                        <img v-bind:src="item.image">-->
-                      <!--                      </router-link>-->
-                      <div class="description-book">
-                        <div class="description-book-titleMB">Lịch sử thế giới</div>
-                        <div class="description-book-categoryMB">Thể loại: Lịch sử</div>
-                        <div class="description-book-categoryMB">Tình trạng 99%</div>
-                        <label>Giá bìa: </label>
-                        <p>120.000VND</p>
-                      </div>
-                    </div>
-                    <div class="background-content">
-                      <img :src="require('@/image/book1.svg')">
-                      <!--                      <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">-->
-                      <!--                        <img v-bind:src="item.image">-->
-                      <!--                      </router-link>-->
-                      <div class="description-book">
-                        <div class="description-book-titleMB">Lịch sử thế giới</div>
-                        <div class="description-book-categoryMB">Thể loại: Lịch sử</div>
-                        <div class="description-book-categoryMB">Tình trạng 99%</div>
-                        <label>Giá bìa: </label>
-                        <p>120.000VND</p>
-                      </div>
-                    </div>
-                    <div class="background-content">
-                      <img :src="require('@/image/book1.svg')">
-                      <!--                      <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">-->
-                      <!--                        <img v-bind:src="item.image">-->
-                      <!--                      </router-link>-->
-                      <div class="description-book">
-                        <div class="description-book-titleMB">Lịch sử thế giới</div>
-                        <div class="description-book-categoryMB">Thể loại: Lịch sử</div>
-                        <div class="description-book-categoryMB">Tình trạng 99%</div>
-
-                      </div>
-                    </div>
-                    <div class="background-content">
-                      <img :src="require('@/image/book1.svg')">
-                      <!--                      <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">-->
-                      <!--                        <img v-bind:src="item.image">-->
-                      <!--                      </router-link>-->
-                      <div class="description-book">
-                        <div class="description-book-titleMB">Lịch sử thế giới</div>
-                        <div class="description-book-categoryMB">Thể loại: Lịch sử</div>
-                        <div class="description-book-categoryMB">Tình trạng 99%</div>
-                        <label>Giá bìa: </label>
-                        <p>120.000VND</p>
-                      </div>
-                    </div>
+                  </b-skeleton-wrapper>
+                  <div class="pagingBook">
+                    <b-pagination class="page-number" @input="getBooks" v-model="page" :total-rows="totalBook" :per-page="10">
+                      <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                      <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                      <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                      <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                      <template #page="{ page, active }">
+                        <b v-if="active" style="color: white;">{{ page }} </b>
+                        <b v-else style="color: #9D6B54;">{{ page }}</b>
+                      </template>
+                    </b-pagination>
                   </div>
                 </b-tab>
                 <b-tab title="Bài đăng">
@@ -148,116 +90,51 @@
                     <input type="text" v-model="search" placeholder="Nhập tên sản phẩm">
                     <button v-on:click="HandleSearch">Tìm</button>
                   </div>
-                  <div class="post">
-                    <div class="post-content">
-                      <div class="post-image">
-                        <img :src="require('@/image/book1.svg')">
-                      </div>
-                      <div class="post-ct">
-                        <div class="person">
-                          <div class="person-infor">
-                            <div class="avatar-post">
-                              <img v-bind:src="info.avatar">
-                            </div>
-                            <div class="name-person">{{ info.fullname }} <Icon icon="ic:baseline-bookmark-border" style="margin-left: 886px"/></div>
-                          </div>
-                          <div class="date-post">
-                            <label>15/10 lúc 19:00</label>
-                            <Icon icon="ri:earth-line"/>
-                          </div>
-                        </div>
-                        <div class="content-post">
-                          Câu trả lời nằm ở cuốn sách này – Hẹn nhau phía sau tan vỡ - một cuốn tản văn man mác buồn khiến những ai đã từng rung động phải thổn thức như đối diện với chính câu chuyện của mình. Nhưng cuốn sách này tuyệt đối không chỉ chất chứa những điều bi lụy, chua xót. Sau mỗi câu chữ, tác giả luôn biết cách nhen nhóm lên một ngọn lửa lòng, để lấp đầy những khoảng trống trong tâm hồn tan vỡ
+                  <b-skeleton-wrapper :loading="loading">
+                    <template #loading>
+                      <div class="gridPost">
+                        <div class="itemPost" v-for='i in 6' :key="i">
+                          <b-card no-body img-left style="height: 180px;">
+                            <b-skeleton-img card-img="left" width="180px"></b-skeleton-img>
+                            <b-card style="width: 413px; height: 180px">
+                              <b-skeleton animation="wave" width="85%"></b-skeleton>
+                              <b-skeleton animation="wave" width="55%"></b-skeleton>
+                              <b-skeleton animation="wave" width="70%"></b-skeleton>
+                              <b-skeleton animation="wave" width="85%"></b-skeleton>
+                              <b-skeleton animation="wave" width="55%"></b-skeleton>
+                              <b-skeleton animation="wave" width="70%"></b-skeleton>
+                            </b-card>
+                          </b-card>
                         </div>
                       </div>
-                    </div>
-                    <div class="post-content">
-                      <div class="post-image">
-                        <img :src="require('@/image/book1.svg')">
-                      </div>
-                      <div class="post-ct">
-                        <div class="person">
-                          <div class="person-infor">
-                            <div class="avatar-post">
-                              <img v-bind:src="info.avatar">
-                            </div>
-                            <div class="name-person">{{ info.fullname }} <Icon icon="ic:baseline-bookmark-border" style="margin-left: 886px"/></div>
-                          </div>
-                          <div class="date-post">
-                            <label>15/10 lúc 19:00</label>
-                            <Icon icon="ri:earth-line"/>
-                          </div>
-                        </div>
-                        <div class="content-post">
-                          Câu trả lời nằm ở cuốn sách này – Hẹn nhau phía sau tan vỡ - một cuốn tản văn man mác buồn khiến những ai đã từng rung động phải thổn thức như đối diện với chính câu chuyện của mình. Nhưng cuốn sách này tuyệt đối không chỉ chất chứa những điều bi lụy, chua xót. Sau mỗi câu chữ, tác giả luôn biết cách nhen nhóm lên một ngọn lửa lòng, để lấp đầy những khoảng trống trong tâm hồn tan vỡ
+                    </template>
+
+                    <div class="gridPost">
+                      <div class="itemPost" v-for="item of listPost" :key="item.id">
+                        <router-link  :to="{ name: 'PostDetail', query: { id:item.id }}">
+                          <img class="imagePost" v-bind:src="item.image">
+                        </router-link>
+                        <button class="actionPost">Xem chi tiết</button>
+                        <div class="infoPost">
+                          <div class="titlePost">{{ item.title }}</div>
+                          <label>Ngày đăng: <strong>{{ item.createdDate}}</strong></label>
+                          <label class="contentPost">{{ item.content }}</label>
                         </div>
                       </div>
                     </div>
-                    <div class="post-content">
-                      <div class="post-image">
-                        <img :src="require('@/image/book1.svg')">
-                      </div>
-                      <div class="post-ct">
-                        <div class="person">
-                          <div class="person-infor">
-                            <div class="avatar-post">
-                              <img v-bind:src="info.avatar">
-                            </div>
-                            <div class="name-person">{{ info.fullname }} <Icon icon="ic:baseline-bookmark-border" style="margin-left: 886px"/></div>
-                          </div>
-                          <div class="date-post">
-                            <label>15/10 lúc 19:00</label>
-                            <Icon icon="ri:earth-line"/>
-                          </div>
-                        </div>
-                        <div class="content-post">
-                          Câu trả lời nằm ở cuốn sách này – Hẹn nhau phía sau tan vỡ - một cuốn tản văn man mác buồn khiến những ai đã từng rung động phải thổn thức như đối diện với chính câu chuyện của mình. Nhưng cuốn sách này tuyệt đối không chỉ chất chứa những điều bi lụy, chua xót. Sau mỗi câu chữ, tác giả luôn biết cách nhen nhóm lên một ngọn lửa lòng, để lấp đầy những khoảng trống trong tâm hồn tan vỡ
-                        </div>
-                      </div>
-                    </div>
-                    <div class="post-content">
-                      <div class="post-image">
-                        <img :src="require('@/image/book1.svg')">
-                      </div>
-                      <div class="post-ct">
-                        <div class="person">
-                          <div class="person-infor">
-                            <div class="avatar-post">
-                              <img v-bind:src="info.avatar">
-                            </div>
-                            <div class="name-person">{{ info.fullname }} <Icon icon="ic:baseline-bookmark-border" style="margin-left: 886px"/></div>
-                          </div>
-                          <div class="date-post">
-                            <label>15/10 lúc 19:00</label>
-                            <Icon icon="ri:earth-line"/>
-                          </div>
-                        </div>
-                        <div class="content-post">
-                          Câu trả lời nằm ở cuốn sách này – Hẹn nhau phía sau tan vỡ - một cuốn tản văn man mác buồn khiến những ai đã từng rung động phải thổn thức như đối diện với chính câu chuyện của mình. Nhưng cuốn sách này tuyệt đối không chỉ chất chứa những điều bi lụy, chua xót. Sau mỗi câu chữ, tác giả luôn biết cách nhen nhóm lên một ngọn lửa lòng, để lấp đầy những khoảng trống trong tâm hồn tan vỡ
-                        </div>
-                      </div>
-                    </div>
-                    <div class="post-content">
-                      <div class="post-image">
-                        <img :src="require('@/image/book1.svg')">
-                      </div>
-                      <div class="post-ct">
-                        <div class="person">
-                          <div class="person-infor">
-                            <div class="avatar-post">
-                              <img v-bind:src="info.avatar">
-                            </div>
-                            <div class="name-person">{{ info.fullname }} <Icon icon="ic:baseline-bookmark-border" style="margin-left: 886px"/></div>
-                          </div>
-                          <div class="date-post">
-                            <label>15/10 lúc 19:00</label>
-                            <Icon icon="ri:earth-line"/>
-                          </div>
-                        </div>
-                        <div class="content-post">
-                          Câu trả lời nằm ở cuốn sách này – Hẹn nhau phía sau tan vỡ - một cuốn tản văn man mác buồn khiến những ai đã từng rung động phải thổn thức như đối diện với chính câu chuyện của mình. Nhưng cuốn sách này tuyệt đối không chỉ chất chứa những điều bi lụy, chua xót. Sau mỗi câu chữ, tác giả luôn biết cách nhen nhóm lên một ngọn lửa lòng, để lấp đầy những khoảng trống trong tâm hồn tan vỡ
-                        </div>
-                      </div>
+                  </b-skeleton-wrapper>
+                  <div class="pagingPost">
+                    <div class="pagePost">
+                      <b-pagination @input="getPost" v-model="page" :total-rows="totalPost" :per-page="6">
+                        <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                        <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                        <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                        <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                        <template #page="{ page, active }">
+                          <b v-if="active" style="color: white;">{{ page }} </b>
+                          <b v-else style="color: #9D6B54;">{{ page }}</b>
+                        </template>
+                      </b-pagination>
                     </div>
                   </div>
                 </b-tab>
@@ -265,7 +142,6 @@
             </b-card>
           </div>
           <div>
-
           </div>
         </div>
       </div>
@@ -276,7 +152,7 @@
 <script>
 import Layout from "@/components/Layout";
 import {Icon} from '@iconify/vue2';
-import {API_PERSONAL} from "@/constant/constant-api";
+import {API_PERSONAL, API_BOOK, API_POST} from "@/constant/constant-api";
 import apiFactory from "@/config/apiFactory";
 import VueJwtDecode from "vue-jwt-decode";
 
@@ -289,33 +165,49 @@ export default {
       userId: '',
       listBook: '',
       totalBook: '',
+      listPost: '',
+      totalPost: '',
+      loading: false
     }
   },
   created() {
-    this.getMyInformation()
-    this.getMyBooks()
+    this.getInformation()
+    this.getBooks(1)
+    this.getPost(1)
     this.isSearch = false
   },
   methods: {
-    getMyInformation() {
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+    getInformation() {
       apiFactory.callApi(API_PERSONAL.INFORMATION, 'POST', {
-        userId: this.userByToken.UserId
+        userId: this.$route.query.id
       }).then((res) => {
         this.info = res.data.data
       }).catch(() => {
       });
     },
-    getMyBooks() {
+    getBooks(pageNumber) {
+      this.loading = true;
       let token = this.$cookies.get('token');
       this.userByToken = VueJwtDecode.decode(token, 'utf-8');
-      const url = API_PERSONAL.LIST_BOOK
-      apiFactory.callApi(url, 'POST', {
-        userId: this.userByToken.UserId
+      const url = API_BOOK.USER_BOOK + this.$route.query.id + '?page=' + pageNumber
+      apiFactory.callApi(url, 'GET', {
       }).then((res) => {
         this.listBook = res.data.data
         this.totalBook = res.data.numberOfRecords
+        this.loading = false
+      }).catch(() => {
+      });
+    },
+    getPost(pageNumber) {
+      this.loading = true;
+      let token = this.$cookies.get('token');
+      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      const url = API_POST.USER_POST + this.$route.query.id + '?page=' + pageNumber
+      apiFactory.callApi(url, 'GET', {
+      }).then((res) => {
+        this.listPost = res.data.data
+        this.totalPost = res.data.numberOfRecords
+        this.loading = false
       }).catch(() => {
       });
     },
@@ -325,7 +217,7 @@ export default {
       } else {
         this.isSearch = true;
       }
-      return this.ChangePage(1)
+      return this.getBooks(1)
     },
   }
 };
@@ -350,6 +242,9 @@ main {
   border-radius: 10px;
 }
 
+strong {
+  color: #9D6B54;
+}
 
 .profile {
   display: flex;
@@ -361,6 +256,7 @@ main {
   width: 186px;
   height: 186px;
   margin-top: 29px;
+  margin-left: 100px;
 }
 
 .infor {
@@ -427,14 +323,15 @@ main {
 
 .body .container .search {
   margin: 20px 0px 10px 20px;
-  width: 80%;
+  display: flex;
+  justify-content: right;
 }
 
 .body .container .search input {
   border-radius: 7px;
   border: 1px solid grey;
   height: 45px;
-  width: 400px;
+  width: 300px;
   padding-left: 15px;
   color: #9D6B54;
 }
@@ -462,143 +359,182 @@ main {
   color: black;
 }
 
-.grid-content {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+.grid-bookOP {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  width: 1206px;
 }
 
-.grid-content > .background-content {
-  background-color: white;
-  /*border: 2px solid black;*/
-  border-radius: 20px;
-  width: 189px;
-  height: auto;
-  margin: 1%;
+.item-bookOP {
+  border-radius: 10px;
+  background: white;
+  width: 210px;
+  height: 380px;
+  margin: 5px;
 }
 
-.background-content:hover {
-  /*box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);*/
-  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-  -webkit-transition: -webkit-transform 1s;
+.item-bookOP:hover {
+  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }
 
-.background-content img {
-  width: 100%;
-  height: auto;
-  margin-top: 1%;
-  border-radius: 20px;
+.item-bookOP img{
+  border-radius: 10px;
+  height: 260px;
+  width: 210px;
 }
 
-.description-book {
-  margin-top: 0.2%;
-  margin-left: 9px;
-  text-decoration: none;
+.grid-bookOP .infoOP {
+  height: 120px;
+  padding: 5px;
 }
 
-.description-book-titleMB {
+.grid-bookOP .infoOP img {
+  width: 20px;
+  height: 20px;
+  margin-left: 0px;
+}
+
+.grid-bookOP .infoOP label {
+  margin-left: 5px;
+}
+
+.grid-bookOP .infoOP .book-titleOP {
   color: #9D6B54;
-  font-weight: 700;
+  margin-left: 5px;
+  margin-right: 5px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.description-book-titleMB label {
-  margin-left: 10%;
+.grid-bookOP .infoOP .book-statusOP {
+  margin-left: 5px;
+  margin-right: 10px;
+  font-size: 0.8rem;
+  display: block;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
-.description-book .description-book-price label {
-  font-weight: 700;
-  color: #9D6B54;
+.pagingBook {
+  margin-top: 10px;
 }
 
-.description-book-categoryMB {
-  font-size: 12px;
-  margin-top: 8px;
+.gridPost {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
 }
 
-.description-book-price {
-  color: red;
-  font-weight: 700;
-  font-size: 12px;
-}
-
-.btn-action {
-  margin-left: 9px;
+.gridPost .itemPost {
+  border-radius: 10px;
+  background: white;
+  width: 593px;
+  height: 180px;
+  margin: 10px 0px 10px 15px;
   display: flex;
-  margin-top: 8px;
-  margin-bottom: 10px;
 }
 
-.btn-action button {
-  border: none;
-  border-radius: 5px;
-  width: 79px;
-  height: 26px;
+.gridPost .itemPost:hover {
+  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  background: grey;
+  opacity: 0.9;
+}
+
+.gridPost .itemPost .imagePost {
+  height: 180px;
+  width: 180px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.gridPost .infoPost {
+  height: 120px;
+  padding: 5px;
+}
+
+.gridPost .infoPost img {
+  width: 20px;
+  height: 20px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.gridPost .infoPost label {
+  margin-left: 5px;
+}
+
+.gridPost .infoPost .titlePost {
+  color: #9D6B54;
+  font-weight: 600;
+  margin-left: 5px;
+  margin-right: 10px;
+  display: block;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.gridPost .infoPost .contentPost {
+  margin-left: 5px;
+  margin-right: 10px;
+  font-size: 0.8rem;
+  display: block;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
+.gridPost .actionPost{
+  position: absolute;
+  width: 200px;
+  height: 50px;
+  border-radius: 10px;
+  border: 1px solid grey;
+  margin-left: 270px;
+  margin-top: 60px;
   background: #9D6B54;
   color: white;
-  margin-right: 10px;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.btn-action button:hover {
-  background: white;
-  color: #9D6B54;
-  border: 2px solid #9D6B54;
-}
-
-.post {
-  margin-top: 16px;
-}
-
-.post-content {
-  border: none;
-  border-radius: 8px;
-  background: white;
-  display: flex;
-margin-bottom: 2%;
-}
-
-.person {
-  margin-top: 9px;
-}
-
-.post-image img {
-  width: 123px;
-  height: 127px;
-  border-radius: 8px;
-}
-
-.person-infor {
-  display: flex;
-}
-
-.avatar-post img {
-  vertical-align: middle;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-}
-
-.name-person {
-  font-size: 14px;
+  display: none;
   font-weight: bold;
-  margin-left: 0.5%;
+  font-size: 16px;
 }
 
-.date-post {
-  margin-left: 33px;
-  margin-top: -8px;
-  font-size: 10px;
-  opacity: 50%;
+.gridPost .actionPost:hover{
+  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }
 
-.date-post label {
-  margin-right: 2px;
-  margin-top: 2px;
+.pagingPost {
+  margin-top: 10px;
+  padding-bottom: 10px;
 }
-.content-post{
-  width: 1000px;
-  height: auto;
-  margin-left: 14px;
+
+.gridPost .actionPost{
+  position: absolute;
+  width: 200px;
+  height: 50px;
+  border-radius: 10px;
+  border: 1px solid grey;
+  margin-left: 270px;
+  margin-top: 60px;
+  background: #9D6B54;
+  color: white;
+  display: none;
+  font-weight: bold;
+  font-size: 16px;
 }
+
+.gridPost .actionPost:hover{
+  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+}
+
+.gridPost .itemPost:hover .actionPost{
+  display: block;
+}
+
 </style>
