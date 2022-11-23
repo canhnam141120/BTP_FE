@@ -7,6 +7,7 @@
         <SideBar_Personal></SideBar_Personal>
       </div>
       <div class="right-contentMR">
+        <div class="titleMR">Danh sách yêu cầu trao đổi</div>
         <b-skeleton-wrapper :loading="loading">
           <template #loading>
             <div class="gridMR">
@@ -164,6 +165,15 @@ strong {
   justify-content: space-between;
 }
 
+.titleMR{
+  text-transform: uppercase;
+  color: #9D6B54;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  padding-top: 5px;
+}
+
 .left-contentMR {
   width: 28%;
   background: #F0ECE4;
@@ -215,16 +225,17 @@ strong {
 }
 
 .right-contentMR .gridMR .infoMR {
-  height: 60px;
+  height: 50px;
   padding: 5px;
 }
 
 .right-contentMR .gridMR .infoMR .book-titleMR {
   width: 200px;
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: #9D6B54;
   text-align: center;
 }

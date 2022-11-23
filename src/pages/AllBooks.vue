@@ -43,10 +43,10 @@
                     <label class="book-status">{{ item.statusBook }}</label>
                   </div>
                   <div class="action">
-                    <button v-if="item.isExchange" class="active">Trao đổi</button>
-                    <button v-else class="disable">Trao đổi</button>
-                    <button v-if="item.isRent" class="active">Thuê</button>
-                    <button v-else class="disable">Thuê</button>
+                    <router-link v-if="item.isExchange" class="activeAB" :to="{ name: 'BookDetail', query: { id:item.id }}">Trao đổi</router-link>
+                    <router-link v-else class="disableAB" :to="{ name: 'BookDetail', query: { id:item.id }}">Trao đổi</router-link>
+                    <router-link v-if="item.isRent" class="activeAB" :to="{ name: 'BookDetail', query: { id:item.id }}">Thuê</router-link>
+                    <router-link v-else class="disableAB" :to="{ name: 'BookDetail', query: { id:item.id }}">Thuê</router-link>
                   </div>
                 </div>
               </div>
@@ -271,31 +271,35 @@ strong {
   margin-bottom: 10px;
 }
 
-.body .container-book .content .grid .action .active {
+.body .container-book .content .grid .action .activeAB {
   border-radius: 5px;
   background-color: #9D6B54;
   color: white;
   border: 1px solid grey;
-  height: 30px;
+  padding: 5px;
   width: 80px;
-  margin-left: 34px;
+  margin-left: 35px;
+  text-decoration: none;
+  text-align: center;
 }
 
-.body .container-book .content .grid .action .active:hover {
+.body .container-book .content .grid .action .activeAB:hover {
   border-color: #9D6B54;
   background-color: white;
   color: #9D6B54;
 }
 
-.body .container-book .content .grid .action .disable {
+.body .container-book .content .grid .action .disableAB {
   border-radius: 5px;
   background-color: grey;
   color: white;
   border: 1px solid grey;
-  height: 30px;
+  padding: 5px;
   width: 80px;
-  margin-left: 32px;
+  margin-left: 35px;
   cursor: not-allowed;
+  text-align: center;
+  text-decoration: none;
 }
 
 .body .container-book .content .paging {

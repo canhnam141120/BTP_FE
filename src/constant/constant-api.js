@@ -72,7 +72,7 @@ export const API_PERSONAL = Object.freeze({
     EDIT_INFORMATION: "https://book-trading-platform.herokuapp.com/api/Personal/edit-profile",
     CHANGE_PASSWORD: "https://book-trading-platform.herokuapp.com/api/Personal/edit-password",
     LIST_REQUEST_SEND: "https://book-trading-platform.herokuapp.com/api/Personal/request-send?page=",
-    LIST_REQUEST_RECEIVED: "https://book-trading-platform.herokuapp.com/api/Personal/request-received/{bookid}",
+    LIST_REQUEST_RECEIVED: "https://book-trading-platform.herokuapp.com/api/Personal/request-received/",
     LIST_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/Personal/my-transaction-exchange-all",
     DETAIL_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/Personal/my-transaction-exchange-detail/{id}",
     BILL_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/Personal/my-transaction-exchange-bill/{id}",

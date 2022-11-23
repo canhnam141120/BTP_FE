@@ -7,7 +7,7 @@
         <SideBar_Personal></SideBar_Personal>
       </div>
       <div class="right-contentMT">
-        <div>Giao dịch của tôi</div>
+        <div class="">Giao dịch của tôi</div>
       </div>
     </div>
   </div>
