@@ -262,7 +262,6 @@ export default {
     get6BookUser(userId) {
       this.loading = true;
       const url = API_BOOK.USER_BOOK6 + userId
-      console.log(url)
       apiFactory.callApi(url, 'GET', {}).then((res) => {
         this.book6user = res.data.data
         this.loading = false
@@ -313,14 +312,16 @@ export default {
     },
     confirm(){
       console.log(this.listIdBook)
+      const bookOffer = [...this.listIdBook]
       let token = this.$cookies.get('token');
       this.userByToken= VueJwtDecode.decode(token, 'utf-8');
       const url = API_REQUEST.REQUEST + this.$route.query.id
       apiFactory.callApi(url, 'POST', {
         userId: this.userByToken.UserId,
-        boofOffer: this.listIdBook
+        bookOffer
       }).then((res) => {
         if(res.data.message === 'REQUEST_SUCCESS'){
+          console.log(alert('Yêu cầu trao đổi thành công!'))
           this.showDialog = false
         }
       }).catch(() => {

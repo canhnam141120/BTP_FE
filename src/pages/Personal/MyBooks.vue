@@ -7,6 +7,7 @@
             <SideBar_Personal></SideBar_Personal>
           </div>
           <div class="right-contentMB">
+            <div class="titleMB">Tủ sách của tôi</div>
             <div class="searchMB">
               <input class="inputMB" type="text" v-model="search" placeholder="Nhập tên sản phẩm">
               <button class="btnMB">Tìm</button>
@@ -37,12 +38,12 @@
                   </router-link>
                   <div class="infoMB">
                     <div class="book-titleMB">{{ item.title }}</div>
-                    <div class="book-categoryMB">Thể loại: {{ item.categoryId}}</div>
-                    <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                    <div class="book-statusMB">Thể loại: {{ item.categoryId}}</div>
+                    <label class="book-statusMB">Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
                     <label class="book-statusMB">{{ item.statusBook }}</label>
                   </div>
                   <div class="action">
-                    <button class="active">Xem yêu cầu</button>
+                    <router-link class="active" :to="{ name: 'ViewRequestBook', query: { id:item.id }}">Xem yêu cầu</router-link>
                   </div>
                 </div>
               </div>
@@ -152,15 +153,26 @@ strong {
 }
 
 .right-contentMB .searchMB {
-  margin: 20px 0px 10px 20px;
-  width: 80%;
+  margin: 10px 0px 10px 20px;
+  width: 95%;
+  display: flex;
+  justify-content: right;
+}
+
+.right-contentMB .titleMB{
+  text-transform: uppercase;
+  color: #9D6B54;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  padding-top: 5px;
 }
 
 .right-contentMB .searchMB .inputMB {
   border-radius: 7px;
   border: 1px solid grey;
-  height: 45px;
-  width: 400px;
+  height: 40px;
+  width: 300px;
   padding-left: 15px;
   color: #9D6B54;
 }
@@ -171,7 +183,7 @@ strong {
   color: white;
   font-weight: bold;
   border: 1px solid grey;
-  height: 45px;
+  height: 40px;
   width: 80px;
   margin-left: 10px;
 }
@@ -192,7 +204,7 @@ strong {
   border-radius: 10px;
   background: white;
   width: 260px;
-  height: 450px;
+  height: 460px;
   margin: 10px 0px 10px 20px;
 }
 
@@ -222,6 +234,7 @@ strong {
 }
 
 .right-contentMB .gridMB .infoMB .book-titleMB{
+  color: #9D6B54;
   margin-left: 15px;
   margin-right: 10px;
   display: block;
@@ -247,7 +260,6 @@ strong {
 }
 
 .right-contentMB  .gridMB .action {
-  margin-bottom: 10px;
   display: flex;
   justify-content: center;
 }
@@ -257,8 +269,11 @@ strong {
   background-color: #9D6B54;
   color: white;
   border: 1px solid grey;
-  height: 35px;
+  height: 40px;
   width: 120px;
+  text-decoration: none;
+  padding-left: 15px;
+  padding-top: 5px;
 }
 
 .right-contentMB .gridMB .action .active:hover {

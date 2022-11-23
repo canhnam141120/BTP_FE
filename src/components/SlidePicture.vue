@@ -3,7 +3,7 @@
     <b-carousel
         id="carousel-fade"
         v-model="slide"
-        :interval="7000"
+        :interval="3000"
         style="text-shadow: 0px 0px 2px #000"
         fade
         indicators
