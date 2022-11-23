@@ -43,7 +43,7 @@
                   <div class="priceBD">
                     <div class="itemPrice">Giá bìa    <span class="cover">{{ book.coverPrice.toLocaleString() }}đ</span></div>
                     <div class="itemPrice">Phí đặt cọc <span class="deposit">{{ book.depositPrice.toLocaleString() }}đ</span></div>
-                    <div v-if="book.isRent" class="itemPrice">Phí thuê   <span class="rent">{{ book.rentFee.toLocaleString() }}đ</span></div>
+                    <div v-if="book.isRent" class="itemPrice">Phí thuê      <span class="rent">{{ book.rentFee.toLocaleString() }}đ</span></div>
                     <div v-else class="itemPrice"></div>
                   </div>
                 </div>
@@ -56,7 +56,7 @@
                     <div><strong>{{ book.user.fullname }}</strong></div>
                     <div>{{ book.user.likeNumber }} người thích</div>
                     <div>{{ book.user.numberOfTransaction }} lần giao dịch</div>
-                    <button class="btn">Xem</button>
+                    <router-link class="btn" :to="{ name: 'Other-Person', query: {id:book.user.id}}">Xem</router-link>
                   </div>
                 </div>
               </div>
