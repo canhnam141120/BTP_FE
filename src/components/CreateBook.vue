@@ -15,28 +15,28 @@
                                        v-model="author"></b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col cols="3">Thể loại</b-col>
+              <b-col cols="3">Thể loại:</b-col>
               <b-col cols="9" ><select name="category" class="input-text" v-model="selected">
                 <option value="comedy" v-for="item of listCategories" :key="item.id" >{{ item.name }}</option>
               </select></b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col cols="3">Mô tả nội dung</b-col>
-              <b-col cols="9" ><input type="text" maxlength="50" required placeholder="Nhập mô tả nội dung sách"
+              <b-col cols="3">Nội dung:</b-col>
+              <b-col cols="9" ><input type="text" maxlength="500" required placeholder="Nhập mô tả nội dung sách"
                                        v-model="description" class="input-text"></b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col cols="3">Nhà xuất bản</b-col>
+              <b-col cols="3">Nhà xuất bản:</b-col>
               <b-col cols="9" ><input type="text" maxlength="50" required placeholder="Nhập nhà xuất bản"
                                        v-model="publisher" class="input-text"></b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col cols="3">Năm xuất bản</b-col>
+              <b-col cols="3">Năm xuất bản:</b-col>
               <b-col cols="9" ><input type="number" maxlength="50" required placeholder="Nhập năm xuất bản"
                                        v-model="year" class="input-text"></b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col cols="3">Ngôn ngữ</b-col>
+              <b-col cols="3">Ngôn ngữ:</b-col>
               <b-col cols="9" ><input type="text" maxlength="50" required placeholder="Nhập ngôn ngữ"
                                        v-model="language" class="input-text"></b-col>
             </b-row>
@@ -45,34 +45,34 @@
         <div class="right-form">
           <b-container class="bv-example-row all-form">
             <b-row class="book-content">
-              <b-col cols="3">Số trang</b-col>
+              <b-col cols="3">Số trang:</b-col>
               <b-col cols="9" ><input type="number" maxlength="50" required placeholder="Nhập số trang"
                                        v-model="numberOfPage" class="input-text"></b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col cols="3">Khối lượng</b-col>
+              <b-col cols="3">Khối lượng:</b-col>
               <b-col cols="9" ><input type="number" maxlength="50" required placeholder="Nhập khối lượng"
                                        v-model="weight" class="input-text"></b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col cols="3">Giá bìa</b-col>
+              <b-col cols="3">Giá bìa:</b-col>
               <b-col cols="9" ><input type="number" maxlength="50" required placeholder="Nhập giá bìa"
                                        v-model="coverPrice" class="input-text"></b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col cols="3">Giá đặt cọc</b-col>
+              <b-col cols="3">Giá đặt cọc:</b-col>
               <b-col cols="9" ><input type="number" maxlength="50" required placeholder="Nhập giá đặt cọc"
                                        v-model="depositPrice" class="input-text"></b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col cols="3">Hình ảnh</b-col>
+              <b-col cols="3">Ảnh sản phẩm:</b-col>
               <b-col cols="9" ><input type="file" class="input-text"></b-col>
             </b-row>
             <b-row class="book-content">
               <b-col cols="4"><input type="checkbox" id="trading" name="trading" value="trading" v-model="isExchange">
                 <label for="trading">Trao đổi</label><br></b-col>
               <b-col cols="4"><input type="checkbox" id="rent" name="rent" value="rent" v-model="isRent">
-                <label for="rent"> Thuê</label><br></b-col>
+                <label for="rent">Thuê</label><br></b-col>
             </b-row>
             <b-row class="book-content">
               <b-col cols="3" >Giá thuê:</b-col>
