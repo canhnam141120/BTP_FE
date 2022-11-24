@@ -1,6 +1,17 @@
 <template>
   <Layout>
     <main style="flex-grow: 1">
+      <CreateBook :show="showDialog"
+                      :cancel="cancel"
+                      :confirm="save"
+                      v-if="showDialog" class="modal">
+        <div class="dialogBook">
+          <div class="gridMB">
+            <div class="itemMB" >
+            </div>
+          </div>
+        </div>
+      </CreateBook>
       <div class="MB">
         <div class="containerMB">
           <div class="left-contentMB">
@@ -11,7 +22,12 @@
             <div class="searchMB">
               <input class="inputMB" type="text" v-model="search" placeholder="Nhập tên sản phẩm">
               <button class="btnMB">Tìm</button>
+              <button class="create-book" v-on:click="openDialog">
+                <Icon icon="material-symbols:add-circle-outline-rounded" />
+                <label>Đăng sách</label>
+              </button>
             </div>
+
             <hr>
             <b-skeleton-wrapper :loading="loading">
               <template #loading>
@@ -73,10 +89,11 @@ import {API_PERSONAL} from "@/constant/constant-api";
 import Layout from "@/components/Layout";
 import SideBar_Personal from "../../components/SideBar_Personal";
 import VueJwtDecode from "vue-jwt-decode";
-
+import {Icon} from '@iconify/vue2';
+import CreateBook from "@/components/CreateBook";
 export default {
   name: "MyBooks",
-  components: {SideBar_Personal, Layout},
+  components: {SideBar_Personal, Layout, Icon, CreateBook},
   data() {
     return {
       listBook: '',
@@ -84,6 +101,7 @@ export default {
       loading: false,
       userByToken: '',
       userId: '',
+      showDialog: false,
     }
   },
   created() {
@@ -104,6 +122,14 @@ export default {
         }).catch(() => {
         });
     },
+    openDialog(){
+      this.showDialog = true
+    },
+    cancel(){
+      this.showDialog = false
+    },
+    save(){
+    },
   }
 }
 </script>
@@ -120,7 +146,76 @@ main {
 strong {
   color: #9D6B54;
 }
+.dialogBook{
+  height: 75%;
+}
 
+.dialogBook .gridMB {
+  display: flex;
+  grid-template-columns: 25% 25% 25% 25%;
+  margin-left: 10px;
+  margin-right: 20px;
+  overflow: auto;
+}
+
+.dialogBook .gridMB .itemMB {
+  display: block;
+  border-radius: 10px;
+  background: white;
+  width: 220px;
+  height: 450px;
+  margin: 10px 0px 10px 20px;
+}
+
+.dialogBook .gridMB .itemMB:hover {
+  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+}
+
+.dialogBook .gridMB .itemMB img {
+  height: 290px;
+  width: 220px;
+  border-radius: 10px;
+}
+
+.dialogBook .gridMB .infoMB {
+  height: 120px;
+  padding: 5px;
+}
+
+.dialogBook .gridMB .infoMB img {
+  width: 20px;
+  height: 20px;
+  margin-left: 15px;
+}
+
+.dialogBook .gridMB .infoMB label {
+  margin-left: 5px;
+}
+
+.dialogBook .gridMB .infoMB .book-titleMB{
+  margin-left: 5px;
+  margin-right: 5px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dialogBook .gridMB .infoMB .book-categoryMB{
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.dialogBook .gridMB .infoMB .book-statusMB {
+  margin-left: 5px;
+  margin-right: 10px;
+  font-size: 0.8rem;
+  display: block;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
 .MB {
   background: #F0F0F0;
 }
@@ -154,9 +249,8 @@ strong {
 
 .right-contentMB .searchMB {
   margin: 10px 0px 10px 20px;
-  width: 95%;
+  width: 100%;
   display: flex;
-  justify-content: right;
 }
 
 .right-contentMB .titleMB{
@@ -289,5 +383,27 @@ strong {
 .right-contentMB .pagingMB ul {
   justify-content: right;
   margin-right: 15px;
+}
+.create-book{
+border: none;
+  border: none;
+  border-radius: 8px;
+  background: #DFD5CB;
+  width: 118px;
+  height: 45px;
+  margin-left: 35%;
+  color: #9D6B54;
+  font-size: 16px;
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+}
+.create-book label{
+  margin-left: 5px;
+}
+.create-book:hover{
+  background: #9D6B54;
+  color: white;
+
 }
 </style>

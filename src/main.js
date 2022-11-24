@@ -5,6 +5,7 @@ import VueCookies from 'vue-cookies'
 import '@/config/boostrap-vue'
 
 
+
 Vue.use(VueCookies)
 Vue.config.productionTip = false
 

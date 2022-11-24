@@ -133,11 +133,11 @@ const routers = [
         name:'GetFees',
         component: () => import('@/pages/ManageFee/GetFees'),
     },
-    {
-        path:'/ManageFee/create',
-        name:'CreateFee',
-        component: () => import('@/pages/ManageFee/CreateFee'),
-    },
+    // {
+    //     path:'/ManageFee/create',
+    //     name:'CreateFee',
+    //     component: () => import('@/pages/ManageFee/CreateFee'),
+    // },
 
     {
         path:'/ManagePost',
