@@ -5,13 +5,19 @@
       <div class="body-blog">
         <div class="title">TRẠM ĐỌC</div>
         <div class="container-blog">
-          <div v-if="this.$cookies.get('token')" class="top"></div>
+          <div v-if="this.$cookies.get('token')" class="top">
+            <img class="userImageBI" v-bind:src="info.avatar">
+            <button class="createPost">Chia sẻ bài viết của bạn...</button>
+            <Icon icon="jam:write-f" class="iconBI"/>
+            <Icon icon="ic:baseline-emoji-emotions" class="iconBI"/>
+            <Icon icon="material-symbols:image-rounded" class="iconBI"/>
+          </div>
           <div class="content">
             <div class="search">
               <input type="text" v-model="search" placeholder="Nhập tiêu đề">
               <button v-on:click="HandleSearch">Tìm</button>
-            </div>
-            <hr>
+            </div><br><hr>
+
             <b-skeleton-wrapper :loading="loading">
               <template #loading>
                 <div class="grid">
@@ -40,8 +46,7 @@
                   <div class="info">
                     <div class="post-title">{{ item.title }}</div>
                     <div><img src="../image/user.png" >{{ item.user.fullname }}</div>
-                    <label>Ngày đăng: <strong>{{ item.createdDate}}</strong></label>
-
+                    <div class="createDate"><Icon class="iconTime" icon="ic:twotone-access-time"/>{{item.createdDate | formatDate}}</div>
                     <label class="post-content">{{ item.content }}</label>
                   </div>
                 </div>
@@ -49,7 +54,7 @@
             </b-skeleton-wrapper>
             <div class="paging">
               <div class="page">
-                <b-pagination @input="ChangePage" v-model="page" :total-rows="totalPost" :per-page="10">
+                <b-pagination @input="getListPost" v-model="page" :total-rows="totalPost" :per-page="10">
                   <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
                   <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
                   <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
@@ -70,16 +75,19 @@
 
 <script>
 import apiFactory from "@/config/apiFactory";
-import {API_POST} from "@/constant/constant-api";
+import {API_PERSONAL, API_POST} from "@/constant/constant-api";
 import Layout from "@/components/Layout";
+import {Icon} from '@iconify/vue2';
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "BlogIndex",
-  components: {Layout},
+  components: {Layout, Icon},
   data() {
     return {
       listPost: '',
       totalPost: '',
+      info: '',
       search: '',
       isSearch: false,
       loading: false,
@@ -87,10 +95,11 @@ export default {
   },
   created() {
     this.isSearch = false
-    this.ChangePage(1)
+    this.getListPost(1)
+    this.getMyInformation()
   },
   methods: {
-    ChangePage(pageNumber) {
+    getListPost(pageNumber) {
       this.loading = true;
       if (this.isSearch) {
         window.scrollTo(0, 0)
@@ -122,6 +131,23 @@ export default {
       }
       return this.ChangePage(1)
     },
+    getMyInformation() {
+      //this.loading = true
+      let token = this.$cookies.get('token');
+      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.INFORMATION, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        this.info = res.data.data
+        //this.loading = false
+      }).catch(() => {
+      });
+    }
+  },
+  filters:{
+    formatDate(value){
+      return new Date(value).toLocaleString('en-GB')
+    }
   }
 }
 </script>
@@ -139,18 +165,64 @@ strong {
   color: #9D6B54;
 }
 
+.createDate{
+  color: #9D6B54;
+  font-weight: 600;
+}
+
+.iconTime{
+  margin-bottom: 5px;
+  font-size: 20px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
 .body-blog {
   background: #F0F0F0;
 }
 
 .body-blog .top {
   background: #F0ECE4;
-  max-width: 800px;
-  height: 200px;
+  width: 100%;
+  height: auto;
   border-radius: 10px;
-  margin: 5px auto 20px auto;
-  display: block;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  margin: 5px auto 10px auto;
+  display: flex;
+  border: 1px solid #9D6B54;
+}
+
+.userImageBI{
+  margin: 20px;
+  height: 60px;
+  width: 60px;
+  border-radius: 30px;
+  border: 2px outset #9D6B54;
+}
+
+.createPost{
+  width: 550px;
+  height: 40px;
+  border-radius: 15px;
+  border: 2px solid #9D6B54;
+  margin-top: auto;
+  margin-bottom: auto;
+  color: grey;
+  font-size: 16px;
+  padding-right: 300px;
+}
+
+.iconBI{
+  color: #9D6B54;
+  margin-left: 10px;
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 30px;
+  height: 30px;
+}
+
+.createPost:hover{
+  color: #9D6B54;
+  cursor: text;
 }
 
 .body-blog .container-blog {
@@ -172,13 +244,13 @@ strong {
   width: 100%;
   background: #F0ECE4;
   border-radius: 10px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 1px solid #9D6B54;
 }
 
 .body-blog .container-blog .search {
-  margin: 0px 0px 10px 20px;
+  margin: 0px 15px 10px 20px;
   padding-top: 20px;
-  width: 80%;
+  float: right;
 }
 
 .body-blog .container-blog .search input {
@@ -199,6 +271,7 @@ strong {
   height: 45px;
   width: 80px;
   margin-left: 10px;
+
 }
 
 .body-blog .container-blog .search button:hover {
@@ -214,11 +287,12 @@ strong {
 
 .body-blog .container-blog .content .grid .item {
   border-radius: 10px;
-  background: white;
+  border: 1px solid #9D6B54;
   width: 593px;
-  height: 180px;
+  height: auto;
   margin: 10px 0px 10px 15px;
   display: flex;
+  padding-bottom: 5px;
 }
 
 .body-blog .container-blog .content .grid .item:hover {

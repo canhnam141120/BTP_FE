@@ -141,15 +141,15 @@ strong {
   display: flex;
   margin-top: 30px;
   padding-bottom: 100px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 1px solid #9D6B54;
 }
 .right-contentMB{
   width: 71%;
   background: #F0ECE4;
   border-radius: 10px;
   margin-top: 30px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
   display: block;
+  border: 1px solid #9D6B54;
 }
 
 .right-contentMB .searchMB {
@@ -190,7 +190,7 @@ strong {
 
 .right-contentMB .searchMB .btnMB:hover {
   border-color: #9D6B54;
-  background-color: white;
+  background-color: #F0ECE4;
   color: #9D6B54;
 }
 
@@ -202,10 +202,11 @@ strong {
 
 .right-contentMB .gridMB .itemMB {
   border-radius: 10px;
-  background: white;
   width: 260px;
-  height: 460px;
+  height: auto;
   margin: 10px 0px 10px 20px;
+  padding-bottom: 10px;
+  border: 1px solid #9D6B54;
 }
 
 .right-contentMB .gridMB .itemMB:hover {
@@ -278,7 +279,7 @@ strong {
 
 .right-contentMB .gridMB .action .active:hover {
   border-color: #9D6B54;
-  background-color: white;
+  background-color: #F0ECE4;
   color: #9D6B54;
 }
 

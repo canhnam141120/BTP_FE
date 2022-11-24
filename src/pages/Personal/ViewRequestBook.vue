@@ -172,7 +172,7 @@ strong {
   display: flex;
   margin-top: 30px;
   padding-bottom: 100px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 1px solid #9D6B54;
 }
 
 .right-contentVR {
@@ -180,7 +180,7 @@ strong {
   background: #F0ECE4;
   border-radius: 10px;
   margin-top: 30px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 1px solid #9D6B54;
   display: block;
 }
 
@@ -291,7 +291,7 @@ strong {
  .gridMB .itemMB {
   display: block;
   border-radius: 10px;
-  background: white;
+   border: 1px solid #9D6B54;
   width: 220px;
   height: 470px;
   margin: 10px 0px 10px 20px;

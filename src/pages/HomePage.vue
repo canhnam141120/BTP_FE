@@ -17,6 +17,7 @@
         <div class="container">
           <div class="listBook">
             <div class="home-title">SÁCH MỚI ĐĂNG</div>
+            <hr style="margin-top: 0px">
             <b-skeleton-wrapper :loading="loading">
               <template #loading>
                 <div class="grid-book" >
@@ -48,7 +49,8 @@
             </b-skeleton-wrapper>
           </div>
           <div class="listPost">
-            <div class="home-title">BÀI ĐĂNG MỚI</div>
+            <div class="home-title2">BÀI VIẾT MỚI</div>
+            <hr style="margin-top: 0px">
             <b-skeleton-wrapper :loading="loading">
               <template #loading>
                 <div class="grid-post" >
@@ -72,7 +74,7 @@
                   <div class="info">
                     <div class="post-title">{{ item.title }}</div>
                     <div><img src="../image/user.png"> {{ item.user.fullname }}</div>
-                    <label class="post-date">{{ item.createdDate }}</label>
+                    <div class="createDate"><Icon class="iconTime" icon="ic:twotone-access-time"/>{{item.createdDate | formatDate}}</div>
                     <div class="post-content">{{ item.content }}</div>
                   </div>
                 </div>
@@ -93,10 +95,11 @@ import Layout from "@/components/Layout";
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 import SlidePicture from "../components/SlidePicture";
+import {Icon} from '@iconify/vue2';
 
 export default {
   name: "HomePage",
-  components: {SlidePicture, Layout},
+  components: {SlidePicture, Layout, Icon},
   data() {
     return {
       loading: false,
@@ -138,6 +141,11 @@ export default {
       }).catch(() => {
       });
     }
+  },
+  filters:{
+    formatDate(value){
+      return new Date(value).toLocaleString('en-GB')
+    }
   }
 }
 </script>
@@ -172,6 +180,13 @@ strong {
   margin-left: 470px;
 }
 
+.home-title2{
+  color: #9D6B54;
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-left: 490px;
+}
+
 .homepage .container {
   max-width: 1250px;
   background: #F0F0F0;
@@ -185,6 +200,7 @@ strong {
   border-radius: 10px;
   display: block;
   padding-bottom: 20px;
+  border: 1px solid #9D6B54;
 }
 
 .listPost {
@@ -195,6 +211,7 @@ strong {
   margin-top: 20px;
   padding-bottom: 20px;
   margin-bottom: 10px;
+  border: 1px solid #9D6B54;
 }
 
 .grid-book {
@@ -205,9 +222,10 @@ strong {
 }
 
 .item-book {
+  border: 1px solid #9D6B54;
   border-radius: 10px;
-  background: white;
   width: 191px;
+  height: auto;
   margin: 5px;
 }
 
@@ -218,7 +236,7 @@ strong {
 .item-book img{
   border-radius: 10px;
   height: 250px;
-  width: 191px;
+  width: 190px;
 }
 
 .grid-book .info {
@@ -266,11 +284,11 @@ strong {
 
 .item-post {
   border-radius: 10px;
-  background: white;
+  border: 1px solid #9D6B54;
   display: flex;
   width: 392px;
   margin: 5px;
-  height: 191px
+  height: auto;
 }
 
 .item-post:hover {
@@ -290,9 +308,10 @@ strong {
 }
 
 .grid-post .info img {
-  width: 20px;
-  height: 20px;
-  margin-left: 2px;
+  width: 18px;
+  height: 18px;
+  margin-left: 4px;
+  margin-bottom: 4px;
 }
 
 .grid-post .info label {
@@ -307,6 +326,21 @@ strong {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
+
+.createDate{
+  margin-top: 4px;
+
+  font-size: 14px;
+}
+
+.iconTime{
+  color: #9D6B54;
+  margin-bottom: 5px;
+  font-size: 20px;
+  margin-right: 5px;
+  margin-left: 3.5px;
+}
+
 
 .grid-post .info .post-content {
   font-size: 14px;

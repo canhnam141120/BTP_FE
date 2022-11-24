@@ -167,14 +167,14 @@ strong {
   height: 1000px;
   background: #F0ECE4;
   border-radius: 10px;
-  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 2px solid #9D6B54;
 }
 
 .body .container-book .content {
   width: 73%;
   background: #F0ECE4;
   border-radius: 10px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 1px solid #9D6B54;
 }
 
 .body .container-book .search {

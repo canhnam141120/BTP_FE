@@ -56,7 +56,6 @@ export default {
   height: auto;
   padding-top: 3%;
   background: #F0ECE4;
-  /*background: #F0ECE4;*/
   border-radius: 8px;
   padding-bottom: 50px;
 }

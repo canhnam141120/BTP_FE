@@ -108,7 +108,6 @@
                         </div>
                       </div>
                     </template>
-
                     <div class="gridPost">
                       <div class="itemPost" v-for="item of listPost" :key="item.id">
                         <router-link  :to="{ name: 'PostDetail', query: { id:item.id }}">
@@ -117,7 +116,7 @@
                         <button class="actionPost">Xem chi tiết</button>
                         <div class="infoPost">
                           <div class="titlePost">{{ item.title }}</div>
-                          <label>Ngày đăng: <strong>{{ item.createdDate}}</strong></label>
+                          <div class="createDate"><Icon class="iconTime" icon="ic:twotone-access-time"/>{{item.createdDate | formatDate}}</div>
                           <label class="contentPost">{{ item.content }}</label>
                         </div>
                       </div>
@@ -154,7 +153,6 @@ import Layout from "@/components/Layout";
 import {Icon} from '@iconify/vue2';
 import {API_PERSONAL, API_BOOK, API_POST} from "@/constant/constant-api";
 import apiFactory from "@/config/apiFactory";
-import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "Other-Person",
@@ -187,8 +185,6 @@ export default {
     },
     getBooks(pageNumber) {
       this.loading = true;
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
       const url = API_BOOK.USER_BOOK + this.$route.query.id + '?page=' + pageNumber
       apiFactory.callApi(url, 'GET', {
       }).then((res) => {
@@ -200,8 +196,6 @@ export default {
     },
     getPost(pageNumber) {
       this.loading = true;
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
       const url = API_POST.USER_POST + this.$route.query.id + '?page=' + pageNumber
       apiFactory.callApi(url, 'GET', {
       }).then((res) => {
@@ -219,6 +213,11 @@ export default {
       }
       return this.getBooks(1)
     },
+  },
+  filters: {
+    formatDate(value){
+      return new Date(value).toLocaleString('en-GB')
+    }
   }
 };
 </script>

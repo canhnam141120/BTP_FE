@@ -7,11 +7,10 @@
             <SideBar_Personal></SideBar_Personal>
           </div>
           <div class="right-contentMI">
-
             <b-skeleton-wrapper :loading="loading">
               <template #loading>
                 <div class="topMI">
-                  <b-card no-body img-right style="width: 742.2px; height: 298px">
+                  <b-card no-body img-right style="width: 100%; height: 290px;">
                     <b-skeleton-img class="imgMI" card-img="right" style="border: none"></b-skeleton-img>
                     <b-card-body style="height: 290px;">
                       <br><br><br>
@@ -44,9 +43,7 @@
                 </div>
               </div>
             </b-skeleton-wrapper>
-            <hr>
             <div class="bottomMI">
-
             </div>
           </div>
         </div>
@@ -126,28 +123,26 @@ strong {
   margin-bottom: 20px;
   margin-top: 30px;
   padding-bottom: 100px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 1px solid #9D6B54;
 }
 .right-contentMI{
   width: 71%;
-  background: #F0ECE4;
+  background: #F0F0F0;
   border-radius: 10px;
   display: flex;
   margin-bottom: 20px;
   margin-top: 30px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
   display: block;
 }
 
 .topMI{
-  background: white;
-  width: 85%;
+  background: #F0ECE4;
+  width: 100%;
   display: flex;
-  margin-left: 65px;
-  margin-top: 15px;
   border-radius: 10px;
   padding-bottom: 10px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  margin-bottom: 15px;
+  border: 1px solid #9D6B54;
 }
 
 .infoMI{
@@ -242,14 +237,11 @@ strong {
 }
 
 .bottomMI{
-  background: white;
-  height: 320px;
-  width: 85%;
+  background: #F0ECE4;
+  height: 400px;
   display: flex;
-  margin-left: 65px;
-  margin-top: 15px;
   border-radius: 10px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 1px solid #9D6B54;
 }
 
 

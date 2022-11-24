@@ -86,6 +86,7 @@ export const API_PERSONAL = Object.freeze({
 
 export const API_POST = Object.freeze({
     TOP_POST: "https://book-trading-platform.herokuapp.com/api/Post/top-post",
+    POST6: "https://book-trading-platform.herokuapp.com/api/Post/6post",
     USER_POST: "https://book-trading-platform.herokuapp.com/api/Post/user",
     LIST_POST: "https://book-trading-platform.herokuapp.com/api/Post/all?page=",
     DETAIL_POST: "https://book-trading-platform.herokuapp.com/api/Post/",
