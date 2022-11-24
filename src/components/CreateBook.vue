@@ -16,8 +16,8 @@
             </b-row>
             <b-row class="book-content">
               <b-col cols="3">Thể loại</b-col>
-              <b-col cols="9" ><select name="category" class="input-text">
-                <option value="comedy" v-for="item of listCategories" :key="item.id" v-model="selected">{{ item.name }}</option>
+              <b-col cols="9" ><select name="category" class="input-text" v-model="selected">
+                <option value="comedy" v-for="item of listCategories" :key="item.id" >{{ item.name }}</option>
               </select></b-col>
             </b-row>
             <b-row class="book-content">
