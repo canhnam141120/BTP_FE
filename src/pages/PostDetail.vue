@@ -1,35 +1,59 @@
 <template>
   <Layout>
-    <main class="container">
-      <!-- Left Column / Headphones Image -->
-      <div class="left-column">
-        <img src="../image/cover.png" alt="">
-        <img src="../image/cover.png" alt="">
-      </div>
-      <!-- Right Column -->
-      <div class="right-column">
-        <!-- Product Description -->
-        <div class="product-description">
-          <span>Book</span>
-          <h1>{{ this.detailBook.title}}</h1>
-          <p>{{ this.detailBook.description}}</p>
-        </div>
-        <!-- Product Configuration -->
-        <div class="product-configuration">
-          <!-- Cable Configuration -->
-          <div class="cable-config">
-            <span>Tác giả</span>
-            <div class="cable-choose">
-              <p>{{ this.detailBook.author}}</p>
+    <main style="flex-grow: 1;">
+      <LoadingDialog v-show="spinner"></LoadingDialog>
+      <div class="postDetail">
+        <div class="container">
+          <div class="leftPD">
+            <div v-if="this.$cookies.get('token')" class="top">
+              <img class="userImageBI" v-bind:src="info.avatar">
+              <button class="createPost">Chia sẻ bài viết của bạn...</button>
+              <Icon icon="jam:write-f" class="iconBI"/>
+              <Icon icon="ic:baseline-emoji-emotions" class="iconBI"/>
+              <Icon icon="material-symbols:image-rounded" class="iconBI"/>
             </div>
-            <a href="#"></a>
+            <div class="bottom">
+              <div class="leftTop">
+                <div class="authorPD">
+                  <div style="margin-left: auto; margin-right: auto; width: 80px"><img class="authorAvatar" v-bind:src="post.user.avatar" alt="Ảnh đại diện"></div>
+                  <div class="authorName">{{post.user.fullname}}</div>
+                  <div class="authorNumber">{{post.user.likeNumber}} người thích</div>
+                  <div style="margin-left: auto; margin-right: auto; width: 54px"><router-link class="authorBtn" :to="{ name: 'Other-Person', query: {id:post.userId}}">Xem</router-link></div>
+                  <hr>
+                </div>
+                <div class="contentPD">
+                  <div class="titlePD">{{post.title}}</div>
+                  <hr>
+                  <div class="imgPD"><img class="displayPD" v-bind:src="post.image" alt="Ảnh minh họa"></div>
+                </div>
+              </div>
+              <div class="leftBottom">
+                <div class="mainPD">{{post.content}}</div>
+                <div class="endPD">
+                  <div class="createDate"><Icon class="iconTime" icon="ic:twotone-access-time"/>{{post.createdDate | formatDate}}</div>
+                  <button class="btnLike">
+                    <Icon icon="ant-design:like-filled" style="width: 20px; height: 20px; margin-right: 2%"/>
+                    Thích
+                  </button></div>
+              </div>
+            </div>
           </div>
-        </div>
-
-        <!-- Product Pricing -->
-        <div class="product-price">
-          <span></span>
-          <a href="#" class="cart-btn">Trao đổi</a>
+          <div class="rightPD">
+            <div class="userPost">
+              <div class="subTitle">Cùng tác giả</div><hr class="hrPD">
+              <div v-for="item of listUserPost" :key="item.id">
+                <router-link class="postTitlePD" @click.native="loadPage" :to="{ name: 'PostDetail', query: { id:item.id }}">{{ item.title }}</router-link>
+                <hr class="hrPD2">
+              </div>
+            </div>
+            <div class="topPost">
+              <div class="subTitle">Bài viết mới nhất</div><hr class="hrPD">
+              <div v-for="item of list6Post" :key="item.id">
+                <router-link class="postTitlePD" @click.native="loadPage" :to="{ name: 'PostDetail', query: { id:item.id }}">{{ item.title }}</router-link>
+                <hr class="hrPD2">
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </main>
@@ -38,320 +62,338 @@
 
 <script>
 import apiFactory from "@/config/apiFactory";
-import {API_BOOK} from "@/constant/constant-api";
+import {API_PERSONAL, API_POST} from "@/constant/constant-api";
 import Layout from "@/components/Layout";
+import {Icon} from '@iconify/vue2';
+import LoadingDialog from "@/components/LoadingDialog";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "BookDetail",
-  components: {Layout},
+  components: {Layout, Icon, LoadingDialog},
   data() {
     return {
-      detailBook: ''
+      info: '',
+      post: '',
+      list6Post: '',
+      listUserPost: '',
+      spinner: false
     }
   },
   created() {
-    this.getBookById()
+    this.getPostById()
+    this.get6Post()
+    this.getMyInformation()
   },
   methods: {
-    getBookById() {
-      const url = API_BOOK.DETAIL_BOOK + this.$route.query.id
+    getPostById() {
+      this.spinner = true
+      const url = API_POST.DETAIL_POST+ this.$route.query.id
       apiFactory.callApi(url,'GET',{}).then((res)=>{
-        this.detailBook = res.data.data
+        this.post = res.data.data
+        this.getPostUser(this.post.userId)
+        this.spinner = false
       }).catch(() => {
       });
+    },
+    get6Post(){
+      apiFactory.callApi(API_POST.POST6,'GET',{}).then((res)=>{
+        this.list6Post = res.data.data
+      }).catch(() => {
+      });
+    },
+    getPostUser(userId){
+      const url = API_POST.USER_POST + userId
+      apiFactory.callApi(url, 'GET', {
+      }).then((res) => {
+        this.listUserPost = res.data.data
+      }).catch(() => {
+      });
+    },
+    getMyInformation() {
+      //this.loading = true
+      let token = this.$cookies.get('token');
+      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.INFORMATION, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        this.info = res.data.data
+        //this.loading = false
+      }).catch(() => {
+      });
+    },
+    loadPage(){
+      this.loading = true
+      this.getPostById()
+    }
+  },
+  filters:{
+    formatDate(value){
+      return new Date(value).toLocaleString('en-GB')
     }
   }
 }
 </script>
 
 <style scoped>
-/*Header*/
-.header {
-  overflow: hidden;
-  background-color: #f1f1f1;
-  padding: 24px 8px;
+* {
+  box-sizing: border-box;
 }
 
-.header a {
-  float: left;
-  color: black;
-  text-align: center;
-  padding: 12px;
-  text-decoration: none;
-  font-size: 18px;
-  line-height: 25px;
-  border-radius: 4px;
+main {
+  background: #F0F0F0;
 }
 
-.header a.logo img {
+strong {
+  color: #9D6B54;
+}
+
+.hrPD{
+  padding: 0px;
+  margin: 0px;
+}
+
+.hrPD2{
+  margin-top: 0px;
+}
+
+.postDetail {
+  background: #F0F0F0;
+}
+
+.top {
+  border-radius: 10px;
+  background: #F0ECE4;
   width: 100%;
+  height: 100px;
+  border-radius: 10px;
+  margin: 5px auto 15px auto;
+  display: flex;
+  border: 1px solid #9D6B54;
+}
+
+.userImageBI{
+  margin: 20px 60px 20px 55px;
+  height: 60px;
+  width: 60px;
+  border-radius: 30px;
+  border: 2px outset #9D6B54;
+}
+
+.createPost{
+  width: 550px;
+  height: 40px;
+  border-radius: 15px;
+  border: 2px solid #9D6B54;
+  margin-top: auto;
+  margin-bottom: auto;
+  color: grey;
+  font-size: 16px;
+  padding-right: 300px;
+}
+
+.iconBI{
+  color: #9D6B54;
+  margin-left: 15px;
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 30px;
+  height: 30px;
+}
+
+.postDetail .container {
+  max-width: 1250px;
+  background: #F0F0F0;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.leftPD{
+  width: 880px;
+  background: #F0F0F0;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.leftTop{
+  width: 100%;
+  display: flex;
+}
+
+.bottom{
+  border-radius: 10px;
+  border: 1px solid #9D6B54;
+}
+
+.authorPD{
+  background: #F0ECE4;
+  border-radius: 10px;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 200px;
+  display: block;
   height: auto;
 }
 
-.header a:hover {
-  background-color: #ddd;
-  color: black;
+.authorAvatar{
+  border: 2px outset #9D6B54;
+  width: 80px;
+  height: 80px;
+  border-radius: 40px;
 }
 
-.header a.active {
-  background-color: dodgerblue;
-  color: white;
-}
-
-.header-menu {
-  margin-left: 100px;
-  padding-right: 10px;
-
-}
-
-.header-menu a {
-  margin-left: 30px;
-  padding-right: 15px;
-  /*justify-content: center;*/
-}
-
-.header-right {
-  float: right;
-  margin-right: 30px;
-}
-
-.header-button {
-  border: burlywood;
-  border-radius: 2px;
-  padding-left: 10px;
-}
-
-/* Basic Styling */
-html, body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  font-family: 'Roboto', sans-serif;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 15px;
-  display: flex;
-}
-
-/* Columns */
-.left-column {
-  width: 65%;
-  position: relative;
-}
-
-.right-column {
-  width: 35%;
-  margin-top: 60px;
-}
-
-
-/* Left Column */
-.left-column img {
-  width: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  opacity: 0;
-  transition: all 0.3s ease;
-}
-
-.left-column img.active {
-  opacity: 1;
-}
-
-
-/* Right Column */
-
-/* Product Description */
-.product-description {
-  border-bottom: 1px solid #E1E8EE;
-  margin-bottom: 20px;
-}
-
-.product-description span {
-  font-size: 12px;
-  color: #358ED7;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-
-.product-description h1 {
-  font-weight: 300;
-  font-size: 52px;
-  color: #43484D;
-  letter-spacing: -2px;
-}
-
-.product-description p {
-  font-size: 16px;
-  font-weight: 300;
-  color: #86939E;
-  line-height: 24px;
-}
-
-/* Product Configuration */
-.product-color span,
-.cable-config span {
-  font-size: 14px;
-  font-weight: 400;
-  color: #86939E;
-  margin-bottom: 20px;
-  display: inline-block;
-}
-
-/* Product Color */
-.product-color {
-  margin-bottom: 30px;
-}
-
-.color-choose div {
-  display: inline-block;
-}
-
-.color-choose input[type="radio"] {
-  display: none;
-}
-
-.color-choose input[type="radio"] + label span {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  margin: -1px 4px 0 0;
-  vertical-align: middle;
-  cursor: pointer;
-  border-radius: 50%;
-}
-
-.color-choose input[type="radio"] + label span {
-  border: 2px solid #FFFFFF;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.33);
-}
-
-.color-choose input[type="radio"]#red + label span {
-  background-color: #C91524;
-}
-
-.color-choose input[type="radio"]#blue + label span {
-  background-color: #314780;
-}
-
-.color-choose input[type="radio"]#black + label span {
-  background-color: #323232;
-}
-
-.color-choose input[type="radio"]:checked + label span {
-  background-color: white;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-/* Cable Configuration */
-.cable-choose {
-  margin-bottom: 20px;
-}
-
-.cable-choose button {
-  border: 2px solid #E1E8EE;
-  border-radius: 6px;
-  padding: 13px 20px;
-  font-size: 14px;
-  color: #5E6977;
-  background-color: #fff;
-  cursor: pointer;
-  transition: all .5s;
-}
-
-.cable-choose button:hover,
-.cable-choose button:active,
-.cable-choose button:focus {
-  border: 2px solid #86939E;
-  outline: none;
-}
-
-.cable-config {
-  border-bottom: 1px solid #E1E8EE;
-  margin-bottom: 20px;
-}
-
-.cable-config a {
-  color: #358ED7;
-  text-decoration: none;
-  font-size: 12px;
-  position: relative;
-  margin: 10px 0;
-  display: inline-block;
-}
-
-.cable-config a:before {
-  content: "?";
-  height: 15px;
-  width: 15px;
-  border-radius: 50%;
-  border: 2px solid rgba(53, 142, 215, 0.5);
-  display: inline-block;
+.authorName{
   text-align: center;
-  line-height: 16px;
-  opacity: 0.5;
+  color: #9D6B54;
+  font-weight: 600;
+}
+
+.authorNumber{
+  text-align: center;
+  color: #9D6B54;
+  margin-bottom: 25px;
+}
+
+.authorBtn{
+  border-radius: 5px;
+  background-color: #9D6B54;
+  color: white;
+  padding: 5px 10px 5px 10px;
+  text-decoration: none;
+  border: 1px solid #9D6B54;
+}
+
+.authorBtn:hover {
+  border-color: #9D6B54;
+  background: #F0ECE4;
+  color: #9D6B54;
+}
+
+.contentPD{
+  border-radius: 10px;
+  width: 100%;
+  background: #F0ECE4;
+}
+
+.titlePD{
+  color: #9D6B54;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 26px;
+  padding-right: 20px;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.imgPD{
+  margin-left: auto;
+  margin-right: auto;
+  width: 40%;
+  height: auto;
+  border: 1px solid grey;
+}
+
+.displayPD{
+  width: 100%;
+}
+
+.mainPD{
+  padding: 15px 5% 20px 5%;
+  text-indent: 5%;
+  min-height: 320px;
+  text-align: justify;
+  background: #F0ECE4;
+}
+
+.endPD{
+  border-radius: 10px;
+  background: #F0ECE4;
+  display: flex;
+  justify-content: space-between;
+}
+
+.iconTime{
+  margin-bottom: 5px;
+  font-size: 24px;
   margin-right: 5px;
 }
 
-/* Product Price */
-.product-price {
-  display: flex;
+.createDate{
+  color: #9D6B54;
+  font-weight: 600;
+  margin-left: 5%;
+  padding-top: 15px;
+}
+
+.btnLike{
+  height: 48px;
+  width: 187px;
+  border-radius: 8px;
+  border: white;
   align-items: center;
-}
-
-.product-price span {
-  font-size: 26px;
-  font-weight: 300;
-  color: #43474D;
-  margin-right: 20px;
-}
-
-.cart-btn {
-  display: inline-block;
-  background-color: #7DC855;
-  border-radius: 6px;
-  font-size: 16px;
-  color: #FFFFFF;
   text-decoration: none;
-  padding: 12px 30px;
-  transition: all .5s;
+  transition: all 0.4s ease;
+  background: #9D6B54;
+  justify-content: center;
+  float: right;
+  color: white;
+  font-size: 16px;
+  margin-bottom: 20px;
+  margin-right: 40px;
+  font-weight: 700;
 }
 
-.cart-btn:hover {
-  background-color: #64af3d;
+.btnLike:hover {
+  background: #F0ECE4;
+  color: #9D6B54;
+  font-size: 16px;
+  border: 1px solid #9D6B54;
 }
 
-/* Responsive */
-@media (max-width: 940px) {
-  .container {
-    flex-direction: column;
-    margin-top: 60px;
-  }
-
-  .left-column,
-  .right-column {
-    width: 100%;
-  }
-
-  .left-column img {
-    width: 300px;
-    right: 0;
-    top: -65px;
-    left: initial;
-  }
+.rightPD{
+  width: 330px;
+  background: #F0ECE4;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border: 1px solid #9D6B54;
 }
 
-@media (max-width: 535px) {
-  .left-column img {
-    width: 220px;
-    top: -85px;
-  }
+.subTitle{
+  color: white;
+  width: 230px;
+  border-radius: 10px 10px 0px 0px;
+  margin-right: auto;
+  height: 45px;
+  font-size: 20px;
+  margin-top: 20px;
+  padding-left: 20px;
+  padding-top: 7px;
+  background: #9D6B54;
 }
 
+.postTitlePD{
+  margin-top: 5px;
+  color: grey;
+  font-size: 14px;
+  display: block;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  text-decoration: none;
+}
+
+.postTitlePD:hover{
+  color: #9D6B54;
+}
 </style>

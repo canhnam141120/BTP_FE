@@ -7,9 +7,10 @@
             <SideBar_Personal></SideBar_Personal>
           </div>
           <div class="right-contentMP">
-            <div class="search">
-              <input class="input" type="text" v-model="search" placeholder="Nhập tên sản phẩm">
-              <button class="btn">Tìm</button>
+            <div class="titleMP">Bài viết của tôi</div>
+            <div class="searchMP">
+              <input class="inputMP" type="text" v-model="search" placeholder="Nhập tiêu đề">
+              <button class="btnMP">Tìm</button>
             </div>
             <hr>
             <b-skeleton-wrapper :loading="loading">
@@ -153,6 +154,15 @@ strong {
   justify-content: space-between;
 }
 
+.right-contentMP .titleMP{
+  text-transform: uppercase;
+  color: #9D6B54;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  padding-top: 5px;
+}
+
 .left-contentMP {
   width: 28%;
   background: #F0ECE4;
@@ -160,7 +170,7 @@ strong {
   display: flex;
   margin-top: 30px;
   padding-bottom: 100px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 1px solid #9D6B54;
 }
 .right-contentMP{
   width: 71%;
@@ -168,40 +178,40 @@ strong {
   border-radius: 10px;
   display: flex;
   margin-top: 30px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 1px solid #9D6B54;
   display: block;
 }
 
-.right-contentMP .search {
-  margin: 0px 0px 10px 20px;
-  padding-top: 20px;
-  width: 80%;
+.right-contentMP .searchMP {
+  margin: 10px 0px 10px 20px;
+  width: 95%;
+  display: flex;
+  justify-content: right;
 }
 
-.right-contentMP .search input {
+.right-contentMP .searchMP .inputMP {
   border-radius: 7px;
   border: 1px solid grey;
-  height: 45px;
-  width: 400px;
+  height: 40px;
+  width: 300px;
   padding-left: 15px;
   color: #9D6B54;
 }
 
-.right-contentMP .search button {
+.right-contentMP .searchMP .btnMP {
   border-radius: 7px;
   background-color: #9D6B54;
   color: white;
   font-weight: bold;
   border: 1px solid grey;
-  height: 45px;
+  height: 40px;
   width: 80px;
   margin-left: 10px;
-  margin-bottom: 5px;
 }
 
-.right-contentMP .search button:hover {
+.right-contentMP .searchMP .btnMP:hover {
   border-color: #9D6B54;
-  background-color: white;
+  background-color: #F0ECE4;
   color: #9D6B54;
 }
 
@@ -212,9 +222,9 @@ strong {
 
 .right-contentMP .grid .item {
   border-radius: 10px;
-  background: white;
+  border: 1px solid #9D6B54;
   width: 840px;
-  height: 140px;
+  height: auto;
   margin: 10px 0px 10px 15px;
   display: flex;
 }
@@ -290,7 +300,7 @@ strong {
 
 .right-contentMP .grid .gr-btn .item-btn:hover{
   border-color: #9D6B54;
-  background-color: white;
+  background-color: #F0ECE4;
   color: #9D6B54;
 }
 

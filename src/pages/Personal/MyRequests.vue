@@ -181,7 +181,7 @@ strong {
   display: flex;
   margin-top: 30px;
   padding-bottom: 100px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 1px solid #9D6B54;
 }
 .right-contentMR{
   width: 71%;
@@ -189,7 +189,7 @@ strong {
   border-radius: 10px;
   display: flex;
   margin-top: 30px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 1px solid #9D6B54;
   display: block;
 }
 
@@ -205,7 +205,7 @@ strong {
   width: 420px;
   height: 375px;
   margin: 10px 0px 10px 10px;
-  background: white;
+  border: 1px solid #9D6B54;
 }
 
 .right-contentMR .gridMR .itemMR:hover {

@@ -42,11 +42,11 @@
                     <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
                   </div>
-                  <div class="action">
-                    <router-link v-if="item.isExchange" class="activeAB" :to="{ name: 'BookDetail', query: { id:item.id }}">Trao đổi</router-link>
-                    <router-link v-else class="disableAB" :to="{ name: 'BookDetail', query: { id:item.id }}">Trao đổi</router-link>
-                    <router-link v-if="item.isRent" class="activeAB" :to="{ name: 'BookDetail', query: { id:item.id }}">Thuê</router-link>
-                    <router-link v-else class="disableAB" :to="{ name: 'BookDetail', query: { id:item.id }}">Thuê</router-link>
+                  <div class="actionAB">
+                    <router-link v-if="item.isExchange" class="activeAll" :to="{ name: 'BookDetail', query: { id:item.id }}">Trao đổi</router-link>
+                    <router-link v-else class="disableAll" :to="{ name: 'BookDetail', query: { id:item.id }}">Trao đổi</router-link>
+                    <router-link v-if="item.isRent" class="activeAllR" :to="{ name: 'BookDetail', query: { id:item.id }}">Thuê</router-link>
+                    <router-link v-else class="disableAllR" :to="{ name: 'BookDetail', query: { id:item.id }}">Thuê</router-link>
                   </div>
                 </div>
               </div>
@@ -167,14 +167,14 @@ strong {
   height: 1000px;
   background: #F0ECE4;
   border-radius: 10px;
-  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 2px solid #9D6B54;
 }
 
 .body .container-book .content {
   width: 73%;
   background: #F0ECE4;
   border-radius: 10px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 1px solid #9D6B54;
 }
 
 .body .container-book .search {
@@ -267,29 +267,47 @@ strong {
   -webkit-line-clamp: 2;
 }
 
-.body .container-book .content .grid .action {
+.body .container-book .content .grid .actionAB {
   margin-bottom: 10px;
+  margin-top: 5px;
 }
 
-.body .container-book .content .grid .action .activeAB {
+.activeAll{
   border-radius: 5px;
   background-color: #9D6B54;
   color: white;
   border: 1px solid grey;
   padding: 5px;
   width: 80px;
+  margin-left: 40px;
+  text-decoration: none;
+  text-align: center;
+}
+
+.activeAllR{
+  border-radius: 5px;
+  background-color: #9D6B54;
+  color: white;
+  border: 1px solid grey;
+  padding: 5px 15px 5px 15px;
   margin-left: 35px;
   text-decoration: none;
   text-align: center;
 }
 
-.body .container-book .content .grid .action .activeAB:hover {
+.activeAll:hover {
   border-color: #9D6B54;
   background-color: white;
   color: #9D6B54;
 }
 
-.body .container-book .content .grid .action .disableAB {
+.activeAllR:hover {
+  border-color: #9D6B54;
+  background-color: white;
+  color: #9D6B54;
+}
+
+.disableAll {
   border-radius: 5px;
   background-color: grey;
   color: white;
@@ -300,6 +318,22 @@ strong {
   cursor: not-allowed;
   text-align: center;
   text-decoration: none;
+}
+
+.disableAllR {
+  border-radius: 5px;
+  background-color: grey;
+  color: white;
+  border: 1px solid grey;
+  padding: 5px 15px 5px 15px;
+  margin-left: 40px;
+  cursor: not-allowed;
+  text-align: center;
+  text-decoration: none;
+}
+
+.disableAllR:hover {
+  color: #9D6B54;
 }
 
 .body .container-book .content .paging {

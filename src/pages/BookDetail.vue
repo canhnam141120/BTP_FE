@@ -1,6 +1,7 @@
 <template>
   <Layout>
     <main style="flex-grow: 1;">
+      <LoadingDialog v-show="spinner"></LoadingDialog>
       <ExchangeDialog :show="showDialog"
                       :cancel="cancel"
                       :confirm="confirm"
@@ -13,7 +14,7 @@
               </router-link>
               <div class="infoMB">
                 <div class="book-titleMB">{{ item.title }}</div>
-                <div class="book-categoryMB">Thể loại: {{ item.categoryId}}</div>
+                <div class="book-statusMB">Thể loại: {{ item.category.name}}</div>
                 <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
                 <label class="book-statusMB">{{ item.statusBook }}</label>
               </div>
@@ -145,7 +146,6 @@
               </b-pagination>
             </div>
 
-
             </div>
           <div v-else class="bookdetail-feedback">
             <div class="title"><strong>Đánh giá/Bình luận</strong></div>
@@ -176,7 +176,7 @@
                   <div class="info">
                     <div class="book-title">{{ item.title }}</div>
                     <label class="book-status">Thể loại: {{ item.category.name }}</label>
-                    <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                    <label class="book-status">Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
                   </div>
                 </div>
@@ -207,8 +207,8 @@
                   </router-link>
                   <div class="info">
                     <div class="book-title">{{ item.title }}</div>
-                    <div><img src="../image/user.png"> {{ item.user.fullname }}</div>
-                    <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                    <div class="book-status"><img src="../image/user.png"> {{ item.user.fullname }}</div>
+                    <label class="book-status">Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
                   </div>
                 </div>
@@ -227,10 +227,11 @@ import {API_BOOK, API_PERSONAL, API_REQUEST} from "@/constant/constant-api";
 import Layout from "@/components/Layout";
 import ExchangeDialog from "@/components/ExchangeDialog";
 import VueJwtDecode from "vue-jwt-decode";
+import LoadingDialog from "@/components/LoadingDialog";
 
 export default {
   name: "BookDetail",
-  components: {Layout, ExchangeDialog},
+  components: {Layout, ExchangeDialog, LoadingDialog},
   data() {
     return {
       book: '',
@@ -238,24 +239,28 @@ export default {
       book6category: '',
       feedbacks: '',
       countFeedback: '',
-      showFlag: false,
       showDialog: false,
+      showFlag: false,
       bookCanTrade: '',
+      spinner: false,
       loading: false,
       listIdBook: []
     }
   },
   created() {
+
     this.getBookById(1)
   },
   methods: {
     getBookById(pageNumber) {
+      this.spinner = true
       const url = API_BOOK.DETAIL_BOOK + this.$route.query.id
       apiFactory.callApi(url,'GET',{}).then((res)=>{
         this.book = res.data.data
         this.get6BookUser(this.book.userId)
         this.get6BookCategory(this.book.categoryId)
         this.getFeedback(this.$route.query.id, pageNumber)
+        this.spinner = false
       }).catch(() => {
       });
     },
@@ -366,7 +371,7 @@ strong {
 .dialogBook .gridMB .itemMB {
   display: block;
   border-radius: 10px;
-  background: white;
+  border: 1px solid #9D6B54;
   width: 220px;
   height: 450px;
   margin: 10px 0px 10px 20px;
@@ -404,11 +409,6 @@ strong {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.dialogBook .gridMB .infoMB .book-categoryMB{
-  margin-left: 5px;
-  margin-right: 10px;
 }
 
 .dialogBook .gridMB .infoMB .book-statusMB {
@@ -449,6 +449,7 @@ strong {
   display: flex;
   margin-bottom: 20px;
   margin-top: 30px;
+  border: 1px solid #9D6B54;
 }
 
 .bookdetail-top .left{
@@ -458,12 +459,12 @@ strong {
 
 .bookdetail-top .left .imgBD{
   width: 270px;
-  height: 390px;
+  height: 391px;
   margin-left: 80px;
   margin-top: 30px;
   margin-bottom: 30px;
   border-radius: 10px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 1px solid #9D6B54;
 }
 
 
@@ -499,7 +500,6 @@ strong {
   margin-top: 10px;
   margin-left: 10px;
   font-size: 18px;
-  font-style: italic;
   justify-content: space-between;
 }
 
@@ -517,21 +517,20 @@ strong {
 .bookdetail-top .right .bookInfoBD .priceBD .deposit{
   font-weight: 700;
   font-size: 24px;
-  color: green;
+  color: #9D6B54;
   font-style: normal;
 }
 
 .bookdetail-top .right .bookInfoBD .priceBD .rent{
   font-weight: 700;
   font-size: 24px;
-  color: blue;
+  color: grey;
   font-style: normal;
 }
 
 .bookdetail-top .right .infoBD .userBD{
-  background: whitesmoke;
   border-radius: 10px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 1px solid #9D6B54;
   height: 260px;
   width: 200px;
 }
@@ -601,8 +600,8 @@ strong {
   cursor: not-allowed;
 }
 
-
 .bookdetail-mid{
+  border: 1px solid #9D6B54;
   max-width: 1230px;
   height: auto;
   background: #F0ECE4;
@@ -634,6 +633,7 @@ strong {
   padding-left: 40px;
   padding-right: 40px;
   text-indent: 5%;
+  text-align: justify;
 }
 
 .bookdetail-bottom1{
@@ -643,6 +643,7 @@ strong {
   display: block;
   padding-bottom: 20px;
   margin-bottom: 10px;
+  border: 1px solid #9D6B54;
 }
 
 .grid-book {
@@ -654,8 +655,9 @@ strong {
 
 .item-book {
   border-radius: 10px;
-  background: white;
+  border: 1px solid #9D6B54;
   width: 191px;
+  height: 380px;
   margin: 5px;
 }
 
@@ -666,7 +668,7 @@ strong {
 .item-book img{
   border-radius: 10px;
   height: 250px;
-  width: 191px;
+  width: 190px;
 }
 
 .grid-book .info {
@@ -677,7 +679,7 @@ strong {
 .grid-book .info img {
   width: 20px;
   height: 20px;
-  margin-left: 5px;
+  margin-left: 0px;
 }
 
 .grid-book .info label {
@@ -707,6 +709,7 @@ strong {
 
 
 .bookdetail-bottom2{
+  border: 1px solid #9D6B54;
   max-width: 1230px;
   background: #F0ECE4;
   border-radius: 10px;
@@ -761,6 +764,7 @@ strong {
 }
 
 .bookdetail-feedback{
+  border: 1px solid #9D6B54;
   max-width: 1230px;
   background: #F0ECE4;
   border-radius: 10px;

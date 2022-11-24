@@ -59,7 +59,7 @@ strong {
   margin-bottom: 20px;
   margin-top: 30px;
   padding-bottom: 100px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 1px solid #9D6B54;
 }
 .right-contentMT{
   width: 71%;
@@ -68,7 +68,7 @@ strong {
   display: flex;
   margin-bottom: 20px;
   margin-top: 30px;
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  border: 1px solid #9D6B54;
   display: block;
 }
 

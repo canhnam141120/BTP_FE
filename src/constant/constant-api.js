@@ -7,7 +7,7 @@ export const API_BOOK = Object.freeze({
     CATEGORY_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/category{id}",
     CATEGORY_6BOOK: "https://book-trading-platform.herokuapp.com/api/Book/6book/category",
     GET_FEEDBACK_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/feedback/",
-    USER_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/user{id}",
+    USER_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/user",
     USER_BOOK6: "https://book-trading-platform.herokuapp.com/api/Book/6book/user",
     SEARCH_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/search-by-title?page=",
     CREATE_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/create",
@@ -86,6 +86,8 @@ export const API_PERSONAL = Object.freeze({
 
 export const API_POST = Object.freeze({
     TOP_POST: "https://book-trading-platform.herokuapp.com/api/Post/top-post",
+    POST6: "https://book-trading-platform.herokuapp.com/api/Post/6post",
+    USER_POST: "https://book-trading-platform.herokuapp.com/api/Post/user",
     LIST_POST: "https://book-trading-platform.herokuapp.com/api/Post/all?page=",
     DETAIL_POST: "https://book-trading-platform.herokuapp.com/api/Post/",
     COMMENT_OF_POST: "https://book-trading-platform.herokuapp.com/api/Post/comment/",
