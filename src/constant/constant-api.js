@@ -33,6 +33,7 @@ export const API_MANAGE_BILL = Object.freeze({
 })
 
 export const API_MANAGE_CATEGORY = Object.freeze({
+    All_CATEGORY: "https://book-trading-platform.herokuapp.com/api/ManageCategory/getAll",
     LIST_CATEGORY: "https://book-trading-platform.herokuapp.com/api/ManageCategory/all",
     DETAIL_CATEGORY: "https://book-trading-platform.herokuapp.com/api/ManageCategory/",
     CREATE_CATEGORY: "https://book-trading-platform.herokuapp.com/api/ManageCategory/create",
@@ -75,7 +76,7 @@ export const API_PERSONAL = Object.freeze({
     LIST_REQUEST_RECEIVED: "https://book-trading-platform.herokuapp.com/api/Personal/request-received/",
     LIST_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/Personal/my-transaction-exchange-all",
     DETAIL_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/Personal/my-transaction-exchange-detail/{id}",
-    BILL_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/Personal/my-transaction-exchange-bill/{id}",
+    BILL_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/Personal/my-transaction-exchange-bill/",
     ALL_BILL_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/Personal/my-exchange-bill-all",
     LIST_RENT: "https://book-trading-platform.herokuapp.com/api/Personal/my-transaction-rent-all",
     DETAIL_RENT: "https://book-trading-platform.herokuapp.com/api/Personal/my-transaction-rent-detail/{id}",
@@ -121,8 +122,8 @@ export const API_TRANSACTION = Object.freeze({
     CANCEL_EXCHANGE_DETAIL: "https://book-trading-platform.herokuapp.com/api/Transaction/exchange-detail/cancel/",
     CANCEL_RENT: "https://book-trading-platform.herokuapp.com/api/Transaction/rent/cancel/",
     CANCEL_RENT_DETAIL: "https://book-trading-platform.herokuapp.com/api/Transaction/rent-detail/cancel/",
-    CREATE_URL_PAY: "https://localhost:7006/api/Transaction/payment/",
-    UPDATE_PAY: "https://localhost:7006/api/Transaction/payment/update?"
+    CREATE_URL_PAY: "https://book-trading-platform.herokuapp.com/api/Transaction/payment/",
+    UPDATE_PAY: "https://book-trading-platform.herokuapp.com/api/Transaction/payment/update?"
 })
 
 export const API_MANAGE_USER= Object.freeze({

@@ -194,7 +194,7 @@ strong {
 .body .container-book .search button {
   border-radius: 7px;
   background-color: #9D6B54;
-  color: white;
+  color: #F0ECE4;
   font-weight: bold;
   border: 1px solid grey;
   height: 45px;
@@ -204,7 +204,7 @@ strong {
 
 .body .container-book .search button:hover {
   border-color: #9D6B54;
-  background-color: white;
+  background-color: #F0ECE4;
   color: #9D6B54;
 }
 
@@ -215,7 +215,7 @@ strong {
 
 .body .container-book .content .grid .item {
   border-radius: 10px;
-  background: white;
+  border: 1px solid #9D6B54;
   width: 260px;
   height: 450px;
   margin: 10px 0px 10px 20px;
@@ -275,7 +275,7 @@ strong {
 .activeAll{
   border-radius: 5px;
   background-color: #9D6B54;
-  color: white;
+  color: #F0ECE4;
   border: 1px solid grey;
   padding: 5px;
   width: 80px;
@@ -287,7 +287,7 @@ strong {
 .activeAllR{
   border-radius: 5px;
   background-color: #9D6B54;
-  color: white;
+  color:#F0ECE4;
   border: 1px solid grey;
   padding: 5px 15px 5px 15px;
   margin-left: 35px;
@@ -297,20 +297,20 @@ strong {
 
 .activeAll:hover {
   border-color: #9D6B54;
-  background-color: white;
+  background-color: #F0ECE4;
   color: #9D6B54;
 }
 
 .activeAllR:hover {
   border-color: #9D6B54;
-  background-color: white;
+  background-color: #F0ECE4;
   color: #9D6B54;
 }
 
 .disableAll {
   border-radius: 5px;
   background-color: grey;
-  color: white;
+  color: #F0ECE4;
   border: 1px solid grey;
   padding: 5px;
   width: 80px;
@@ -323,7 +323,7 @@ strong {
 .disableAllR {
   border-radius: 5px;
   background-color: grey;
-  color: white;
+  color: #F0ECE4;
   border: 1px solid grey;
   padding: 5px 15px 5px 15px;
   margin-left: 40px;
@@ -333,7 +333,7 @@ strong {
 }
 
 .disableAllR:hover {
-  color: #9D6B54;
+  color: #F0ECE4;
 }
 
 .body .container-book .content .paging {

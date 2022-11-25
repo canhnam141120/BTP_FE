@@ -237,8 +237,10 @@ main {
 
 .body .container {
   max-width: 1230px;
-  background: #F0ECE4;
+  background: #F0F0F0;
   border-radius: 10px;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 strong {
@@ -246,11 +248,25 @@ strong {
 }
 
 .profile {
+  max-width: 1230px;
+  border-radius: 10px;
+  border: 1px solid #9D6B54;;
   display: flex;
-  margin-bottom: 3%;
+  margin-bottom: 10px;
+  background: #F0ECE4;
+  padding-bottom: 30px;
+}
+
+.content-bottom {
+  max-width: 1230px;
+  border-radius: 10px;
+  border: 1px solid #9D6B54;
+  display: flex;
+  background: #F0ECE4;
 }
 
 .avatar-personal {
+  border: 2px outset #9D6B54;
   background-color: #6C757D;
   width: 186px;
   height: 186px;
@@ -259,6 +275,7 @@ strong {
 }
 
 .infor {
+  color: #9D6B54;
   margin-left: 3%;
   margin-top: 5%;
 }
@@ -269,6 +286,7 @@ strong {
 }
 
 .infor span {
+  color: grey;
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
@@ -307,14 +325,14 @@ strong {
   transition: all 0.4s ease;
   background: #9D6B54;
   justify-content: center;
-  color: white;
+  color: #F0ECE4;
   font-size: 16px;
   margin-bottom: 11px;
   font-weight: 700;
 }
 
 .btn-edit:hover {
-  background: white;
+  background: #F0ECE4;
   color: #9D6B54;
   font-size: 16px;
   border: 1px solid #9D6B54;
@@ -338,7 +356,7 @@ strong {
 .body .container .search button {
   border-radius: 7px;
   background-color: #9D6B54;
-  color: white;
+  color: #F0ECE4;
   font-weight: bold;
   border: 1px solid grey;
   height: 45px;
@@ -348,7 +366,7 @@ strong {
 
 .body .container .search button:hover {
   border-color: #9D6B54;
-  background-color: white;
+  background-color: #F0ECE4;
   color: #9D6B54;
 }
 
@@ -366,7 +384,6 @@ strong {
 
 .item-bookOP {
   border-radius: 10px;
-  background: white;
   width: 210px;
   height: 380px;
   margin: 5px;
@@ -429,10 +446,10 @@ strong {
 
 .gridPost .itemPost {
   border-radius: 10px;
-  background: white;
-  width: 593px;
+  border: 1px solid #9D6B54;
+  width: auto;
   height: 180px;
-  margin: 10px 0px 10px 15px;
+  margin: 10px 0px 10px 10px;
   display: flex;
 }
 
@@ -440,6 +457,7 @@ strong {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
   background: grey;
   opacity: 0.9;
+  border: 1px solid #9D6B54;
 }
 
 .gridPost .itemPost .imagePost {
