@@ -7,20 +7,36 @@
                       :confirm="confirm"
                       v-if="showDialog" class="modal">
           <div class="dialogBook">
-             <div class="gridMB">
-            <div class="itemMB" v-for="item of bookCanTrade" :key="item.id">
-              <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">
-                <img v-bind:src="item.image">
-              </router-link>
-              <div class="infoMB">
-                <div class="book-titleMB">{{ item.title }}</div>
-                <div class="book-statusMB">Thể loại: {{ item.category.name}}</div>
-                <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
-                <label class="book-statusMB">{{ item.statusBook }}</label>
+            <b-skeleton-wrapper :loading="loading">
+              <template #loading>
+                <div class="gridMB" >
+                  <div class="itemMB" v-for='i in 4' :key="i">
+                    <b-card no-body img-top style="height: 100%">
+                      <b-skeleton-img card-img="top" aspect="3:1" height="290px"></b-skeleton-img>
+                      <b-card style="height: 160px">
+                        <b-skeleton animation="wave" width="85%"></b-skeleton>
+                        <b-skeleton animation="wave" width="55%"></b-skeleton>
+                        <b-skeleton animation="wave" width="70%"></b-skeleton>
+                      </b-card>
+                    </b-card>
+                  </div>
+                </div>
+              </template>
+              <div class="gridMB">
+                <div class="itemMB" v-for="item of bookCanTrade" :key="item.id">
+                  <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">
+                    <img v-bind:src="item.image">
+                  </router-link>
+                  <div class="infoMB">
+                    <div class="book-titleMB">{{ item.title }}</div>
+                    <div class="book-statusMB">Thể loại: {{ item.category.name}}</div>
+                    <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                    <label class="book-statusMB">{{ item.statusBook }}</label>
+                  </div>
+                  <input type="checkbox" class="checkboxes" v-bind:value="item.id" v-model="listIdBook">
+                </div>
               </div>
-                <input type="checkbox" class="checkboxes" v-bind:value="item.id" v-model="listIdBook">
-            </div>
-          </div>
+            </b-skeleton-wrapper>
           </div>
       </ExchangeDialog>
       <div class="bookDetail">
@@ -316,7 +332,6 @@ export default {
       this.showDialog = false
     },
     confirm(){
-      console.log(this.listIdBook)
       const bookOffer = [...this.listIdBook]
       let token = this.$cookies.get('token');
       this.userByToken= VueJwtDecode.decode(token, 'utf-8');
@@ -668,7 +683,7 @@ strong {
 .item-book img{
   border-radius: 10px;
   height: 250px;
-  width: 190px;
+  width: 189px;
 }
 
 .grid-book .info {

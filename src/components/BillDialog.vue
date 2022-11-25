@@ -2,21 +2,17 @@
   <div v-show="show" class="dialog">
     <div class="dialogContent">
       <div>
-        <div class="dialogTitle">ĐĂNG SÁCH</div>
+        <div class="dialogTitle">HÓA ĐƠN</div>
       </div>
       <slot></slot>
-      <div class="dialogGroupBtn">
-        <button class="dialogBtn" v-on:click="cancel">Hủy</button>
-        <button class="dialogBtn" v-on:click="save">Xác nhận</button>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "CreateBook",
-  props: ['show', 'cancel', 'save'],
+  name: "BillDialog",
+  props: ['show', 'cancel', 'pay'],
 }
 </script>
 
@@ -29,14 +25,15 @@ export default {
 }
 
 .dialogContent {
-  width: 1000px;
+  padding-left: 30px;
+  width: 500px;
   background: #F0ECE4;
   height: auto;
   border-radius: 10px;
   margin: 5% auto auto auto;
 }
 
-.dialogTitle{
+.dialogTitle {
   color: #9D6B54;
   font-weight: bold;
   font-size: 22px;
@@ -45,42 +42,17 @@ export default {
   margin-bottom: 10px;
 }
 
-.form-book{
+.dialogGroupBtn {
   display: flex;
-  justify-content: space-between;
-  width: 96%;
-  margin-left: 20px;
-}
-.bv-example-row{
-  margin-bottom: 30px;
-}
-.input-text{
-  border-radius: 8px;
-  border: none;
-  width: 300px;
-  height: 40px;
-  padding-left: 10px;
-}
-.input-text-short{
-  border-radius: 8px;
-  border: none;
-  width: 200px;
-  height: 40px;
-}
-.book-content{
-  margin-bottom: 30px;
-}
-
-.dialogGroupBtn{
-  display: flex;
-  width: 50%;
+  width: 80%;
+  margin-top: 20px;
   margin-right: auto;
-  margin-left: auto;
+  margin-left: 30px;
   padding-bottom: 20px;
   justify-content: space-between;
 }
 
-.dialogBtn{
+.dialogBtn {
   border-radius: 10px;
   background-color: #9D6B54;
   color: white;
@@ -88,6 +60,7 @@ export default {
   height: 50px;
   width: 140px;
 }
+
 .dialogBtn:hover {
   border-color: #9D6B54;
   background: #F0ECE4;

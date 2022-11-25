@@ -22,7 +22,7 @@
               <template #loading>
                 <div class="grid-book" >
                   <div class="item-book" v-for='i in 6' :key="i">
-                    <b-card no-body img-top style="height: 332px">
+                    <b-card no-body img-top>
                       <b-skeleton-img card-img="top" aspect="3:1" height="250px"></b-skeleton-img>
                       <b-card style="height: 120px">
                         <b-skeleton animation="wave" width="85%"></b-skeleton>
@@ -55,7 +55,7 @@
               <template #loading>
                 <div class="grid-post" >
                   <div class="item-post" v-for='i in 3' :key="i">
-                    <b-card no-body img-left style="height: 191px">
+                    <b-card no-body img-left>
                       <b-skeleton-img card-img="left" width="191px"></b-skeleton-img>
                       <b-card style="width: 201px; height: 191px">
                         <b-skeleton animation="wave" width="85%"></b-skeleton>
@@ -236,7 +236,7 @@ strong {
 .item-book img{
   border-radius: 10px;
   height: 250px;
-  width: 190px;
+  width: 100%;
 }
 
 .grid-book .info {
