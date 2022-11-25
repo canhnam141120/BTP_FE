@@ -22,9 +22,132 @@
               v-model="status"
               name="alo"
               value="accepted"
-              unchecked-value="not_accepted"
-          >
+              unchecked-value="not_accepted">
             Thuê
+          </b-form-checkbox>
+        </div>
+        <hr>
+        <h5>Theo danh mục</h5>
+        <div>
+          <b-form-checkbox
+              id="alo"
+              v-model="status"
+              name="alo"
+              value="accepted"
+              unchecked-value="not_accepted">
+            Văn học trong nước
+          </b-form-checkbox>
+        </div>
+        <div>
+          <b-form-checkbox
+              id="alo"
+              v-model="status"
+              name="alo"
+              value="accepted"
+              unchecked-value="not_accepted">
+            Chính trị- vấn đề quốc tế
+          </b-form-checkbox>
+        </div>
+        <div>
+          <b-form-checkbox
+              id="alo"
+              v-model="status"
+              name="alo"
+              value="accepted"
+              unchecked-value="not_accepted">
+            Kiến thức khoa học
+          </b-form-checkbox>
+        </div>
+        <div>
+          <b-form-checkbox
+              id="alo"
+              v-model="status"
+              name="alo"
+              value="accepted"
+              unchecked-value="not_accepted">
+            Kinh tế
+          </b-form-checkbox>
+        </div>
+        <div>
+          <b-form-checkbox
+              id="alo"
+              v-model="status"
+              name="alo"
+              value="accepted"
+              unchecked-value="not_accepted">
+            Kiến thức khoa học
+          </b-form-checkbox>
+        </div>
+        <div>
+          <b-form-checkbox
+              id="alo"
+              v-model="status"
+              name="alo"
+              value="accepted"
+              unchecked-value="not_accepted">
+            Lịch sử
+          </b-form-checkbox>
+        </div>
+        <div>
+          <b-form-checkbox
+              id="alo"
+              v-model="status"
+              name="alo"
+              value="accepted"
+              unchecked-value="not_accepted">
+            Nghệ thuật giải trí
+          </b-form-checkbox>
+        </div>
+        <hr>
+        <h5>Theo giá bìa</h5>
+        <div>
+          <b-form-checkbox
+              id="alo"
+              v-model="status"
+              name="alo"
+              value="accepted"
+              unchecked-value="not_accepted">
+            Từ 0 - 100.000Đ
+          </b-form-checkbox>
+        </div>
+        <div>
+          <b-form-checkbox
+              id="alo"
+              v-model="status"
+              name="alo"
+              value="accepted"
+              unchecked-value="not_accepted">
+            Từ 100.000Đ - 200.000Đ
+          </b-form-checkbox>
+        </div>
+        <div>
+          <b-form-checkbox
+              id="alo"
+              v-model="status"
+              name="alo"
+              value="accepted"
+              unchecked-value="not_accepted">
+            Từ 200.000Đ - 500.000Đ
+          </b-form-checkbox>
+        </div>
+        <div>
+          <b-form-checkbox
+              id="c-lo"
+              v-model="status"
+              name="c-lo"
+              value="accepted"
+              unchecked-value="not_accepted">
+            Từ 500.000Đ - 1.000.000Đ
+          </b-form-checkbox>
+        </div>
+        <div>
+          <b-form-checkbox
+              id="c-lo"
+              v-model="status"
+              name="c-lo"
+              value="accepted"
+              unchecked-value="not_accepted">
+            Từ 1.000.000Đ trở lên
           </b-form-checkbox>
         </div>
       </div>
