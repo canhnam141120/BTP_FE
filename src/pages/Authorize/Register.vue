@@ -1,6 +1,6 @@
 <template>
   <Header>
-    <main style="flex-grow: 1; padding: 32px 0 45px; background-image: url('https://f5-zpcloud.zdn.vn/2258788996442817451/dd48482006abc0f599ba.jpg'); background-size: cover">
+    <main style="flex-grow: 1; background-image: url('https://f5-zpcloud.zdn.vn/2258788996442817451/dd48482006abc0f599ba.jpg'); background-size: cover">
       <div id="login" >
         <div class="container">
           <label for="show" class="close-btn fas fa-times" title="close"></label>
@@ -12,12 +12,12 @@
               <div class="column">
                 <div class="data">
                   <label>Email</label>
-                  <input type="text" maxlength="50" required placeholder="Email" v-model="email">
+                  <input type="text" maxlength="50" required placeholder="Ví dụ: acb@gmail.com" v-model="email">
                   <label class="err" v-if="errMail.length">{{this.errMail}}</label>
                 </div>
                 <div class="data">
                   <label>Mật khẩu</label>
-                  <input type="password" maxlength="50" required placeholder="Mật khẩu" v-model="password">
+                  <input type="password" maxlength="50" required placeholder="Nhập mật khẩu" v-model="password">
                   <label class="err" v-if="errPass.length">{{this.errPass}}</label>
                 </div>
                 <div class="data">
@@ -29,17 +29,17 @@
               <div class="column">
                 <div class="data">
                   <label>Họ và tên</label>
-                  <input type="text" maxlength="30" required placeholder="Tên đầy đủ" v-model="fullname">
+                  <input type="text" maxlength="30" required placeholder="Ví dụ: Nguyễn Văn A" v-model="fullname">
                   <label class="err" v-if="errName.length">{{this.errName}}</label>
                 </div>
                 <div class="data">
                   <label>Số điện thoại</label>
-                  <input type="text" maxlength="10" required placeholder="Số điện thoại" v-model="phone">
+                  <input type="text" maxlength="10" required placeholder="Ví dụ: 0123456789" v-model="phone">
                   <label class="err" v-if="errPhone.length">{{this.errPhone}}</label>
                 </div>
                 <div class="data">
                   <label>Địa chỉ</label>
-                  <input type="text" maxlength="100" required placeholder="Địa chỉ" v-model="address">
+                  <input type="text" maxlength="100" required placeholder="Ví dụ: Số 1, Đào Duy Anh, Đống Đa, Hà Nội" v-model="address">
                   <label class="err" v-if="errAddress.length">{{this.errAddress}}</label>
                 </div>
               </div>
@@ -58,6 +58,7 @@
           </div>
         </div>
       </div>
+      <LoadingDialog v-show="spinner"></LoadingDialog>
     </main>
   </Header>
 </template>
@@ -66,10 +67,11 @@
 import apiFactory from "@/config/apiFactory";
 import {API_USER} from "@/constant/constant-api";
 import Header from "../../components/Header";
+import LoadingDialog from "@/components/LoadingDialog";
 
 export default {
   name: "Register",
-  components: {Header},
+  components: {Header, LoadingDialog},
   data() {
     return {
       email: '',
@@ -84,7 +86,8 @@ export default {
       errName: '',
       errPhone: '',
       errAddress: '',
-      err: ''
+      err: '',
+      spinner: false
     }
   },
   methods: {
@@ -130,6 +133,7 @@ export default {
         this.errAddress = 'Vui lòng nhập địa chỉ!'
       }
       if(regxMail.test(this.email) && this.password && this.fullname && regxPhone.test(this.phone) && this.address ){
+        this.spinner = true
         apiFactory.callApi(API_USER.USER_REGISTER, 'POST', {
           email: this.email,
           phone: this.phone,
@@ -137,12 +141,13 @@ export default {
           password: this.password,
           addressMain: this.address
         }).then((res) => {
-          if(res.data.message === 'REGISTER_SUCCESS - PLEASE GET CODE VERIFY FROM YOUR MAIL BOX!'){
+          if(res.data.message === 'REGISTER_SUCCESS'){
             this.$router.push({name: 'VerifyRegister'})
           }
           if(res.data.message === 'EMAIL_IS_EXIST'){
             this.err = 'Email đăng ký đã được sử dụng!'
           }
+          this.spinner = false
         }).catch(() => {this.err = 'Đăng ký không thành công!'});
       }
       }
@@ -170,18 +175,19 @@ body{
 }
 
 .container {
-  position: relative;
-  left: 600px;
-  top: 10%;
-  margin-top: 70px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   font-size: 14px;
   cursor: pointer;
   max-width: 800px;
   border-radius: 20px;
-  justify-content: center;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   background-color: white;
   font-family: 'Roboto', sans-serif;
+  padding-bottom: 20px;
 }
 
 .container .title{
@@ -276,6 +282,7 @@ body{
   width: 100%;
   /*margin: 30px 0;*/
   /*margin-left: 30px;*/
+  margin-top: 10px;
   justify-content: center;
   text-align: center;
   color: #9D6B54;

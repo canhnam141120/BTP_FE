@@ -1,96 +1,109 @@
 <template>
   <Layout>
     <main style="flex-grow: 1">
-      <CreateBook :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
-        <div class="form-book">
+      <CreateBookDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
+        <div class="top-form">
           <div class="left-form">
-            <b-container class="bv-example-row all-form">
-
-              <b-row class="book-content">
-                <b-col style="padding: 0px" cols="2">Tiêu đề:</b-col>
-                <b-col style="padding: 0px" cols="9"><input type="text" maxlength="50" required placeholder="Nhập tên sách" v-model="title" class="input-text"></b-col>
-              </b-row>
-
-              <b-row class="book-content">
-                <b-col style="padding: 0px" cols="2">Tác giả:</b-col>
-                <b-col style="padding: 0px" cols="9"><input type="text" class="input-text" maxlength="50" required placeholder="Nhập tên tác giả" v-model="author"></b-col>
-              </b-row>
-
-              <b-row class="book-content">
-                <b-col style="padding: 0px" cols="2">Thể loại:</b-col>
-                <b-col style="padding: 0px" cols="9"><select name="category" class="input-text" v-model="categoryId">
-                  <option v-bind:value="item.id" v-for="item of listCategories" :key="item.id">{{ item.name }}</option>
-                </select></b-col>
-              </b-row>
-              <b-row class="book-content">
-                <b-col style="padding: 0px" cols="3">Nội dung:</b-col>
-                <b-col cols="9"><input type="text" maxlength="500" required placeholder="Nhập mô tả nội dung sách"
-                                       v-model="description" class="input-text"></b-col>
-              </b-row>
-              <b-row class="book-content">
-                <b-col style="padding: 0px" cols="3">Nhà xuất bản:</b-col>
-                <b-col cols="9"><input type="text" maxlength="50" required placeholder="Nhập nhà xuất bản"
-                                       v-model="publisher" class="input-text"></b-col>
-              </b-row>
-              <b-row class="book-content">
-                <b-col style="padding: 0px" cols="3">Năm xuất bản:</b-col>
-                <b-col cols="9"><input type="number" maxlength="4" required placeholder="Nhập năm xuất bản"
-                                       v-model="year" class="input-text-short"></b-col>
-              </b-row>
-              <b-row class="book-content">
-                <b-col style="padding: 0px" cols="3">Ngôn ngữ:</b-col>
-                <b-col  cols="9"><input type="text" maxlength="50" required placeholder="Nhập ngôn ngữ"
-                                       v-model="language" class="input-text"></b-col>
-              </b-row>
-
-              <b-row class="book-content">
-                <b-col style="padding: 0px" cols="3">Trạng thái:</b-col>
-                <b-col  cols="9"><input type="text" maxlength="50" required placeholder="Nhập ngôn ngữ"
-                                        v-model="statusBook" class="input-text"></b-col>
-              </b-row>
-            </b-container>
+            <b-row class="book-content">
+              <b-col class="input-label" cols="2">Tiêu đề:</b-col>
+              <b-col class="input-div" cols="9"><input type="text" maxlength="50" required placeholder="Nhập tên sách"
+                                                       v-model="title" class="input-text"></b-col>
+            </b-row>
+            <b-row class="book-content">
+              <b-col class="input-label" cols="2">Tác giả:</b-col>
+              <b-col class="input-div" cols="9"><input type="text" class="input-text" maxlength="50" required
+                                                       placeholder="Nhập tên tác giả" v-model="author"></b-col>
+            </b-row>
+            <b-row class="book-content">
+              <b-col class="input-label" cols="2">Thể loại:</b-col>
+              <b-col class="input-div" cols="9">
+                <select name="category" class="input-text" v-model="categoryId">
+                <option v-bind:value="item.id" v-for="item of listCategories" :key="item.id">{{ item.name }}</option>
+              </select></b-col>
+            </b-row>
+            <b-row class="book-content">
+              <b-col class="input-label" cols="2">Ngôn ngữ:</b-col>
+              <b-col class="input-div" cols="9">
+                <select name="category" class="input-text" v-model="language">
+                  <option v-bind:value="language" v-for="language of listLanguage" :key="language">{{language}}</option>
+                </select>
+              </b-col>
+            </b-row>
+            <b-row class="book-content">
+              <b-col class="input-label" cols="2">Nhà XB:</b-col>
+              <b-col class="input-div" cols="9"><input type="text" maxlength="50" required
+                                                       placeholder="Nhập nhà xuất bản"
+                                                       v-model="publisher" class="input-text"></b-col>
+            </b-row>
+          </div>
+          <div class="mid-form">
+            <b-row class="book-content">
+              <b-col class="input-label" cols="2">Năm XB:</b-col>
+              <b-col cols="6"><input type="number" maxlength="4" required placeholder="Nhập năm xuất bản"
+                                     v-model="year" class="input-text-short"></b-col>
+            </b-row>
+            <b-row class="book-content">
+              <b-col class="input-label" cols="2">Số trang:</b-col>
+              <b-col cols="6"><input type="number" maxlength="50" required placeholder="Nhập số trang"
+                                     v-model="numberOfPage" class="input-text-short"></b-col>
+            </b-row>
+            <b-row class="book-content">
+              <b-col class="input-label" cols="2">Khối lượng:</b-col>
+              <b-col cols="6"><input type="number" maxlength="50" required placeholder="Nhập khối lượng"
+                                     v-model="weight" class="input-text-short"></b-col>
+            </b-row>
+            <b-row class="book-content">
+              <b-col class="input-label" cols="2">Chọn ảnh:</b-col>
+              <b-col class="input-div" cols="6"><input type="file" title=" " class="input-text-short" name="image"
+                                                       @change="handleFileUpload"></b-col>
+            </b-row>
           </div>
           <div class="right-form">
-            <b-container class="bv-example-row all-form">
-              <b-row class="book-content">
-                <b-col style="padding: 0px" cols="3">Số trang:</b-col>
-                <b-col style="padding: 0px" cols="9"><input type="number" maxlength="50" required placeholder="Nhập số trang"
-                                       v-model="numberOfPage" class="input-text-short"></b-col>
-              </b-row>
-              <b-row class="book-content">
-                <b-col style="padding: 0px" cols="3">Khối lượng:</b-col>
-                <b-col style="padding: 0px" cols="9"><input type="number" maxlength="50" required placeholder="Nhập khối lượng"
-                                       v-model="weight" class="input-text-short"></b-col>
-              </b-row>
-              <b-row class="book-content">
-                <b-col style="padding: 0px" cols="3">Giá bìa:</b-col>
-                <b-col style="padding: 0px" cols="9"><input type="number" maxlength="50" required placeholder="Nhập giá bìa"
-                                       v-model="coverPrice" class="input-text-short"></b-col>
-              </b-row>
-              <b-row class="book-content">
-                <b-col style="padding: 0px" cols="3">Giá đặt cọc:</b-col>
-                <b-col style="padding: 0px" cols="9"><input type="number" maxlength="50" required placeholder="Nhập giá đặt cọc"
-                                       v-model="depositPrice" class="input-text-short"></b-col>
-              </b-row>
-              <b-row class="book-content">
-                <b-col style="padding: 0px" cols="4">Ảnh sản phẩm:</b-col>
-                <b-col cols="6"><input type="file" class="input-text" name="image" @change="handleFileUpload"></b-col>
-                <img v-bind:src="imageSrc" style="width: 100px; height: 100px">
-              </b-row>
-              <b-row class="book-content">
-                <b-col cols="4"><input type="checkbox" id="trading" name="trading" value="true" v-model="isExchange">
-                  <label for="trading">Trao đổi</label><br></b-col>
-                <b-col cols="4"><input type="checkbox" id="rent" name="rent" value="true" v-model="isRent">
-                  <label for="rent">Thuê</label><br></b-col>
-              </b-row>
-              <b-row  class="book-content">
-                <b-col style="padding: 0px" cols="3">Giá thuê:</b-col>
-                <b-col style="padding: 0px" cols=3><input type="number" maxlength="50" required placeholder="Giá thuê" v-model="rentFee" class="input-text-short"></b-col>
-              </b-row>
-            </b-container>
+            <b-row  class="book-content">
+              <b-col class="grCb" cols="9">
+                <input type="checkbox" value="true" class="checkB" v-model="isExchange">&ensp;Trao đổi&emsp;
+                <input type="checkbox" value="true" class="checkB" v-model="isRent">&ensp;Thuê
+              </b-col>
+            </b-row>
+            <b-row class="book-content">
+              <b-col class="input-label" cols="2">Giá bìa:</b-col>
+              <b-col cols="9"><input type="number" maxlength="50" required placeholder="Nhập giá bìa"
+                                     v-model="coverPrice" class="input-text-short"></b-col>
+            </b-row>
+            <b-row class="book-content">
+              <b-col class="input-label" cols="2">Giá đặt cọc:</b-col>
+              <b-col cols="9"><input type="number" maxlength="50" required placeholder="Nhập giá đặt cọc"
+                                     v-model="depositPrice" class="input-text-short"></b-col>
+            </b-row>
+            <b-row v-if="isRent" class="book-content">
+              <b-col class="input-label" cols="2">Giá thuê:</b-col>
+              <b-col cols=3><input type="number" maxlength="7" required placeholder="Giá thuê" v-model="rentFee"
+                                   class="input-text-short"></b-col>
+            </b-row>
+          </div>
+          <div class="img-form">
+            <img v-bind:src="imageSrc" style="width: 190px; height: 260px; border: 1px solid #9D6B54;">
           </div>
         </div>
-      </CreateBook>
+        <div class="bottom-form">
+          <b-row class="book-content">
+            <b-col class="input-label" style="width: 60px" cols="2">Trạng thái:</b-col>
+            <b-col class="input-div" cols="9">
+              <textarea type="text" style="height: 100px; width: 1200px"
+                        maxlength="50" required placeholder="Nhập trạng thái"
+                        v-model="statusBook" class="input-text">
+              </textarea></b-col>
+          </b-row>
+          <b-row class="book-content">
+            <b-col class="input-label" style="width: 60px" cols="2">Nội dung:</b-col>
+            <b-col class="input-div" cols="9">
+              <textarea type="text" maxlength="500" required style="height: 100px; width: 1200px"
+                        placeholder="Nhập mô tả nội dung sách"
+                        v-model="description" class="input-text">
+            </textarea></b-col>
+          </b-row>
+        </div>
+      </CreateBookDialog>
       <div class="MB">
         <div class="containerMB">
           <div class="left-contentMB">
@@ -99,14 +112,17 @@
           <div class="right-contentMB">
             <div class="titleMB">Tủ sách của tôi</div>
             <div class="searchMB">
-              <input class="inputMB" type="text" placeholder="Nhập tên sản phẩm">
-              <button class="btnMB">Tìm</button>
-              <button class="create-book" v-on:click="openDialog">
+              <div>
+                <button class="create-book" v-on:click="openDialog">
                 <Icon icon="material-symbols:add-circle-outline-rounded"/>
                 <label>Đăng sách</label>
               </button>
+              </div>
+              <div>
+                <input class="inputMB" type="text" placeholder="Nhập tên sản phẩm">
+                <button class="btnMB">Tìm</button>
+              </div>
             </div>
-
             <hr>
             <b-skeleton-wrapper :loading="loading">
               <template #loading>
@@ -173,14 +189,14 @@ import Layout from "@/components/Layout";
 import SideBar_Personal from "../../components/SideBar_Personal";
 import VueJwtDecode from "vue-jwt-decode";
 import {Icon} from '@iconify/vue2';
-import CreateBook from "@/components/CreateBook";
+import CreateBookDialog from "@/components/CreateBookDialog";
 
 export default {
   name: "MyBooks",
-  components: {SideBar_Personal, Layout, Icon, CreateBook},
+  components: {SideBar_Personal, Layout, Icon, CreateBookDialog},
   data() {
     return {
-      imageSrc:'',
+      imageSrc: '',
       listBook: '',
       totalBook: '',
       loading: false,
@@ -188,6 +204,9 @@ export default {
       userId: '',
       showDialog: false,
       listCategories: '',
+      listLanguage: ['Tiếng Việt','Tiếng Anh','Tiếng Hán','Tiếng Hàn','Tiếng Nhật',
+        'Tiếng Tây Ban Nha','Tiếng Pháp','Tiếng Đức','Tiếng Nga','Tiếng Bồ Đào Nha',
+      'Tiếng Hindi','Khác'],
 
       title: '',
       categoryId: '',
@@ -239,16 +258,8 @@ export default {
       this.showDialog = false
     },
     save() {
-      /*const reader = new FileReader()
-      let imageRaw;
-      reader.onloadend = () => {
-        imageRaw = reader.result;
-      }
-      const imageBase = imageRaw
-      console.log(imageBase);
-      reader.readAsDataURL(this.file);*/
       let token = this.$cookies.get('token');
-      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
       apiFactory.callApi(API_BOOK.CREATE_BOOK, 'POST', {
         image: this.imageSrc,
         userId: this.userByToken.UserId,
@@ -274,7 +285,7 @@ export default {
       }).catch(() => {
       });
     },
-    handleFileUpload(e){
+    handleFileUpload(e) {
       const file = document.querySelector('input[type=file]').files[0]
       var files = e.target.files
       if (!files[0]) {
@@ -305,77 +316,6 @@ main {
 
 strong {
   color: #9D6B54;
-}
-
-.dialogBook {
-  height: 75%;
-}
-
-.dialogBook .gridMB {
-  display: flex;
-  grid-template-columns: 25% 25% 25% 25%;
-  margin-left: 10px;
-  margin-right: 20px;
-  overflow: auto;
-}
-
-.dialogBook .gridMB .itemMB {
-  display: block;
-  border-radius: 10px;
-  background: white;
-  width: 220px;
-  height: 450px;
-  margin: 10px 0px 10px 20px;
-}
-
-.dialogBook .gridMB .itemMB:hover {
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
-}
-
-.dialogBook .gridMB .itemMB img {
-  height: 290px;
-  width: 220px;
-  border-radius: 10px;
-}
-
-.dialogBook .gridMB .infoMB {
-  height: 120px;
-  padding: 5px;
-}
-
-.dialogBook .gridMB .infoMB img {
-  width: 20px;
-  height: 20px;
-  margin-left: 15px;
-}
-
-.dialogBook .gridMB .infoMB label {
-  margin-left: 5px;
-}
-
-.dialogBook .gridMB .infoMB .book-titleMB {
-  margin-left: 5px;
-  margin-right: 5px;
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.dialogBook .gridMB .infoMB .book-categoryMB {
-  margin-left: 5px;
-  margin-right: 10px;
-}
-
-.dialogBook .gridMB .infoMB .book-statusMB {
-  margin-left: 5px;
-  margin-right: 10px;
-  font-size: 0.8rem;
-  display: block;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
 }
 
 .MB {
@@ -411,9 +351,11 @@ strong {
 }
 
 .right-contentMB .searchMB {
-  margin: 10px 0px 10px 20px;
+  margin: 10px 0px 10px 0px;
   width: 100%;
   display: flex;
+  justify-content: space-between;
+  padding-right: 20px;
 }
 
 .right-contentMB .titleMB {

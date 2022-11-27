@@ -47,6 +47,7 @@
             </div>
           </div>
         </div>
+        <LoadingDialog v-show="spinner"></LoadingDialog>
       </div>
     </div>
   </Side_Bar>
@@ -56,13 +57,15 @@
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_TRANSACTION} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
+import LoadingDialog from "@/components/LoadingDialog";
 
 export default {
   name: "GetExchanges",
-  components: {Side_Bar},
+  components: {Side_Bar, LoadingDialog},
   data() {
     return {
-      listExchanges: ''
+      listExchanges: '',
+      spinner: false,
     }
   },
   created() {
@@ -70,8 +73,10 @@ export default {
   },
   methods: {
     getExchanges() {
+      this.spinner = true
       apiFactory.callApi(API_MANAGE_TRANSACTION.LIST_EXCHANGE, 'GET', {}).then((res) => {
         this.listExchanges = res.data.data
+        this.spinner = false
       }).catch(() => {
       });
     }

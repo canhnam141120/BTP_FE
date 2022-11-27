@@ -17,6 +17,14 @@
 
 .ml{
     margin-left: 65px;
+    background: #F0ECE4;
+    height: 800px;
+}
+
+.mlBook{
+    margin-left: 65px;
+    background: #F0ECE4;
+    height: 1400px;
 }
 
 .col-lg-6 {
@@ -3932,9 +3940,8 @@ section {
 
 .user-data {
     border: 1px solid #e5e5e5;
-    background: #fff;
-    padding-top: 44px;
-    margin-left: 2%;
+    background: #F0ECE4;
+    padding-top: 20px;
 }
 
 .user-data .title-3 {

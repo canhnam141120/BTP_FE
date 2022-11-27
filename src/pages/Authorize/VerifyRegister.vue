@@ -1,16 +1,17 @@
 <template>
   <Header>
-    <main style="flex-grow: 1; padding: 32px 0 45px; background-image: url('https://f5-zpcloud.zdn.vn/2258788996442817451/dd48482006abc0f599ba.jpg'); background-size: cover">
+    <main style="flex-grow: 1; background-image: url('https://f5-zpcloud.zdn.vn/2258788996442817451/dd48482006abc0f599ba.jpg'); background-size: cover">
       <div id="login">
         <div class="container">
-          <label for="show" class="close-btn fas fa-times" title="close"></label>
+          <label></label>
           <div class="title">
             Xác thực tài khoản
           </div>
+          <div class="subTitle">Mã xác thực tài khoản đã được gửi qua email đăng ký của bạn</div>
           <div class="main">
             <div class="data">
               <label>Mã xác thực</label>
-              <input type="text" maxlength="8" placeholder="Nhập mã" v-model="verifyCode" required>
+              <input type="text" maxlength="8" placeholder="Ví dụ: ABCD1234" v-model="verifyCode" required>
               <label class="err" v-if="err.length">{{this.err}}</label>
             </div>
             <div class="btn">
@@ -19,6 +20,7 @@
           </div>
         </div>
       </div>
+      <LoadingDialog v-show="spinner"></LoadingDialog>
     </main>
   </Header>
 </template>
@@ -27,14 +29,16 @@
 import apiFactory from "@/config/apiFactory";
 import {API_USER} from "@/constant/constant-api";
 import Header from "../../components/Header";
+import LoadingDialog from "@/components/LoadingDialog";
 
 export default {
   name: "VerifyRegister",
-  components: {Header},
+  components: {Header, LoadingDialog},
   data(){
     return{
       verifyCode: '',
-      err:''
+      err:'',
+      spinner: false
     }
   },
   methods: {
@@ -44,6 +48,7 @@ export default {
         this.err = 'Vui lòng nhập mã xác thực!'
       }
       if(this.verifyCode){
+        this.spinner = true
         apiFactory.callApi(API_USER.VERIFY_EMAIL, 'PUT', {
           verifyCode: this.verifyCode
         }).then((res) => {
@@ -52,6 +57,10 @@ export default {
               name: 'Login'
             })
           }
+          if(res.data.message === 'CODE_NOT_MATCH'){
+            this.err = 'Mã không hợp lệ!'
+          }
+          this.spinner = false
         }).catch(() => {this.err = 'Xác thực không thành công!'});
       }
     }
@@ -66,7 +75,6 @@ export default {
   padding: 0;
   outline: none;
   box-sizing: border-box;
-
 }
 
 body{
@@ -77,13 +85,15 @@ body{
 }
 
 .container {
-  margin-top: 150px;
-  position: relative;
-  left: 800px;
-  top: 10%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   font-size: 14px;
   cursor: pointer;
-  max-width: 390px;
+  max-width: 420px;
+  height: 250px;
   border-radius: 20px;
   justify-content: center;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -161,5 +171,12 @@ body{
   border-color: #9D6B54;
   background-color: white;
   color: #9D6B54;
+}
+
+.subTitle{
+  color: #9D6B54;
+  text-align: center;
+  font-size: 14px;
+  font-style: italic;
 }
 </style>

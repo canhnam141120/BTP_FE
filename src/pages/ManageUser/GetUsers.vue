@@ -1,7 +1,6 @@
 <template>
   <Side_Bar>
     <div class="ml">
-      <!-- USER DATA-->
       <div class="row">
         <div class="col-lg-6">
           <div class="user-data m-b-30">
@@ -63,6 +62,7 @@
             </div>
           </div>
         </div>
+        <LoadingDialog v-show="spinner"></LoadingDialog>
       </div>
     </div>
   </Side_Bar>
@@ -72,13 +72,16 @@
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_USER} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
+import LoadingDialog from "@/components/LoadingDialog";
+
 export default {
   name: "GetUsers",
-  components: {Side_Bar},
+  components: {Side_Bar, LoadingDialog},
   data() {
     return {
       listUsers: '',
-      search: ''
+      search: '',
+      spinner: false,
     }
   },
   created() {
@@ -86,8 +89,10 @@ export default {
   },
   methods: {
     getUsersAll() {
+      this.spinner = true
       apiFactory.callApi(API_MANAGE_USER.LIST_USER, 'GET', {}).then((res) => {
         this.listUsers = res.data.data
+        this.spinner = false
       }).catch(() => {
       });
     },

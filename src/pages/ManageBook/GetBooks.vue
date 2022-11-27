@@ -1,23 +1,79 @@
 <template>
-  <div class="ml">
+  <div class="mlBook">
     <div class="row">
+      <BookDetailDialog :show="showDialogBD" :cancel="cancel" v-if="showDialogBD" class="modal">
+        <div class="topVRN">
+          <div class="left">
+            <img class="imgBD" v-bind:src="book.image">
+          </div>
+          <div class="right">
+            <label class="titleBD"><strong>{{ book.title }}</strong></label>
+            <div class="contentRight">
+              <div class="bookInfoBD">
+                <div>Người đăng: <span>{{ book.user.fullname }}</span></div>
+                <div>Ngày đăng: <span>{{ book.postedDate | formatDate }}</span></div>
+                <div>Thể loại: <span>{{ book.category.name }}</span></div>
+                <div>Tác giả: <span>{{ book.author }}</span></div>
+                <div>Nhà xuất bản: <span>{{ book.publisher }}</span></div>
+                <div>Năm xuất bản: <span>{{ book.year }}</span></div>
+                <div>Ngôn ngữ: <span>{{ book.language }}</span></div>
+                <div>Số trang: <span>{{ book.numberOfPages }}</span></div>
+                <div>Trọng lượng: <span>{{ book.weight }}g</span></div>
+                <div>Thời gian giao dịch: <span>{{ book.numberOfDays }} ngày</span></div>
+                <div>Giá bìa: <span class="cover">{{ book.coverPrice.toLocaleString() }}đ</span></div>
+                <div>Phí đặt cọc: <span class="deposit">{{ book.depositPrice.toLocaleString() }}đ</span></div>
+                <div v-if="book.isRent">Phí thuê: <span class="rent">{{ book.rentFee.toLocaleString() }}đ</span></div>
+                <div>Tình trạng: {{ book.statusBook }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </BookDetailDialog>
+      <FeedbackDialog :show="showDialogFB" :cancel="cancel" v-if="showDialogFB" class="modal">
+        <div v-if="totalFeedbacks!=0" class="bookdetail-feedback">
+          <table class="table">
+            <thead>
+            <tr>
+              <td>Mã đánh giá</td>
+              <td>Mã người đánh giá</td>
+              <td>Nội dung</td>
+              <td>Ngày</td>
+              <td></td>
+            </tr>
+            </thead>
+            <tbody v-for="item of listFeedbacks" :key="item.id">
+            <tr>
+              <td>{{ item.id }}</td>
+              <td>{{item.userId}}</td>
+              <td>{{item.content}}</td>
+              <td>{{ item.createdDate | format }}</td>
+              <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDelete(item.id, item.bookId)">Xoá</button></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div v-else class="bookdetail-feedback">
+          <div class="no-feedback">Chưa có đánh giá, bình luận!</div>
+        </div>
+      </FeedbackDialog>
       <div class="col-lg-6">
         <div class="user-data m-b-30">
-          <h3 class="title-3 m-b-30">
-            <i class="zmdi zmdi-account-calendar"></i>Danh sách sách</h3>
-          <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getBooksAll(1)">Tất cả</button>
-          <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getBooksApproved">Đã duyệt</button>
-          <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getBooksDenied">Đã hủy</button>
-          <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getBooksWaiting">Đang đợi</button>
-          <br>
+          <div class="titleMB">QUẢN LÝ SÁCH</div>
+          <hr>
           <div class="search-book">
-            <input type="text" v-model="search" placeholder="Nhập tên sản phẩm">
-            <button v-on:click="HandleSearch">Tìm</button>
+            <select class="selectCss"  v-model="filter" @change="onchange($event)">
+              <option v-bind:value="item" v-for="item of listFilter" :key="item">{{item}}</option>
+            </select>
+            <div>
+              <input type="text" v-model="search" placeholder="Nhập tên sản phẩm">
+              <button v-on:click="HandleSearch">Tìm</button>
+            </div>
           </div>
           <div class="table-responsive table-data">
             <table class="table">
               <thead>
               <tr>
+                <td>Chi tiết</td>
                 <td>Mã sách</td>
                 <td>Người đăng</td>
                 <td>Tên sách</td>
@@ -27,43 +83,99 @@
                 <td>Ngày đăng</td>
                 <td>Trạng thái</td>
                 <td>Duyệt/Hủy</td>
-                <td>Chi tiết</td>
                 <td>Đánh giá</td>
               </tr>
               </thead>
               <tbody v-for="item of listBooks" :key="item.id">
               <tr>
                 <td>
-                  <div class="table-data__info">
-                    <h6>{{ item.id }}</h6>
-                  </div>
+                  <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router"
+                          v-on:click="openDialogBD(item.id)">Xem
+                  </button>
                 </td>
+                <td>{{ item.id }}</td>
                 <td>{{ item.user.fullname }}</td>
                 <td style="max-width: 300px">{{ item.title }}</td>
                 <td><img v-bind:src="item.image" height="90px" width="65px"></td>
-                <td>{{ item.coverPrice.toLocaleString()}}đ</td>
-                <td>{{ item.depositPrice.toLocaleString()}}đ</td>
-                <td>{{item.postedDate }}</td>
-                <td v-if="item.status == 'Approved'" ><span class="role approved">ĐÃ DUYỆT</span></td>
-                <td v-if="item.status == 'Denied'" ><span class="role denied">ĐÃ HỦY</span></td>
-                <td v-if="item.status == 'Waiting'" ><span class="role waiting">ĐANG ĐỢI</span></td>
+                <td>{{ item.coverPrice.toLocaleString() }}đ</td>
+                <td>{{ item.depositPrice.toLocaleString() }}đ</td>
+                <td>{{ item.postedDate |formatDate }}</td>
+                <td v-if="item.status == 'Approved'"><span class="role approved">ĐÃ DUYỆT</span></td>
+                <td v-if="item.status == 'Denied'"><span class="role denied">ĐÃ HỦY</span></td>
+                <td v-if="item.status == 'Waiting'"><span class="role waiting">ĐANG ĐỢI</span></td>
                 <td v-if="item.status == 'Waiting'">
-                  <button style="display: block" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleApproved(item.id)">Duyệt</button>
-                  <button style="width: 53.5px" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDenied(item.id)">Hủy</button>
+                  <button style="display: block" class="au-btn au-btn-icon au-btn--brown au-btn--small"
+                          v-on:click="HandleApproved(item.id)">Duyệt
+                  </button>
+                  <button style="width: 53.5px" class="au-btn au-btn-icon au-btn--brown au-btn--small"
+                          v-on:click="HandleDenied(item.id)">Hủy
+                  </button>
                 </td>
                 <td v-if="item.status == 'Approved'">
-                  <button style="width: 53.5px"  class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDenied(item.id)">Huỷ</button>
+                  <button style="width: 53.5px" class="au-btn au-btn-icon au-btn--brown au-btn--small"
+                          v-on:click="HandleDenied(item.id)">Huỷ
+                  </button>
                 </td>
                 <td v-if="item.status == 'Denied'">
-                  <button  class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleApproved(item.id)">Duyệt</button>
+                  <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleApproved(item.id)">
+                    Duyệt
+                  </button>
                 </td>
-                <td><router-link class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router"  :to="{ name: 'DetailBook', query: { id:item.id }}">Chi tiết</router-link></td>
-                <td><router-link class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router"  :to="{ name: 'GetFeedbacks', query: { id:item.id }}">Xem đánh giá</router-link></td>
+                <td>
+                  <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router"
+                          v-on:click="openDialogFB(item.id)">XEM
+                  </button>
+                </td>
               </tr>
               </tbody>
             </table>
             <div class="paging-book">
-              <b-pagination class="page-number" @input="getBooksAll" v-model="page" :total-rows="totalBook" :per-page="9">
+              <b-pagination v-if="filter==''" class="page-number" @input="getBooksAll" v-model="page" :total-rows="totalBook"
+                            :per-page="10">
+                <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                <template #page="{ page, active }">
+                  <b v-if="active" style="color: white;">{{ page }} </b>
+                  <b v-else style="color: #9D6B54;">{{ page }}</b>
+                </template>
+              </b-pagination>
+              <b-pagination v-if="filter=='Tất Cả'" class="page-number" @input="getBooksAll" v-model="page" :total-rows="totalBook"
+                            :per-page="10">
+                <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                <template #page="{ page, active }">
+                  <b v-if="active" style="color: white;">{{ page }} </b>
+                  <b v-else style="color: #9D6B54;">{{ page }}</b>
+                </template>
+              </b-pagination>
+              <b-pagination v-if="filter=='Đã Duyệt'" class="page-number" @input="getBooksApproved" v-model="page" :total-rows="totalBook"
+                            :per-page="10">
+                <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                <template #page="{ page, active }">
+                  <b v-if="active" style="color: white;">{{ page }} </b>
+                  <b v-else style="color: #9D6B54;">{{ page }}</b>
+                </template>
+              </b-pagination>
+              <b-pagination v-if="filter=='Đã Hủy'" class="page-number" @input="getBooksDenied" v-model="page" :total-rows="totalBook"
+                            :per-page="10">
+                <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                <template #page="{ page, active }">
+                  <b v-if="active" style="color: white;">{{ page }} </b>
+                  <b v-else style="color: #9D6B54;">{{ page }}</b>
+                </template>
+              </b-pagination>
+              <b-pagination v-if="filter=='Đang Đợi'" class="page-number" @input="getBooksWaiting" v-model="page" :total-rows="totalBook"
+                            :per-page="10">
                 <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
                 <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
                 <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
@@ -77,6 +189,7 @@
           </div>
         </div>
       </div>
+      <LoadingDialog v-show="spinner"></LoadingDialog>
     </div>
   </div>
 </template>
@@ -84,15 +197,28 @@
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_BOOK} from "@/constant/constant-api";
+import LoadingDialog from "@/components/LoadingDialog";
+import BookDetailDialog from "@/components/BookDetailDialog";
+import FeedbackDialog from "@/components/FeedbackDialog";
 
 export default {
   name: "GetBooks",
+  components: {BookDetailDialog, LoadingDialog, FeedbackDialog},
   data() {
     return {
+      book: '',
       listBooks: '',
-      isSearch: false,
+      totalBook: '',
+      listFeedbacks: '',
+      totalFeedbacks: '',
       search: '',
-      totalBook: ''
+      isSearch: false,
+      spinner: false,
+      showDialogFB: false,
+      showDialogBD: false,
+      listFilter: ['Tất Cả', 'Đã Duyệt', 'Đã Hủy', 'Đang Đợi'],
+      filter: 'Tất Cả',
+      page: ''
     }
   },
   created() {
@@ -100,81 +226,189 @@ export default {
     this.getBooksAll(1)
   },
   methods: {
-    getBooksApproved() {
+    onchange(e){
+      this.isSearch = false
+      this.search = ''
+      if(e.target.value === 'Tất Cả'){
+        this.getBooksAll(1)
+      }
+      if(e.target.value=== 'Đã Duyệt'){
+        this.getBooksApproved(1)
+      }
+      if(e.target.value === 'Đã Hủy'){
+        this.getBooksDenied(1)
+      }
+      if(e.target.value === 'Đang Đợi'){
+        this.getBooksWaiting(1)
+      }
+    },
+    getBooksAll(pageNumber) {
+      this.spinner = true
+      if (this.isSearch) {
+        apiFactory.callApi(API_MANAGE_BOOK.SEARCH_BOOK + pageNumber, 'POST', {
+          search: this.search
+        }).then((res) => {
+          this.listBooks = res.data.data
+          this.totalBook = res.data.numberOfRecords
+          this.page = pageNumber
+          this.spinner = false
+        }).catch(() => {
+        });
+      } else {
+        apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK + pageNumber, 'GET', {}).then((res) => {
+          this.listBooks = res.data.data
+          this.totalBook = res.data.numberOfRecords
+          this.page = pageNumber
+          this.spinner = false
+        }).catch(() => {
+        });
+      }
+    },
+    getBooksApproved(pageNumber) {
+      this.spinner = true
       this.isSearch = false;
-      apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK_APPROVED, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK_APPROVED + pageNumber, 'GET', {}).then((res) => {
         this.listBooks = res.data.data
+        this.totalBook = res.data.numberOfRecords
+        this.page = pageNumber
+        this.spinner = false
       }).catch(() => {
       });
     },
-    getBooksDenied() {
+    getBooksDenied(pageNumber) {
+      this.spinner = true
       this.isSearch = false;
-      apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK_DENIED, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK_DENIED + pageNumber, 'GET', {}).then((res) => {
         this.listBooks = res.data.data
+        this.totalBook = res.data.numberOfRecords
+        this.page = pageNumber
+        this.spinner = false
       }).catch(() => {
       });
     },
-    getBooksWaiting() {
+    getBooksWaiting(pageNumber) {
+      this.spinner = true
       this.isSearch = false;
-      apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK_WAITING, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK_WAITING + pageNumber, 'GET', {}).then((res) => {
         this.listBooks = res.data.data
+        this.totalBook = res.data.numberOfRecords
+        this.page = pageNumber
+        this.spinner = false
       }).catch(() => {
       });
     },
     HandleApproved(id) {
-      const url = API_MANAGE_BOOK.APPROVED_BOOK + id
-      apiFactory.callApi(url, 'PUT', {}).then((res) => {
+      this.spinner = true
+      apiFactory.callApi(API_MANAGE_BOOK.APPROVED_BOOK + id, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
-          this.getBooksAll(1)
+          if(this.filter === ''){
+            this.getBooksAll(this.page)
+          }
+          if(this.filter === 'Tất Cả'){
+            this.getBooksAll(this.page)
+          }
+          if(this.filter === 'Đã Duyệt'){
+            this.getBooksApproved(this.page)
+          }
+          if(this.filter  === 'Đã Hủy'){
+            this.getBooksDenied(this.page)
+          }
+          if(this.filter === 'Đang Đợi'){
+            this.getBooksWaiting(this.page)
+          }
         }
       }).catch(() => {
         alert('Duyệt không thành công!')
       });
     },
     HandleDenied(id) {
-      const url = API_MANAGE_BOOK.DENIED_BOOK + id
-      apiFactory.callApi(url, 'PUT', {}).then((res) => {
+      this.spinner = true
+      apiFactory.callApi(API_MANAGE_BOOK.DENIED_BOOK + id, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
-          this.getBooksAll(1)
+          if(this.filter === ''){
+            this.getBooksAll(this.page)
+          }
+          if(this.filter === 'Tất Cả'){
+            this.getBooksAll(this.page)
+          }
+          if(this.filter === 'Đã Duyệt'){
+            this.getBooksApproved(this.page)
+          }
+          if(this.filter  === 'Đã Hủy'){
+            this.getBooksDenied(this.page)
+          }
+          if(this.filter === 'Đang Đợi'){
+            this.getBooksWaiting(this.page)
+          }
         }
       }).catch(() => {
         alert('Hủy không thành công!')
       });
     },
-    getBooksAll(pageNumber) {
-      if (this.isSearch) {
-        window.scrollTo(0, 0)
-        const url = API_MANAGE_BOOK.SEARCH_BOOK + pageNumber
-        apiFactory.callApi(url, 'POST', {
-          search: this.search
-        }).then((res) => {
-          this.listBooks = res.data.data
-          this.totalBook = res.data.numberOfRecords
-        }).catch(() => {
-        });
-      } else {
-        window.scrollTo(0, 0)
-        const url = API_MANAGE_BOOK.LIST_BOOK + pageNumber
-        apiFactory.callApi(url, 'GET', {}).then((res) => {
-          this.listBooks = res.data.data
-          this.totalBook = res.data.numberOfRecords
-        }).catch(() => {
-        });
-      }
+    getBookById(bookId) {
+      this.spinner = true
+      apiFactory.callApi(API_MANAGE_BOOK.DETAIL_BOOK + bookId, 'GET', {}).then((res) => {
+        this.book = res.data.data
+        this.spinner = false
+        this.showDialogBD = true
+      }).catch(() => {
+      });
+    },
+    getFeedback(bookId) {
+      this.spinner = true
+      const url = API_MANAGE_BOOK.FEEDBACK_BOOK + bookId
+      apiFactory.callApi(url, 'GET', {}).then((res) => {
+        this.listFeedbacks = res.data.data
+        this.totalFeedbacks = res.data.numberOfRecords
+        this.spinner = false
+        this.showDialogFB = true
+      }).catch(() => {
+      });
+    },
+    HandleDelete(feedbackId, bookId){
+      const url = API_MANAGE_BOOK.DELETE_FEEDBACK + feedbackId
+      apiFactory.callApi(url, 'DELETE', {}).then((res) => {
+        if (res.data.message === 'DELETE_SUCCESS') {
+          this.getFeedback(bookId)
+          console.log(alert('Xóa thành công!'))
+        }
+      }).catch(() => {
+        alert('Xóa không thành công!')
+      });
     },
     HandleSearch() {
       if (!this.search) {
+        this.filter= 'Tất Cả'
         this.isSearch = false;
       } else {
+        this.filter= ''
         this.isSearch = true;
       }
       return this.getBooksAll(1)
     },
+    openDialogBD(bookId) {
+      this.getBookById(bookId)
+    },
+    openDialogFB(bookId) {
+      this.getFeedback(bookId)
+    },
+    cancel() {
+      this.showDialogBD = false
+      this.showDialogFB = false
+    },
+  },
+  filters: {
+    formatDate(value) {
+      return new Date(value).toLocaleDateString('en-GB')
+    },
+    format(value) {
+      return new Date(value).toLocaleString('en-GB')
+    }
   }
 }
 </script>
 
-<style >
+<style>
 @import "../../assets/CSS/tableManage.css";
 
 .paging-book {
@@ -182,14 +416,33 @@ export default {
 }
 
 .paging-book ul {
-  margin-right: auto;
-  margin-left: auto;
-  width: 30%;
+  justify-content: right;
+  margin-right: 15px;
 }
 
 .search-book {
+  display: flex;
+  justify-content: space-between;
   margin: 20px 0px 10px 20px;
-  width: 80%;
+  width: 95%;
+}
+
+.titleMB{
+  font-weight: bold;
+  text-align: center;
+  color:  #9D6B54;
+  font-size: 30px;
+}
+
+.selectCss{
+  border: 1px solid white;
+  border-radius: 10px;
+  width: 150px;
+  padding-left: 10px;
+  padding-right: 20px;
+  color: white;
+  font-weight: bold;
+  background: #9D6B54;
 }
 
 .search-book input {
@@ -217,5 +470,4 @@ export default {
   background-color: white;
   color: #9D6B54;
 }
-
 </style>

@@ -96,6 +96,7 @@
           </div>
 
         </div>
+        <LoadingDialog v-show="spinner"></LoadingDialog>
       </div>
     </div>
   </Side_Bar>
@@ -105,13 +106,15 @@
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_BILL} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
+import LoadingDialog from "@/components/LoadingDialog";
 
 export default {
   name: "GetRentBills",
-  components: {Side_Bar},
+  components: {Side_Bar, LoadingDialog},
   data() {
     return {
-      listBills: ''
+      listBills: '',
+      spinner: false,
     }
   },
   created() {
@@ -119,8 +122,10 @@ export default {
   },
   methods: {
     getRentBills() {
+      this.spinner = true
       apiFactory.callApi(API_MANAGE_BILL.LIST_BILL_RENT, 'GET', {}).then((res) => {
         this.listBills = res.data.data
+        this.spinner = false
       }).catch(() => {
       });
     }

@@ -66,7 +66,7 @@ const routers = [
     {
         path:'/Other-Person',
         name:'Other-Person',
-        component: () => import('@/pages/Visit/Other-Person'),
+        component: () => import('@/pages/Visit/OtherPerson'),
     },
     {
         path:'/MyPosts',
@@ -104,16 +104,6 @@ const routers = [
         component: () => import('@/pages/ManageBook/GetBooks'),
     },
     {
-        path:'/ManageBook/detail',
-        name:'DetailBook',
-        component: () => import('@/pages/ManageBook/DetailBook'),
-    },
-    {
-        path:'/ManageBook/feedback',
-        name:'GetFeedbacks',
-        component: () => import('@/pages/ManageBook/GetFeedbacks'),
-    },
-    {
         path:'/ManageCategory',
         name:'GetCategories',
         component: () => import('@/pages/ManageCategory/GetCategories'),
@@ -128,21 +118,10 @@ const routers = [
         name:'GetFees',
         component: () => import('@/pages/ManageFee/GetFees'),
     },
-    // {
-    //     path:'/ManageFee/create',
-    //     name:'CreateFee',
-    //     component: () => import('@/pages/ManageFee/CreateFee'),
-    // },
-
     {
         path:'/ManagePost',
         name:'GetPosts',
         component: () => import('@/pages/ManagePost/GetPosts'),
-    },
-    {
-        path:'/ManagePost/detail',
-        name:'DetailPost',
-        component: () => import('@/pages/ManagePost/DetailPost'),
     },
     {
         path:'/ManagePost/comment',
@@ -153,11 +132,6 @@ const routers = [
         path:'/ManageUser',
         name:'GetUsers',
         component: () => import('@/pages/ManageUser/GetUsers'),
-    },
-    {
-        path:'/ManageUser/detail',
-        name:'DetailUser',
-        component: () => import('@/pages/ManageUser/DetailUser'),
     },
     {
         path:'/ManageBill/exchange-bill',

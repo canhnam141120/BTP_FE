@@ -1,9 +1,10 @@
 <template>
   <Header>
-    <main style="flex-grow: 1; padding: 32px 0 45px; background-image: url('https://f5-zpcloud.zdn.vn/2258788996442817451/dd48482006abc0f599ba.jpg'); background-size: cover">
+    <main style="flex-grow: 1; background-image: url('https://f5-zpcloud.zdn.vn/2258788996442817451/dd48482006abc0f599ba.jpg'); background-size: cover">
+
       <div id="login">
-      <div class="container">
-        <label for="show" class="close-btn fas fa-times" title="close"></label>
+        <div class="container">
+        <label for="show"></label>
         <div class="title">
           Đăng nhập hệ thống
         </div>
@@ -21,7 +22,7 @@
           <div class="btn">
             <button v-on:click="HandleLogin">Đăng nhập</button>
           </div>
-          <label class="result" v-if="err.length">{{this.err}}</label>
+          <div class="result" v-if="err.length">{{this.err}}</div>
           <div class="under">
               <a v-on:click="HandleForgotPassword" class="forgot-pass">Quên mật khẩu?</a>
               <router-link to="/register" class="link">Đăng ký</router-link>
@@ -29,6 +30,7 @@
         </div>
       </div>
       </div>
+      <LoadingDialog v-show="spinner"></LoadingDialog>
     </main>
   </Header>
 </template>
@@ -37,11 +39,11 @@
 import apiFactory from "@/config/apiFactory";
 import {API_USER} from "@/constant/constant-api";
 import Header from "../../components/Header";
-// import 'bootstrap/dist/css/bootstrap.min.css'
+import LoadingDialog from "@/components/LoadingDialog";
 
 export default {
   name: "Login",
-  components: {Header},
+  components: {Header, LoadingDialog},
   data() {
     return {
       email: '',
@@ -49,6 +51,7 @@ export default {
       errMail: '',
       errPass: '',
       err: '',
+      spinner: false
     }
   },
   methods: {
@@ -69,6 +72,7 @@ export default {
         this.errPass = 'Vui lòng nhập mật khẩu!'
       }
       if(regxMail.test(this.email) && this.password){
+        this.spinner = true
         apiFactory.callApi(API_USER.USER_LOGIN, 'POST', {
           email: this.email, password: this.password
         }).then((res) => {
@@ -77,10 +81,21 @@ export default {
             this.$router.push({
               name: 'HomePage'
             })
-          }else{
-            this.err = 'Email hoặc mật khẩu không chính xác!'
           }
-        }).catch(() => {this.err = 'Email hoặc mật khẩu không chính xác!'});
+          if(res.data.message === 'PASSWORD_INCORRECT'){
+            this.err = 'Mật khẩu không chính xác!'
+          }
+          if(res.data.message === 'ACCOUNT_NOT_EXIST'){
+            this.err = 'Tài khoản không tồn tại!'
+          }
+          if(res.data.message === 'ACCOUNT_NOT_VERIFY'){
+            this.err = 'Tài khoản chưa được xác thực!'
+          }
+          if(res.data.message === 'ACCOUNT_IS_BAN'){
+            this.err = 'Tài khoản đã bị khóa!'
+          }
+          this.spinner = false
+        }).catch(() => {this.err = 'Có lỗi xảy ra, vui loòng thử lại!'});
       }
     },
     HandleForgotPassword() {
@@ -97,6 +112,7 @@ export default {
         }
       }
       if(this.email){
+        this.spinner = true
         apiFactory.callApi(API_USER.FORGOT_PASSWORD, 'POST', {
           email: this.email
         }).then((res) => {
@@ -105,7 +121,10 @@ export default {
               name: 'ResetPassword'
             })
           }
-          console.log(res)
+          if(res.data.message === 'EMAIL_NOT_EXIST'){
+            this.err = 'Tài khoản không tồn tại!'
+          }
+          this.spinner = false
         }).catch(() => {this.err = 'Email chưa đăng ký!'});
       }
     }
@@ -130,10 +149,11 @@ body{
 }
 
 .container {
-  margin-top: 120px;
-  position: relative;
-  left: 800px;
-  top: 10%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   font-size: 14px;
   cursor: pointer;
   max-width: 390px;
@@ -217,8 +237,7 @@ body{
 }
 
 .container .main .result{
-  justify-content: center;
-  margin-left: 75px;
+  text-align: center;
   color: red;
 }
 

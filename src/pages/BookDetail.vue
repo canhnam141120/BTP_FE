@@ -140,12 +140,12 @@
           <div v-if="countFeedback!=0" class="bookdetail-feedback">
             <div class="title"><strong>Đánh giá/Bình luận</strong></div>
             <div class="feedbacks" v-for="item of feedbacks" :key="item.id">
-              <router-link :to="{ name: '', query: { id:item.id }}">
+              <router-link :to="{ name: 'OtherPerson', query: { id:item.userId}}">
                 <img class="avatar-feedbacker" v-bind:src="item.user.avatar">
               </router-link>
               <div class="feedbackItem">
                 <div class="name">{{item.user.fullname}}</div>
-                <div class="date">{{item.createdDate}}</div>
+                <div class="date">{{item.createdDate | formatDate}}</div>
                 <div class="content">{{item.content}}</div>
               </div>
             </div>
@@ -353,6 +353,9 @@ export default {
       if(value){
         return value.substring(0, limit);
       }
+    },
+    formatDate(value){
+      return new Date(value).toLocaleString('en-GB')
     }
   }
 }
@@ -398,7 +401,7 @@ strong {
 
 .dialogBook .gridMB .itemMB img {
   height: 290px;
-  width: 220px;
+  width: 218px;
   border-radius: 10px;
 }
 

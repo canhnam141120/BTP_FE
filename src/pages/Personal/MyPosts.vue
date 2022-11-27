@@ -237,7 +237,7 @@ strong {
   height: 140px;
   width: 140px;
   border-radius: 10px;
-  object-fit: cover;
+  object-fit: scale-down;
 }
 
 .right-contentMP .grid .info {

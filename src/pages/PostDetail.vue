@@ -5,13 +5,6 @@
       <div class="postDetail">
         <div class="container">
           <div class="leftPD">
-            <div v-if="this.$cookies.get('token')" class="top">
-              <img class="userImageBI" v-bind:src="info.avatar">
-              <button class="createPost">Chia sẻ bài viết của bạn...</button>
-              <Icon icon="jam:write-f" class="iconBI"/>
-              <Icon icon="ic:baseline-emoji-emotions" class="iconBI"/>
-              <Icon icon="material-symbols:image-rounded" class="iconBI"/>
-            </div>
             <div class="bottom">
               <div class="leftTop">
                 <div class="authorPD">

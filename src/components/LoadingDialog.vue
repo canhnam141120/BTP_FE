@@ -22,12 +22,16 @@ export default {
   width: 100%;
   height: 100%;
   position: fixed;
-  padding-top: 250px;
-  padding-left: 700px;
   display: block;
-  align-items: center;
-  justify-content: center;
   background: rgba(0, 0, 0, 0.4);
+}
+
+.dialogContent{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 
 .spinner{

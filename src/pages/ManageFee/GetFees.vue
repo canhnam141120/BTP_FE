@@ -34,6 +34,7 @@
           </div>
         </div>
       </div>
+      <LoadingDialog v-show="spinner"></LoadingDialog>
     </div>
   </div>
   </Side_Bar>
@@ -43,14 +44,15 @@
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_FEE} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
-
+import LoadingDialog from "@/components/LoadingDialog";
 
 export default {
   name: "GetFees",
-  components: {Side_Bar},
+  components: {Side_Bar, LoadingDialog},
   data() {
     return {
-      listFees: ''
+      listFees: '',
+      spinner: false,
     }
   },
   created() {
@@ -58,8 +60,10 @@ export default {
   },
   methods: {
     getFees() {
-      apiFactory.callApi(API_MANAGE_FEE.LIST_FEE, 'GET', {}).then((res) => {
+      this.spinner = true
+      apiFactory.callApi(API_MANAGE_FEE.LIS_FEE, 'GET', {}).then((res) => {
         this.listFees = res.data.data
+        this.spinner = false
       }).catch(() => {
       });
     }

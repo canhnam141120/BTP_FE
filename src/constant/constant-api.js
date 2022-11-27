@@ -20,7 +20,7 @@ export const API_BOOK = Object.freeze({
 export const API_MANAGE_ADMIN = Object.freeze({
     LIST_ADMIN: "https://book-trading-platform.herokuapp.com/api/ManageAdmin/all",
     REMOVE_ADMIN: "https://book-trading-platform.herokuapp.com/api/ManageAdmin/remove/",
-    SEARCH_ADMIN: "https://book-trading-platform.herokuapp.com/api/ManageAdmin/search/"
+    SEARCH_ADMIN: "https://book-trading-platform.herokuapp.com/api/ManageAdmin/search"
 })
 
 export const API_MANAGE_BILL = Object.freeze({
@@ -139,11 +139,12 @@ export const API_MANAGE_USER= Object.freeze({
 })
 
 export const API_MANAGE_POST = Object.freeze({
-    LIST_POST: "https://book-trading-platform.herokuapp.com/api/ManagePost/all",
-    LIST_POST_APPROVED:"https://book-trading-platform.herokuapp.com/api/ManagePost/approved",
-    LIST_POST_WAITING: "https://book-trading-platform.herokuapp.com/api/ManagePost/waiting",
-    LIST_POST_DENIED: "https://book-trading-platform.herokuapp.com/api/ManagePost/denied",
+    LIST_POST: "https://book-trading-platform.herokuapp.com/api/ManagePost/all?page=",
+    LIST_POST_APPROVED:"https://book-trading-platform.herokuapp.com/api/ManagePost/approved?page=",
+    LIST_POST_WAITING: "https://book-trading-platform.herokuapp.com/api/ManagePost/waiting?page=",
+    LIST_POST_DENIED: "https://book-trading-platform.herokuapp.com/api/ManagePost/denied?page=",
     DETAIL_POST: "https://book-trading-platform.herokuapp.com/api/ManagePost/",
+    SEARCH_POST: "https://book-trading-platform.herokuapp.com/api/ManagePost/search?page=",
     APPROVED_POST: "https://book-trading-platform.herokuapp.com/api/ManagePost/approved/",
     DENIED_POST: "https://book-trading-platform.herokuapp.com/api/ManagePost/denied/",
     COMMENT_OF_POST: "https://book-trading-platform.herokuapp.com/api/ManagePost/comment/",
@@ -152,9 +153,9 @@ export const API_MANAGE_POST = Object.freeze({
 
 export const API_MANAGE_BOOK = Object.freeze({
     LIST_BOOK: "https://book-trading-platform.herokuapp.com/api/ManageBook/all?page=",
-    LIST_BOOK_APPROVED:"https://book-trading-platform.herokuapp.com/api/ManageBook/approved",
-    LIST_BOOK_WAITING: "https://book-trading-platform.herokuapp.com/api/ManageBook/waiting",
-    LIST_BOOK_DENIED: "https://book-trading-platform.herokuapp.com/api/ManageBook/denied",
+    LIST_BOOK_APPROVED:"https://book-trading-platform.herokuapp.com/api/ManageBook/approved?page=",
+    LIST_BOOK_WAITING: "https://book-trading-platform.herokuapp.com/api/ManageBook/waiting?page=",
+    LIST_BOOK_DENIED: "https://book-trading-platform.herokuapp.com/api/ManageBook/denied?page=",
     DETAIL_BOOK: "https://book-trading-platform.herokuapp.com/api/ManageBook/",
     SEARCH_BOOK: "https://book-trading-platform.herokuapp.com/api/ManageBook/search?page=",
     APPROVED_BOOK: "https://book-trading-platform.herokuapp.com/api/ManageBook/approved/",
