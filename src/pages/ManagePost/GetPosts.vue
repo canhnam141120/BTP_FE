@@ -192,7 +192,6 @@ export default {
         });
       }
       else{
-        window.scrollTo(0, 0)
         apiFactory.callApi(API_MANAGE_POST.LIST_POST + pageNumber, 'GET', {}).then((res) => {
           this.listPosts = res.data.data
           this.totalPosts = res.data.numberOfRecords

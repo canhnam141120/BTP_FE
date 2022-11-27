@@ -127,12 +127,12 @@ export const API_TRANSACTION = Object.freeze({
 })
 
 export const API_MANAGE_USER= Object.freeze({
-    LIST_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/all",
-    LIST_BAN_USER:"https://book-trading-platform.herokuapp.com/api/ManageUser/ban-list",
-    LIST_ACTIVE_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/active-list",
+    LIST_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/all?page=",
+    LIST_BAN_USER:"https://book-trading-platform.herokuapp.com/api/ManageUser/ban-list?page=",
+    LIST_ACTIVE_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/active-list?page=",
     TOP: "https://book-trading-platform.herokuapp.com/api/ManageUser/top",
     DETAIL_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/",
-    SEARCH_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/search",
+    SEARCH_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/search?page=",
     BAN_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/ban/",
     ACTIVE_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/active/",
     AUTHORITY_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/authority/",
