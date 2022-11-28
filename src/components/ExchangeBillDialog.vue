@@ -2,7 +2,7 @@
   <div v-show="show" class="dialog">
     <div class="dialogContent">
       <div class="topDialog">
-        <div class="dialogTitle">CHI TIẾT GIAO DỊCH</div>
+        <div class="dialogTitle">HÓA ĐƠN GIAO DỊCH</div>
         <button class="dialogBtn" v-on:click="cancel">X</button>
       </div>
       <slot></slot>
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: "ExchangeDetailDialog",
+  name: "ExchangeBillDialog",
   props: ['show', 'cancel'],
 }
 </script>
@@ -27,7 +27,7 @@ export default {
 }
 
 .dialogContent {
-  width: 1400px;
+  width: 1200px;
   padding-right: 10px;
   padding-left: 10px;
   background: #F0ECE4;
@@ -37,27 +37,11 @@ export default {
   display: block;
 }
 
-.divBtn{
-  text-align: center;
-}
 
-.btnUpdate{
-  height: 40px;
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-
-.editInput{
-  color: #9D6B54;
-  height: 30px;
-  padding-left: 10px;
-  border-radius: 5px;
-}
-
-.topDialog{
+.topDialog {
   display: flex;
   justify-content: space-between;
-  padding-left: 600px;
+  padding-left: 500px;
   padding-top: 10px;
   padding-right: 10px;
 }
@@ -71,7 +55,7 @@ export default {
   margin-bottom: 10px;
 }
 
-.dialogBtn{
+.dialogBtn {
   border-radius: 10px;
   background-color: #9D6B54;
   color: white;

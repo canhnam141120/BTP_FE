@@ -3,14 +3,13 @@
     <div class="ml">
       <div class="row">
         <div class="col-lg-6">
-          <ExchangeDetailDialog :show="showDialog"
-                      :cancel="cancel"
-                      v-if="showDialog" class="modal">
+          <ExchangeDetailDialog :show="showDialogED"
+                      :cancel="cancelDialogDetail"
+                      v-if="showDialogED" class="modal">
             <table class="table">
               <thead>
               <tr class="header">
-                <td>Mã GD</td>
-                <td>Mã chi tiết GD</td>
+                <td>Mã chi tiết</td>
                 <td>Mã Sách 1</td>
                 <td>TT Sách 1 trước GD</td>
                 <td>TT Sách 1 sau GD</td>
@@ -20,12 +19,12 @@
                 <td>Thời gian tạo</td>
                 <td>Hạn GD</td>
                 <td>Trạng thái</td>
-                <td>Hủy</td>
+                <td v-if="!showEditED">Hủy</td>
+                <td v-if="showEditED">Lưu</td>
               </tr>
               </thead>
               <tbody v-for="item of listExchangeDetail" :key="item.id">
-              <tr>
-                <td>{{ item.exchangeId}}</td>
+              <tr v-if="!showEditED">
                 <td>{{ item.id}}</td>
                 <td>{{ item.book1Id}}</td>
                 <td v-if="item.beforeStatusBook1==null">Chưa cập nhật</td>
@@ -39,15 +38,130 @@
                 <td v-else>{{ item.afterStatusBook2}}</td>
                 <td>{{ item.requestTime |  format}}</td>
                 <td>{{ item.expiredDate |  formatDate}}</td>
-                <td v-if="item.status == 'Trading'" ><span class="role approved">ĐANG GIAO DỊCH</span></td>
+                <td v-if="item.status == 'Trading'" ><span class="role approved">ĐANG GD</span></td>
                 <td v-if="item.status == 'Complete'" ><span class="role approved">HOÀN THÀNH</span></td>
                 <td v-if="item.status == 'Cancel'" ><span class="role denied">ĐÃ HỦY</span></td>
                 <td v-if="item.status == 'Waiting'" ><span class="role waiting">ĐANG ĐỢI</span></td>
-                <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="HandleCancel(item.id)">Hủy</button></td>
+                <td v-if="item.status == 'Waiting'"><button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="HandleCancelExchangeDetail(item.id, item.exchangeId)">Hủy</button></td>
+              </tr>
+              <tr v-if="showEditED && item.status != 'Cancel' && item.status != 'Waiting'" >
+                <td>{{ item.id}}</td>
+                <td>{{ item.book1Id}}</td>
+                <td><input type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.beforeStatusBook1"></td>
+                <td><input type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.afterStatusBook1"></td>
+                <td>{{ item.book2Id}}</td>
+                <td><input type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.beforeStatusBook2"></td>
+                <td><input type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.afterStatusBook2"></td>
+                <td>{{ item.requestTime |  format}}</td>
+                <td>{{ item.expiredDate |  formatDate}}</td>
+                <td v-if="item.status == 'Trading'" ><span class="role approved">ĐANG GD</span></td>
+                <td v-if="item.status == 'Complete'" ><span class="role approved">HOÀN THÀNH</span></td>
+                <td v-if="item.status == 'Cancel'" ><span class="role denied">ĐÃ HỦY</span></td>
+                <td v-if="item.status == 'Waiting'" ><span class="role waiting">ĐANG ĐỢI</span></td>
+                <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="editExchangeDetail(item.id, item.exchangeId)">LƯU</button>  </td>
               </tr>
               </tbody>
             </table>
+            <div class="divBtn">
+              <button v-if="!showEditED" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router btnUpdate" v-on:click="showEditED = true">CẬP NHẬT</button>
+              <button v-if="showEditED" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router btnUpdate" v-on:click="showEditED = false">HỦY CẬP NHẬT</button>
+            </div>
           </ExchangeDetailDialog>
+          <ExchangeBillDialog :show="showDialogBD"
+                                :cancel="cancelDialogBill"
+                                v-if="showDialogBD" class="modal">
+            <table class="table">
+              <thead>
+              <tr class="header">
+                <td>Mã hóa đơn</td>
+                <td>Mã/Tên KH</td>
+                <td>Tổng sách</td>
+                <td>Phí cọc</td>
+                <td>Phí ship</td>
+                <td>Phí dịch vụ</td>
+                <td>Tổng tiền</td>
+                <td>TT Thanh toán</td>
+                <td>Ngày thanh toán</td>
+                <td>Phương thức thanh toán</td>
+              </tr>
+              </thead>
+              <tbody v-for="item of listExchangeBills" :key="item.id">
+              <tr>
+                <td>{{ item.id}}</td>
+                <td>{{item.userId}}/{{item.user.fullname}}</td>
+                <td>{{item.totalBook}}</td>
+                <td>{{item.depositFee.toLocaleString()}}đ</td>
+                <td>{{item.feeId1Navigation.price.toLocaleString()}}đ</td>
+                <td v-if="item.feeId3Navigation">{{item.feeId2Navigation.price.toLocaleString()}}đ + {{item.totalBook}}x{{item.feeId3Navigation.price}}đ</td>
+                <td v-else>{{item.feeId2Navigation.price.toLocaleString()}}đ</td>
+                <td>{{item.totalAmount}}</td>
+                <td v-if="item.isPaid"><span class="role paid">ĐÃ THANH TOÁN</span></td>
+                <td v-else><span class="role notPaid">CHƯA THANH TOÁN</span></td>
+                <td v-if="item.paidDate">{{item.paidDate}}</td>
+                <td v-else>Chưa thanh toán</td>
+                <td>{{item.payments}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </ExchangeBillDialog>
+          <UpdateExchangeDialog :show="showDialogUE" v-if="showDialogUE" class="modal">
+            <div class="topDialog">
+              <div class="dialogTitle">CẬP NHẬT GIAO DỊCH SỐ {{exchange.id}}</div>
+              <button class="dialogExit" v-on:click="cancelDialogUE">X</button>
+            </div>
+            <div class="updateBody">
+              <div class="updateLeft">
+                <div class="customer">KHÁCH HÀNG 1</div>
+                <label class="labelFee">TT Vận Chuyển: </label>
+                <select class="sl" v-model="exchange.storageStatus1">
+                  <option v-bind:value="item.id" v-for="item of listStatus" :key="item.id">{{ item.name }}</option>
+                </select><br>
+                <br>
+                <label class="labelFee">Ngày nhận: </label>
+                <input v-if="exchange.storageStatus1 == 'Received'" type="date" class="sl" required v-model="exchange.receiveDate1">
+                <input v-else type="date" disabled class="sl" required v-model="exchange.receiveDate1"><br>
+                <br>
+                <label class="labelFee">Ngày gửi: </label>
+                <input v-if="exchange.storageStatus1 == 'Sent'" type="date" class="sl" required v-model="exchange.sendDate1">
+                <input v-else type="date" class="sl" disabled required v-model="exchange.sendDate1"><br>
+                <br>
+                <label class="labelFee">Ngày thu hồi: </label>
+                <input v-if="exchange.storageStatus1 == 'Recall'" type="date" class="sl" required v-model="exchange.recallDate1">
+                <input v-else type="date" class="sl" disabled required v-model="exchange.recallDate1"><br>
+                <br>
+                <label class="labelFee">Ngày hoàn trả: </label>
+                <input v-if="exchange.storageStatus1 == 'Refund'"  type="date" class="sl" required v-model="exchange.refundDate1">
+                <input v-else type="date" class="sl" disabled required v-model="exchange.refundDate1"><br>
+              </div>
+              <div class="updateRight">
+                <div class="customer">KHÁCH HÀNG 2</div>
+                <label class="labelFee">TT Vận Chuyển: </label>
+                <select class="sl" v-model="exchange.storageStatus2">
+                  <option v-bind:value="item.id" v-for="item of listStatus" :key="item.id">{{ item.name }}</option>
+                </select><br>
+                <br>
+                <label class="labelFee">Ngày nhận: </label>
+                <input v-if="exchange.storageStatus2 == 'Received'" type="date" class="sl" required v-model="exchange.receiveDate2">
+                <input v-else type="date" disabled class="sl" required v-model="exchange.receiveDate2"><br>
+                <br>
+                <label class="labelFee">Ngày gửi: </label>
+                <input v-if="exchange.storageStatus2 == 'Sent'" type="date" class="sl" required v-model="exchange.sendDate2">
+                <input v-else type="date" class="sl" disabled required v-model="exchange.sendDate2"><br>
+                <br>
+                <label class="labelFee">Ngày thu hồi: </label>
+                <input v-if="exchange.storageStatus2 == 'Recall'" type="date" class="sl" required v-model="exchange.recallDate2">
+                <input v-else type="date" class="sl" disabled required v-model="exchange.recallDate2"><br>
+                <br>
+                <label class="labelFee">Ngày hoàn trả: </label>
+                <input v-if="exchange.storageStatus2 == 'Refund'"  type="date" class="sl" required v-model="exchange.refundDate2">
+                <input v-else type="date" class="sl" disabled required v-model="exchange.refundDate2"><br>
+              </div>
+            </div>
+            <div  class="divBtn">
+              <button v-if="exchange.storageStatus1 == 'Refund' && exchange.storageStatus2 == 'Refund'" class="dialogBtn" v-on:click="HandleComplete(exchange.id)">Hoàn Thành</button>
+              <button v-else  class="dialogBtn" v-on:click="saveUE">Cập Nhật</button>
+            </div>
+          </UpdateExchangeDialog>
           <div class="user-data m-b-30">
             <div class="titleMB">QUẢN LÝ GIAO DỊCH ĐỔI</div>
             <hr>
@@ -78,13 +192,12 @@
                   <td>Trạng thái</td>
                   <td>Hóa đơn</td>
                   <td>Cập nhật</td>
-                  <td>Hủy GD</td>
                 </tr>
                 </thead>
                 <tbody v-for="item of listExchanges" :key="item.id">
                 <tr>
                   <td>
-                    <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="openDialog(item.id)">XEM</button>
+                    <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="openDialogDetail(item.id)">XEM</button>
                   </td>
                   <td>{{ item.id }}</td>
                   <td>{{ item.userId1 }} - {{ item.userId1Navigation.fullname }}</td>
@@ -98,17 +211,22 @@
                   <td v-if="item.storageStatus2 == 'Received'" ><span class="role tradingReceived">ĐÃ NHẬN - {{item.receiveDate2|formatDate}}</span></td>
                   <td v-if="item.storageStatus2 == 'Sent'" ><span class="role tradingSent">ĐÃ GỬI - {{item.sendDate2|formatDate}}</span></td>
                   <td v-if="item.storageStatus2 == 'Recall'" ><span class="role tradingRecall">ĐÃ THU HÔI - {{item.recallDate2|formatDate}}</span></td>
-                  <td v-if="item.storageStatus2 == 'Refund'" ><span class="role tradingRefund">ĐÃ HOÀN TRẢ - {{item.refunđate2|formatDate}}</span></td>
+                  <td v-if="item.storageStatus2 == 'Refund'" ><span class="role tradingRefund">ĐÃ HOÀN TRẢ - {{item.refundDate2|formatDate}}</span></td>
                   <td>{{ item.date | formatDate}}</td>
                   <td v-if="item.status == 'Trading'"><span class="role approved">ĐANG GD</span></td>
                   <td v-if="item.status == 'Complete'"><span class="role complete">XONG</span></td>
                   <td v-if="item.status == 'Cancel'"><span class="role denied">ĐÃ HỦY</span></td>
                   <td v-if="item.status == 'Waiting'"><span class="role waiting">ĐANG ĐỢI</span></td>
                   <td>
-                    <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router">XEM</button>
+                    <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="openDialogBill(item.id)">XEM</button>
                   </td>
-                  <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router">CẬP NHẬT</button></td>
-                  <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router">Hủy</button></td>
+                  <td v-if="item.status == 'Waiting'">
+                    <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="HandleTrading(item.id)">DUYỆT</button>
+                    <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="HandleCanCelExchange(item.id)">Hủy</button>
+                  </td>
+                  <td v-if="item.status == 'Trading'">
+                    <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="openDialogUE(item.id)">CẬP NHẬT</button>
+                  </td>
                 </tr>
                 </tbody>
               </table>
@@ -191,26 +309,38 @@
 
 <script>
 import apiFactory from "@/config/apiFactory";
-import {API_MANAGE_TRANSACTION} from "@/constant/constant-api";
+import {API_MANAGE_TRANSACTION, API_TRANSACTION} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
 import LoadingDialog from "@/components/LoadingDialog";
 import ExchangeDetailDialog from "@/components/ExchangeDetailDialog";
+import ExchangeBillDialog from "@/components/ExchangeBillDialog";
+import UpdateExchangeDialog from "@/components/UpdateExchangeDialog";
 
 export default {
   name: "GetExchanges",
-  components: {Side_Bar, LoadingDialog, ExchangeDetailDialog},
+  components: {Side_Bar, LoadingDialog, ExchangeDetailDialog, ExchangeBillDialog, UpdateExchangeDialog},
   data() {
     return {
       listExchanges: '',
       totalExchanges: '',
       listExchangeDetail: '',
+      listExchangeBills: '',
+      exchange: '',
       search: '',
       isSearch: '',
       spinner: false,
       filter: 'Tất Cả',
       listFilter: ['Tất Cả', 'Đang Đợi', 'Đang Giao Dịch', 'Đã Hoàn Thành', 'Đã Hủy'],
+      listStatus: [{id: 'Waiting', name: 'Đang Đợi'},{id: 'Received', name: 'Đã Nhận'},{id: 'Sent', name: 'Đã Gửi'},{id: 'Recall', name: 'Đã Thu Hồi'},{id: 'Refund', name: 'Đã Hoàn Trả'}],
       page: '',
-      showDialog: false,
+      showDialogED: false,
+      showDialogBD: false,
+      showDialogUE: false,
+      showEditED: false,
+      beforeStatusBook1: '',
+      afterStatusBook1: '',
+      beforeStatusBook2: '',
+      afterStatusBook2: '',
     }
   },
   created() {
@@ -300,10 +430,23 @@ export default {
       });
     },
     getExchangeDetail(exchangeId){
-      this.spinner = true
+      this.listExchangeDetail = ''
       apiFactory.callApi(API_MANAGE_TRANSACTION.DETAIL_EXCHANGE + exchangeId, 'GET', {}).then((res) => {
         this.listExchangeDetail = res.data.data
-        this.spinner = false
+      }).catch(() => {
+      });
+    },
+    getExchangeBill(exchangeId){
+      this.listExchangeBills = ''
+      apiFactory.callApi(API_MANAGE_TRANSACTION.BILL_EXCHANGE + exchangeId, 'GET', {}).then((res) => {
+        this.listExchangeBills = res.data.data
+      }).catch(() => {
+      });
+    },
+    getExchangeById(exchangeId){
+      this.exchange = ''
+      apiFactory.callApi(API_MANAGE_TRANSACTION.EXCHANGE_BYID + exchangeId, 'GET', {}).then((res) => {
+        this.exchange = res.data.data
       }).catch(() => {
       });
     },
@@ -317,15 +460,123 @@ export default {
       }
       return this.getExchanges(1)
     },
-    openDialog(exchangeId){
-      this.showDialog = true;
+    HandleTrading(exchangeId){
+      apiFactory.callApi(API_MANAGE_TRANSACTION.HANDLE_TRADE_EXCHANGE + exchangeId, 'PUT', {}).then((res) => {
+        if (res.data.message === 'UPDATE_SUCCESS') {
+          if(this.filter === ''){
+            this.getExchanges(this.page)
+          }
+          if(this.filter === 'Tất Cả'){
+            this.getExchanges(this.page)
+          }
+          if(this.filter === 'Đang Đợi'){
+            this.getExchangeWaiting(this.page)
+          }
+        }
+      }).catch(() => {
+      });
+    },
+    HandleComplete(exchangeId){
+      apiFactory.callApi(API_MANAGE_TRANSACTION.HANDLE_COMPLETE_EXCHANGE + exchangeId, 'PUT', {}).then((res) => {
+        if (res.data.message === 'UPDATE_SUCCESS') {
+          this.saveUE()
+        }
+      }).catch(() => {
+      });
+    },
+    openDialogDetail(exchangeId){
+      this.showDialogED = true;
       this.getExchangeDetail(exchangeId)
     },
-    cancel(){
-      this.showDialog = false;
+    cancelDialogDetail(){
+      this.showDialogED = false;
     },
-    HandleCancel(exchangeDetailId){
-      alert(exchangeDetailId)
+    openDialogBill(exchangeId){
+      this.showDialogBD = true;
+      this.getExchangeBill(exchangeId)
+    },
+    cancelDialogBill(){
+      this.showDialogBD = false;
+    },
+    openDialogUE(exchangeId){
+      this.getExchangeById(exchangeId)
+      this.showDialogUE = true;
+    },
+    cancelDialogUE(){
+      this.showDialogUE = false;
+    },
+    saveUE(){
+      this.spinner = true
+      apiFactory.callApi(API_MANAGE_TRANSACTION.UPDATE_STATUS_EXCHANGE + this.exchange.id, 'PUT', {
+        storageStatus1: this.exchange.storageStatus1,
+        storageStatus2: this.exchange.storageStatus2,
+        sendDate1: this.exchange.sendDate1,
+        receiveDate1: this.exchange.receiveDate1,
+        recallDate1: this.exchange.recallDate1,
+        refundDate1: this.exchange.refundDate1,
+        sendDate2: this.exchange.sendDate2,
+        receiveDate2: this.exchange.receiveDate2,
+        recallDate2: this.exchange.recallDate2,
+        refundDate2: this.exchange.refundDate2,
+      }).then((res) => {
+        if (res.data.message === 'UPDATE_SUCCESS') {
+          alert('Cập nhật thành công')
+          if(this.filter === ''){
+            this.getExchanges(this.page)
+          }
+          if(this.filter === 'Tất Cả'){
+            this.getExchanges(this.page)
+          }
+          if(this.filter === 'Đang Giao Dịch'){
+            this.getExchangeTrading(this.page)
+          }
+          this.showDialogUE = false
+        }
+      }).catch(() => {
+      });
+      this.showDialogUE = false;
+    },
+    editExchangeDetail(exchangeDetailId, exchangeId){
+      const item = this.listExchangeDetail.filter(list => list.id == exchangeDetailId)
+      apiFactory.callApi(API_MANAGE_TRANSACTION.UPDATE_DETAIL_EXCHANGE + exchangeDetailId, 'PUT', {
+        beforeStatusBook1: item[0].beforeStatusBook1,
+        beforeStatusBook2: item[0].beforeStatusBook2,
+        afterStatusBook1:  item[0].afterStatusBook1,
+        afterStatusBook2:  item[0].afterStatusBook2,
+      }).then((res) => {
+        if (res.data.message === 'UPDATE_SUCCESS') {
+          alert('Cập nhật thành công!')
+          this.getExchangeDetail(exchangeId)
+        }
+      }).catch(() => {
+      });
+    },
+    HandleCancelExchangeDetail(exchangeDetailId, exchangeId){
+      apiFactory.callApi(API_TRANSACTION.CANCEL_EXCHANGE_DETAIL + exchangeDetailId, 'PUT', {}).then((res) => {
+        if (res.data.message === 'SUCCESS') {
+          this.getExchangeDetail(exchangeId)
+        }
+      }).catch(() => {
+        alert('Không thành công!')
+      });
+    },
+    HandleCanCelExchange(exchangeId){
+      this.spinner = true
+      apiFactory.callApi(API_TRANSACTION.CANCEL_EXCHANGE + exchangeId, 'PUT', {}).then((res) => {
+        if (res.data.message === 'SUCCESS') {
+          if(this.filter === ''){
+            this.getExchanges(this.page)
+          }
+          if(this.filter === 'Tất Cả'){
+            this.getExchanges(this.page)
+          }
+          if(this.filter === 'Đang Đợi'){
+            this.getExchangeWaiting(this.page)
+          }
+        }
+      }).catch(() => {
+        alert('Không thành công!')
+      });
     }
   },
   filters: {

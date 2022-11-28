@@ -82,6 +82,7 @@ export const API_PERSONAL = Object.freeze({
     DETAIL_RENT: "https://book-trading-platform.herokuapp.com/api/Personal/my-transaction-rent-detail/{id}",
     BILL_RENT: "https://book-trading-platform.herokuapp.com/api/Personal/my-transaction-rent-bill/{id}",
     ALL_BILL_RENT: "https://book-trading-platform.herokuapp.com/api/Personal/my-rent-bill-all",
+    INFO_SHIP: "https://book-trading-platform.herokuapp.com/api/Personal/my-infoShip",
     EDIT_SHIP_INFO: "https://book-trading-platform.herokuapp.com/api/Personal/update-info-shipping"
 })
 
@@ -166,6 +167,7 @@ export const API_MANAGE_BOOK = Object.freeze({
 
 export const API_MANAGE_TRANSACTION= Object.freeze({
     LIST_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/all?page=",
+    EXCHANGE_BYID: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/",
     WAITING_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/waiting?page=",
     TRADING_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/trading?page=",
     COMPLETE_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/complete?page=",
@@ -174,8 +176,11 @@ export const API_MANAGE_TRANSACTION= Object.freeze({
     DETAIL_EXCHANGE:"https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/detail/",
     BILL_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/bill/",
     UPDATE_STATUS_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/update-status/",
+    HANDLE_TRADE_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/trading/",
+    HANDLE_COMPLETE_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/complete/",
     UPDATE_DETAIL_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange-detail/update-status/",
-    LIST_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/all",
+    LIST_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/all?page=",
+    RENT_BYID: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/",
     WAITING_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/waiting?page=",
     TRADING_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/trading?page=",
     COMPLETE_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/complete?page=",
@@ -184,5 +189,7 @@ export const API_MANAGE_TRANSACTION= Object.freeze({
     DETAIL_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/detail/",
     BILL_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/bill/",
     UPDATE_STATUS_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/update-status/",
+    HANDLE_TRADE_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/trading/",
+    HANDLE_COMPLETE_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/complete/",
     UPDATE_DETAIL_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent-detail/update-status/",
 })

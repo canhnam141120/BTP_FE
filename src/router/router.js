@@ -109,11 +109,6 @@ const routers = [
         component: () => import('@/pages/ManageCategory/GetCategories'),
     },
     {
-        path:'/ManageCategory/create',
-        name:'CreateCategory',
-        component: () => import('@/pages/ManageCategory/CreateCategory'),
-    },
-    {
         path:'/ManageFee',
         name:'GetFees',
         component: () => import('@/pages/ManageFee/GetFees'),

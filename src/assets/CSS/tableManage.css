@@ -4508,6 +4508,18 @@ section {
     border: 1px solid green;
 }
 
+.role.paid{
+    width: 110px;
+    background: green;
+    border: 1px solid green;
+}
+
+.role.notPaid{
+    width: 110px;
+    background: red;
+    border: 1px solid red;
+}
+
 .table-top-campaign.table td {
     border-top: none;
     border-bottom: 1px solid #e5e5e5;

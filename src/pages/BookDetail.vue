@@ -673,7 +673,6 @@ strong {
 
 .item-book {
   border-radius: 10px;
-  border: 1px solid #9D6B54;
   width: 191px;
   height: 380px;
   margin: 5px;

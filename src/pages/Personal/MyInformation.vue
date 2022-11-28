@@ -44,6 +44,28 @@
               </div>
             </b-skeleton-wrapper>
             <div class="bottomMI">
+              <div class="titleBottom">Thông tin vận chuyển</div>
+              <div class="infoBottom">
+                <div class="info2">
+                  <label class="lbInfoShip">Gửi sách vào thứ 2 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.sendIsMonday">
+                  <label class="lbInfoShip">Nhận sách vào thứ 2 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.receiveIsMonday">
+                  <label class="lbInfoShip">Hoàn trả sách vào thứ 2 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.recallIsMonday">
+                  <label class="lbInfoShip">Thu hồi sách vào thứ 2 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.refundIsMonday">
+                </div>
+                <div class="info4">
+                  <label class="lbInfoShip">Gửi sách vào thứ 4 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.sendIsWednesday">
+                  <label class="lbInfoShip">Nhận sách vào thứ 4 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.receiveIsWednesday">
+                  <label class="lbInfoShip">Hoàn trả sách vào thứ 4 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.recallIsWednesday">
+                  <label class="lbInfoShip">Thu hồi sách vào thứ 4 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.refundIsWednesday">
+                </div>
+                <div class="info6">
+                  <label class="lbInfoShip">Gửi sách vào thứ 6 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.sendIsFriday">
+                  <label class="lbInfoShip">Nhận sách vào thứ 6 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.receiveIsFriday">
+                  <label class="lbInfoShip">Hoàn trả sách vào thứ 6 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.recallIsFriday">
+                  <label class="lbInfoShip">Thu hồi sách vào thứ 6 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.refundIsFriday">
+                </div>
+              </div>
+              <div class="divUpdate"><button class="btnUpdate" v-on:click="HandleUpdateInfoShip">CẬP NHẬT THÔNG TIN VẬN CHUYỂN</button></div>
             </div>
           </div>
         </div>
@@ -65,12 +87,14 @@ export default {
   data() {
     return {
       info: '',
+      infoShip: '',
       userId: '',
       loading: false,
     }
   },
   created() {
     this.getMyInformation()
+    this.getMyInfoShipping()
   },
   methods: {
     getMyInformation() {
@@ -82,6 +106,41 @@ export default {
       }).then((res) => {
         this.info = res.data.data
         this.loading = false
+      }).catch(() => {
+      });
+    },
+    getMyInfoShipping() {
+      let token = this.$cookies.get('token');
+      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.INFO_SHIP, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        this.infoShip = res.data.data
+      }).catch(() => {
+      });
+    },
+    HandleUpdateInfoShip(){
+      let token = this.$cookies.get('token');
+      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.EDIT_SHIP_INFO, 'PUT', {
+        userId: this.userByToken.UserId,
+        sendIsMonday: this.infoShip.sendIsMonday,
+        receiveIsMonday: this.infoShip.receiveIsMonday,
+        recallIsMonday: this.infoShip.recallIsMonday,
+        refundIsMonday: this.infoShip.refundIsMonday,
+        sendIsWednesday: this.infoShip.sendIsWednesday,
+        receiveIsWednesday: this.infoShip.receiveIsWednesday,
+        recallIsWednesday: this.infoShip.recallIsWednesday,
+        refundIsWednesday: this.infoShip.refundIsWednesday,
+        sendIsFriday: this.infoShip.sendIsFriday,
+        receiveIsFriday: this.infoShip.receiveIsFriday,
+        recallIsFriday: this.infoShip.recallIsFriday,
+        refundIsFriday: this.infoShip.refundIsFriday,
+      }).then((res) => {
+        if(res.data.message == 'UPDATE_SUCCESS'){
+          alert('Cập nhật thông tin vận chuyển thành công!')
+          this.getMyInfoShipping()
+        }
       }).catch(() => {
       });
     }
@@ -239,10 +298,56 @@ strong {
 .bottomMI{
   background: #F0ECE4;
   height: 400px;
-  display: flex;
   border-radius: 10px;
   border: 1px solid #9D6B54;
 }
 
+.titleBottom{
+  padding-top: 10px;
+  padding-left: 20px;
+  color: #9D6B54;
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
 
+.infoBottom{
+  display: flex;
+  justify-content: space-between;
+  padding-top: 30px;
+  padding-left: 70px;
+  padding-right: 30px;
+}
+
+.lbInfoShip{
+  height: 30px;
+  width: 180px;
+  margin-top: 20px;
+}
+
+.cbInfoShip{
+  width: 20px;
+  height: 20px;
+}
+
+.divUpdate{
+  text-align: center;
+}
+
+.btnUpdate{
+  background-color: #9D6B54;
+  color: #F0ECE4;
+  border-radius: 10px;
+  height: 50px;
+  width: 350px;
+  border: 1px solid #9D6B54;
+  margin-top: 40px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.btnUpdate:hover{
+  background-color: #F0ECE4;
+  color: #9D6B54;
+}
 </style>
