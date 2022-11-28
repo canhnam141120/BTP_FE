@@ -37,7 +37,7 @@ export const API_MANAGE_CATEGORY = Object.freeze({
     LIST_CATEGORY: "https://book-trading-platform.herokuapp.com/api/ManageCategory/all",
     DETAIL_CATEGORY: "https://book-trading-platform.herokuapp.com/api/ManageCategory/",
     CREATE_CATEGORY: "https://book-trading-platform.herokuapp.com/api/ManageCategory/create",
-    EDIT_BILL: "https://book-trading-platform.herokuapp.com/api/ManageCategory/edit/",
+    EDIT_CATEGORY: "https://book-trading-platform.herokuapp.com/api/ManageCategory/edit/",
     DELETE_CATEGORY: "https://book-trading-platform.herokuapp.com/api/ManageCategory/delete/",
 })
 
@@ -165,12 +165,22 @@ export const API_MANAGE_BOOK = Object.freeze({
 })
 
 export const API_MANAGE_TRANSACTION= Object.freeze({
-    LIST_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/all",
+    LIST_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/all?page=",
+    WAITING_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/waiting?page=",
+    TRADING_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/trading?page=",
+    COMPLETE_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/complete?page=",
+    CANCEL_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/cancel?page=",
+    SEARCH_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/search?page=",
     DETAIL_EXCHANGE:"https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/detail/",
     BILL_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/bill/",
     UPDATE_STATUS_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/update-status/",
     UPDATE_DETAIL_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange-detail/update-status/",
     LIST_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/all",
+    WAITING_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/waiting?page=",
+    TRADING_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/trading?page=",
+    COMPLETE_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/complete?page=",
+    CANCEL_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/cancel?page=",
+    SEARCH_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/search?page=",
     DETAIL_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/detail/",
     BILL_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/bill/",
     UPDATE_STATUS_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/update-status/",

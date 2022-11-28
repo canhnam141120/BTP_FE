@@ -74,10 +74,10 @@
               <thead>
               <tr>
                 <td>Chi tiết</td>
+                <td>Ảnh</td>
                 <td>Mã sách</td>
                 <td>Người đăng</td>
                 <td>Tên sách</td>
-                <td>Ảnh</td>
                 <td>Giá bìa</td>
                 <td>Giá cọc</td>
                 <td>Ngày đăng</td>
@@ -94,9 +94,9 @@
                   </button>
                 </td>
                 <td>{{ item.id }}</td>
+                <td><img v-bind:src="item.image" height="90px" width="65px"></td>
                 <td>{{ item.user.fullname }}</td>
                 <td style="max-width: 300px">{{ item.title }}</td>
-                <td><img v-bind:src="item.image" height="90px" width="65px"></td>
                 <td>{{ item.coverPrice.toLocaleString() }}đ</td>
                 <td>{{ item.depositPrice.toLocaleString() }}đ</td>
                 <td>{{ item.postedDate |formatDate }}</td>

@@ -362,7 +362,6 @@ strong {
 
 .body-blog .container-blog .content .grid .item {
   border-radius: 10px;
-  border: 1px solid #9D6B54;
   width: 593px;
   height: auto;
   margin: 10px 0px 10px 15px;

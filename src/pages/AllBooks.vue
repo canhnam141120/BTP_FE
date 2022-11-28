@@ -38,16 +38,23 @@
                   </router-link>
                   <div class="info">
                     <div class="book-title">{{ item.title }}</div>
-                    <div><img src="../image/user.png"> {{ item.user.fullname }}</div>
+                    <div><img src="../image/user.png"><strong>{{ item.user.fullname }}</strong> </div>
                     <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                    <label>Dịch vụ:
+                      <strong>
+                        <span v-if="item.isExchange && item.isRent">Trao đổi & Thuê</span>
+                        <span v-if="!item.isRent && item.isExchange">Trao đổi</span>
+                        <span v-if="item.isRent && !item.isExchange">Thuê</span>
+                      </strong>
+                    </label>
                     <label class="book-status">{{ item.statusBook }}</label>
                   </div>
-                  <div class="actionAB">
-                    <router-link v-if="item.isExchange" class="activeAll" :to="{ name: 'BookDetail', query: { id:item.id }}">Trao đổi</router-link>
+<!--                  <div class="actionAB">
+                    <label v-if="item.isExchange" class="activeAll">Trao đổi</label>
                     <router-link v-else class="disableAll" :to="{ name: 'BookDetail', query: { id:item.id }}">Trao đổi</router-link>
                     <router-link v-if="item.isRent" class="activeAllR" :to="{ name: 'BookDetail', query: { id:item.id }}">Thuê</router-link>
                     <router-link v-else class="disableAllR" :to="{ name: 'BookDetail', query: { id:item.id }}">Thuê</router-link>
-                  </div>
+                  </div>-->
                 </div>
               </div>
             </b-skeleton-wrapper>
@@ -222,7 +229,7 @@ strong {
 }
 
 .body .container-book .content .grid .item:hover {
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  box-shadow: 0px 4px 6px 0 rgba(0, 0, 0, 0.2)
 }
 
 .body .container-book .content .grid .item img {

@@ -36,11 +36,11 @@
               <div class="grid-book">
                 <div class="item-book" v-for="item of listBook" :key="item.id">
                   <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">
-                    <img v-bind:src="item.image">
+                    <img class="imgBook" v-bind:src="item.image">
                   </router-link>
                   <div class="info">
                     <div class="book-title">{{ item.title }}</div>
-                    <div><img src="../image/user.png"> {{ item.user.fullname }}</div>
+                    <div><img class="imgUser" src="../image/user.png"> {{ item.user.fullname }}</div>
                     <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
                   </div>
@@ -69,11 +69,11 @@
               <div class="grid-post">
                 <div class="item-post" v-for="item of listPost" :key="item.id">
                   <router-link :to="{ name: 'PostDetail', query: { id:item.id }}">
-                    <img v-bind:src="item.image">
+                    <img class="imgPost" v-bind:src="item.image">
                   </router-link>
                   <div class="info">
                     <div class="post-title">{{ item.title }}</div>
-                    <div><img src="../image/user.png"> {{ item.user.fullname }}</div>
+                    <div><img class="imgUserPost" src="../image/user.png"> {{ item.user.fullname }}</div>
                     <div class="createDate"><Icon class="iconTime" icon="ic:twotone-access-time"/>{{item.createdDate | formatDate}}</div>
                     <div class="post-content">{{ item.content }}</div>
                   </div>
@@ -222,7 +222,6 @@ strong {
 }
 
 .item-book {
-  border: 1px solid #9D6B54;
   border-radius: 10px;
   width: 191px;
   height: auto;
@@ -233,7 +232,7 @@ strong {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }
 
-.item-book img{
+.item-book .imgBook{
   border-radius: 10px;
   height: 250px;
   width: 100%;
@@ -244,7 +243,7 @@ strong {
   padding: 5px;
 }
 
-.grid-book .info img {
+.grid-book .info .imgUser {
   width: 20px;
   height: 20px;
   margin-left: 5px;
@@ -284,7 +283,6 @@ strong {
 
 .item-post {
   border-radius: 10px;
-  border: 1px solid #9D6B54;
   display: flex;
   width: 392px;
   margin: 5px;
@@ -295,7 +293,7 @@ strong {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }
 
-.item-post img{
+.item-post .imgPost{
   border-radius: 10px;
   height: 191px;
   width: 191px;
@@ -307,7 +305,7 @@ strong {
   padding: 5px;
 }
 
-.grid-post .info img {
+.grid-post .info .imgUserPost {
   width: 18px;
   height: 18px;
   margin-left: 4px;

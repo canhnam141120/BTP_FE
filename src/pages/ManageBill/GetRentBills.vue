@@ -4,8 +4,8 @@
       <div class="row">
         <div class="col-lg-6">
           <div class="user-data m-b-30">
-            <h3 class="title-3 m-b-30">
-              <i class="zmdi zmdi-account-calendar"></i>Danh sách tất cả hóa đơn thuê</h3>
+            <div class="titleMB">QUẢN LÝ HÓA ĐƠN THUÊ</div>
+            <hr>
             <button class="au-btn au-btn-icon au-btn--brown au-btn--small">
               <router-link to="/ManageBill/exchange-bill" class="btn-router">Xem hóa đơn đổi</router-link>
             </button>
@@ -135,4 +135,5 @@ export default {
 
 <style >
 @import "../../assets/CSS/tableManage.css";
+
 </style>

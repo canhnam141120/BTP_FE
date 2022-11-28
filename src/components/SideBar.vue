@@ -197,7 +197,7 @@ export default {
  }
 
 &__logo img {
-   width: 160px;
+   width: 180px;
    height: auto;
    position: unset;
    padding-bottom: 10px;

@@ -2,10 +2,17 @@
   <Side_Bar>
   <div class="ml">
     <div class="row">
+      <CreateFeeDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
+        <div class="dialogBody">
+          <label class="labelFee">Code Phí: </label><span>{{fee.code}}</span><br>
+          <label class="labelFee">Tên Phí: </label><span>{{fee.name}}</span><br>
+          <label class="labelFee">Giá: </label><input class="inputFee" maxlength="6" type="number" required placeholder="Nhập giá mới" v-model="fee.price">đ
+        </div>
+      </CreateFeeDialog>
       <div class="col-lg-6">
         <div class="user-data m-b-30">
-          <h3 class="title-3 m-b-30">
-            <i class="zmdi zmdi-account-calendar"></i>Danh sách phí</h3>
+          <div class="titleMB">QUẢN LÝ PHÍ</div>
+          <hr>
           <div class="table-responsive table-data">
             <table class="table">
               <thead>
@@ -14,20 +21,16 @@
                 <td>Code</td>
                 <td>Tên phí</td>
                 <td>Giá</td>
-                <td></td>
+                <td>Chỉnh sửa</td>
               </tr>
               </thead>
               <tbody>
               <tr v-for="item of listFees" :key="item.id">
-                <td>
-                  <div class="table-data__info">
-                    <h6>{{item.id}}</h6>
-                  </div>
-                </td>
+                <td>{{item.id}}</td>
                 <td>{{item.code}}</td>
                 <td>{{item.name}}</td>
-                <td>{{item.price}}</td>
-                <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleCreate(item.code)">Sửa giá</button></td>
+                <td>{{item.price.toLocaleString()}}đ</td>
+                <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="openDialog(item.id)">Sửa giá</button></td>
               </tr>
               </tbody>
             </table>
@@ -45,13 +48,16 @@ import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_FEE} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
 import LoadingDialog from "@/components/LoadingDialog";
+import CreateFeeDialog from "@/components/CreateFeeDialog";
 
 export default {
   name: "GetFees",
-  components: {Side_Bar, LoadingDialog},
+  components: {Side_Bar, LoadingDialog, CreateFeeDialog},
   data() {
     return {
       listFees: '',
+      fee: '',
+      showDialog: false,
       spinner: false,
     }
   },
@@ -61,11 +67,40 @@ export default {
   methods: {
     getFees() {
       this.spinner = true
-      apiFactory.callApi(API_MANAGE_FEE.LIS_FEE, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_FEE.LIST_FEE, 'GET', {}).then((res) => {
         this.listFees = res.data.data
         this.spinner = false
       }).catch(() => {
       });
+    },
+    getFeeById(id){
+      apiFactory.callApi(API_MANAGE_FEE.DETAIL_FEE + id, 'GET', {}).then((res) => {
+        this.fee = res.data.data
+      }).catch(() => {
+      });
+    },
+    openDialog(id) {
+      this.getFeeById(id)
+      this.showDialog = true
+    },
+    cancel() {
+      this.fee=''
+      this.showDialog = false
+    },
+    save(){
+      apiFactory.callApi(API_MANAGE_FEE.CREATE_FEE, 'POST', {
+        code: this.fee.code,
+        name: this.fee.name,
+        price: this.fee.price
+      }).then((res) => {
+        if (res.data.message === 'CREATE_SUCCESS') {
+          console.log(alert('Chỉnh sửa phí thành công'))
+          this.showDialog = false
+          this.getFees()
+        }
+      }).catch(() => {
+      });
+      this.showDialog = false
     }
   }
 }
@@ -73,4 +108,10 @@ export default {
 
 <style >
 @import "../../assets/CSS/tableManage.css";
+.titleMB{
+  font-weight: bold;
+  text-align: center;
+  color:  #9D6B54;
+  font-size: 30px;
+}
 </style>
