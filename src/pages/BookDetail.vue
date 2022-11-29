@@ -29,8 +29,8 @@
                   </router-link>
                   <div class="infoMB">
                     <div class="book-titleMB">{{ item.title }}</div>
-                    <div class="book-statusMB">Thể loại: {{ item.category.name}}</div>
-                    <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                    <div class="book-statusMB">Thể loại: {{ item.category?.name}}</div>
+                    <label>Giá bìa: <strong>{{ item.coverPrice?.toLocaleString() }}đ</strong></label>
                     <label class="book-statusMB">{{ item.statusBook }}</label>
                   </div>
                   <input type="checkbox" class="checkboxes" v-bind:value="item.id" v-model="listIdBook">
@@ -49,7 +49,7 @@
               <label class="titleBD"><strong>{{book.title}}</strong></label>
               <div class="infoBD">
                 <div class="bookInfoBD">
-                  <div>Thể loại: <span>{{book.category.name}}</span></div>
+                  <div>Thể loại: <span>{{book.category?.name}}</span></div>
                   <div>Tác giả: <span>{{book.author}}</span></div>
                   <div>Nhà xuất bản: <span>{{book.publisher}}</span></div>
                   <div>Năm xuất bản: <span>{{book.year}}</span></div>
@@ -58,22 +58,22 @@
                   <div>Trọng lượng: <span>{{book.weight}}g</span></div>
                   <div>Thời gian giao dịch: <span>{{book.numberOfDays}} ngày</span></div>
                   <div class="priceBD">
-                    <div class="itemPrice">Giá bìa    <span class="cover">{{ book.coverPrice.toLocaleString() }}đ</span></div>
-                    <div class="itemPrice">Phí đặt cọc <span class="deposit">{{ book.depositPrice.toLocaleString() }}đ</span></div>
-                    <div v-if="book.isRent" class="itemPrice">Phí thuê      <span class="rent">{{ book.rentFee.toLocaleString() }}đ</span></div>
+                    <div class="itemPrice">Giá bìa    <span class="cover">{{ book.coverPrice?.toLocaleString() }}đ</span></div>
+                    <div class="itemPrice">Phí đặt cọc <span class="deposit">{{ book.depositPrice?.toLocaleString() }}đ</span></div>
+                    <div v-if="book.isRent" class="itemPrice">Phí thuê      <span class="rent">{{ book.rentFee?.toLocaleString() }}đ</span></div>
                     <div v-else class="itemPrice"></div>
                   </div>
                 </div>
                 <div class="userBD">
-                  <router-link :to="{ name: '', query: { id:book.user.id }}">
-                    <img class="avatarBD" v-bind:src="book.user.avatar">
+                  <router-link :to="{ name: 'OtherPerson', query: { id:book.user?.id }}">
+                    <img class="avatarBD" v-bind:src="book.user?.avatar">
                   </router-link>
                   <div class="userInfoBD">
                     <div>Đăng bởi</div>
-                    <div><strong>{{ book.user.fullname }}</strong></div>
-                    <div>{{ book.user.likeNumber }} người thích</div>
-                    <div>{{ book.user.numberOfTransaction }} lần giao dịch</div>
-                    <router-link class="btn" :to="{ name: 'Other-Person', query: {id:book.user.id}}">Xem</router-link>
+                    <div><strong>{{ book.user?.fullname }}</strong></div>
+                    <div>{{ book.user?.likeNumber }} người thích</div>
+                    <div>{{ book.user?.numberOfTransaction }} lần giao dịch</div>
+                    <router-link class="btn" :to="{ name: 'OtherPerson', query: {id:book.user?.id}}">Xem</router-link>
                   </div>
                 </div>
               </div>
@@ -107,13 +107,13 @@
               </div>
               <div class="mid-info-right">
                 <div>{{book.title}}</div>
-                <div>{{book.user.fullname}}</div>
-                <div>{{book.coverPrice.toLocaleString()}}đ</div>
-                <div>{{book.depositPrice.toLocaleString()}}đ</div>
-                <div v-if="book.isRent">{{book.rentFee.toLocaleString()}}đ</div>
+                <div>{{book.user?.fullname}}</div>
+                <div>{{book.coverPrice?.toLocaleString()}}đ</div>
+                <div>{{book.depositPrice?.toLocaleString()}}đ</div>
+                <div v-if="book.isRent">{{book.rentFee?.toLocaleString()}}đ</div>
                 <div>{{book.numberOfDays}} ngày</div>
                 <div>{{book.postedDate}}</div>
-                <div>{{book.category.name}}</div>
+                <div>{{book.category?.name}}</div>
                 <div>{{book.author}}</div>
                 <div>{{book.publisher}}</div>
                 <div>{{book.year}}</div>
@@ -140,12 +140,12 @@
           <div v-if="countFeedback!=0" class="bookdetail-feedback">
             <div class="title"><strong>Đánh giá/Bình luận</strong></div>
             <div class="feedbacks" v-for="item of feedbacks" :key="item.id">
-              <router-link :to="{ name: '', query: { id:item.id }}">
-                <img class="avatar-feedbacker" v-bind:src="item.user.avatar">
+              <router-link :to="{ name: 'OtherPerson', query: { id:item.userId}}">
+                <img class="avatar-feedbacker" v-bind:src="item.user?.avatar">
               </router-link>
               <div class="feedbackItem">
-                <div class="name">{{item.user.fullname}}</div>
-                <div class="date">{{item.createdDate}}</div>
+                <div class="name">{{item.user?.fullname}}</div>
+                <div class="date">{{item.createdDate | formatDate}}</div>
                 <div class="content">{{item.content}}</div>
               </div>
             </div>
@@ -191,8 +191,8 @@
                   </router-link>
                   <div class="info">
                     <div class="book-title">{{ item.title }}</div>
-                    <label class="book-status">Thể loại: {{ item.category.name }}</label>
-                    <label class="book-status">Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                    <label class="book-status">Thể loại: {{ item.category?.name }}</label>
+                    <label class="book-status">Giá bìa: <strong>{{ item.coverPrice?.toLocaleString() }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
                   </div>
                 </div>
@@ -223,8 +223,8 @@
                   </router-link>
                   <div class="info">
                     <div class="book-title">{{ item.title }}</div>
-                    <div class="book-status"><img src="../image/user.png"> {{ item.user.fullname }}</div>
-                    <label class="book-status">Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                    <div class="book-status"><img src="../image/user.png"> {{ item.user?.fullname }}</div>
+                    <label class="book-status">Giá bìa: <strong>{{ item.coverPrice?.toLocaleString() }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
                   </div>
                 </div>
@@ -241,7 +241,7 @@
 import apiFactory from "@/config/apiFactory";
 import {API_BOOK, API_PERSONAL, API_REQUEST} from "@/constant/constant-api";
 import Layout from "@/components/Layout";
-import ExchangeDialog from "@/components/ExchangeDialog";
+import ExchangeDialog from "@/pages/ManageTransaction/ExchangeDialog";
 import VueJwtDecode from "vue-jwt-decode";
 import LoadingDialog from "@/components/LoadingDialog";
 
@@ -260,7 +260,8 @@ export default {
       bookCanTrade: '',
       spinner: false,
       loading: false,
-      listIdBook: []
+      listIdBook: [],
+      page: 1
     }
   },
   created() {
@@ -300,13 +301,22 @@ export default {
     },
     getFeedback(bookId, page){
       //this.loading = true;
-      const url = API_BOOK.GET_FEEDBACK_BOOK + bookId + '?page=' + page
-      apiFactory.callApi(url, 'GET', {}).then((res) => {
-        this.feedbacks = res.data.data
-        this.countFeedback = res.data.numberOfRecords
-        //this.loading = false
-      }).catch(() => {
-      });
+      if(page){
+        apiFactory.callApi(API_BOOK.GET_FEEDBACK_BOOK + bookId + '?page=' + page, 'GET', {}).then((res) => {
+          this.feedbacks = res.data.data
+          this.countFeedback = res.data.numberOfRecords
+          //this.loading = false
+        }).catch(() => {
+        });
+      }
+      else{
+        apiFactory.callApi(API_BOOK.GET_FEEDBACK_BOOK + bookId, 'GET', {}).then((res) => {
+          this.feedbacks = res.data.data
+          this.countFeedback = res.data.numberOfRecords
+          //this.loading = false
+        }).catch(() => {
+        });
+      }
     },
     getBookCanTrade() {
       this.loading = true;
@@ -353,6 +363,9 @@ export default {
       if(value){
         return value.substring(0, limit);
       }
+    },
+    formatDate(value){
+      return new Date(value).toLocaleString('en-GB')
     }
   }
 }
@@ -398,7 +411,7 @@ strong {
 
 .dialogBook .gridMB .itemMB img {
   height: 290px;
-  width: 220px;
+  width: 218px;
   border-radius: 10px;
 }
 
@@ -670,7 +683,6 @@ strong {
 
 .item-book {
   border-radius: 10px;
-  border: 1px solid #9D6B54;
   width: 191px;
   height: 380px;
   margin: 5px;

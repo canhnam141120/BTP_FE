@@ -95,7 +95,8 @@ export default {
       loading: false,
       userByToken: '',
       userId: '',
-      tmpId: ''
+      tmpId: '',
+      page: 1
     }
   },
   created() {
@@ -106,7 +107,7 @@ export default {
       this.loading = true;
       let token = this.$cookies.get('token');
       this.userByToken= VueJwtDecode.decode(token, 'utf-8');
-      const url = API_PERSONAL.LIST_REQUEST_SEND + pageNumber
+      const url = API_PERSONAL.LIST_REQUEST_SEND + '?page=' + pageNumber
       apiFactory.callApi(url, 'POST', {
         userId: this.userByToken.UserId
       }).then((res) => {

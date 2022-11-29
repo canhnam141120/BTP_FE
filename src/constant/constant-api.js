@@ -2,7 +2,7 @@
 export const API_BOOK = Object.freeze({
     LIST_BOOK_FOLLOW: "https://book-trading-platform.herokuapp.com/api/Book/from-favorite-users",
     TOP_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/top-book",
-    LIST_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/all?page=",
+    LIST_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/all",
     DETAIL_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/",
     CATEGORY_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/category{id}",
     CATEGORY_6BOOK: "https://book-trading-platform.herokuapp.com/api/Book/6book/category",
@@ -10,6 +10,7 @@ export const API_BOOK = Object.freeze({
     USER_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/user",
     USER_BOOK6: "https://book-trading-platform.herokuapp.com/api/Book/6book/user",
     SEARCH_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/search-by-title?page=",
+    SEARCH_BOOK_USER: "https://book-trading-platform.herokuapp.com/api/Book/search-book-user/user",
     CREATE_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/create",
     FEEDBACK_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/feedback/create/",
     EDIT_BOOK: "https://book-trading-platform.herokuapp.com/api/Book/edit/{id}",
@@ -20,7 +21,7 @@ export const API_BOOK = Object.freeze({
 export const API_MANAGE_ADMIN = Object.freeze({
     LIST_ADMIN: "https://book-trading-platform.herokuapp.com/api/ManageAdmin/all",
     REMOVE_ADMIN: "https://book-trading-platform.herokuapp.com/api/ManageAdmin/remove/",
-    SEARCH_ADMIN: "https://book-trading-platform.herokuapp.com/api/ManageAdmin/search/"
+    SEARCH_ADMIN: "https://book-trading-platform.herokuapp.com/api/ManageAdmin/search"
 })
 
 export const API_MANAGE_BILL = Object.freeze({
@@ -37,7 +38,7 @@ export const API_MANAGE_CATEGORY = Object.freeze({
     LIST_CATEGORY: "https://book-trading-platform.herokuapp.com/api/ManageCategory/all",
     DETAIL_CATEGORY: "https://book-trading-platform.herokuapp.com/api/ManageCategory/",
     CREATE_CATEGORY: "https://book-trading-platform.herokuapp.com/api/ManageCategory/create",
-    EDIT_BILL: "https://book-trading-platform.herokuapp.com/api/ManageCategory/edit/",
+    EDIT_CATEGORY: "https://book-trading-platform.herokuapp.com/api/ManageCategory/edit/",
     DELETE_CATEGORY: "https://book-trading-platform.herokuapp.com/api/ManageCategory/delete/",
 })
 
@@ -52,11 +53,11 @@ export const API_PERSONAL = Object.freeze({
     NOTIFICATION_10: "https://book-trading-platform.herokuapp.com/api/Personal/notification/top10new",
     MARK_READ_NOTIFICATION: "https://book-trading-platform.herokuapp.com/api/Personal/notification/mark-read/",
     BOOK_CAN_TRADE: "https://book-trading-platform.herokuapp.com/api/Personal/can-trade",
-    LIST_BOOK: "https://book-trading-platform.herokuapp.com/api/Personal/my-book-list?page=",
+    LIST_BOOK: "https://book-trading-platform.herokuapp.com/api/Personal/my-book-list",
     LIST_BOOK_APPROVED: "https://book-trading-platform.herokuapp.com/api/Personal/my-approved-book-list",
     LIST_BOOK_DENIED: "https://book-trading-platform.herokuapp.com/api/Personal/my-denied-book-list",
     LIST_BOOK_WAITING: "https://book-trading-platform.herokuapp.com/api/Personal/my-waiting-book-list",
-    LIST_POST: "https://book-trading-platform.herokuapp.com/api/Personal/my-post-list?page=",
+    LIST_POST: "https://book-trading-platform.herokuapp.com/api/Personal/my-post-list",
     LIST_POST_APPROVED: "https://book-trading-platform.herokuapp.com/api/Personal/my-approved-post-list",
     LIST_POST_DENIED: "https://book-trading-platform.herokuapp.com/api/Personal/my-denied-post-list",
     LIST_POST_WAITING: "https://book-trading-platform.herokuapp.com/api/Personal/my-waiting-post-list",
@@ -72,7 +73,7 @@ export const API_PERSONAL = Object.freeze({
     INFORMATION: "https://book-trading-platform.herokuapp.com/api/Personal/my-profile",
     EDIT_INFORMATION: "https://book-trading-platform.herokuapp.com/api/Personal/edit-profile",
     CHANGE_PASSWORD: "https://book-trading-platform.herokuapp.com/api/Personal/edit-password",
-    LIST_REQUEST_SEND: "https://book-trading-platform.herokuapp.com/api/Personal/request-send?page=",
+    LIST_REQUEST_SEND: "https://book-trading-platform.herokuapp.com/api/Personal/request-send",
     LIST_REQUEST_RECEIVED: "https://book-trading-platform.herokuapp.com/api/Personal/request-received/",
     LIST_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/Personal/my-transaction-exchange-all",
     DETAIL_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/Personal/my-transaction-exchange-detail/{id}",
@@ -82,6 +83,7 @@ export const API_PERSONAL = Object.freeze({
     DETAIL_RENT: "https://book-trading-platform.herokuapp.com/api/Personal/my-transaction-rent-detail/{id}",
     BILL_RENT: "https://book-trading-platform.herokuapp.com/api/Personal/my-transaction-rent-bill/{id}",
     ALL_BILL_RENT: "https://book-trading-platform.herokuapp.com/api/Personal/my-rent-bill-all",
+    INFO_SHIP: "https://book-trading-platform.herokuapp.com/api/Personal/my-infoShip",
     EDIT_SHIP_INFO: "https://book-trading-platform.herokuapp.com/api/Personal/update-info-shipping"
 })
 
@@ -89,10 +91,11 @@ export const API_POST = Object.freeze({
     TOP_POST: "https://book-trading-platform.herokuapp.com/api/Post/top-post",
     POST6: "https://book-trading-platform.herokuapp.com/api/Post/6post",
     USER_POST: "https://book-trading-platform.herokuapp.com/api/Post/user",
-    LIST_POST: "https://book-trading-platform.herokuapp.com/api/Post/all?page=",
+    LIST_POST: "https://book-trading-platform.herokuapp.com/api/Post/all",
     DETAIL_POST: "https://book-trading-platform.herokuapp.com/api/Post/",
     COMMENT_OF_POST: "https://book-trading-platform.herokuapp.com/api/Post/comment/",
-    SEARCH_POST: "https://book-trading-platform.herokuapp.com/api/Post/search?page=",
+    SEARCH_POST: "https://book-trading-platform.herokuapp.com/api/Post/search",
+    SEARCH_POST_USER: "https://book-trading-platform.herokuapp.com/api/Post/search/user",
     CREATE_POST: "https://book-trading-platform.herokuapp.com/api/Post/create",
     COMMENT_POST: "https://book-trading-platform.herokuapp.com/api/Post/comment/create/",
     HIDE_POST: "https://book-trading-platform.herokuapp.com/api/Post/hide/",
@@ -127,23 +130,24 @@ export const API_TRANSACTION = Object.freeze({
 })
 
 export const API_MANAGE_USER= Object.freeze({
-    LIST_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/all",
-    LIST_BAN_USER:"https://book-trading-platform.herokuapp.com/api/ManageUser/ban-list",
-    LIST_ACTIVE_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/active-list",
+    LIST_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/all?page=",
+    LIST_BAN_USER:"https://book-trading-platform.herokuapp.com/api/ManageUser/ban-list?page=",
+    LIST_ACTIVE_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/active-list?page=",
     TOP: "https://book-trading-platform.herokuapp.com/api/ManageUser/top",
     DETAIL_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/",
-    SEARCH_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/search",
+    SEARCH_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/search?page=",
     BAN_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/ban/",
     ACTIVE_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/active/",
     AUTHORITY_USER: "https://book-trading-platform.herokuapp.com/api/ManageUser/authority/",
 })
 
 export const API_MANAGE_POST = Object.freeze({
-    LIST_POST: "https://book-trading-platform.herokuapp.com/api/ManagePost/all",
-    LIST_POST_APPROVED:"https://book-trading-platform.herokuapp.com/api/ManagePost/approved",
-    LIST_POST_WAITING: "https://book-trading-platform.herokuapp.com/api/ManagePost/waiting",
-    LIST_POST_DENIED: "https://book-trading-platform.herokuapp.com/api/ManagePost/denied",
+    LIST_POST: "https://book-trading-platform.herokuapp.com/api/ManagePost/all?page=",
+    LIST_POST_APPROVED:"https://book-trading-platform.herokuapp.com/api/ManagePost/approved?page=",
+    LIST_POST_WAITING: "https://book-trading-platform.herokuapp.com/api/ManagePost/waiting?page=",
+    LIST_POST_DENIED: "https://book-trading-platform.herokuapp.com/api/ManagePost/denied?page=",
     DETAIL_POST: "https://book-trading-platform.herokuapp.com/api/ManagePost/",
+    SEARCH_POST: "https://book-trading-platform.herokuapp.com/api/ManagePost/search?page=",
     APPROVED_POST: "https://book-trading-platform.herokuapp.com/api/ManagePost/approved/",
     DENIED_POST: "https://book-trading-platform.herokuapp.com/api/ManagePost/denied/",
     COMMENT_OF_POST: "https://book-trading-platform.herokuapp.com/api/ManagePost/comment/",
@@ -152,9 +156,9 @@ export const API_MANAGE_POST = Object.freeze({
 
 export const API_MANAGE_BOOK = Object.freeze({
     LIST_BOOK: "https://book-trading-platform.herokuapp.com/api/ManageBook/all?page=",
-    LIST_BOOK_APPROVED:"https://book-trading-platform.herokuapp.com/api/ManageBook/approved",
-    LIST_BOOK_WAITING: "https://book-trading-platform.herokuapp.com/api/ManageBook/waiting",
-    LIST_BOOK_DENIED: "https://book-trading-platform.herokuapp.com/api/ManageBook/denied",
+    LIST_BOOK_APPROVED:"https://book-trading-platform.herokuapp.com/api/ManageBook/approved?page=",
+    LIST_BOOK_WAITING: "https://book-trading-platform.herokuapp.com/api/ManageBook/waiting?page=",
+    LIST_BOOK_DENIED: "https://book-trading-platform.herokuapp.com/api/ManageBook/denied?page=",
     DETAIL_BOOK: "https://book-trading-platform.herokuapp.com/api/ManageBook/",
     SEARCH_BOOK: "https://book-trading-platform.herokuapp.com/api/ManageBook/search?page=",
     APPROVED_BOOK: "https://book-trading-platform.herokuapp.com/api/ManageBook/approved/",
@@ -164,14 +168,30 @@ export const API_MANAGE_BOOK = Object.freeze({
 })
 
 export const API_MANAGE_TRANSACTION= Object.freeze({
-    LIST_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/all",
+    LIST_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/all?page=",
+    EXCHANGE_BYID: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/",
+    WAITING_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/waiting?page=",
+    TRADING_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/trading?page=",
+    COMPLETE_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/complete?page=",
+    CANCEL_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/cancel?page=",
+    SEARCH_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/search?page=",
     DETAIL_EXCHANGE:"https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/detail/",
     BILL_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/bill/",
     UPDATE_STATUS_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/update-status/",
+    HANDLE_TRADE_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/trading/",
+    HANDLE_COMPLETE_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange/complete/",
     UPDATE_DETAIL_EXCHANGE: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/exchange-detail/update-status/",
-    LIST_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/all",
+    LIST_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/all?page=",
+    RENT_BYID: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/",
+    WAITING_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/waiting?page=",
+    TRADING_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/trading?page=",
+    COMPLETE_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/complete?page=",
+    CANCEL_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/cancel?page=",
+    SEARCH_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/search?page=",
     DETAIL_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/detail/",
     BILL_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/bill/",
     UPDATE_STATUS_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/update-status/",
+    HANDLE_TRADE_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/trading/",
+    HANDLE_COMPLETE_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/complete/",
     UPDATE_DETAIL_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent-detail/update-status/",
 })

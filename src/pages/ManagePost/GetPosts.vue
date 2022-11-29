@@ -2,23 +2,38 @@
   <Side_Bar>
     <div class="ml">
       <div class="row">
+        <PostDetailDialog :show="showDialogPD" :cancel="cancel" v-if="showDialogPD" class="modal">
+          <div class="topDialog">
+            <div class="dialogTitle">{{post.title}}</div>
+            <button class="dialogBtn" v-on:click="cancel">X</button>
+          </div>
+          <div class="bottomDialog">
+            <img class="imgPD" v-bind:src="post.image">
+            <div>{{post.content}}</div>
+          </div>
+          <div class="date">Đăng lúc: {{post.createdDate | format}}</div>
+        </PostDetailDialog>
         <div class="col-lg-6">
           <div class="user-data m-b-30">
-            <h3 class="title-3 m-b-30">
-              <i class="zmdi zmdi-account-calendar"></i>Danh sách bài đăng
-            </h3>
-            &nbsp;<button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getPostsAll">Tất cả</button>
-            &nbsp;<button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getPostsApproved">Đã duyệt</button>
-            &nbsp;&nbsp;<button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getPostsDenied">Đã hủy</button>
-            &nbsp;&nbsp;<button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getPostsWaiting">Đang đợi</button>
-            <br><br>
+            <div class="titleMB">QUẢN LÝ BÀI ĐĂNG</div>
+            <hr>
+            <div class="search-post">
+              <select class="selectCss"  v-model="filter" @change="onchange($event)">
+                <option v-bind:value="item" v-for="item of listFilter" :key="item">{{item}}</option>
+              </select>
+              <div>
+                <input type="text" v-model="search" placeholder="Nhập tiêu đề bài đăng">
+                <button v-on:click="HandleSearch">Tìm</button>
+              </div>
+            </div>
             <div class="table-responsive table-data">
               <table class="table">
                 <thead>
                 <tr>
                   <td>Chi tiết</td>
-                  <td>Mã bài dăng</td>
+                  <td>Mã bài đăng</td>
                   <td>Người đăng</td>
+                  <td>Ảnh</td>
                   <td>Tiêu đề</td>
                   <td>Thời gian đăng</td>
                   <td>Trạng thái</td>
@@ -28,16 +43,13 @@
                 </thead>
                 <tbody v-for="item of listPosts" :key="item.id">
                 <tr>
-                  <td><router-link :to="{ name: 'DetailPost', query: { id:item.id }}" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router">Chi tiết</router-link>
+                  <td><button v-on:click="openDialogPD(item.id)" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router">XEM</button>
                   </td>
-                  <td>
-                    <div class="table-data__info">
-                      <h6>{{ item.id }}</h6>
-                    </div>
-                  </td>
+                  <td>{{ item.id}}</td>
                   <td>{{ item.user.fullname }}</td>
+                  <td><img v-bind:src="item.image" style="height: 85px; width: 85px; object-fit: scale-down"></td>
                   <td>{{ item.title }}</td>
-                  <td>{{ item.createdDate}}</td>
+                  <td>{{ item.createdDate | format}}</td>
                   <td v-if="item.status == 'Approved'" ><span class="role approved">ĐÃ DUYỆT</span></td>
                   <td v-if="item.status == 'Denied'" ><span class="role denied">ĐÃ HỦY</span></td>
                   <td v-if="item.status == 'Waiting'" ><span class="role waiting">ĐANG ĐỢI</span></td>
@@ -52,130 +64,320 @@
                     <button  class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleApproved(item.id)">Duyệt</button>
                   </td>
                   <td><router-link class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router"  :to="{ name: 'GetComments', query: { id:item.id }}">Xem bình luận</router-link></td>
-<!--                  <td v-if="item.status == 'Approved'">
-                    <button style="width: 84px" class="au-btn au-btn-icon au-btn&#45;&#45;brown au-btn&#45;&#45;small" v-on:click="HandleDenied(item.id)">Huỷ</button>
-                  </td>
-                  <td v-if="item.status == 'Denied'">
-                    <button  class="au-btn au-btn-icon au-btn&#45;&#45;brown au-btn&#45;&#45;small" v-on:click="HandleApproved(item.id)">Duyệt</button>
-                  </td>-->
-                  <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small">Xem</button></td>
                 </tr>
                 </tbody>
               </table>
+              <div class="paging-post">
+                <b-pagination v-if="filter==''" class="page-number" @input="getPostsAll" v-model="page" :total-rows="totalPosts"
+                              :per-page="5">
+                  <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                  <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                  <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                  <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                  <template #page="{ page, active }">
+                    <b v-if="active" style="color: white;">{{ page }} </b>
+                    <b v-else style="color: #9D6B54;">{{ page }}</b>
+                  </template>
+                </b-pagination>
+                <b-pagination v-if="filter=='Tất Cả'" class="page-number" @input="getPostsAll" v-model="page" :total-rows="totalPosts"
+                              :per-page="5">
+                  <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                  <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                  <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                  <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                  <template #page="{ page, active }">
+                    <b v-if="active" style="color: white;">{{ page }} </b>
+                    <b v-else style="color: #9D6B54;">{{ page }}</b>
+                  </template>
+                </b-pagination>
+                <b-pagination v-if="filter=='Đã Duyệt'" class="page-number" @input="getPostsApproved" v-model="page" :total-rows="totalPosts"
+                              :per-page="5">
+                  <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                  <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                  <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                  <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                  <template #page="{ page, active }">
+                    <b v-if="active" style="color: white;">{{ page }} </b>
+                    <b v-else style="color: #9D6B54;">{{ page }}</b>
+                  </template>
+                </b-pagination>
+                <b-pagination v-if="filter=='Đã Hủy'" class="page-number" @input="getPostsDenied" v-model="page" :total-rows="totalPosts"
+                              :per-page="5">
+                  <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                  <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                  <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                  <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                  <template #page="{ page, active }">
+                    <b v-if="active" style="color: white;">{{ page }} </b>
+                    <b v-else style="color: #9D6B54;">{{ page }}</b>
+                  </template>
+                </b-pagination>
+                <b-pagination v-if="filter=='Đang Đợi'" class="page-number" @input="getPostsWaiting" v-model="page" :total-rows="totalPosts"
+                              :per-page="5">
+                  <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                  <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                  <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                  <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                  <template #page="{ page, active }">
+                    <b v-if="active" style="color: white;">{{ page }} </b>
+                    <b v-else style="color: #9D6B54;">{{ page }}</b>
+                  </template>
+                </b-pagination>
+              </div>
             </div>
           </div>
         </div>
+        <LoadingDialog v-show="spinner"></LoadingDialog>
       </div>
     </div>
   </Side_Bar>
-  <!--  <SideBar>-->
-  <!--  <div>-->
-  <!--    <div class="GetPosts">-->
-  <!--      <h1>Danh sách bài đăng</h1>-->
-  <!--      <button v-on:click="getPostsAll">Tất cả</button>-->
-  <!--      <button v-on:click="getPostsApproved">Đã duyệt</button>-->
-  <!--      <button v-on:click="getPostsDenied">Bị hủy</button>-->
-  <!--      <button v-on:click="getPostsWaiting">Đang đợi</button>-->
-  <!--      <br><br>-->
-  <!--      <table border="1px">-->
-  <!--        <tr>-->
-  <!--          <td></td>-->
-  <!--          <td>Mã bài dăng</td>-->
-  <!--          <td>Người đăng</td>-->
-  <!--          <td>Tiêu đề</td>-->
-  <!--          <td>Thời gian đăng</td>-->
-  <!--          <td>Trạng thái</td>-->
-  <!--          <td>Bình luận</td>-->
-  <!--          <td></td>-->
-  <!--        </tr>-->
-  <!--        <tr v-for="item of listPosts" :key="item.id">-->
-  <!--          <td><router-link :to="{ name: 'DetailPost', query: { id:item.id }}"><button>Chi tiết</button></router-link></td>-->
-  <!--          <td>{{item.id}}</td>-->
-  <!--          <td>{{item.user.fullname}}</td>-->
-  <!--          <td>{{item.title}}</td>-->
-  <!--          <td>{{item.createdDate}}</td>-->
-  <!--          <td>{{item.status}}</td>-->
-  <!--          <td></td>-->
-  <!--          <td v-if="item.status == 'Waiting'">-->
-  <!--            <button v-on:click="HandleApproved(item.id)">Duyệt</button>-->
-  <!--            <button v-on:click="HandleDenied(item.id)">Hủy</button>-->
-  <!--          </td>-->
-  <!--        </tr>-->
-  <!--      </table>-->
-  <!--    </div>-->
-  <!--    <br>-->
-  <!--    <button><router-link to="/ManageIndex">Quay lại</router-link></button>-->
-  <!--  </div>-->
-  <!--  </SideBar>-->
 </template>
 
 <script>
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_POST} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
+import LoadingDialog from "@/components/LoadingDialog";
+import PostDetailDialog from "@/pages/ManagePost/PostDetailDialog";
 
 export default {
   name: "GetPosts",
-  components: {Side_Bar},
+  components: {Side_Bar, LoadingDialog, PostDetailDialog},
   data() {
     return {
-      listPosts: ''
+      post: '',
+      listPosts: '',
+      totalPosts: '',
+      search: '',
+      showDialogPD: false,
+      isSearch: false,
+      spinner: false,
+      listFilter: ['Tất Cả', 'Đã Duyệt', 'Đã Hủy', 'Đang Đợi'],
+      filter: 'Tất Cả',
+      page: ''
     }
   },
   created() {
-    this.getPostsAll()
+    this.isSearch = false
+    this.getPostsAll(1)
   },
   methods: {
-    getPostsAll() {
-      apiFactory.callApi(API_MANAGE_POST.LIST_POST, 'GET', {}).then((res) => {
+    onchange(e){
+      this.isSearch = false
+      this.search = ''
+      if(e.target.value === 'Tất Cả'){
+        this.getPostsAll(1)
+      }
+      if(e.target.value=== 'Đã Duyệt'){
+        this.getPostsApproved(1)
+      }
+      if(e.target.value === 'Đã Hủy'){
+        this.getPostsDenied(1)
+      }
+      if(e.target.value === 'Đang Đợi'){
+        this.getPostsWaiting(1)
+      }
+    },
+    getPostsAll(pageNumber) {
+      this.spinner = true
+      if(this.search){
+        apiFactory.callApi(API_MANAGE_POST.SEARCH_POST + pageNumber, 'POST', {
+          search: this.search
+        }).then((res) => {
+          this.listPosts = res.data.data
+          this.totalPosts = res.data.numberOfRecords
+          this.page = pageNumber
+          this.spinner = false
+        }).catch(() => {
+        });
+      }
+      else{
+        apiFactory.callApi(API_MANAGE_POST.LIST_POST + pageNumber, 'GET', {}).then((res) => {
+          this.listPosts = res.data.data
+          this.totalPosts = res.data.numberOfRecords
+          this.page = pageNumber
+          this.spinner = false
+      }).catch(() => {
+      });
+      }
+    },
+    getPostsApproved(pageNumber) {
+      this.spinner = true
+      this.isSearch = false;
+      apiFactory.callApi(API_MANAGE_POST.LIST_POST_APPROVED + pageNumber, 'GET', {}).then((res) => {
         this.listPosts = res.data.data
+        this.totalPosts = res.data.numberOfRecords
+        this.page = pageNumber
+        this.spinner = false
       }).catch(() => {
       });
     },
-    getPostsApproved() {
-      apiFactory.callApi(API_MANAGE_POST.LIST_POST_APPROVED, 'GET', {}).then((res) => {
+    getPostsDenied(pageNumber) {
+      this.spinner = true
+      this.isSearch = false;
+      apiFactory.callApi(API_MANAGE_POST.LIST_POST_DENIED + pageNumber, 'GET', {}).then((res) => {
         this.listPosts = res.data.data
+        this.totalPosts = res.data.numberOfRecords
+        this.page = pageNumber
+        this.spinner = false
       }).catch(() => {
       });
     },
-    getPostsDenied() {
-      apiFactory.callApi(API_MANAGE_POST.LIST_POST_DENIED, 'GET', {}).then((res) => {
+    getPostsWaiting(pageNumber) {
+      this.spinner = true
+      this.isSearch = false;
+      apiFactory.callApi(API_MANAGE_POST.LIST_POST_WAITING + pageNumber, 'GET', {}).then((res) => {
         this.listPosts = res.data.data
-      }).catch(() => {
-      });
-    },
-    getPostsWaiting() {
-      apiFactory.callApi(API_MANAGE_POST.LIST_POST_WAITING, 'GET', {}).then((res) => {
-        this.listPosts = res.data.data
+        this.totalPosts = res.data.numberOfRecords
+        this.page = pageNumber
+        this.spinner = false
       }).catch(() => {
       });
     },
     HandleApproved(id) {
-      const url = API_MANAGE_POST.APPROVED_POST + id
-      apiFactory.callApi(url, 'PUT', {}).then((res) => {
+      this.spinner = true
+      apiFactory.callApi(API_MANAGE_POST.APPROVED_POST + id, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
-          this.getPostsAll()
+          if(this.filter === ''){
+            this.getPostsAll(this.page)
+          }
+          if(this.filter === 'Tất Cả'){
+            this.getPostsAll(this.page)
+          }
+          if(this.filter === 'Đã Duyệt'){
+            this.getPostsApproved(this.page)
+          }
+          if(this.filter  === 'Đã Hủy'){
+            this.getPostsDenied(this.page)
+          }
+          if(this.filter === 'Đang Đợi'){
+            this.getPostsWaiting(this.page)
+          }
         }
-        console.log(res)
       }).catch(() => {
         alert('Duyệt không thành công!')
       });
     },
     HandleDenied(id) {
-      const url = API_MANAGE_POST.DENIED_POST + id
-      apiFactory.callApi(url, 'PUT', {}).then((res) => {
+      this.spinner = true
+      apiFactory.callApi(API_MANAGE_POST.DENIED_POST + id, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
-          this.getPostsAll()
+          if(this.filter === ''){
+            this.getPostsAll(this.page)
+          }
+          if(this.filter === 'Tất Cả'){
+            this.getPostsAll(this.page)
+          }
+          if(this.filter === 'Đã Duyệt'){
+            this.getPostsApproved(this.page)
+          }
+          if(this.filter  === 'Đã Hủy'){
+            this.getPostsDenied(this.page)
+          }
+          if(this.filter === 'Đang Đợi'){
+            this.getPostsWaiting(this.page)
+          }
         }
-        console.log(res)
       }).catch(() => {
         alert('Hủy không thành công!')
       });
     },
+    HandleSearch(){
+      if (!this.search) {
+        this.filter= 'Tất Cả'
+        this.isSearch = false;
+      } else {
+        this.filter= ''
+        this.isSearch = true;
+      }
+      return this.getPostsAll(1)
+    },
+    getPostById(postId){
+      this.spinner = true
+      apiFactory.callApi(API_MANAGE_POST.DETAIL_POST + postId, 'GET', {}).then((res) => {
+        this.post = res.data.data
+        this.spinner = false
+        this.showDialogPD = true
+      }).catch(() => {
+      });
+    },
+    openDialogPD(postId) {
+      this.getPostById(postId)
+    },
+    cancel() {
+      this.showDialogPD = false
+    },
+  },
+  filters: {
+    formatDate(value) {
+      return new Date(value).toLocaleDateString('en-GB')
+    },
+    format(value) {
+      return new Date(value).toLocaleString('en-GB')
+    }
   }
 }
 </script>
 
 <style>
 @import "../../assets/CSS/tableManage.css";
+.paging-post {
+  margin-top: 10px;
+}
+
+.paging-post ul {
+  justify-content: right;
+  margin-right: 15px;
+}
+
+.search-post {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0px 10px 20px;
+  width: 95%;
+}
+
+.titleMB{
+  font-weight: bold;
+  text-align: center;
+  color:  #9D6B54;
+  font-size: 30px;
+}
+
+.selectCss{
+  border: 1px solid white;
+  border-radius: 10px;
+  width: 150px;
+  padding-left: 10px;
+  padding-right: 20px;
+  color: white;
+  font-weight: bold;
+  background: #9D6B54;
+}
+
+.search-post input {
+  border-radius: 7px;
+  border: 1px solid grey;
+  height: 45px;
+  width: 400px;
+  padding-left: 15px;
+  color: #9D6B54;
+}
+
+.search-post button {
+  border-radius: 7px;
+  background-color: #9D6B54;
+  color: white;
+  font-weight: bold;
+  border: 1px solid grey;
+  height: 45px;
+  width: 80px;
+  margin-left: 10px;
+}
+
+.search-post button:hover {
+  border-color: #9D6B54;
+  background-color: white;
+  color: #9D6B54;
+}
 </style>

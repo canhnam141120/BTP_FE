@@ -4,8 +4,8 @@
       <div class="row">
         <div class="col-lg-6">
           <div class="user-data m-b-30">
-            <h3 class="title-3 m-b-30">
-              <i class="zmdi zmdi-account-calendar"></i>Danh sách tất cả hóa đơn thuê</h3>
+            <div class="titleMB">QUẢN LÝ HÓA ĐƠN THUÊ</div>
+            <hr>
             <button class="au-btn au-btn-icon au-btn--brown au-btn--small">
               <router-link to="/ManageBill/exchange-bill" class="btn-router">Xem hóa đơn đổi</router-link>
             </button>
@@ -96,6 +96,7 @@
           </div>
 
         </div>
+        <LoadingDialog v-show="spinner"></LoadingDialog>
       </div>
     </div>
   </Side_Bar>
@@ -105,13 +106,15 @@
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_BILL} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
+import LoadingDialog from "@/components/LoadingDialog";
 
 export default {
   name: "GetRentBills",
-  components: {Side_Bar},
+  components: {Side_Bar, LoadingDialog},
   data() {
     return {
-      listBills: ''
+      listBills: '',
+      spinner: false,
     }
   },
   created() {
@@ -119,8 +122,10 @@ export default {
   },
   methods: {
     getRentBills() {
+      this.spinner = true
       apiFactory.callApi(API_MANAGE_BILL.LIST_BILL_RENT, 'GET', {}).then((res) => {
         this.listBills = res.data.data
+        this.spinner = false
       }).catch(() => {
       });
     }
@@ -130,4 +135,5 @@ export default {
 
 <style >
 @import "../../assets/CSS/tableManage.css";
+
 </style>

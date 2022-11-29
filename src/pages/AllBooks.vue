@@ -38,21 +38,28 @@
                   </router-link>
                   <div class="info">
                     <div class="book-title">{{ item.title }}</div>
-                    <div><img src="../image/user.png"> {{ item.user.fullname }}</div>
+                    <div><img src="../image/user.png"><strong>{{ item.user.fullname }}</strong> </div>
                     <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                    <label>Dịch vụ:
+                      <strong>
+                        <span v-if="item.isExchange && item.isRent">Trao đổi & Thuê</span>
+                        <span v-if="!item.isRent && item.isExchange">Trao đổi</span>
+                        <span v-if="item.isRent && !item.isExchange">Thuê</span>
+                      </strong>
+                    </label>
                     <label class="book-status">{{ item.statusBook }}</label>
                   </div>
-                  <div class="actionAB">
-                    <router-link v-if="item.isExchange" class="activeAll" :to="{ name: 'BookDetail', query: { id:item.id }}">Trao đổi</router-link>
+<!--                  <div class="actionAB">
+                    <label v-if="item.isExchange" class="activeAll">Trao đổi</label>
                     <router-link v-else class="disableAll" :to="{ name: 'BookDetail', query: { id:item.id }}">Trao đổi</router-link>
                     <router-link v-if="item.isRent" class="activeAllR" :to="{ name: 'BookDetail', query: { id:item.id }}">Thuê</router-link>
                     <router-link v-else class="disableAllR" :to="{ name: 'BookDetail', query: { id:item.id }}">Thuê</router-link>
-                  </div>
+                  </div>-->
                 </div>
               </div>
             </b-skeleton-wrapper>
             <div class="paging">
-                <b-pagination class="page-number" @input="ChangePage" v-model="page" :total-rows="totalBook" :per-page="9">
+                <b-pagination class="page-number" @input="getAllBook" v-model="page" :total-rows="totalBook" :per-page="9">
                   <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
                   <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
                   <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
@@ -86,14 +93,15 @@ export default {
       search: '',
       isSearch: false,
       loading: false,
+      page: 1
     }
   },
   created() {
     this.isSearch = false
-    this.ChangePage(1)
+    this.getAllBook(1)
   },
   methods: {
-    ChangePage(pageNumber) {
+    getAllBook(pageNumber) {
       this.loading = true;
       if (this.isSearch) {
         window.scrollTo(0, 0)
@@ -108,7 +116,7 @@ export default {
         });
       } else {
         window.scrollTo(0, 0)
-        const url = API_BOOK.LIST_BOOK + pageNumber
+        const url = API_BOOK.LIST_BOOK + '?page=' + pageNumber
         apiFactory.callApi(url, 'GET', {}).then((res) => {
           this.listBook = res.data.data
           this.totalBook = res.data.numberOfRecords
@@ -123,7 +131,7 @@ export default {
       } else {
         this.isSearch = true;
       }
-      return this.ChangePage(1)
+      return this.getAllBook(1)
     },
   }
 }
@@ -222,7 +230,7 @@ strong {
 }
 
 .body .container-book .content .grid .item:hover {
-  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+  box-shadow: 0px 4px 6px 0 rgba(0, 0, 0, 0.2)
 }
 
 .body .container-book .content .grid .item img {

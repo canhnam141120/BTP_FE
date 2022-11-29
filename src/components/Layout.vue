@@ -68,8 +68,10 @@
                 <template v-slot:button-content>
                     <img class="icon" v-bind:src="user.avatar">
                 </template>
+                <div class="dropdown-item-top"><Icon class="iconPerson" icon="ic:round-person-pin"/>{{user.fullname}}</div>
+                <hr style="margin: 5px" />
                 <router-link to="/MyBooks" class="dropdown-item">
-                      {{user.fullname}}
+                      Trang cá nhân
                 </router-link>
                 <hr style="margin: 5px" />
                 <div v-if="user.roleId == 1 || user.roleId == 2">
@@ -193,9 +195,11 @@
 import VueJwtDecode from 'vue-jwt-decode';
 import {API_PERSONAL} from "@/constant/constant-api";
 import apiFactory from "@/config/apiFactory";
+import {Icon} from '@iconify/vue2';
 
 export default {
   name: "Layout",
+  components: {Icon},
   data(){
     return{
       userByToken: '',
@@ -514,6 +518,8 @@ export default {
 }
 
 .dropdown-menu {
+  padding-left: 10px;
+  padding-right: 10px;
   min-width: 220px;
   max-width: 300px;
   right: 0 !important;
@@ -526,6 +532,22 @@ export default {
 .dropdown-item:hover{
   background-color: #9D6B54;
   color: white;
+  border-radius: 5px;
+}
+
+.dropdown-item-top{
+  text-transform: uppercase;
+  background-color: #9D6B54;
+  color: white;
+  padding-left: 10px;
+  border-radius: 5px;
+  height: 30px;
+  padding-top: 3px;
+}
+
+.dropdown-item-top .iconPerson{
+  font-size: 26px;
+  padding-bottom: 5px;
 }
 
 .contact{

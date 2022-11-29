@@ -94,12 +94,6 @@ export default {
           icon: 'bx-cart-alt',
         },
         {
-          link: '/ManageBill/exchange-bill',
-          name: 'Quản lý hóa đơn',
-          tooltip: 'User',
-          icon: 'bx-receipt',
-        },
-        {
           link: '/ManageCategory',
           name: 'Quản lý thể loại',
           tooltip: 'Order',

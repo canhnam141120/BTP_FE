@@ -2,6 +2,16 @@
   <Layout>
     <main style="flex-grow: 1">
       <div class="MI">
+        <ChangePassDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
+          <div class="dialogBody">
+            <label class="labelPass">Mật khẩu cũ: </label>
+            <input class="inputPass" maxlength="50" type="password" required placeholder="Nhập mật khẩu cũ" v-model="oldPassword">
+            <label class="labelPass">Mật khẩu mới: </label>
+            <input class="inputPass" maxlength="50" type="password" required placeholder="Nhập mật khẩu mới" v-model="newPassword">
+            <label class="labelPass">Nhập lại mật khẩu mới: </label>
+            <input class="inputPass" maxlength="50" type="password" required placeholder="Nhập mật khẩu cũ" v-model="copyNewPassword">
+          </div>
+        </ChangePassDialog>
         <div class="containerMI">
           <div class="left-contentMI">
             <SideBar_Personal></SideBar_Personal>
@@ -22,19 +32,28 @@
                   </b-card>
                 </div>
               </template>
-
               <div class="topMI">
                 <div class="infoMI">
-                  <div class="nameMI">{{info.fullname}}</div>
+                  <div v-if="!edit" class="nameMI">{{info.fullname}}</div>
+                  <div v-else class="nameMI"><input class="inputName" type="text" maxlength="50" v-model="info.fullname"></div>
                   <div class="divMI"><Icon icon="mdi:email"/><span >Email: {{info.email}}</span></div>
-                  <div class="divMI"><Icon icon="material-symbols:call"/><span>Số điện thoại: {{info.phone}}</span></div>
-                  <div class="divMI"><Icon icon="material-symbols:location-on"/><span>Địa chỉ: {{info.addressMain}}</span></div>
-                  <button class="editMI">
+                  <div v-if="!edit" class="divMI" ><Icon icon="material-symbols:call"/><span>Số điện thoại: {{info.phone}}</span></div>
+                  <div v-else class="divInput" ><Icon icon="material-symbols:call"/><input class="inputInfo" type="text" maxlength="10" placeholder="Nhập SĐT" v-model="info.phone"></div>
+                  <div v-if="!edit" class="divMI"><Icon icon="material-symbols:location-on"/><span>Địa chỉ: {{info.addressMain}}</span></div>
+                  <div v-else class="divInput"><Icon icon="material-symbols:location-on"/><input class="inputInfo"  type="text" maxlength="50" placeholder="Nhập địa chỉ giao hàng" v-model="info.addressMain"></div>
+                  <button v-if="!edit" class="editMI" v-on:click="edit = true">
                     <Icon icon="uil:pen" style="width: 20px; height: 20px; margin-right: 2%"/>Thay đổi thông tin
                   </button>
+                  <button v-else class="editMI" v-on:click="HandleEdit">
+                    <Icon icon="dashicons:saved" style="width: 20px; height: 20px; margin-right: 2%"/>Lưu thay đổi
+                  </button>
+                  <button class="editMI" v-on:click="showDialogChangePass">
+                    <Icon icon="mdi:password-reset" style="width: 20px; height: 20px; margin-right: 5%"/>Đổi mật khẩu</button>
                 </div>
                 <div>
-                  <button class="imgBtn"><Icon icon="material-symbols:flip-camera-ios"/></button>
+                  <input type="file" hidden accept="image/*" ref="file" @change="handleFileUpload"/>
+                  <button v-if="!showUpload" class="imgBtn" v-on:click="browse"><Icon icon="material-symbols:flip-camera-ios"/></button>
+                  <button v-else class="imgBtn" v-on:click="HandleEdit"><Icon icon="dashicons:saved"/></button>
                   <img class="imgMI" v-bind:src="info.avatar">
                   <div class="numberMI">
                     <div class="">{{info.likeNumber}} người thích</div>
@@ -44,6 +63,28 @@
               </div>
             </b-skeleton-wrapper>
             <div class="bottomMI">
+              <div class="titleBottom">Thông tin vận chuyển</div>
+              <div class="infoBottom">
+                <div class="info2">
+                  <label class="lbInfoShip">Gửi sách vào thứ 2 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.sendIsMonday">
+                  <label class="lbInfoShip">Nhận sách vào thứ 2 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.receiveIsMonday">
+                  <label class="lbInfoShip">Hoàn trả sách vào thứ 2 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.recallIsMonday">
+                  <label class="lbInfoShip">Thu hồi sách vào thứ 2 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.refundIsMonday">
+                </div>
+                <div class="info4">
+                  <label class="lbInfoShip">Gửi sách vào thứ 4 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.sendIsWednesday">
+                  <label class="lbInfoShip">Nhận sách vào thứ 4 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.receiveIsWednesday">
+                  <label class="lbInfoShip">Hoàn trả sách vào thứ 4 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.recallIsWednesday">
+                  <label class="lbInfoShip">Thu hồi sách vào thứ 4 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.refundIsWednesday">
+                </div>
+                <div class="info6">
+                  <label class="lbInfoShip">Gửi sách vào thứ 6 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.sendIsFriday">
+                  <label class="lbInfoShip">Nhận sách vào thứ 6 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.receiveIsFriday">
+                  <label class="lbInfoShip">Hoàn trả sách vào thứ 6 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.recallIsFriday">
+                  <label class="lbInfoShip">Thu hồi sách vào thứ 6 </label><input class="cbInfoShip" type="checkbox" v-model="infoShip.refundIsFriday">
+                </div>
+              </div>
+              <div class="divUpdate"><button class="btnUpdate" v-on:click="HandleUpdateInfoShip">CẬP NHẬT THÔNG TIN VẬN CHUYỂN</button></div>
             </div>
           </div>
         </div>
@@ -58,19 +99,28 @@ import SideBar_Personal from "@/components/SideBar_Personal";
 import Layout from "@/components/Layout";
 import VueJwtDecode from "vue-jwt-decode";
 import {Icon} from '@iconify/vue2';
+import ChangePassDialog from "@/pages/Personal/ChangePassDialog";
 
 export default {
   name: "MyInformation",
-  components: {SideBar_Personal, Layout, Icon},
+  components: {SideBar_Personal, Layout, Icon, ChangePassDialog},
   data() {
     return {
       info: '',
+      infoShip: '',
       userId: '',
       loading: false,
+      edit: false,
+      showUpload: false,
+      showDialog: false,
+      oldPassword: '',
+      newPassword: '',
+      copyNewPassword: ''
     }
   },
   created() {
     this.getMyInformation()
+    this.getMyInfoShipping()
   },
   methods: {
     getMyInformation() {
@@ -84,6 +134,98 @@ export default {
         this.loading = false
       }).catch(() => {
       });
+    },
+    getMyInfoShipping() {
+      let token = this.$cookies.get('token');
+      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.INFO_SHIP, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        this.infoShip = res.data.data
+      }).catch(() => {
+      });
+    },
+    HandleUpdateInfoShip(){
+      let token = this.$cookies.get('token');
+      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.EDIT_SHIP_INFO, 'PUT', {
+        userId: this.userByToken.UserId,
+        sendIsMonday: this.infoShip.sendIsMonday,
+        receiveIsMonday: this.infoShip.receiveIsMonday,
+        recallIsMonday: this.infoShip.recallIsMonday,
+        refundIsMonday: this.infoShip.refundIsMonday,
+        sendIsWednesday: this.infoShip.sendIsWednesday,
+        receiveIsWednesday: this.infoShip.receiveIsWednesday,
+        recallIsWednesday: this.infoShip.recallIsWednesday,
+        refundIsWednesday: this.infoShip.refundIsWednesday,
+        sendIsFriday: this.infoShip.sendIsFriday,
+        receiveIsFriday: this.infoShip.receiveIsFriday,
+        recallIsFriday: this.infoShip.recallIsFriday,
+        refundIsFriday: this.infoShip.refundIsFriday,
+      }).then((res) => {
+        if(res.data.message == 'UPDATE_SUCCESS'){
+          alert('Cập nhật thông tin vận chuyển thành công!')
+        }
+      }).catch(() => {
+      });
+    },
+    HandleEdit(){
+      let token = this.$cookies.get('token');
+      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.EDIT_INFORMATION, 'PUT', {
+        userId: this.userByToken.UserId,
+        fullname: this.info.fullname,
+        phone: this.info.phone,
+        addressMain: this.info.addressMain,
+        avatar: this.info.avatar
+      }).then((res) => {
+        if(res.data.message == 'UPDATE_SUCCESS'){
+          alert('Thay đổi thành công')
+          this.edit = false
+          this.showUpload = false
+        }
+      }).catch(() => {
+      });
+    },
+    handleFileUpload(e) {
+      const file = document.querySelector('input[type=file]').files[0]
+      var files = e.target.files
+      if (!files[0]) {
+        return
+      }
+      const reader = new FileReader()
+
+      var rawImg;
+      reader.onloadend = () => {
+        rawImg = reader.result;
+        this.info.avatar = rawImg
+      }
+      reader.readAsDataURL(file);
+    },
+    browse(){
+      this.$refs.file.click();
+      this.showUpload = true
+    },
+    showDialogChangePass(){
+      this.showDialog = true
+    },
+    cancel(){
+      this.showDialog = false
+    },
+    save(){
+      let token = this.$cookies.get('token');
+      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.CHANGE_PASSWORD, 'PUT', {
+        userId: this.userByToken.UserId,
+        oldPassword: this.oldPassword,
+        newPassword: this.newPassword,
+      }).then((res) => {
+        if(res.data.message == 'UPDATE_SUCCESS'){
+          alert('Thay đổi mật khẩu thành công')
+        }
+      }).catch(() => {
+      });
+      this.showDialog = false
     }
   }
 }
@@ -140,7 +282,6 @@ strong {
   width: 100%;
   display: flex;
   border-radius: 10px;
-  padding-bottom: 10px;
   margin-bottom: 15px;
   border: 1px solid #9D6B54;
 }
@@ -185,7 +326,7 @@ strong {
   color: white;
   font-size: 16px;
   margin-top: 20px;
-  margin-bottom: 11px;
+  margin-bottom: 30px;
   margin-left: 50px;
   font-weight: 700;
   line-height: 18.75px;
@@ -220,7 +361,6 @@ strong {
   margin-left: 120px;
   font-size: 26px;
   padding-bottom: 8px;
-  padding-left: 6px;
 }
 
 .imgBtn:hover{
@@ -239,10 +379,82 @@ strong {
 .bottomMI{
   background: #F0ECE4;
   height: 400px;
-  display: flex;
   border-radius: 10px;
   border: 1px solid #9D6B54;
 }
 
+.titleBottom{
+  padding-top: 10px;
+  padding-left: 20px;
+  color: #9D6B54;
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
 
+.infoBottom{
+  display: flex;
+  justify-content: space-between;
+  padding-top: 30px;
+  padding-left: 70px;
+  padding-right: 30px;
+}
+
+.lbInfoShip{
+  height: 30px;
+  width: 180px;
+  margin-top: 20px;
+}
+
+.cbInfoShip{
+  width: 20px;
+  height: 20px;
+}
+
+.divUpdate{
+  text-align: center;
+}
+
+.btnUpdate{
+  background-color: #9D6B54;
+  color: #F0ECE4;
+  border-radius: 10px;
+  height: 50px;
+  width: 350px;
+  border: 1px solid #9D6B54;
+  margin-top: 40px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.btnUpdate:hover{
+  background-color: #F0ECE4;
+  color: #9D6B54;
+}
+
+.divInput{
+  line-height: 30px;
+  font-size: 20px;
+  padding-left: 50px;
+  color: #9D6B54;
+}
+
+.inputInfo {
+  padding-left: 10px;
+  height: 30px;
+  margin-left: 30px;
+  width: 300px;
+  border-radius: 10px;
+  margin-top: 10px;
+  border: 1px solid #9D6B54;
+  color: #9D6B54;
+}
+
+.inputName{
+  width: 300px;
+  border-radius: 10px;
+  border: 1px solid #9D6B54;
+  color: #9D6B54;
+  text-align: center;
+}
 </style>

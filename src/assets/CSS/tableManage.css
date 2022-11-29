@@ -17,6 +17,14 @@
 
 .ml{
     margin-left: 65px;
+    background: #F0ECE4;
+    height: auto;
+}
+
+.mlBook{
+    margin-left: 65px;
+    background: #F0ECE4;
+    height: 1400px;
 }
 
 .col-lg-6 {
@@ -435,6 +443,13 @@ section {
     border: 2px solid #9D6B54;
     border-radius: 3px;
 
+}
+
+.titleMB{
+    font-weight: bold;
+    text-align: center;
+    color:  #9D6B54;
+    font-size: 30px;
 }
 
 .btn-router {
@@ -3932,9 +3947,8 @@ section {
 
 .user-data {
     border: 1px solid #e5e5e5;
-    background: #fff;
-    padding-top: 44px;
-    margin-left: 2%;
+    background: #F0ECE4;
+    padding-top: 20px;
 }
 
 .user-data .title-3 {
@@ -4334,8 +4348,8 @@ section {
 }
 
 .table-data {
-    height: auto;
-    overflow-y: auto;
+    height: 600px;
+    overflow: auto;
 }
 
 .table-data thead tr td {
@@ -4447,6 +4461,11 @@ section {
     border: 1px solid green
 }
 
+.role.complete{
+    background: #00aced;
+    border: 1px solid #00aced;
+}
+
 .role.denied{
     background: red;
     border: 1px solid red;
@@ -4456,6 +4475,49 @@ section {
     background: yellow;
     border: 1px solid yellow;
     color: black;
+}
+
+.role.tradingWaiting{
+    color: black;
+    width: 140px;
+    background: yellow;
+    border: 1px solid yellow;
+}
+
+.role.tradingReceived{
+    width: 140px;
+    background: #00aced;
+    border: 1px solid #00aced;
+}
+
+.role.tradingSent{
+    width: 140px;
+    background: #2948ff;
+    border: 1px solid #2948ff;
+}
+
+.role.tradingRecall{
+    width: 140px;
+    background: #28a745;
+    border: 1px solid #28a745;
+}
+
+.role.tradingRefund{
+    width: 140px;
+    background: green;
+    border: 1px solid green;
+}
+
+.role.paid{
+    width: 110px;
+    background: green;
+    border: 1px solid green;
+}
+
+.role.notPaid{
+    width: 110px;
+    background: red;
+    border: 1px solid red;
 }
 
 .table-top-campaign.table td {

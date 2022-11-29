@@ -4,11 +4,18 @@
     <div class="row">
       <div class="col-lg-6">
         <div class="user-data m-b-30">
-          <h3 class="title-3 m-b-30">
-            <i class="zmdi zmdi-account-calendar"></i>Danh sách tất cả giao dịch thuê</h3>
-          <button class="au-btn au-btn-icon au-btn--brown au-btn--small">
-            <router-link to="/ManageTransaction/exchange" class="btn-router">Xem giao dịch đổi</router-link>
-          </button>
+          <div class="titleMB">QUẢN LÝ GIAO DỊCH THUÊ</div>
+          <hr>
+          <div class="search-transaction">
+              <router-link to="/ManageTransaction/exchange" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" style="height: 50px; padding-top: 10px">Xem giao dịch đổi</router-link>
+            <select class="selectCss" v-model="filter" @change="onchange($event)">
+              <option v-bind:value="item" v-for="item of listFilter" :key="item">{{ item }}</option>
+            </select>
+            <div>
+              <input type="text" v-model="search" placeholder="Nhập mã giao dịch">
+              <button v-on:click="HandleSearch">Tìm</button>
+            </div>
+          </div>
           <div class="table-responsive table-data">
             <table class="table">
               <thead>
@@ -47,6 +54,7 @@
           </div>
         </div>
       </div>
+      <LoadingDialog v-show="spinner"></LoadingDialog>
     </div>
   </div>
 </Side_Bar>
@@ -56,13 +64,15 @@
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_TRANSACTION} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
+import LoadingDialog from "@/components/LoadingDialog";
 
 export default {
   name: "GetRents",
-  components: {Side_Bar},
+  components: {Side_Bar, LoadingDialog},
   data() {
     return {
-      listRents: ''
+      listRents: '',
+      spinner: false,
     }
   },
   created() {
@@ -70,8 +80,10 @@ export default {
   },
   methods: {
     getRents() {
+      this.spinner = true
       apiFactory.callApi(API_MANAGE_TRANSACTION.LIST_RENT, 'GET', {}).then((res) => {
         this.listRents = res.data.data
+        this.spinner = false
       }).catch(() => {
       });
     }
@@ -81,4 +93,62 @@ export default {
 
 <style >
 @import "../../assets/CSS/tableManage.css";
+.paging-transaction {
+  margin-top: 10px;
+}
+
+.paging-transaction ul {
+  justify-content: right;
+  margin-right: 15px;
+}
+.search-transaction {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0px 10px 20px;
+  width: 90%;
+}
+
+.titleMB {
+  font-weight: bold;
+  text-align: center;
+  color: #9D6B54;
+  font-size: 30px;
+}
+
+.selectCss {
+  border: 1px solid white;
+  border-radius: 10px;
+  width: 180px;
+  padding-left: 10px;
+  padding-right: 20px;
+  color: white;
+  font-weight: bold;
+  background: #9D6B54;
+}
+
+.search-transaction input {
+  border-radius: 7px;
+  border: 1px solid grey;
+  height: 45px;
+  width: 400px;
+  padding-left: 15px;
+  color: #9D6B54;
+}
+
+.search-transaction button {
+  border-radius: 7px;
+  background-color: #9D6B54;
+  color: white;
+  font-weight: bold;
+  border: 1px solid grey;
+  height: 45px;
+  width: 80px;
+  margin-left: 10px;
+}
+
+.search-transaction button:hover {
+  border-color: #9D6B54;
+  background-color: white;
+  color: #9D6B54;
+}
 </style>

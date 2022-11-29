@@ -1,13 +1,44 @@
 <template>
   <Layout>
     <main style="flex-grow: 1;">
-      <!--==============body=============-->
+      <CreatePostDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
+        <div class="dialogBody">
+          <b-row class="post-content">
+            <b-col class="input-label" cols="2">Tiêu đề:</b-col>
+            <b-col class="input-div" cols="9">
+              <input type="text" maxlength="500"
+                     required placeholder="Nhập tiêu đề"
+                     v-model="title" class="input-text">
+            </b-col>
+          </b-row>
+          <div class="bottom-post">
+            <b-row class="post-content">
+              <b-col class="input-label" cols="2">Nội dung:</b-col>
+              <b-col class="input-div" cols="9">
+              <textarea type="text" maxlength="2000" required style="height: 400px; width: 550px;"
+                        placeholder="Nhập nội dung bài đăng"
+                        v-model="content"
+                        class="input-text">
+            </textarea></b-col>
+            </b-row>
+            <div>
+              <b-row class="post-content">
+                <b-col class="input-label" cols="2">Chọn ảnh:</b-col>
+                <b-col class="input-div" cols="6"><input type="file" title=" " class="input-text-short" name="image"
+                                                         @change="handleFileUpload"></b-col>
+              </b-row>
+              <img v-bind:src="imageSrc" style="width: 300px; height: 300px; object-fit: scale-down">
+            </div>
+          </div>
+        </div>
+
+      </CreatePostDialog>
       <div class="body-blog">
         <div class="title">TRẠM ĐỌC</div>
         <div class="container-blog">
           <div v-if="this.$cookies.get('token')" class="top">
             <img class="userImageBI" v-bind:src="info.avatar">
-            <button class="createPost">Chia sẻ bài viết của bạn...</button>
+            <button class="createPost" v-on:click="openDialog">Chia sẻ bài viết của bạn...</button>
             <Icon icon="jam:write-f" class="iconBI"/>
             <Icon icon="ic:baseline-emoji-emotions" class="iconBI"/>
             <Icon icon="material-symbols:image-rounded" class="iconBI"/>
@@ -79,10 +110,11 @@ import {API_PERSONAL, API_POST} from "@/constant/constant-api";
 import Layout from "@/components/Layout";
 import {Icon} from '@iconify/vue2';
 import VueJwtDecode from "vue-jwt-decode";
+import CreatePostDialog from "@/pages/CreatePostDialog";
 
 export default {
   name: "BlogIndex",
-  components: {Layout, Icon},
+  components: {Layout, Icon, CreatePostDialog},
   data() {
     return {
       listPost: '',
@@ -91,6 +123,12 @@ export default {
       search: '',
       isSearch: false,
       loading: false,
+      showDialog: false,
+      page: 1,
+
+      title:'',
+      content: '',
+      imageSrc: ''
     }
   },
   created() {
@@ -103,7 +141,7 @@ export default {
       this.loading = true;
       if (this.isSearch) {
         window.scrollTo(0, 0)
-        const url = API_POST.SEARCH_POST + pageNumber
+        const url = API_POST.SEARCH_POST + '?page=' + pageNumber
         apiFactory.callApi(url, 'POST', {
           search: this.search
         }).then((res) => {
@@ -114,7 +152,7 @@ export default {
         });
       } else {
         window.scrollTo(0, 0)
-        const url = API_POST.LIST_POST + pageNumber
+        const url = API_POST.LIST_POST + '?page=' + pageNumber
         apiFactory.callApi(url, 'GET', {}).then((res) => {
           this.listPost = res.data.data
           this.totalPost = res.data.numberOfRecords
@@ -129,7 +167,7 @@ export default {
       } else {
         this.isSearch = true;
       }
-      return this.ChangePage(1)
+      return this.getListPost(1)
     },
     getMyInformation() {
       //this.loading = true
@@ -142,6 +180,44 @@ export default {
         //this.loading = false
       }).catch(() => {
       });
+    },
+    openDialog() {
+      this.showDialog = true
+    },
+    cancel() {
+      this.showDialog = false
+    },
+    save(){
+      let token = this.$cookies.get('token');
+      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_POST.CREATE_POST, 'POST', {
+        image: this.imageSrc,
+        userId: this.userByToken.UserId,
+        title: this.title,
+        content: this.content
+      }).then((res) => {
+        if (res.data.message === 'CREATE_SUCCESS') {
+          console.log(alert('Đăng bài thành công'))
+          this.showDialog = false
+        }
+      }).catch(() => {
+      });
+    },
+    handleFileUpload(e) {
+      const file = document.querySelector('input[type=file]').files[0]
+      var files = e.target.files
+      if (!files[0]) {
+        return
+      }
+      const reader = new FileReader()
+
+      var rawImg;
+      reader.onloadend = () => {
+        rawImg = reader.result;
+        this.imageSrc = rawImg
+      }
+      console.log(this.imageSrc)
+      reader.readAsDataURL(file);
     }
   },
   filters:{
@@ -287,7 +363,6 @@ strong {
 
 .body-blog .container-blog .content .grid .item {
   border-radius: 10px;
-  border: 1px solid #9D6B54;
   width: 593px;
   height: auto;
   margin: 10px 0px 10px 15px;
@@ -305,7 +380,7 @@ strong {
   height: 180px;
   width: 180px;
   border-radius: 10px;
-  object-fit: cover;
+  object-fit: scale-down;
 }
 
 .body-blog .container-blog .content .grid .info {

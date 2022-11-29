@@ -1,37 +1,33 @@
 <template>
   <Side_Bar>
     <div class="ml">
-      <!-- USER DATA-->
       <div class="row">
         <div class="col-lg-6">
           <div class="user-data m-b-30">
-            <h3 class="title-3 m-b-30">
-              <i class="zmdi zmdi-account-calendar"></i>Danh sách người dùng</h3>
-            <div class="filters m-b-45">
-              <br>
-              <input class="au-input au-input--xl" type="text"
-                     placeholder="Nhập email hoặc số điện thoại" v-model="search" required/>
-              <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleSearch">
-                Tìm kiếm
-              </button>
-              <br><br>
-              &nbsp;<button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getUsersAll">Tất cả</button>
-              &nbsp;<button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getUsersActive">Đang hoạt động</button>
-              &nbsp;<button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="getUsersBan">Đang khóa</button>
+            <div class="titleMB">QUẢN LÝ NGƯỜI DÙNG</div>
+            <hr>
+            <div class="search-user">
+              <select class="selectCss"  v-model="filter" @change="onchange($event)">
+                <option v-bind:value="item" v-for="item of listFilter" :key="item">{{item}}</option>
+              </select>
+              <div>
+                <input type="text" v-model="search" placeholder="Nhập email hoặc SĐT">
+                <button v-on:click="HandleSearch">Tìm</button>
+              </div>
             </div>
-            <div>
               <div class="table-responsive table-data">
                 <table class="table">
                   <thead>
                   <tr>
-<!--                    <td>Mã người dùng</td>-->
-                    <td>Email</td>
-                    <td>Đã xác thực</td>
+                    <td>Mã</td>
+                    <td>Ảnh đại diện</td>
                     <td>Tên đầy đủ</td>
+                    <td>Email</td>
                     <td>Số điện thoại</td>
                     <td>Địa chỉ</td>
                     <td>Số người thích</td>
                     <td>Số lần giao dịch</td>
+                    <td>Trạng thái hoạt động</td>
                     <td>Kích hoạt/Khóa</td>
                     <td>Ủy quyền</td>
                   </tr>
@@ -39,18 +35,16 @@
 
                   <tbody v-for="item of listUsers" :key="item.id">
                   <tr>
-<!--                    <td>-->
-<!--                      <div class="table-data__info">-->
-<!--                        <h6>{{ item.id }}</h6>-->
-<!--                      </div>-->
-<!--                    </td>-->
-                    <td>{{ item.email }}</td>
-                    <td>{{ item.isVerify }}</td>
+                    <td>{{item.id}}</td>
+                    <td><img v-bind:src="item.avatar" style="height: 60px; width: 60px; object-fit: scale-down"></td>
                     <td>{{ item.fullname }}</td>
+                    <td>{{ item.email }}</td>
                     <td>{{ item.phone }}</td>
                     <td>{{ item.addressMain }}</td>
                     <td>{{ item.likeNumber }}</td>
                     <td>{{ item.numberOfTransaction }}</td>
+                    <td v-if="item.isActive"><span class="role approved" style="width: 120px">ĐANG HOẠT ĐỘNG</span></td>
+                    <td v-else ><span class="role denied" style="width: 120px">ĐANG KHÓA</span></td>
                     <td >
                       <button v-if="item.isActive" class="au-btn au-btn-icon au-btn--brown au-btn--small" style="width: 76px;" v-on:click="HandleBan(item.id)">Khóa</button>
                       <button v-else class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleActive(item.id)">Kích hoạt</button>
@@ -59,12 +53,58 @@
                   </tr>
                   </tbody>
                 </table>
+                <div class="paging-user">
+                  <b-pagination v-if="filter==''" class="page-number" @input="getUsersAll" v-model="page" :total-rows="totalUsers"
+                                :per-page="10">
+                    <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                    <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                    <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                    <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                    <template #page="{ page, active }">
+                      <b v-if="active" style="color: white;">{{ page }} </b>
+                      <b v-else style="color: #9D6B54;">{{ page }}</b>
+                    </template>
+                  </b-pagination>
+                  <b-pagination v-if="filter=='Tất Cả'" class="page-number" @input="getUsersAll" v-model="page" :total-rows="totalUsers"
+                                :per-page="10">
+                    <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                    <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                    <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                    <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                    <template #page="{ page, active }">
+                      <b v-if="active" style="color: white;">{{ page }} </b>
+                      <b v-else style="color: #9D6B54;">{{ page }}</b>
+                    </template>
+                  </b-pagination>
+                  <b-pagination v-if="filter=='Đang Hoạt Động'" class="page-number" @input="getUsersActive" v-model="page" :total-rows="totalUsers"
+                                :per-page="10">
+                    <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                    <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                    <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                    <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                    <template #page="{ page, active }">
+                      <b v-if="active" style="color: white;">{{ page }} </b>
+                      <b v-else style="color: #9D6B54;">{{ page }}</b>
+                    </template>
+                  </b-pagination>
+                  <b-pagination v-if="filter=='Đang Khóa'" class="page-number" @input="getUsersBan" v-model="page" :total-rows="totalUsers"
+                                :per-page="10">
+                    <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                    <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                    <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                    <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                    <template #page="{ page, active }">
+                      <b v-if="active" style="color: white;">{{ page }} </b>
+                      <b v-else style="color: #9D6B54;">{{ page }}</b>
+                    </template>
+                  </b-pagination>
+                </div>
               </div>
             </div>
           </div>
+        <LoadingDialog v-show="spinner"></LoadingDialog>
         </div>
       </div>
-    </div>
   </Side_Bar>
 </template>
 
@@ -72,77 +112,156 @@
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_USER} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
+import LoadingDialog from "@/components/LoadingDialog";
+
 export default {
   name: "GetUsers",
-  components: {Side_Bar},
+  components: {Side_Bar, LoadingDialog},
   data() {
     return {
       listUsers: '',
-      search: ''
+      totalUsers: '',
+      search: '',
+      isSearch: false,
+      spinner: false,
+      page: '',
+      filter: 'Tất Cả',
+      listFilter: ['Tất Cả', 'Đang Hoạt Động', 'Đang Khóa']
     }
   },
   created() {
-    this.getUsersAll()
+    this.isSearch = false
+    this.getUsersAll(1)
   },
   methods: {
-    getUsersAll() {
-      apiFactory.callApi(API_MANAGE_USER.LIST_USER, 'GET', {}).then((res) => {
+    onchange(e){
+      this.isSearch = false
+      this.search = ''
+      if(e.target.value === 'Tất Cả'){
+        this.getUsersAll(1)
+      }
+      if(e.target.value=== 'Đang Hoạt Động'){
+        this.getUsersActive(1)
+      }
+      if(e.target.value === 'Đang Khóa'){
+        this.getUsersBan(1)
+      }
+    },
+    getUsersAll(pageNumber) {
+      this.spinner = true
+      if(this.search){
+        apiFactory.callApi(API_MANAGE_USER.SEARCH_USER + pageNumber, 'POST', {
+          search: this.search
+        }).then((res) => {
+          this.listUsers = res.data.data
+          this.totalUsers = res.data.numberOfRecords
+          this.page = pageNumber
+          this.spinner = false
+        }).catch(() => {
+        });
+      }
+      else{
+        apiFactory.callApi(API_MANAGE_USER.LIST_USER + pageNumber, 'GET', {}).then((res) => {
+          this.listUsers = res.data.data
+          this.totalUsers = res.data.numberOfRecords
+          this.page = pageNumber
+          this.spinner = false
+        }).catch(() => {
+        });
+      }
+    },
+    getUsersBan(pageNumber) {
+      this.spinner = true
+      apiFactory.callApi(API_MANAGE_USER.LIST_BAN_USER + pageNumber, 'GET', {}).then((res) => {
         this.listUsers = res.data.data
+        this.totalUsers = res.data.numberOfRecords
+        this.page = pageNumber
+        this.spinner = false
       }).catch(() => {
       });
     },
-    getUsersBan() {
-      apiFactory.callApi(API_MANAGE_USER.LIST_BAN_USER, 'GET', {}).then((res) => {
+    getUsersActive(pageNumber) {
+      this.spinner = true
+      apiFactory.callApi(API_MANAGE_USER.LIST_ACTIVE_USER + pageNumber, 'GET', {}).then((res) => {
         this.listUsers = res.data.data
-      }).catch(() => {
-      });
-    },
-    getUsersActive() {
-      apiFactory.callApi(API_MANAGE_USER.LIST_ACTIVE_USER, 'GET', {}).then((res) => {
-        this.listUsers = res.data.data
+        this.totalUsers = res.data.numberOfRecords
+        this.page = pageNumber
+        this.spinner = false
       }).catch(() => {
       });
     },
     HandleBan(id) {
-      const url = API_MANAGE_USER.BAN_USER + id
-      apiFactory.callApi(url, 'PUT', {}).then((res) => {
+      this.spinner = true
+      apiFactory.callApi(API_MANAGE_USER.BAN_USER + id, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
-          this.$router.go();
+          if(this.filter === ''){
+            this.getUsersAll(this.page)
+          }
+          if(this.filter === 'Tất Cả'){
+            this.getUsersAll(this.page)
+          }
+          if(this.filter === 'Đang Hoạt Động'){
+            this.getUsersActive(this.page)
+          }
+          if(this.filter  === 'Đang Khóa'){
+            this.getUsersBan(this.page)
+          }
         }
-        console.log(res)
       }).catch(() => {
         alert('Khóa tài khoản không thành công!')
       });
     },
     HandleActive(id) {
-      const url = API_MANAGE_USER.ACTIVE_USER + id
-      apiFactory.callApi(url, 'PUT', {}).then((res) => {
+      this.spinner = true
+      apiFactory.callApi(API_MANAGE_USER.ACTIVE_USER + id, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
-          this.$router.go();
+          if(this.filter === ''){
+            this.getUsersAll(this.page)
+          }
+          if(this.filter === 'Tất Cả'){
+            this.getUsersAll(this.page)
+          }
+          if(this.filter === 'Đang Hoạt Động'){
+            this.getUsersActive(this.page)
+          }
+          if(this.filter  === 'Đang Khóa'){
+            this.getUsersBan(this.page)
+          }
         }
-        console.log(res)
       }).catch(() => {
         alert('Kích hoạt tài khoản không thành công!')
       });
     },
     HandleAuthority(id) {
-      const url = API_MANAGE_USER.AUTHORITY_USER + id
-      apiFactory.callApi(url, 'PUT', {}).then((res) => {
+      this.spinner = true
+      apiFactory.callApi(API_MANAGE_USER.AUTHORITY_USER + id, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
-          this.$router.go();
+          if(this.filter === ''){
+            this.getUsersAll(this.page)
+          }
+          if(this.filter === 'Tất Cả'){
+            this.getUsersAll(this.page)
+          }
+          if(this.filter === 'Đang Hoạt Động'){
+            this.getUsersActive(this.page)
+          }
+          if(this.filter  === 'Đang Khóa'){
+            this.getUsersBan(this.page)
+          }
         }
-        console.log(res)
       }).catch(() => {
         alert('Ủy quyền không thành công!')
       });
     },
     HandleSearch() {
-      apiFactory.callApi(API_MANAGE_USER.SEARCH_USER, 'POST', {
-        search: this.search
-      }).then((res) => {
-        this.listUsers = res.data.data
-      }).catch(() => {
-      });
+      if (!this.search) {
+        this.filter= 'Tất Cả'
+        this.isSearch = false;
+      } else {
+        this.filter= ''
+        this.isSearch = true;
+      }
+      return this.getUsersAll(1)
     }
   }
 }
@@ -150,4 +269,64 @@ export default {
 
 <style >
 @import "../../assets/CSS/tableManage.css";
+
+.paging-user {
+  margin-top: 10px;
+}
+
+.paging-user ul {
+  justify-content: right;
+  margin-right: 15px;
+}
+
+.search-user {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0px 10px 20px;
+  width: 95%;
+}
+
+.titleMB{
+  font-weight: bold;
+  text-align: center;
+  color:  #9D6B54;
+  font-size: 30px;
+}
+
+.selectCss{
+  border: 1px solid white;
+  border-radius: 10px;
+  width: 180px;
+  padding-left: 10px;
+  padding-right: 20px;
+  color: white;
+  font-weight: bold;
+  background: #9D6B54;
+}
+
+.search-user input {
+  border-radius: 7px;
+  border: 1px solid grey;
+  height: 45px;
+  width: 400px;
+  padding-left: 15px;
+  color: #9D6B54;
+}
+
+.search-user button {
+  border-radius: 7px;
+  background-color: #9D6B54;
+  color: white;
+  font-weight: bold;
+  border: 1px solid grey;
+  height: 45px;
+  width: 80px;
+  margin-left: 10px;
+}
+
+.search-user button:hover {
+  border-color: #9D6B54;
+  background-color: white;
+  color: #9D6B54;
+}
 </style>

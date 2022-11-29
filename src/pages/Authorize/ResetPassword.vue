@@ -1,21 +1,22 @@
 <template>
   <Header>
-    <main style="flex-grow: 1; padding: 32px 0 45px; background-image: url('https://f5-zpcloud.zdn.vn/2258788996442817451/dd48482006abc0f599ba.jpg'); background-size: cover">
+    <main style="flex-grow: 1; background-image: url('https://f5-zpcloud.zdn.vn/2258788996442817451/dd48482006abc0f599ba.jpg'); background-size: cover">
       <div id="login">
         <div class="container">
           <label for="show" class="close-btn fas fa-times" title="close"></label>
           <div class="title">
             Cài lại mật khẩu
           </div>
+          <div class="subTitle">Mã đổi mật khẩu đã được gửi qua email của bạn</div>
           <div class="main">
             <div class="data">
               <label>Email</label>
-              <input type="text" maxlength="50" required placeholder="Nhập email" v-model="email">
+              <input type="text" maxlength="50" required placeholder="Ví dụ: abc@gmail.com" v-model="email">
               <label class="err" v-if="errMail.length">{{this.errMail}}</label>
             </div>
             <div class="data">
-              <label>Code</label>
-              <input type="text" maxlength="8" required placeholder="Nhập mã" v-model="forgotPasswordCode">
+              <label>Mã đổi mật khẩu</label>
+              <input type="text" maxlength="8" required placeholder="Ví dụ: ABCD1234" v-model="forgotPasswordCode">
               <label class="err" v-if="errCode.length">{{this.errCode}}</label>
             </div>
             <div class="data">
@@ -38,6 +39,7 @@
           </div>
         </div>
       </div>
+      <LoadingDialog v-show="spinner"></LoadingDialog>
     </main>
   </Header>
 </template>
@@ -46,10 +48,11 @@
 import apiFactory from "@/config/apiFactory";
 import {API_USER} from "@/constant/constant-api";
 import Header from "../../components/Header";
+import LoadingDialog from "@/components/LoadingDialog";
 
 export default {
   name: "ResetPassword",
-  components: {Header},
+  components: {Header, LoadingDialog},
   data() {
     return {
       email: '',
@@ -60,7 +63,8 @@ export default {
       errCode: '',
       errPass: '',
       errPassCheck: '',
-      err: ''
+      err: '',
+      spinner: false
     }
   },
   methods: {
@@ -93,6 +97,7 @@ export default {
         }
       }
       if(regxMail.test(this.email) && this.forgotPasswordCode && this.newPassword){
+        this.spinner = true
         apiFactory.callApi(API_USER.RESET_PASSWORD, 'PUT', {
           email: this.email,
           forgotPasswordCode: this.forgotPasswordCode,
@@ -101,7 +106,14 @@ export default {
           if(res.data.message === 'CHANGE_PASSWORD_SUCCESS'){
             this.$router.push({name: 'Login'})
           }
-        }).catch(() => {this.err = 'Cài lại mật khẩu không thành công!'});
+          if(res.data.message === 'ACCOUNT_NOT_EXIST'){
+            this.err = 'Tài khoản không tồn tại!'
+          }
+          if(res.data.message === 'CODE_INCORRECT'){
+            this.err = 'Mã không hợp lệ!'
+          }
+          this.spinner = false
+        }).catch(() => {this.err = 'Có lỗi xảy ra, vui loòng thử lại!'});
       }
     }
   }
@@ -126,15 +138,15 @@ body{
 }
 
 .container {
-  margin-top: 40px;
-  position: relative;
-  left: 800px;
-  top: 10%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   font-size: 14px;
   cursor: pointer;
   max-width: 400px;
   border-radius: 20px;
-  justify-content: center;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   background-color: white;
   font-family: 'Roboto', sans-serif;
@@ -236,5 +248,12 @@ body{
   height: 30px;
   color: #9D6B54;
   text-decoration: none;
+}
+
+.subTitle{
+  color: #9D6B54;
+  text-align: center;
+  font-size: 14px;
+  font-style: italic;
 }
 </style>
