@@ -252,7 +252,7 @@ strong {
   background: #F0F0F0;
   max-width: 1230px;
   border-radius: 10px;
-  margin: 5px auto 30px auto;
+  margin: 0px auto 0px auto;
   display: flex;
   justify-content: space-between;
 }

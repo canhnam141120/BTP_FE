@@ -2,6 +2,9 @@
   <Layout>
     <main style="flex-grow: 1">
       <CreateBookDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
+        <div>
+          <div class="dialogTitle">ĐĂNG SÁCH</div>
+        </div>
         <div class="top-form">
           <div class="left-form">
             <b-row class="book-content">
@@ -104,6 +107,10 @@
             </textarea></b-col>
           </b-row>
         </div>
+        <div class="dialogGroupBtn">
+          <button class="dialogBtn" v-on:click="cancel">Hủy</button>
+          <button class="dialogBtn" v-on:click="save">Xác nhận</button>
+        </div>
       </CreateBookDialog>
       <div class="MB">
         <div class="containerMB">
@@ -112,6 +119,7 @@
           </div>
           <div class="right-contentMB">
             <div class="titleMB">Tủ sách của tôi</div>
+            <hr>
             <div class="searchMB">
               <div>
                 <button class="create-book" v-on:click="openDialog">
@@ -120,14 +128,13 @@
                 </button>
               </div>
               <div>
-                <input class="inputMB" type="text" placeholder="Nhập tên sản phẩm">
-                <button class="btnMB">Tìm</button>
+                <input class="inputMB" type="text" placeholder="Nhập tiêu đề sách" v-model="search">
+                <button class="btnMB" v-on:click="HandleSearch">Tìm</button>
                 <select class="selectCss" v-model="filter" @change="onchange($event)">
                   <option v-bind:value="item" v-for="item of listFilter" :key="item">{{ item }}</option>
                 </select>
               </div>
             </div>
-            <hr>
             <b-skeleton-wrapper :loading="loading">
               <template #loading>
                 <div class="gridMB">
@@ -158,12 +165,14 @@
                         item.coverPrice.toLocaleString()
                       }}đ</strong></label>
                     <label class="book-statusMB">{{ item.statusBook }}</label>
-                    <label v-if="item.status == 'Approved'" class="book-statusMB">Trạng thái: <strong>Đã được
+                    <label v-if="item.status == 'Approved'" class="book-statusMB">Trạng thái: <strong style="color: green">Đã được
                       duyệt</strong></label>
-                    <label v-if="item.status == 'Denied'" class="book-statusMB">Trạng thái: <strong>Đã bị
+                    <label v-if="item.status == 'Denied'" class="book-statusMB">Trạng thái: <strong  style="color: red">Đã bị
                       hủy</strong></label>
                     <label v-if="item.status == 'Waiting'" class="book-statusMB">Trạng thái: <strong>Đang đợi
                       duyệt</strong></label>
+                    <label class="book-statusMB" style="color: red; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
+                    <label class="book-statusMB" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
                   </div>
                 </div>
               </div>
@@ -312,7 +321,7 @@ export default {
       let token = this.$cookies.get('token');
       this.userByToken = VueJwtDecode.decode(token, 'utf-8');
       if (this.isSearch) {
-        apiFactory.callApi(API_PERSONAL.LIST_BOOK + '?page=' + pageNumber, 'POST', {
+        apiFactory.callApi(API_PERSONAL.SEARCH_MY_BOOK + '?page=' + pageNumber, 'POST', {
           userId: this.userByToken.UserId,
           search: this.search
         }).then((res) => {
@@ -434,6 +443,16 @@ export default {
       console.log(this.imageSrc)
       reader.readAsDataURL(file);
     },
+    HandleSearch() {
+      if (!this.search) {
+        this.filter= 'Tất Cả'
+        this.isSearch = false;
+      } else {
+        this.filter= ''
+        this.isSearch = true;
+      }
+      return this.getMyBooks(1)
+    },
   }
 }
 </script>
@@ -459,7 +478,7 @@ strong {
   background: #F0F0F0;
   max-width: 1230px;
   border-radius: 10px;
-  margin: 5px auto 30px auto;
+  margin: 0px auto 20px auto;
   display: flex;
   justify-content: space-between;
 }
@@ -508,9 +527,9 @@ strong {
   text-transform: uppercase;
   color: #9D6B54;
   text-align: center;
-  font-size: 20px;
+  font-size: 26px;
   font-weight: bold;
-  padding-top: 5px;
+  padding-top: 20px;
 }
 
 .right-contentMB .searchMB .inputMB {
@@ -564,7 +583,7 @@ strong {
 }
 
 .right-contentMB .gridMB .infoMB {
-  height: 120px;
+  height: auto;
   padding: 5px;
   margin-bottom: 10px;
 }

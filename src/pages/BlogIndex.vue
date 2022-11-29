@@ -2,6 +2,9 @@
   <Layout>
     <main style="flex-grow: 1;">
       <CreatePostDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
+        <div>
+          <div class="dialogTitle">VIẾT BÀI</div>
+        </div>
         <div class="dialogBody">
           <b-row class="post-content">
             <b-col class="input-label" cols="2">Tiêu đề:</b-col>
@@ -31,7 +34,10 @@
             </div>
           </div>
         </div>
-
+        <div class="dialogGroupBtn">
+          <button class="dialogBtn" v-on:click="cancel">Hủy</button>
+          <button class="dialogBtn" v-on:click="save">Đăng</button>
+        </div>
       </CreatePostDialog>
       <div class="body-blog">
         <div class="title">TRẠM ĐỌC</div>

@@ -1,14 +1,7 @@
 <template>
   <div v-show="show" class="dialog">
     <div class="dialogContent">
-      <div>
-        <div class="dialogTitle">ĐĂNG SÁCH</div>
-      </div>
       <slot></slot>
-      <div class="dialogGroupBtn">
-        <button class="dialogBtn" v-on:click="cancel">Hủy</button>
-        <button class="dialogBtn" v-on:click="save">Xác nhận</button>
-      </div>
     </div>
   </div>
 </template>
@@ -33,7 +26,7 @@ export default {
   background: #F0ECE4;
   height: auto;
   border-radius: 10px;
-  margin: 30px auto auto auto;
+  margin: 80px auto auto auto;
 }
 
 .dialogTitle{

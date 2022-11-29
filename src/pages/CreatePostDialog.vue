@@ -1,14 +1,9 @@
 <template>
   <div v-show="show" class="dialog">
     <div class="dialogContent">
-      <div>
-        <div class="dialogTitle">VIẾT BÀI</div>
-      </div>
+
       <slot></slot>
-      <div class="dialogGroupBtn">
-        <button class="dialogBtn" v-on:click="cancel">Hủy</button>
-        <button class="dialogBtn" v-on:click="save">Đăng</button>
-      </div>
+
     </div>
   </div>
 </template>

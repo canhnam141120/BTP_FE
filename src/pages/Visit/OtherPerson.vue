@@ -1,6 +1,7 @@
 <template>
   <Layout>
     <main style="flex-grow: 1">
+      <LoadingDialog v-show="spinner" style="z-index: 999"></LoadingDialog>
       <div class="body">
         <div class="container">
           <div class="profile">
@@ -26,7 +27,7 @@
                 </div>
               </div>
               <div class="edit">
-                <button class="btn-edit">
+                <button class="btn-edit" v-on:click="HandleLike">
                   <Icon icon="ant-design:like-filled" style="width: 20px; height: 20px; margin-right: 2%"/>
                   Thích
                 </button>
@@ -75,7 +76,7 @@
                     </div>
                   </b-skeleton-wrapper>
                   <div class="pagingBook">
-                    <b-pagination class="page-number" @input="getBooks" v-model="page" :total-rows="totalBook" :per-page="10">
+                    <b-pagination class="page-number" @input="getBooks" v-model="pageBook" :total-rows="totalBook" :per-page="10">
                       <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
                       <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
                       <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
@@ -126,7 +127,7 @@
                   </b-skeleton-wrapper>
                   <div class="pagingPost">
                     <div class="pagePost">
-                      <b-pagination @input="getPost" v-model="page" :total-rows="totalPost" :per-page="6">
+                      <b-pagination @input="getPost" v-model="pagePost" :total-rows="totalPost" :per-page="6">
                         <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
                         <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
                         <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
@@ -155,10 +156,12 @@ import Layout from "@/components/Layout";
 import {Icon} from '@iconify/vue2';
 import {API_PERSONAL, API_BOOK, API_POST} from "@/constant/constant-api";
 import apiFactory from "@/config/apiFactory";
+import VueJwtDecode from "vue-jwt-decode";
+import LoadingDialog from "@/components/LoadingDialog";
 
 export default {
   name: "OtherPerson",
-  components: {Layout, Icon},
+  components: {Layout, Icon, LoadingDialog},
   data() {
     return {
       info: '',
@@ -171,7 +174,9 @@ export default {
       isSearchBook: false,
       searchPost: '',
       isSearchPost: false,
-      page: 1
+      pageBook: 1,
+      pagePost: 1,
+      spinner: false
     }
   },
   created() {
@@ -181,10 +186,12 @@ export default {
   },
   methods: {
     getInformation() {
+      this.spinner = true
       apiFactory.callApi(API_PERSONAL.INFORMATION, 'POST', {
         userId: this.$route.query.id
       }).then((res) => {
         this.info = res.data.data
+        this.spinner = false
       }).catch(() => {
       });
     },
@@ -196,6 +203,7 @@ export default {
         }).then((res) => {
           this.listBook = res.data.data
           this.totalBook = res.data.numberOfRecords
+          this.pageBook = pageNumber
           this.loading = false
         }).catch(() => {
         });
@@ -204,6 +212,7 @@ export default {
         }).then((res) => {
           this.listBook = res.data.data
           this.totalBook = res.data.numberOfRecords
+          this.pageBook = pageNumber
           this.loading = false
         }).catch(() => {
         });
@@ -217,6 +226,7 @@ export default {
         }).then((res) => {
           this.listPost = res.data.data
           this.totalPost = res.data.numberOfRecords
+          this.pagePost = pageNumber
           this.loading = false
         }).catch(() => {
         });
@@ -225,6 +235,7 @@ export default {
         }).then((res) => {
           this.listPost = res.data.data
           this.totalPost = res.data.numberOfRecords
+          this.pagePost = pageNumber
           this.loading = false
         }).catch(() => {
         });
@@ -246,6 +257,21 @@ export default {
       }
       return this.getPost(1)
     },
+    HandleLike(){
+      this.spinner = true
+      let token = this.$cookies.get('token');
+      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.ADD_USER_FAVORITE + this.$route.query.id, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        if(res.data.message == 'ADD_SUCCESS'){
+          this.getInformation()
+          this.spinner = false;
+        }
+        this.spinner = false;
+      }).catch(() => {
+      });
+    }
   },
   filters: {
     formatDate(value){

@@ -44,6 +44,10 @@
           <div class="bookdetail-top">
             <div class="left">
               <img class="imgBD" v-bind:src="book.image">
+              <div style="text-align: center; margin-bottom: 10px">
+                <label class="book-statusMB" style="color: red; font-weight: bold" v-if="book.isTrade">Đang giao dịch</label>
+                <label class="book-statusMB" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
+              </div>
             </div>
             <div class="right">
               <label class="titleBD"><strong>{{book.title}}</strong></label>
@@ -77,11 +81,15 @@
                   </div>
                 </div>
               </div>
-              <div class="btn-tran">
+              <div v-if="!book.isTrade" class="btn-tran">
                 <button v-if="book.isExchange" class="active" v-on:click="openDialog">Trao đổi</button>
                 <button v-else class="disable">Trao đổi</button>
                 <button v-if="book.isRent" class="active">Thuê</button>
                 <button v-else class="disable">Thuê</button>
+              </div>
+              <div v-else class="btn-tran">
+                <button class="disable">Trao đổi</button>
+                <button class="disable">Thuê</button>
               </div>
             </div>
           </div>
@@ -194,6 +202,8 @@
                     <label class="book-status">Thể loại: {{ item.category?.name }}</label>
                     <label class="book-status">Giá bìa: <strong>{{ item.coverPrice?.toLocaleString() }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
+                    <label class="book-status" style="color: red; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
+                    <label class="book-status" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
                   </div>
                 </div>
               </div>
@@ -226,6 +236,8 @@
                     <div class="book-status"><img src="../image/user.png"> {{ item.user?.fullname }}</div>
                     <label class="book-status">Giá bìa: <strong>{{ item.coverPrice?.toLocaleString() }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
+                    <label class="book-status" style="color: red; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
+                    <label class="book-status" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
                   </div>
                 </div>
               </div>
@@ -490,7 +502,7 @@ strong {
   height: 391px;
   margin-left: 80px;
   margin-top: 30px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   border-radius: 10px;
   border: 1px solid #9D6B54;
 }
@@ -684,7 +696,7 @@ strong {
 .item-book {
   border-radius: 10px;
   width: 191px;
-  height: 380px;
+  height: auto;
   margin: 5px;
 }
 
@@ -699,7 +711,7 @@ strong {
 }
 
 .grid-book .info {
-  height: 120px;
+  height: auto;
   padding: 5px;
 }
 
