@@ -7,32 +7,34 @@
             <div>
               <b-avatar badge badge-left class="avatar-personal"><img style="width: 190px; height: 190px;" v-bind:src="info.avatar"></b-avatar>
             </div>
-            <div class="infor">
-              <p class="name-other-person">{{ info.fullname }}</p>
-              <div>
-                <div class="description">
-                  <Icon icon="mdi:email"/>
-                  <span>{{ info.email }}</span><br>
-                </div>
-                <div class="description">
-                  <Icon icon="material-symbols:call"/>
-                  <span>{{ info.phone }}</span><br>
-                </div>
-                <div class="description">
-                  <Icon icon="material-symbols:location-on"/>
-                  <span>{{ info.addressMain }}</span><br>
-                </div>
-                <div class="description">
-                  <Icon icon="material-symbols:location-on"/>
-                  <span>{{ info.likeNumber }} người thích</span><br>
+            <div>
+              <div class="infor">
+                <p class="name-other-person">{{ info.fullname }}</p>
+                <div class="infoDes">
+                  <div class="description">
+                    <Icon class="iconSmall" icon="mdi:email"/>
+                    <label>{{ info.email }}</label>
+                  </div>
+                  <div class="description">
+                    <Icon class="iconSmall" icon="material-symbols:call"/>
+                    <label>{{ info.phone }}</label>
+                  </div>
+                  <div class="description">
+                    <Icon class="iconSmall" icon="material-symbols:location-on"/>
+                    <label>{{ info.addressMain }}</label>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="edit">
-              <button class="btn-edit">
-                <Icon icon="ant-design:like-filled" style="width: 20px; height: 20px; margin-right: 2%"/>
-                Thích
-              </button>
+              <div class="edit">
+                <button class="btn-edit">
+                  <Icon icon="ant-design:like-filled" style="width: 20px; height: 20px; margin-right: 2%"/>
+                  Thích
+                </button>
+                <div class="likeNumber">
+                  <Icon class="iconSmall" icon="material-symbols:check-circle-rounded"/>
+                  <label>{{ info.likeNumber }} người thích</label>
+                </div>
+              </div>
             </div>
           </div>
           <div class="content-bottom">
@@ -40,8 +42,8 @@
               <b-tabs>
                 <b-tab title="Tủ sách" active>
                   <div class="search">
-                    <input type="text" v-model="search" placeholder="Nhập tên sản phẩm">
-                    <button v-on:click="HandleSearch">Tìm</button>
+                    <input type="text" v-model="searchBook" placeholder="Nhập tên sản phẩm">
+                    <button v-on:click="HandleSearchBook">Tìm</button>
                   </div>
                   <b-skeleton-wrapper :loading="loading">
                     <template #loading>
@@ -65,7 +67,7 @@
                         </router-link>
                         <div class="infoOP">
                           <div class="book-titleOP">{{ item.title }}</div>
-                          <label class="book-statusOP">Thể loại: {{ item.category.name}}</label>
+                          <label class="book-statusOP">Thể loại: {{ item.category?.name}}</label>
                           <label class="book-statusOP">Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
                           <label class="book-statusOP">{{ item.statusBook }}</label>
                         </div>
@@ -87,8 +89,8 @@
                 </b-tab>
                 <b-tab title="Bài đăng">
                   <div class="search">
-                    <input type="text" v-model="search" placeholder="Nhập tên sản phẩm">
-                    <button v-on:click="HandleSearch">Tìm</button>
+                    <input type="text" v-model="searchPost" placeholder="Nhập tên sản phẩm">
+                    <button v-on:click="HandleSearchPost">Tìm</button>
                   </div>
                   <b-skeleton-wrapper :loading="loading">
                     <template #loading>
@@ -160,19 +162,22 @@ export default {
   data() {
     return {
       info: '',
-      userId: '',
       listBook: '',
       totalBook: '',
       listPost: '',
       totalPost: '',
-      loading: false
+      loading: false,
+      searchBook: '',
+      isSearchBook: false,
+      searchPost: '',
+      isSearchPost: false,
+      page: 1
     }
   },
   created() {
     this.getInformation()
     this.getBooks(1)
     this.getPost(1)
-    this.isSearch = false
   },
   methods: {
     getInformation() {
@@ -185,33 +190,61 @@ export default {
     },
     getBooks(pageNumber) {
       this.loading = true;
-      const url = API_BOOK.USER_BOOK + this.$route.query.id + '?page=' + pageNumber
-      apiFactory.callApi(url, 'GET', {
-      }).then((res) => {
-        this.listBook = res.data.data
-        this.totalBook = res.data.numberOfRecords
-        this.loading = false
-      }).catch(() => {
-      });
+      if(this.isSearchBook){
+        apiFactory.callApi(API_BOOK.SEARCH_BOOK_USER + this.$route.query.id + '?page=' + pageNumber, 'POST', {
+          search: this.searchBook
+        }).then((res) => {
+          this.listBook = res.data.data
+          this.totalBook = res.data.numberOfRecords
+          this.loading = false
+        }).catch(() => {
+        });
+      }else{
+        apiFactory.callApi(API_BOOK.USER_BOOK + this.$route.query.id + '?page=' + pageNumber, 'GET', {
+        }).then((res) => {
+          this.listBook = res.data.data
+          this.totalBook = res.data.numberOfRecords
+          this.loading = false
+        }).catch(() => {
+        });
+      }
     },
     getPost(pageNumber) {
       this.loading = true;
-      const url = API_POST.USER_POST + this.$route.query.id + '?page=' + pageNumber
-      apiFactory.callApi(url, 'GET', {
-      }).then((res) => {
-        this.listPost = res.data.data
-        this.totalPost = res.data.numberOfRecords
-        this.loading = false
-      }).catch(() => {
-      });
+      if(this.isSearchPost){
+        apiFactory.callApi(API_POST.SEARCH_POST_USER + this.$route.query.id + '?page=' + pageNumber, 'POST', {
+          search: this.searchPost
+        }).then((res) => {
+          this.listPost = res.data.data
+          this.totalPost = res.data.numberOfRecords
+          this.loading = false
+        }).catch(() => {
+        });
+      }else{
+        apiFactory.callApi(API_POST.USER_POST + this.$route.query.id + '?page=' + pageNumber, 'GET', {
+        }).then((res) => {
+          this.listPost = res.data.data
+          this.totalPost = res.data.numberOfRecords
+          this.loading = false
+        }).catch(() => {
+        });
+      }
     },
-    HandleSearch() {
-      if (!this.search) {
-        this.isSearch = false;
+    HandleSearchBook() {
+      if (!this.searchBook) {
+        this.isSearchBook = false;
       } else {
-        this.isSearch = true;
+        this.isSearchBook = true;
       }
       return this.getBooks(1)
+    },
+    HandleSearchPost() {
+      if (!this.searchPost) {
+        this.isSearchPost = false;
+      } else {
+        this.isSearchPost = true;
+      }
+      return this.getPost(1)
     },
   },
   filters: {
@@ -275,28 +308,34 @@ strong {
 }
 
 .infor {
+  width: 800px;
+  display: block;
   color: #9D6B54;
-  margin-left: 3%;
   margin-top: 5%;
+  margin-left: 20px;
 }
 
-.infor h3 {
-  color: #9D6B54;
-  font-weight: bold;
-}
-
-.infor span {
+.infor label {
   color: grey;
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
   line-height: 19px;
+  margin-left: 10px;
 }
 
 .name-other-person {
+  text-transform: uppercase;
   font-size: 30px;
+  margin-left: 10px;
   font-weight: 700;
   line-height: 35.16px;
+}
+
+.infoDes{
+  width: 75%;
+  justify-content: space-between;
+  display: flex;
 }
 
 .description {
@@ -304,20 +343,36 @@ strong {
   margin-left: 10px;
 }
 
+.iconSmall{
+  font-size: 24px;
+}
+
 .description span {
   margin-left: 14px;
 }
 
 .edit {
-  margin-top: 13%;
-  margin-left: 15%;
+  margin-left: 20px;
+  margin-top: 10px;
   justify-content: center;
+}
 
+.likeNumber{
+  display: flex;
+  margin-left: 10px;
+  color: #9D6B54;
+}
+
+.likeNumber label{
+  font-weight: bold;
+  color: grey;
+  margin-left: 5px;
 }
 
 .btn-edit {
   height: 48px;
-  width: 187px;
+  margin-left: 10px;
+  width: 170px;
   border-radius: 8px;
   border: white;
   align-items: center;

@@ -55,8 +55,8 @@ import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_CATEGORY} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
 import LoadingDialog from "@/components/LoadingDialog";
-import CreateCategoryDialog from "@/components/CreateCategoryDialog";
-import EditCategoryDialog from "@/components/EditCategoryDialog";
+import CreateCategoryDialog from "@/pages/ManageCategory/CreateCategoryDialog";
+import EditCategoryDialog from "@/pages/ManageCategory/EditCategoryDialog";
 import {Icon} from '@iconify/vue2';
 
 export default {

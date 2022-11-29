@@ -18,14 +18,15 @@
               <b-col class="input-label" cols="2">Thể loại:</b-col>
               <b-col class="input-div" cols="9">
                 <select name="category" class="input-text" v-model="categoryId">
-                <option v-bind:value="item.id" v-for="item of listCategories" :key="item.id">{{ item.name }}</option>
-              </select></b-col>
+                  <option v-bind:value="item.id" v-for="item of listCategories" :key="item.id">{{ item.name }}</option>
+                </select></b-col>
             </b-row>
             <b-row class="book-content">
               <b-col class="input-label" cols="2">Ngôn ngữ:</b-col>
               <b-col class="input-div" cols="9">
                 <select name="category" class="input-text" v-model="language">
-                  <option v-bind:value="language" v-for="language of listLanguage" :key="language">{{language}}</option>
+                  <option v-bind:value="language" v-for="language of listLanguage" :key="language">{{ language }}
+                  </option>
                 </select>
               </b-col>
             </b-row>
@@ -59,7 +60,7 @@
             </b-row>
           </div>
           <div class="right-form">
-            <b-row  class="book-content">
+            <b-row class="book-content">
               <b-col class="grCb" cols="9">
                 <input type="checkbox" value="true" class="checkB" v-model="isExchange">&ensp;Trao đổi&emsp;
                 <input type="checkbox" value="true" class="checkB" v-model="isRent">&ensp;Thuê
@@ -114,13 +115,16 @@
             <div class="searchMB">
               <div>
                 <button class="create-book" v-on:click="openDialog">
-                <Icon icon="material-symbols:add-circle-outline-rounded"/>
-                <label>Đăng sách</label>
-              </button>
+                  <Icon icon="material-symbols:add-circle-outline-rounded"/>
+                  <label>Đăng sách</label>
+                </button>
               </div>
               <div>
                 <input class="inputMB" type="text" placeholder="Nhập tên sản phẩm">
                 <button class="btnMB">Tìm</button>
+                <select class="selectCss" v-model="filter" @change="onchange($event)">
+                  <option v-bind:value="item" v-for="item of listFilter" :key="item">{{ item }}</option>
+                </select>
               </div>
             </div>
             <hr>
@@ -144,7 +148,7 @@
               </template>
               <div class="gridMB">
                 <div class="itemMB" v-for="item of listBook" :key="item.id">
-                  <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">
+                  <router-link class="active" :to="{ name: 'ViewRequestBook', query: { id:item.id }}">
                     <img v-bind:src="item.image">
                   </router-link>
                   <div class="infoMB">
@@ -154,16 +158,67 @@
                         item.coverPrice.toLocaleString()
                       }}đ</strong></label>
                     <label class="book-statusMB">{{ item.statusBook }}</label>
-                  </div>
-                  <div class="action">
-                    <router-link class="active" :to="{ name: 'ViewRequestBook', query: { id:item.id }}">Xem yêu cầu
-                    </router-link>
+                    <label v-if="item.status == 'Approved'" class="book-statusMB">Trạng thái: <strong>Đã được
+                      duyệt</strong></label>
+                    <label v-if="item.status == 'Denied'" class="book-statusMB">Trạng thái: <strong>Đã bị
+                      hủy</strong></label>
+                    <label v-if="item.status == 'Waiting'" class="book-statusMB">Trạng thái: <strong>Đang đợi
+                      duyệt</strong></label>
                   </div>
                 </div>
               </div>
             </b-skeleton-wrapper>
             <div class="pagingMB">
-              <b-pagination class="page-numberMB" @input="getMyBooks" v-model="page" :total-rows="totalBook"
+              <b-pagination v-if="filter==''" class="page-numberMB" @input="getMyBooks" v-model="page"
+                            :total-rows="totalBook"
+                            :per-page="6">
+                <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                <template #page="{ page, active }">
+                  <b v-if="active" style="color: white;">{{ page }} </b>
+                  <b v-else style="color: #9D6B54;">{{ page }}</b>
+                </template>
+              </b-pagination>
+              <b-pagination v-if="filter=='Tất Cả'" class="page-numberMB" @input="getMyBooks" v-model="page"
+                            :total-rows="totalBook"
+                            :per-page="6">
+                <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                <template #page="{ page, active }">
+                  <b v-if="active" style="color: white;">{{ page }} </b>
+                  <b v-else style="color: #9D6B54;">{{ page }}</b>
+                </template>
+              </b-pagination>
+              <b-pagination v-if="filter=='Đã Duyệt'" class="page-numberMB" @input="getMyBooksApproved" v-model="page"
+                            :total-rows="totalBook"
+                            :per-page="6">
+                <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                <template #page="{ page, active }">
+                  <b v-if="active" style="color: white;">{{ page }} </b>
+                  <b v-else style="color: #9D6B54;">{{ page }}</b>
+                </template>
+              </b-pagination>
+              <b-pagination v-if="filter=='Đã Hủy'" class="page-numberMB" @input="getMyBooksDenied" v-model="page"
+                            :total-rows="totalBook"
+                            :per-page="6">
+                <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                <template #page="{ page, active }">
+                  <b v-if="active" style="color: white;">{{ page }} </b>
+                  <b v-else style="color: #9D6B54;">{{ page }}</b>
+                </template>
+              </b-pagination>
+              <b-pagination v-if="filter=='Đang Đợi'" class="page-numberMB" @input="getMyBooksWaiting" v-model="page"
+                            :total-rows="totalBook"
                             :per-page="6">
                 <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
                 <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
@@ -189,7 +244,7 @@ import Layout from "@/components/Layout";
 import SideBar_Personal from "../../components/SideBar_Personal";
 import VueJwtDecode from "vue-jwt-decode";
 import {Icon} from '@iconify/vue2';
-import CreateBookDialog from "@/components/CreateBookDialog";
+import CreateBookDialog from "@/pages/Personal/CreateBookDialog";
 
 export default {
   name: "MyBooks",
@@ -204,9 +259,14 @@ export default {
       userId: '',
       showDialog: false,
       listCategories: '',
-      listLanguage: ['Tiếng Việt','Tiếng Anh','Tiếng Hán','Tiếng Hàn','Tiếng Nhật',
-        'Tiếng Tây Ban Nha','Tiếng Pháp','Tiếng Đức','Tiếng Nga','Tiếng Bồ Đào Nha',
-      'Tiếng Hindi','Khác'],
+      listLanguage: ['Tiếng Việt', 'Tiếng Anh', 'Tiếng Hán', 'Tiếng Hàn', 'Tiếng Nhật',
+        'Tiếng Tây Ban Nha', 'Tiếng Pháp', 'Tiếng Đức', 'Tiếng Nga', 'Tiếng Bồ Đào Nha',
+        'Tiếng Hindi', 'Khác'],
+      listFilter: ['Tất Cả', 'Đã Duyệt', 'Đã Hủy', 'Đang Đợi'],
+      filter: 'Tất Cả',
+      search: '',
+      isSearch: false,
+      page: 1,
 
       title: '',
       categoryId: '',
@@ -230,12 +290,85 @@ export default {
     this.getMyBooks(1)
   },
   methods: {
+    onchange(e) {
+      this.isSearch = false
+      this.search = ''
+      if (e.target.value === 'Tất Cả') {
+        this.getMyBooks(1)
+      }
+      if (e.target.value === 'Đã Duyệt') {
+        this.getMyBooksApproved(1)
+      }
+      if (e.target.value === 'Đã Hủy') {
+        this.getMyBooksDenied(1)
+      }
+      if (e.target.value === 'Đang Đợi') {
+        this.getMyBooksWaiting(1)
+      }
+    },
     getMyBooks(pageNumber) {
+      window.scroll(0, 0)
       this.loading = true;
       let token = this.$cookies.get('token');
       this.userByToken = VueJwtDecode.decode(token, 'utf-8');
-      const url = API_PERSONAL.LIST_BOOK + pageNumber
-      apiFactory.callApi(url, 'POST', {
+      if (this.isSearch) {
+        apiFactory.callApi(API_PERSONAL.LIST_BOOK + '?page=' + pageNumber, 'POST', {
+          userId: this.userByToken.UserId,
+          search: this.search
+        }).then((res) => {
+          this.listBook = res.data.data
+          this.totalBook = res.data.numberOfRecords
+          this.loading = false;
+        }).catch(() => {
+        });
+      } else {
+        apiFactory.callApi(API_PERSONAL.LIST_BOOK + '?page=' + pageNumber, 'POST', {
+          userId: this.userByToken.UserId
+        }).then((res) => {
+          this.listBook = res.data.data
+          this.totalBook = res.data.numberOfRecords
+          this.loading = false;
+        }).catch(() => {
+        });
+      }
+    },
+    getMyBooksApproved(pageNumber) {
+      window.scroll(0, 0)
+      this.loading = true;
+      this.isSearch = false;
+      let token = this.$cookies.get('token');
+      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.LIST_BOOK_APPROVED + '?page=' + pageNumber, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        this.listBook = res.data.data
+        this.totalBook = res.data.numberOfRecords
+        this.loading = false;
+      }).catch(() => {
+      });
+    },
+    getMyBooksDenied(pageNumber) {
+      window.scroll(0, 0)
+      this.loading = true;
+      this.isSearch = false;
+      let token = this.$cookies.get('token');
+      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.LIST_BOOK_DENIED + '?page=' + pageNumber, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        this.listBook = res.data.data
+        this.totalBook = res.data.numberOfRecords
+        this.loading = false;
+      }).catch(() => {
+      });
+    },
+    getMyBooksWaiting(pageNumber) {
+      window.scroll(0, 0)
+      this.loading = true;
+      this.isSearch = false;
+      let token = this.$cookies.get('token');
+      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.LIST_BOOK_WAITING + '?page=' + pageNumber, 'POST', {
         userId: this.userByToken.UserId
       }).then((res) => {
         this.listBook = res.data.data
@@ -300,7 +433,7 @@ export default {
       }
       console.log(this.imageSrc)
       reader.readAsDataURL(file);
-    }
+    },
   }
 }
 </script>
@@ -348,6 +481,19 @@ strong {
   margin-top: 30px;
   display: block;
   border: 1px solid #9D6B54;
+}
+
+.selectCss {
+  border: 1px solid white;
+  border-radius: 10px;
+  width: 150px;
+  padding-left: 10px;
+  padding-right: 20px;
+  margin-left: 20px;
+  height: 40px;
+  color: white;
+  font-weight: bold;
+  background: #9D6B54;
 }
 
 .right-contentMB .searchMB {
@@ -404,7 +550,6 @@ strong {
   width: 260px;
   height: auto;
   margin: 10px 0px 10px 20px;
-  padding-bottom: 10px;
   border: 1px solid #9D6B54;
 }
 
@@ -421,6 +566,7 @@ strong {
 .right-contentMB .gridMB .infoMB {
   height: 120px;
   padding: 5px;
+  margin-bottom: 10px;
 }
 
 .right-contentMB .gridMB .infoMB img {
@@ -457,29 +603,6 @@ strong {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-}
-
-.right-contentMB .gridMB .action {
-  display: flex;
-  justify-content: center;
-}
-
-.right-contentMB .gridMB .action .active {
-  border-radius: 5px;
-  background-color: #9D6B54;
-  color: white;
-  border: 1px solid grey;
-  height: 40px;
-  width: 120px;
-  text-decoration: none;
-  padding-left: 15px;
-  padding-top: 5px;
-}
-
-.right-contentMB .gridMB .action .active:hover {
-  border-color: #9D6B54;
-  background-color: #F0ECE4;
-  color: #9D6B54;
 }
 
 .right-contentMB .pagingMB {

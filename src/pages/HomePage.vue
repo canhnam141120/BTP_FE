@@ -105,6 +105,7 @@ export default {
       loading: false,
       listBook: '',
       listPost: '',
+      slide: 'false',
       settings: {
         "dots": true,
         "infinite": true,

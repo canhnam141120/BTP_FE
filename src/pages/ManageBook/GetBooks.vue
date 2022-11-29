@@ -198,8 +198,8 @@
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_BOOK} from "@/constant/constant-api";
 import LoadingDialog from "@/components/LoadingDialog";
-import BookDetailDialog from "@/components/BookDetailDialog";
-import FeedbackDialog from "@/components/FeedbackDialog";
+import BookDetailDialog from "@/pages/ManageBook/BookDetailDialog";
+import FeedbackDialog from "@/pages/ManageBook/FeedbackDialog";
 
 export default {
   name: "GetBooks",
@@ -254,7 +254,8 @@ export default {
           this.spinner = false
         }).catch(() => {
         });
-      } else {
+      }
+      else {
         apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK + pageNumber, 'GET', {}).then((res) => {
           this.listBooks = res.data.data
           this.totalBook = res.data.numberOfRecords

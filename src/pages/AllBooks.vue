@@ -59,7 +59,7 @@
               </div>
             </b-skeleton-wrapper>
             <div class="paging">
-                <b-pagination class="page-number" @input="ChangePage" v-model="page" :total-rows="totalBook" :per-page="9">
+                <b-pagination class="page-number" @input="getAllBook" v-model="page" :total-rows="totalBook" :per-page="9">
                   <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
                   <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
                   <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
@@ -93,14 +93,15 @@ export default {
       search: '',
       isSearch: false,
       loading: false,
+      page: 1
     }
   },
   created() {
     this.isSearch = false
-    this.ChangePage(1)
+    this.getAllBook(1)
   },
   methods: {
-    ChangePage(pageNumber) {
+    getAllBook(pageNumber) {
       this.loading = true;
       if (this.isSearch) {
         window.scrollTo(0, 0)
@@ -115,7 +116,7 @@ export default {
         });
       } else {
         window.scrollTo(0, 0)
-        const url = API_BOOK.LIST_BOOK + pageNumber
+        const url = API_BOOK.LIST_BOOK + '?page=' + pageNumber
         apiFactory.callApi(url, 'GET', {}).then((res) => {
           this.listBook = res.data.data
           this.totalBook = res.data.numberOfRecords
@@ -130,7 +131,7 @@ export default {
       } else {
         this.isSearch = true;
       }
-      return this.ChangePage(1)
+      return this.getAllBook(1)
     },
   }
 }

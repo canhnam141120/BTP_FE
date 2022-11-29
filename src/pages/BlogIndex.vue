@@ -110,7 +110,7 @@ import {API_PERSONAL, API_POST} from "@/constant/constant-api";
 import Layout from "@/components/Layout";
 import {Icon} from '@iconify/vue2';
 import VueJwtDecode from "vue-jwt-decode";
-import CreatePostDialog from "@/components/CreatePostDialog";
+import CreatePostDialog from "@/pages/CreatePostDialog";
 
 export default {
   name: "BlogIndex",
@@ -124,6 +124,7 @@ export default {
       isSearch: false,
       loading: false,
       showDialog: false,
+      page: 1,
 
       title:'',
       content: '',
@@ -140,7 +141,7 @@ export default {
       this.loading = true;
       if (this.isSearch) {
         window.scrollTo(0, 0)
-        const url = API_POST.SEARCH_POST + pageNumber
+        const url = API_POST.SEARCH_POST + '?page=' + pageNumber
         apiFactory.callApi(url, 'POST', {
           search: this.search
         }).then((res) => {
@@ -151,7 +152,7 @@ export default {
         });
       } else {
         window.scrollTo(0, 0)
-        const url = API_POST.LIST_POST + pageNumber
+        const url = API_POST.LIST_POST + '?page=' + pageNumber
         apiFactory.callApi(url, 'GET', {}).then((res) => {
           this.listPost = res.data.data
           this.totalPost = res.data.numberOfRecords
@@ -166,7 +167,7 @@ export default {
       } else {
         this.isSearch = true;
       }
-      return this.ChangePage(1)
+      return this.getListPost(1)
     },
     getMyInformation() {
       //this.loading = true

@@ -312,9 +312,9 @@ import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_TRANSACTION, API_TRANSACTION} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
 import LoadingDialog from "@/components/LoadingDialog";
-import ExchangeDetailDialog from "@/components/ExchangeDetailDialog";
-import ExchangeBillDialog from "@/components/ExchangeBillDialog";
-import UpdateExchangeDialog from "@/components/UpdateExchangeDialog";
+import ExchangeDetailDialog from "@/pages/ManageTransaction/ExchangeDetailDialog";
+import ExchangeBillDialog from "@/pages/ManageTransaction/ExchangeBillDialog";
+import UpdateExchangeDialog from "@/pages/ManageTransaction/UpdateExchangeDialog";
 
 export default {
   name: "GetExchanges",

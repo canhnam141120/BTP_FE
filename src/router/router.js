@@ -64,8 +64,8 @@ const routers = [
         component: () => import('@/pages/Personal/ViewRequestBook'),
     },
     {
-        path:'/Other-Person',
-        name:'Other-Person',
+        path:'/OtherPerson',
+        name:'OtherPerson',
         component: () => import('@/pages/Visit/OtherPerson'),
     },
     {
@@ -119,11 +119,6 @@ const routers = [
         component: () => import('@/pages/ManagePost/GetPosts'),
     },
     {
-        path:'/ManagePost/comment',
-        name:'GetComments',
-        component: () => import('@/pages/ManagePost/GetComments'),
-    },
-    {
         path:'/ManageUser',
         name:'GetUsers',
         component: () => import('@/pages/ManageUser/GetUsers'),
@@ -154,29 +149,9 @@ const routers = [
         component: () => import('@/pages/ManageTransaction/GetExchanges'),
     },
     {
-        path:'/ManageTransaction/exchange/detail',
-        name:'DetailExchange',
-        component: () => import('@/pages/ManageTransaction/DetailExchange'),
-    },
-    {
-        path:'/ManageTransaction/exchange/bill',
-        name:'ExchangeBill',
-        component: () => import('@/pages/ManageTransaction/ExchangeBill'),
-    },
-    {
         path:'/ManageTransaction/rent',
         name:'GetRents',
         component: () => import('@/pages/ManageTransaction/GetRents'),
-    },
-    {
-        path:'/ManageTransaction/rent/detail',
-        name:'DetailRent',
-        component: () => import('@/pages/ManageTransaction/DetailRent'),
-    },
-    {
-        path:'/ManageTransaction/rent/bill',
-        name:'RentBill',
-        component: () => import('@/pages/ManageTransaction/RentBill'),
     },
     {
         path:'/ManageIndex',

@@ -76,7 +76,7 @@ import Layout from "@/components/Layout";
 import apiFactory from "@/config/apiFactory";
 import {API_PERSONAL, API_TRANSACTION} from "@/constant/constant-api";
 import VueJwtDecode from "vue-jwt-decode";
-import BillDialog from "@/components/BillDialog";
+import BillDialog from "@/pages/Personal/BillDialog";
 
 export default {
   name: "MyTransaction",

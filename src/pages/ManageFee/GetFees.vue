@@ -48,7 +48,7 @@ import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_FEE} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
 import LoadingDialog from "@/components/LoadingDialog";
-import CreateFeeDialog from "@/components/CreateFeeDialog";
+import CreateFeeDialog from "@/pages/ManageFee/CreateFeeDialog";
 
 export default {
   name: "GetFees",

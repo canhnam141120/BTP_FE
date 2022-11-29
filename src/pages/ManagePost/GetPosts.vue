@@ -138,7 +138,7 @@ import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_POST} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
 import LoadingDialog from "@/components/LoadingDialog";
-import PostDetailDialog from "@/components/PostDetailDialog";
+import PostDetailDialog from "@/pages/ManagePost/PostDetailDialog";
 
 export default {
   name: "GetPosts",

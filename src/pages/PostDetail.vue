@@ -8,10 +8,10 @@
             <div class="bottom">
               <div class="leftTop">
                 <div class="authorPD">
-                  <div style="margin-left: auto; margin-right: auto; width: 80px"><img class="authorAvatar" v-bind:src="post.user.avatar" alt="Ảnh đại diện"></div>
-                  <div class="authorName">{{post.user.fullname}}</div>
-                  <div class="authorNumber">{{post.user.likeNumber}} người thích</div>
-                  <div style="margin-left: auto; margin-right: auto; width: 54px"><router-link class="authorBtn" :to="{ name: 'Other-Person', query: {id:post.userId}}">Xem</router-link></div>
+                  <div style="margin-left: auto; margin-right: auto; width: 80px"><img class="authorAvatar" v-bind:src="post.user?.avatar" alt="Ảnh đại diện"></div>
+                  <div class="authorName">{{post.user?.fullname}}</div>
+                  <div class="authorNumber">{{post.user?.likeNumber}} người thích</div>
+                  <div style="margin-left: auto; margin-right: auto; width: 54px"><router-link class="authorBtn" :to="{ name: 'OtherPerson', query: {id:post.userId}}">Xem</router-link></div>
                   <hr>
                 </div>
                 <div class="contentPD">
