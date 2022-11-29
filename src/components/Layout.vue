@@ -28,7 +28,7 @@
             >Trạm đọc
             </router-link>
             <router-link
-                to="/users-management"
+                to="/Policy&Terms"
                 class="Main__list__item musers-management"
                 active-color="#9D6B54"
             >Chính sách & điều khoản
@@ -623,10 +623,13 @@ export default {
   color: #737373;
   padding: 3px 0;
   align-items: center;
+  list-style: none;
+  transition: 300ms;
 }
 
 .item-link:hover{
   color: #9D6B54;
+  transform: translateX(0.25rem);
 }
 
 .contact_info{
