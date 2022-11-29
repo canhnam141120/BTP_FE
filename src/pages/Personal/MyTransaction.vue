@@ -32,7 +32,7 @@
         <SideBar_Personal></SideBar_Personal>
       </div>
       <div class="right-contentMT">
-        <div class="titleMT">DANH SÁCH GIAO DỊCH</div>
+        <div class="titleMT">DANH SÁCH GIAO DỊCH</div><hr>
         <div class="listTrans">
           <table class="table">
             <thead>
@@ -155,7 +155,7 @@ strong {
   background: #F0F0F0;
   max-width: 1230px;
   border-radius: 10px;
-  margin: 5px auto 30px auto;
+  margin: 0px auto 0px auto;
   display: flex;
   justify-content: space-between;
 }
@@ -184,9 +184,9 @@ strong {
 .right-contentMT .titleMT {
   color: #9D6B54;
   text-align: center;
-  font-size: 20px;
+  font-size: 26px;
   font-weight: bold;
-  padding-top: 5px;
+  padding-top: 20px;
 }
 
 </style>

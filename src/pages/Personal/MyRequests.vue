@@ -7,7 +7,7 @@
         <SideBar_Personal></SideBar_Personal>
       </div>
       <div class="right-contentMR">
-        <div class="titleMR">Danh sách yêu cầu trao đổi</div>
+        <div class="titleMR">Danh sách yêu cầu trao đổi</div><hr>
         <b-skeleton-wrapper :loading="loading">
           <template #loading>
             <div class="gridMR">
@@ -161,7 +161,7 @@ strong {
   background: #F0F0F0;
   max-width: 1230px;
   border-radius: 10px;
-  margin: 5px auto 30px auto;
+  margin: 0px auto 20px auto;
   display: flex;
   justify-content: space-between;
 }
@@ -170,9 +170,9 @@ strong {
   text-transform: uppercase;
   color: #9D6B54;
   text-align: center;
-  font-size: 20px;
+  font-size: 26px;
   font-weight: bold;
-  padding-top: 5px;
+  padding-top: 20px;
 }
 
 .left-contentMR {

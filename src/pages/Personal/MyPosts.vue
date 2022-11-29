@@ -3,20 +3,58 @@
     <main style="flex-grow: 1">
       <div class="myPost">
         <LoadingDialog v-show="spinner"></LoadingDialog>
+        <CreatePostDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
+          <div>
+            <div class="dialogTitle">SỬA BÀI VIẾT</div>
+          </div>
+          <div class="dialogBody">
+            <b-row class="post-content">
+              <b-col class="input-label" cols="2">Tiêu đề:</b-col>
+              <b-col class="input-div" cols="9">
+                <input type="text" maxlength="500"
+                       required placeholder="Nhập tiêu đề"
+                       v-model="post.title" class="input-text">
+              </b-col>
+            </b-row>
+            <div class="bottom-post">
+              <b-row class="post-content">
+                <b-col class="input-label" cols="2">Nội dung:</b-col>
+                <b-col class="input-div" cols="9">
+              <textarea type="text" maxlength="2000" required style="height: 400px; width: 550px;"
+                        placeholder="Nhập nội dung bài đăng"
+                        v-model="post.content"
+                        class="input-text">
+            </textarea></b-col>
+              </b-row>
+              <div>
+                <b-row class="post-content">
+                  <b-col class="input-label" cols="2">Chọn ảnh:</b-col>
+                  <b-col class="input-div" cols="6"><input type="file" title=" " class="input-text-short" name="image"
+                                                           @change="handleFileUpload"></b-col>
+                </b-row>
+                <img v-bind:src="post.image" style="width: 300px; height: 300px; object-fit: scale-down">
+              </div>
+            </div>
+          </div>
+          <div class="dialogGroupBtn">
+            <button class="dialogBtn" v-on:click="cancel">Hủy</button>
+            <button class="dialogBtn" v-on:click="save">Lưu</button>
+          </div>
+        </CreatePostDialog>
         <div class="containerMP">
           <div class="left-contentMP">
             <SideBar_Personal></SideBar_Personal>
           </div>
           <div class="right-contentMP">
-            <div class="titleMP">Bài viết của tôi</div>
+            <div class="titleMP">Bài viết của tôi</div><hr>
             <div class="searchMP">
-              <input class="inputMP" type="text" v-model="search" placeholder="Nhập tiêu đề">
-              <button class="btnMP">Tìm</button>
+              <input class="inputMP" type="text" v-model="search" placeholder="Nhập tiêu đề bài viết">
+              <button class="btnMP" v-on:click="HandleSearch">Tìm</button>
               <select class="selectCss" v-model="filter" @change="onchange($event)">
                 <option v-bind:value="item" v-for="item of listFilter" :key="item">{{ item }}</option>
               </select>
             </div>
-            <hr>
+
             <b-skeleton-wrapper :loading="loading">
               <template #loading>
                 <div class="grid">
@@ -50,7 +88,7 @@
                     <label class="post-content">{{ item.content }}</label>
                   </div>
                   <div class="gr-btn">
-                    <button class="item-btn">Sửa</button>
+                    <button class="item-btn" v-on:click="openEditPostDialog(item.id)">Sửa</button>
                     <div v-if="item.status == 'Approved'">
                       <button v-if="!item.isHide" class="item-btn" v-on:click="HandleHide(item.id)">Ẩn</button>
                       <button v-else class="item-btn" v-on:click="HandleShow(item.id)">Hiện</button>
@@ -115,7 +153,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </main>
   </Layout>
@@ -123,27 +160,30 @@
 
 <script>
 import apiFactory from "@/config/apiFactory";
-import {API_POST, API_PERSONAL} from "@/constant/constant-api";
+import {API_POST, API_PERSONAL, API_MANAGE_POST} from "@/constant/constant-api";
 import SideBar_Personal from "@/components/SideBar_Personal";
 import Layout from "@/components/Layout";
 import VueJwtDecode from "vue-jwt-decode";
 import LoadingDialog from "@/components/LoadingDialog";
+import CreatePostDialog from "@/pages/CreatePostDialog";
 
 export default {
   name: "MyPosts",
-  components: {SideBar_Personal, Layout, LoadingDialog},
+  components: {SideBar_Personal, Layout, LoadingDialog, CreatePostDialog},
   data() {
     return {
       loading: false,
       listPosts: '',
       totalPost: '',
+      post: '',
       userId: '',
       listFilter: ['Tất Cả', 'Đã Duyệt', 'Đã Hủy', 'Đang Đợi'],
       filter: 'Tất Cả',
       page: 1,
       search: '',
       isSearch: false,
-      spinner: false
+      spinner: false,
+      showDialog: false
     }
   },
   created() {
@@ -172,7 +212,7 @@ export default {
       let token = this.$cookies.get('token');
       this.userByToken= VueJwtDecode.decode(token, 'utf-8');
       if(this.isSearch){
-        apiFactory.callApi(API_PERSONAL.LIST_POST + '?page=' + pageNumber, 'POST', {
+        apiFactory.callApi(API_PERSONAL.SEARCH_MY_POST + '?page=' + pageNumber, 'POST', {
           userId: this.userByToken.UserId,
           search: this.search
         }).then((res) => {
@@ -291,7 +331,78 @@ export default {
       }).catch(() => {
         alert('Ẩn không thành công!')
       });
+    },
+    HandleSearch() {
+      if (!this.search) {
+        this.filter= 'Tất Cả'
+        this.isSearch = false;
+      } else {
+        this.filter= ''
+        this.isSearch = true;
+      }
+      return this.getMyPosts(1)
+    },
+    getPostById(postId){
+      this.spinner = true
+      const url = API_MANAGE_POST.DETAIL_POST + postId
+      apiFactory.callApi(url,'GET',{}).then((res)=>{
+        this.post = res.data.data
+        this.spinner = false
+      }).catch(() => {
+      });
+    },
+    openEditPostDialog(postId){
+      this.getPostById(postId)
+      this.showDialog = true
+    },
+    cancel(){
+      this.showDialog = false
+    },
+    save(){
+      this.spinner = true
+      const url = API_POST.UPDATE_POST + this.post.id
+      apiFactory.callApi(url,'PUT',{
+        title: this.post.title,
+        content: this.post.content,
+        image: this.post.image
+      }).then((res)=>{
+        if(res.data.message == 'UPDATE_SUCCESS'){
+          if(this.filter === ''){
+            this.getMyPosts(this.page)
+          }
+          if(this.filter === 'Tất Cả'){
+            this.getMyPosts(this.page)
+          }
+          if(this.filter === 'Đã Duyệt'){
+            this.getMyPostsApproved(this.page)
+          }
+          if(this.filter  === 'Đã Hủy'){
+            this.getPostsDenied(this.page)
+          }
+          if(this.filter === 'Đang Đợi'){
+            this.getMyPostsWaiting(this.page)
+          }
+          this.spinner = false
+        }
+      }).catch(() => {
+      });
+      this.showDialog = false
+    },
+    handleFileUpload(e) {
+      const file = document.querySelector('input[type=file]').files[0]
+      var files = e.target.files
+      if (!files[0]) {
+        return
+      }
+      const reader = new FileReader()
 
+      var rawImg;
+      reader.onloadend = () => {
+        rawImg = reader.result;
+        this.post.image = rawImg
+      }
+      console.log(this.imageSrc)
+      reader.readAsDataURL(file);
     }
   },
   filters: {
@@ -323,7 +434,7 @@ strong {
   background: #F0F0F0;
   max-width: 1230px;
   border-radius: 10px;
-  margin: 5px auto 30px auto;
+  margin: 0px auto 20px auto;
   display: flex;
   justify-content: space-between;
 }
@@ -332,9 +443,9 @@ strong {
   text-transform: uppercase;
   color: #9D6B54;
   text-align: center;
-  font-size: 20px;
+  font-size: 26px;
   font-weight: bold;
-  padding-top: 5px;
+  padding-top: 20px;
 }
 
 .left-contentMP {

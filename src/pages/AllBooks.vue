@@ -48,13 +48,9 @@
                       </strong>
                     </label>
                     <label class="book-status">{{ item.statusBook }}</label>
+                    <label class="book-status" style="color: red; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
+                    <label class="book-status" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
                   </div>
-<!--                  <div class="actionAB">
-                    <label v-if="item.isExchange" class="activeAll">Trao đổi</label>
-                    <router-link v-else class="disableAll" :to="{ name: 'BookDetail', query: { id:item.id }}">Trao đổi</router-link>
-                    <router-link v-if="item.isRent" class="activeAllR" :to="{ name: 'BookDetail', query: { id:item.id }}">Thuê</router-link>
-                    <router-link v-else class="disableAllR" :to="{ name: 'BookDetail', query: { id:item.id }}">Thuê</router-link>
-                  </div>-->
                 </div>
               </div>
             </b-skeleton-wrapper>
@@ -225,7 +221,7 @@ strong {
   border-radius: 10px;
   border: 1px solid #9D6B54;
   width: 260px;
-  height: 450px;
+  height: auto;
   margin: 10px 0px 10px 20px;
 }
 
@@ -240,7 +236,7 @@ strong {
 }
 
 .body .container-book .content .grid .info {
-  height: 120px;
+  height: auto;
   padding: 5px;
 }
 

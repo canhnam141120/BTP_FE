@@ -43,6 +43,8 @@
                     <div><img class="imgUser" src="../image/user.png"> {{ item.user.fullname }}</div>
                     <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
+                    <label class="book-status" style="color: red; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
+                    <label class="book-status" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
                   </div>
                 </div>
               </div>
@@ -240,7 +242,7 @@ strong {
 }
 
 .grid-book .info {
-  height: 120px;
+  height: auto;
   padding: 5px;
 }
 
