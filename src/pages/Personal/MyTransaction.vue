@@ -53,7 +53,8 @@
       <div>Số lượng sách giao dịch: {{billExchange.totalBook}}</div>
       <div>Phí đặt cọc: {{billExchange.depositFee.toLocaleString()}}đ</div>
       <div>Phí ship: {{billExchange.feeId1Navigation.price.toLocaleString()}}đ</div>
-      <div>Phí dịch vụ: {{billExchange.feeId2Navigation.price.toLocaleString()}}đ + {{billExchange.totalBook - 1}} x {{billExchange.feeId3Navigation.price.toLocaleString()}}đ</div>
+      <div v-if="billExchange.feeId3 != 0">Phí dịch vụ: {{billExchange.feeId2Navigation.price.toLocaleString()}}đ + {{billExchange.totalBook - 1}} x {{billExchange.feeId3Navigation.price.toLocaleString()}}đ</div>
+      <div v-else>Phí dịch vụ: {{billExchange.feeId2Navigation.price.toLocaleString()}}đ</div>
       <div>Tổng chi phí: {{billExchange.totalAmount.toLocaleString()}}đ</div>
       <div v-if="billExchange.isPaid">
         <div>Trạng thái thanh toán: Đã thanh toán thanh toán</div>
@@ -111,7 +112,8 @@
       <div>Phí đặt cọc: {{billRent.depositFee.toLocaleString()}}đ</div>
       <div>Phí thuê: {{billRent.rentFee.toLocaleString()}}đ</div>
       <div>Phí ship: {{billRent.feeId1Navigation.price.toLocaleString()}}đ</div>
-      <div>Phí dịch vụ: {{billRent.feeId2Navigation.price.toLocaleString()}}đ + {{billRent.totalBook - 1}} x {{billRent.feeId3Navigation.price.toLocaleString()}}đ</div>
+      <div v-if="billRent.feeId3 != 0">Phí dịch vụ: {{billRent.feeId2Navigation.price.toLocaleString()}}đ + {{billRent.totalBook - 1}} x {{billRent.feeId3Navigation.price.toLocaleString()}}đ</div>
+      <div v-else>Phí dịch vụ: {{billRent.feeId2Navigation.price.toLocaleString()}}đ</div>
       <div>Tổng chi phí: {{billRent.totalAmount.toLocaleString()}}đ</div>
       <div v-if="billRent.isPaid">
         <div>Trạng thái thanh toán: Đã thanh toán thanh toán</div>

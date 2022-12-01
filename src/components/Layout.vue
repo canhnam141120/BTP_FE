@@ -15,12 +15,7 @@
                 active-color="#9D6B54"
             >Trang Chủ
             </router-link>
-            <router-link
-                to="/AllBooks"
-                class="Main__list__item course-management"
-                active-color="#9D6B54"
-            >Tủ sách
-            </router-link>
+            <router-link to="/AllBooks" class="Main__list__item course-management btnCategory" active-color="#9D6B54">Tủ sách</router-link>
             <router-link
                 to="/BlogIndex"
                 class="Main__list__item class-management"
@@ -56,8 +51,9 @@
             <li>
               <b-dropdown variant="black" no-caret>
                 <template v-slot:button-content>
-                    <img class="icon"  src="../image/bell.png" style="position: relative"><div class="countNoti">{{count}}</div>
+                  <Icon class="icon" icon="tabler:bell-ringing-2"/><div class="countNoti">{{count}}</div>
                 </template>
+                <div class="titleNoti">Thông Báo</div>
                 <div v-for="item of noti" :key="item.id" class="notification">
                   "{{item.content}}"
                   <hr style="margin-top: 0px; margin-bottom: 10px">
@@ -679,11 +675,19 @@ export default {
 }
 
 .icon{
-  width: 30px;
-  height: 30px;
+  color: #9d6b54;
+  width: 40px;
+  height: 40px;
   border-radius: 20px;
   margin-left: 14px;
   margin-right: 14px;
+  padding: 5px;
+  background-color: #F0ECE4;
+}
+
+.icon:hover{
+  background-color: #c4a698;
+  color: #F0ECE4;
 }
 
 .dropdown-menu{
@@ -704,7 +708,7 @@ export default {
 .countNoti{
   position: absolute;
   top: 0;
-  margin-left: 30px;
+  margin-left: 35px;
   background-color: red;
   width: 20px;
   height: 20px;
@@ -730,5 +734,13 @@ export default {
 .linkAllNoti:hover{
   background-color: #F0ECE4;
   color: #9d6b54;
+}
+
+.titleNoti{
+  color: #9d6b54;
+  font-weight: bold;
+  padding-bottom: 5px;
+  font-size: 16px;
+  border-radius: 10px;
 }
 </style>
