@@ -382,10 +382,6 @@ strong {
   color: #9D6B54;
 }
 
-.groupTab{
-
-}
-
  .search {
   margin: 0px 0px 10px 20px;
   display: flex;

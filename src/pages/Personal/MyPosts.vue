@@ -2,7 +2,7 @@
   <Layout>
     <main style="flex-grow: 1">
       <div class="myPost">
-        <LoadingDialog v-show="spinner"></LoadingDialog>
+        <LoadingDialog v-show="spinner" style="z-index: 999999"></LoadingDialog>
         <CreatePostDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
           <div>
             <div class="dialogTitle">SỬA BÀI VIẾT</div>
@@ -506,6 +506,7 @@ strong {
 }
 
 .right-contentMP .grid .item {
+  color: #9D6B54;
   border-radius: 10px;
   border: 1px solid #9D6B54;
   width: 840px;

@@ -75,7 +75,7 @@
               <tr>
                 <td>Chi tiết</td>
                 <td>Ảnh</td>
-                <td>Mã sách</td>
+                <td>Mã</td>
                 <td>Người đăng</td>
                 <td>Tên sách</td>
                 <td>Giá bìa</td>
@@ -88,13 +88,11 @@
               </thead>
               <tbody v-for="item of listBooks" :key="item.id">
               <tr>
-                <td>
-                  <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router"
-                          v-on:click="openDialogBD(item.id)">Xem
-                  </button>
+                <td style="padding-left: 12px">
+                  <button class="tableBtnAction" v-on:click="openDialogBD(item.id)"><Icon icon="ic:baseline-remove-red-eye"/></button>
                 </td>
-                <td>{{ item.id }}</td>
                 <td><img v-bind:src="item.image" height="90px" width="65px"></td>
+                <td>{{ item.id }}</td>
                 <td>{{ item.user.fullname }}</td>
                 <td style="max-width: 300px">{{ item.title }}</td>
                 <td>{{ item.coverPrice.toLocaleString() }}đ</td>
@@ -104,27 +102,29 @@
                 <td v-if="item.status == 'Denied'"><span class="role denied">ĐÃ HỦY</span></td>
                 <td v-if="item.status == 'Waiting'"><span class="role waiting">ĐANG ĐỢI</span></td>
                 <td v-if="item.status == 'Waiting'">
-                  <button style="display: block" class="au-btn au-btn-icon au-btn--brown au-btn--small"
-                          v-on:click="HandleApproved(item.id)">Duyệt
+                  <button class="tableBtnAction"
+                          v-on:click="HandleApproved(item.id)"><Icon icon="material-symbols:check-box-rounded"/>
                   </button>
-                  <button style="width: 53.5px" class="au-btn au-btn-icon au-btn--brown au-btn--small"
-                          v-on:click="HandleDenied(item.id)">Hủy
+                  <button class="tableBtnAction"
+                          v-on:click="HandleDenied(item.id)"><Icon icon="mdi:cancel-box"/>
                   </button>
                 </td>
                 <td v-if="item.status == 'Approved'">
-                  <button style="width: 53.5px" class="au-btn au-btn-icon au-btn--brown au-btn--small"
-                          v-on:click="HandleDenied(item.id)">Huỷ
+                  <button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="material-symbols:check-box-rounded"/>
+                  </button>
+                  <button class="tableBtnAction"
+                          v-on:click="HandleDenied(item.id)"><Icon icon="mdi:cancel-box"/>
                   </button>
                 </td>
                 <td v-if="item.status == 'Denied'">
-                  <button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleApproved(item.id)">
-                    Duyệt
+                  <button class="tableBtnAction" v-on:click="HandleApproved(item.id)">
+                    <Icon icon="material-symbols:check-box-rounded"/>
+                  </button>
+                  <button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="mdi:cancel-box"/>
                   </button>
                 </td>
-                <td>
-                  <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router"
-                          v-on:click="openDialogFB(item.id)">XEM
-                  </button>
+                <td style="padding-left: 18px">
+                  <button class="tableBtnAction" v-on:click="openDialogFB(item.id)"><Icon icon="ic:baseline-remove-red-eye"/></button>
                 </td>
               </tr>
               </tbody>
@@ -200,10 +200,11 @@ import {API_MANAGE_BOOK} from "@/constant/constant-api";
 import LoadingDialog from "@/components/LoadingDialog";
 import BookDetailDialog from "@/pages/ManageBook/BookDetailDialog";
 import FeedbackDialog from "@/pages/ManageBook/FeedbackDialog";
+import {Icon} from '@iconify/vue2';
 
 export default {
   name: "GetBooks",
-  components: {BookDetailDialog, LoadingDialog, FeedbackDialog},
+  components: {BookDetailDialog, LoadingDialog, FeedbackDialog, Icon},
   data() {
     return {
       book: '',

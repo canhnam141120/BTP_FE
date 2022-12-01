@@ -43,13 +43,15 @@
                     <td>{{ item.addressMain }}</td>
                     <td>{{ item.likeNumber }}</td>
                     <td>{{ item.numberOfTransaction }}</td>
-                    <td v-if="item.isActive"><span class="role approved" style="width: 120px">ĐANG HOẠT ĐỘNG</span></td>
-                    <td v-else ><span class="role denied" style="width: 120px">ĐANG KHÓA</span></td>
-                    <td >
-                      <button v-if="item.isActive" class="au-btn au-btn-icon au-btn--brown au-btn--small" style="width: 76px;" v-on:click="HandleBan(item.id)">Khóa</button>
-                      <button v-else class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleActive(item.id)">Kích hoạt</button>
+                    <td style="padding-left: 50px">
+                      <Icon v-if="item.isActive" icon="fontisto:radio-btn-active" style="color: forestgreen; font-size: 30px;"/>
+                      <Icon v-else icon="pajamas:status-active" style="color: #ca0303; font-size: 30px;"/>
                     </td>
-                    <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleAuthority(item.id)">Uỷ quyền</button></td>
+                    <td style="padding-left: 35px">
+                      <button v-if="item.isActive" class="tableBtnAction" v-on:click="HandleBan(item.id)"><Icon icon="material-symbols:lock"/></button>
+                      <button v-else class="tableBtnAction" v-on:click="HandleActive(item.id)"><Icon icon="material-symbols:lock-open-rounded"/></button>
+                    </td>
+                    <td style="padding-left: 18px"><button class="tableBtnAction" v-on:click="HandleAuthority(item.id)"><Icon icon="game-icons:armor-upgrade"/></button></td>
                   </tr>
                   </tbody>
                 </table>
@@ -113,10 +115,11 @@ import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_USER} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
 import LoadingDialog from "@/components/LoadingDialog";
+import {Icon} from '@iconify/vue2';
 
 export default {
   name: "GetUsers",
-  components: {Side_Bar, LoadingDialog},
+  components: {Side_Bar, LoadingDialog, Icon},
   data() {
     return {
       listUsers: '',

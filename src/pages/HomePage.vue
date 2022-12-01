@@ -39,11 +39,11 @@
                     <img class="imgBook" v-bind:src="item.image">
                   </router-link>
                   <div class="info">
-                    <div class="book-title">{{ item.title }}</div>
-                    <div><img class="imgUser" src="../image/user.png"> {{ item.user.fullname }}</div>
-                    <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                    <div class="book-title"><strong>{{ item.title }}</strong></div>
+                    <div class="book-status">Đăng bởi: <strong>{{ item.user.fullname }}</strong></div>
+                    <label class="book-status">Giá cọc: <strong>{{ item.depositPrice.toLocaleString() }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
-                    <label class="book-status" style="color: red; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
+                    <label class="book-status" style="color: #ca0303; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
                     <label class="book-status" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
                   </div>
                 </div>
@@ -74,8 +74,8 @@
                     <img class="imgPost" v-bind:src="item.image">
                   </router-link>
                   <div class="info">
-                    <div class="post-title">{{ item.title }}</div>
-                    <div><img class="imgUserPost" src="../image/user.png"> {{ item.user.fullname }}</div>
+                    <div class="post-title"><strong>{{ item.title }}</strong></div>
+                    <div class="post-content">Tác giả: <strong>{{ item.user.fullname }}</strong></div>
                     <div class="createDate"><Icon class="iconTime" icon="ic:twotone-access-time"/>{{item.createdDate | formatDate}}</div>
                     <div class="post-content">{{ item.content }}</div>
                   </div>
@@ -164,6 +164,7 @@ main {
 
 strong {
   color: #9D6B54;
+  font-weight: 600;
 }
 
 .banner {
@@ -225,6 +226,7 @@ strong {
 }
 
 .item-book {
+  color: #9D6B54;
   border-radius: 10px;
   width: 191px;
   height: auto;
@@ -285,6 +287,7 @@ strong {
 }
 
 .item-post {
+  color: #9D6B54;
   border-radius: 10px;
   display: flex;
   width: 392px;

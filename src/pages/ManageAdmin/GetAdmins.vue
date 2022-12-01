@@ -33,9 +33,11 @@
                     <td>{{ item.fullname }}</td>
                     <td>{{ item.phone }}</td>
                     <td>{{ item.addressMain }}</td>
-                    <td v-if="item.isActive"><span class="role approved" style="width: 120px">ĐANG HOẠT ĐỘNG</span></td>
-                    <td v-else ><span class="role denied" style="width: 120px">ĐANG KHÓA</span></td>
-                    <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleAuthority(item.id)">Huỷ quyền</button></td>
+                    <td style="padding-left: 50px">
+                      <Icon v-if="item.isActive" icon="fontisto:radio-btn-active" style="color: forestgreen; font-size: 30px;"/>
+                      <Icon v-else icon="pajamas:status-active" style="color: #ca0303; font-size: 30px;"/>
+                    </td>
+                    <td style="padding-left: 23px"><button class="tableBtnAction" v-on:click="HandleAuthority(item.id)"><Icon icon="game-icons:armor-downgrade"/></button></td>
                   </tr>
                   </tbody>
                 </table>
@@ -54,10 +56,11 @@ import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_ADMIN} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
 import LoadingDialog from "@/components/LoadingDialog";
+import {Icon} from '@iconify/vue2';
 
 export default {
   name: "GetAdmins",
-  components: {Side_Bar, LoadingDialog},
+  components: {Side_Bar, LoadingDialog, Icon},
   data() {
     return {
       listAdmins: '',

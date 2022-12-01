@@ -28,9 +28,9 @@
                     <img v-bind:src="item.image">
                   </router-link>
                   <div class="infoMB">
-                    <div class="book-titleMB">{{ item.title }}</div>
-                    <div class="book-statusMB">Thể loại: {{ item.category?.name}}</div>
-                    <label>Giá bìa: <strong>{{ item.coverPrice?.toLocaleString() }}đ</strong></label>
+                    <div class="book-titleMB"><strong>{{ item.title }}</strong></div>
+                    <div class="book-statusMB">Thể loại: <strong>{{ item.category?.name}}</strong></div>
+                    <label class="book-statusMB">Giá cọc: <strong>{{ item.depositPrice?.toLocaleString() }}đ</strong></label>
                     <label class="book-statusMB">{{ item.statusBook }}</label>
                   </div>
                   <input type="checkbox" class="checkboxes" v-bind:value="item.id" v-model="listIdBook">
@@ -84,7 +84,7 @@
               <div v-if="!book.isTrade" class="btn-tran">
                 <button v-if="book.isExchange" class="active" v-on:click="openDialog">Trao đổi</button>
                 <button v-else class="disable">Trao đổi</button>
-                <button v-if="book.isRent" class="active">Thuê</button>
+                <button v-if="book.isRent" class="active" v-on:click="HandleRent">Thuê</button>
                 <button v-else class="disable">Thuê</button>
               </div>
               <div v-else class="btn-tran">
@@ -198,11 +198,11 @@
                     <img v-bind:src="item.image">
                   </router-link>
                   <div class="info">
-                    <div class="book-title">{{ item.title }}</div>
-                    <label class="book-status">Thể loại: {{ item.category?.name }}</label>
-                    <label class="book-status">Giá bìa: <strong>{{ item.coverPrice?.toLocaleString() }}đ</strong></label>
+                    <div class="book-title"><strong>{{ item.title }}</strong></div>
+                    <label class="book-status">Thể loại: <strong>{{ item.category?.name }}</strong></label>
+                    <label class="book-status">Giá cọc: <strong>{{ item.depositPrice?.toLocaleString() }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
-                    <label class="book-status" style="color: red; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
+                    <label class="book-status" style="color: #ca0303; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
                     <label class="book-status" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
                   </div>
                 </div>
@@ -232,11 +232,11 @@
                     <img v-bind:src="item.image">
                   </router-link>
                   <div class="info">
-                    <div class="book-title">{{ item.title }}</div>
-                    <div class="book-status"><img src="../image/user.png"> {{ item.user?.fullname }}</div>
-                    <label class="book-status">Giá bìa: <strong>{{ item.coverPrice?.toLocaleString() }}đ</strong></label>
+                    <div class="book-title"><strong>{{ item.title }}</strong></div>
+                    <div class="book-status">Đăng bởi: <strong>{{ item.user?.fullname }}</strong></div>
+                    <label class="book-status">Giá cọc: <strong>{{ item.depositPrice?.toLocaleString() }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
-                    <label class="book-status" style="color: red; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
+                    <label class="book-status" style="color: #ca0303; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
                     <label class="book-status" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
                   </div>
                 </div>
@@ -368,6 +368,18 @@ export default {
         }
       }).catch(() => {
       });
+    },
+    HandleRent(){
+      let token = this.$cookies.get('token');
+      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_REQUEST.RENT + this.$route.query.id, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        if(res.data.message === 'SUCCESS'){
+          console.log(alert('Thuê thành công!'))
+        }
+      }).catch(() => {
+      });
     }
   },
   filters:{
@@ -394,6 +406,7 @@ main {
 
 strong {
   color: #9D6B54;
+  font-weight: 600;
 }
 
 .dialogBook{
@@ -409,6 +422,7 @@ strong {
 }
 
 .dialogBook .gridMB .itemMB {
+  color: #9D6B54;
   display: block;
   border-radius: 10px;
   border: 1px solid #9D6B54;
@@ -518,6 +532,7 @@ strong {
 }
 
 .bookdetail-top .right .infoBD{
+  color: grey;
   display: flex;
   justify-content: space-between;
 }
@@ -530,7 +545,7 @@ strong {
 }
 
 .bookdetail-top .right .bookInfoBD span{
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .bookdetail-top .right .bookInfoBD .priceBD{
@@ -550,7 +565,7 @@ strong {
 .bookdetail-top .right .bookInfoBD .priceBD .cover{
   font-weight: 700;
   font-size: 24px;
-  color: red;
+  color: #ca0303;
   font-style: normal;
 }
 
@@ -659,6 +674,7 @@ strong {
 }
 
 .bookdetail-mid .mid-info .mid-info-left {
+  color: grey;
   line-height: 30px;
 }
 
@@ -669,6 +685,7 @@ strong {
 }
 
 .bookdetail-mid .mid-des .mid-content{
+  color: grey;
   padding-top: 10px;
   padding-left: 40px;
   padding-right: 40px;
@@ -694,6 +711,7 @@ strong {
 }
 
 .item-book {
+  color: #9D6B54;
   border-radius: 10px;
   width: 191px;
   height: auto;

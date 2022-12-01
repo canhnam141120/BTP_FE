@@ -14,15 +14,15 @@
                 <div class="infoDes">
                   <div class="description">
                     <Icon class="iconSmall" icon="mdi:email"/>
-                    <label>{{ info.email }}</label>
+                    <label style="font-weight: 600">{{ info.email }}</label>
                   </div>
                   <div class="description">
                     <Icon class="iconSmall" icon="material-symbols:call"/>
-                    <label>{{ info.phone }}</label>
+                    <label style="font-weight: 600">{{ info.phone }}</label>
                   </div>
                   <div class="description">
                     <Icon class="iconSmall" icon="material-symbols:location-on"/>
-                    <label>{{ info.addressMain }}</label>
+                    <label style="font-weight: 600">{{ info.addressMain }}</label>
                   </div>
                 </div>
               </div>
@@ -33,7 +33,7 @@
                 </button>
                 <div class="likeNumber">
                   <Icon class="iconSmall" icon="material-symbols:check-circle-rounded"/>
-                  <label>{{ info.likeNumber }} người thích</label>
+                  <label style="font-weight: 600">{{ info.likeNumber }} người thích</label>
                 </div>
               </div>
             </div>
@@ -67,10 +67,12 @@
                           <img v-bind:src="item.image">
                         </router-link>
                         <div class="infoOP">
-                          <div class="book-titleOP">{{ item.title }}</div>
-                          <label class="book-statusOP">Thể loại: {{ item.category?.name}}</label>
+                          <div class="book-titleOP"><strong>{{ item.title }}</strong></div>
+                          <label class="book-statusOP">Thể loại: <strong>{{ item.category?.name}}</strong></label>
                           <label class="book-statusOP">Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
                           <label class="book-statusOP">{{ item.statusBook }}</label>
+                          <label class="book-statusOP" style="color: #ca0303; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
+                          <label class="book-statusOP" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
                         </div>
                       </div>
                     </div>
@@ -118,8 +120,8 @@
                         </router-link>
                         <button class="actionPost">Xem chi tiết</button>
                         <div class="infoPost">
-                          <div class="titlePost">{{ item.title }}</div>
-                          <div class="createDate"><Icon class="iconTime" icon="ic:twotone-access-time"/>{{item.createdDate | formatDate}}</div>
+                          <div class="titlePost"><strong>{{ item.title }}</strong></div>
+                          <div class="contentPost">Đăng lúc: <strong>{{item.createdDate | formatDate}}</strong></div>
                           <label class="contentPost">{{ item.content }}</label>
                         </div>
                       </div>
@@ -288,6 +290,11 @@ export default {
 
 main {
   background: #F0F0F0;
+}
+
+strong {
+  color: #9D6B54;
+  font-weight: 600;
 }
 
 .body {
@@ -464,9 +471,10 @@ strong {
 }
 
 .item-bookOP {
+  color: #9D6B54;
   border-radius: 10px;
   width: 210px;
-  height: 380px;
+  height: auto;
   margin: 5px;
 }
 
@@ -481,7 +489,7 @@ strong {
 }
 
 .grid-bookOP .infoOP {
-  height: 120px;
+  height: auto;
   padding: 5px;
 }
 
@@ -526,6 +534,7 @@ strong {
 }
 
 .gridPost .itemPost {
+  color: #9D6B54;
   border-radius: 10px;
   border: 1px solid #9D6B54;
   width: auto;

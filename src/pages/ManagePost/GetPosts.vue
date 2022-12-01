@@ -31,39 +31,38 @@
                 <thead>
                 <tr>
                   <td>Chi tiết</td>
-                  <td>Mã bài đăng</td>
-                  <td>Người đăng</td>
                   <td>Ảnh</td>
+                  <td>Mã</td>
+                  <td>Người đăng</td>
                   <td>Tiêu đề</td>
                   <td>Thời gian đăng</td>
                   <td>Trạng thái</td>
                   <td>Duyệt/Hủy</td>
-                  <td>Bình luận</td>
                 </tr>
                 </thead>
                 <tbody v-for="item of listPosts" :key="item.id">
                 <tr>
-                  <td><button v-on:click="openDialogPD(item.id)" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router">XEM</button>
-                  </td>
+                  <td style="padding-left: 13px"><button v-on:click="openDialogPD(item.id)" class="tableBtnAction"><Icon icon="ic:baseline-remove-red-eye"/></button></td>
+                  <td><img v-bind:src="item.image" style="height: 85px; width: 85px; object-fit: scale-down"></td>
                   <td>{{ item.id}}</td>
                   <td>{{ item.user.fullname }}</td>
-                  <td><img v-bind:src="item.image" style="height: 85px; width: 85px; object-fit: scale-down"></td>
                   <td>{{ item.title }}</td>
                   <td>{{ item.createdDate | format}}</td>
                   <td v-if="item.status == 'Approved'" ><span class="role approved">ĐÃ DUYỆT</span></td>
                   <td v-if="item.status == 'Denied'" ><span class="role denied">ĐÃ HỦY</span></td>
                   <td v-if="item.status == 'Waiting'" ><span class="role waiting">ĐANG ĐỢI</span></td>
                   <td v-if="item.status == 'Waiting'">
-                    <button style="display: block" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleApproved(item.id)">Duyệt</button>
-                    <button style="width: 53.5px" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDenied(item.id)">Hủy</button>
+                    <button class="tableBtnAction" v-on:click="HandleApproved(item.id)"><Icon icon="material-symbols:check-box-rounded"/></button>
+                    <button class="tableBtnAction" v-on:click="HandleDenied(item.id)"><Icon icon="mdi:cancel-box"/></button>
                   </td>
                   <td v-if="item.status == 'Approved'">
-                    <button style="width: 53.5px"  class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDenied(item.id)">Huỷ</button>
+                    <button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="material-symbols:check-box-rounded"/></button>
+                    <button class="tableBtnAction" v-on:click="HandleDenied(item.id)"><Icon icon="mdi:cancel-box"/></button>
                   </td>
                   <td v-if="item.status == 'Denied'">
-                    <button  class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleApproved(item.id)">Duyệt</button>
+                    <button  class="tableBtnAction" v-on:click="HandleApproved(item.id)"><Icon icon="material-symbols:check-box-rounded"/></button>
+                    <button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="mdi:cancel-box"/></button>
                   </td>
-                  <td><router-link class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router"  :to="{ name: 'GetComments', query: { id:item.id }}">Xem bình luận</router-link></td>
                 </tr>
                 </tbody>
               </table>
@@ -139,10 +138,11 @@ import {API_MANAGE_POST} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
 import LoadingDialog from "@/components/LoadingDialog";
 import PostDetailDialog from "@/pages/ManagePost/PostDetailDialog";
+import {Icon} from '@iconify/vue2';
 
 export default {
   name: "GetPosts",
-  components: {Side_Bar, LoadingDialog, PostDetailDialog},
+  components: {Side_Bar, LoadingDialog, PostDetailDialog, Icon},
   data() {
     return {
       post: '',

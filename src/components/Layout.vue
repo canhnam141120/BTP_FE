@@ -54,13 +54,15 @@
           </nav>
           <nav v-else>
             <li>
-              <b-dropdown right text="Right align" variant="black" no-caret>
+              <b-dropdown variant="black" no-caret>
                 <template v-slot:button-content>
-                    <img class="icon"  src="../image/bell.png">
+                    <img class="icon"  src="../image/bell.png" style="position: relative"><div class="countNoti">{{count}}</div>
                 </template>
-                <div v-for="item of noti" :key="item.id" class="dropdown-item notification">
+                <div v-for="item of noti" :key="item.id" class="notification">
                   "{{item.content}}"
+                  <hr style="margin-top: 0px; margin-bottom: 10px">
                 </div>
+                <div class="allNoti"><router-link class="linkAllNoti" to="AllNotification">Xem tất cả</router-link></div>
               </b-dropdown>
             </li>
             <li>
@@ -206,11 +208,13 @@ export default {
       user:'',
       noti: '',
       userId: '',
+      count: ''
     }
   },
   created() {
     this.getUserInfoByToken()
     this.getNotifications()
+    this.getNotificationsNotRead()
   },
   methods:{
     getUserInfoByToken(){
@@ -230,6 +234,16 @@ export default {
         userId: this.userByToken.UserId
       }).then((res) => {
         this.noti = res.data.data
+      }).catch(() => {
+      });
+    },
+    getNotificationsNotRead() {
+      let token = this.$cookies.get('token');
+      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.NOTIFICATION_NOT_READ, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        this.count = res.data.numberOfRecords
       }).catch(() => {
       });
     },
@@ -673,15 +687,48 @@ export default {
 }
 
 .dropdown-menu{
-  max-width: 400px;
+  max-width: 600px;
 }
 
 .notification{
+  width: 500px;
   margin-right: 30px;
-  font-size: 0.7rem;
+  color: #9d6b54;
+  font-size: 12px;
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.countNoti{
+  position: absolute;
+  top: 0;
+  margin-left: 30px;
+  background-color: red;
+  width: 20px;
+  height: 20px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding-top: 1px;
+  vertical-align: middle;
+  border-radius: 10px;
+}
+
+.allNoti{
+  text-align: center;
+}
+
+.linkAllNoti{
+  padding: 5px;
+  border-radius: 5px;
+   color: #9d6b54;
+  font-weight: 600;
+}
+
+.linkAllNoti:hover{
+  background-color: #F0ECE4;
+  color: #9d6b54;
 }
 </style>

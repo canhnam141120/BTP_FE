@@ -393,6 +393,7 @@ strong {
 }
 
 .infoBottom{
+  color: grey;
   display: flex;
   justify-content: space-between;
   padding-top: 30px;

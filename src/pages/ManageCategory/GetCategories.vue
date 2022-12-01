@@ -36,8 +36,8 @@
                 <tr v-for="item of listCategories" :key="item.id">
                   <td>{{ item.id }}</td>
                   <td>{{ item.name }}</td>
-                  <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="openDialogEdit(item.id)">Sửa</button></td>
-                  <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDelete(item.id)">Xoá</button></td>
+                  <td style="padding-left: 20px"><button class="tableBtnAction" v-on:click="openDialogEdit(item.id)"><Icon icon="uiw:setting"/></button></td>
+                  <td><button class="tableBtnAction" v-on:click="HandleDelete(item.id)"><Icon icon="ion:trash-bin"/></button></td>
                 </tr>
                 </tbody>
               </table>

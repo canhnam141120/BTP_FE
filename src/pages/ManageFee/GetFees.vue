@@ -30,7 +30,7 @@
                 <td>{{item.code}}</td>
                 <td>{{item.name}}</td>
                 <td>{{item.price.toLocaleString()}}đ</td>
-                <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="openDialog(item.id)">Sửa giá</button></td>
+                <td><button style="padding-left: 13px" class="tableBtnAction" v-on:click="openDialog(item.id)"><Icon icon="uiw:setting"/></button></td>
               </tr>
               </tbody>
             </table>
@@ -49,10 +49,11 @@ import {API_MANAGE_FEE} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
 import LoadingDialog from "@/components/LoadingDialog";
 import CreateFeeDialog from "@/pages/ManageFee/CreateFeeDialog";
+import {Icon} from '@iconify/vue2';
 
 export default {
   name: "GetFees",
-  components: {Side_Bar, LoadingDialog, CreateFeeDialog},
+  components: {Side_Bar, LoadingDialog, CreateFeeDialog, Icon},
   data() {
     return {
       listFees: '',

@@ -9,7 +9,7 @@
             <table class="table">
               <thead>
               <tr class="header">
-                <td>Mã chi tiết</td>
+                <td>Mã</td>
                 <td>Mã Sách 1</td>
                 <td>TT Sách 1 trước GD</td>
                 <td>TT Sách 1 sau GD</td>
@@ -38,11 +38,13 @@
                 <td v-else>{{ item.afterStatusBook2}}</td>
                 <td>{{ item.requestTime |  format}}</td>
                 <td>{{ item.expiredDate |  formatDate}}</td>
-                <td v-if="item.status == 'Trading'" ><span class="role approved">ĐANG GD</span></td>
-                <td v-if="item.status == 'Complete'" ><span class="role approved">HOÀN THÀNH</span></td>
-                <td v-if="item.status == 'Cancel'" ><span class="role denied">ĐÃ HỦY</span></td>
+                <td v-if="item.status == 'Trading'" ><span class="role trading">ĐANG GD</span></td>
+                <td v-if="item.status == 'Complete'" ><span class="role complete">HOÀN THÀNH</span></td>
+                <td v-if="item.status == 'Cancel'" ><span class="role cancel">ĐÃ HỦY</span></td>
                 <td v-if="item.status == 'Waiting'" ><span class="role waiting">ĐANG ĐỢI</span></td>
-                <td v-if="item.status == 'Waiting'"><button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="HandleCancelExchangeDetail(item.id, item.exchangeId)">Hủy</button></td>
+                <td v-if="item.status == 'Waiting'"><button class="tableBtnAction" v-on:click="HandleCancelExchangeDetail(item.id, item.exchangeId)"><Icon icon="mdi:cancel-box"/></button></td>
+                <td v-else><button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="mdi:cancel-box"/></button></td>
+
               </tr>
               <tr v-if="showEditED && item.status != 'Cancel' && item.status != 'Waiting'" >
                 <td>{{ item.id}}</td>
@@ -54,17 +56,17 @@
                 <td><input type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.afterStatusBook2"></td>
                 <td>{{ item.requestTime |  format}}</td>
                 <td>{{ item.expiredDate |  formatDate}}</td>
-                <td v-if="item.status == 'Trading'" ><span class="role approved">ĐANG GD</span></td>
-                <td v-if="item.status == 'Complete'" ><span class="role approved">HOÀN THÀNH</span></td>
-                <td v-if="item.status == 'Cancel'" ><span class="role denied">ĐÃ HỦY</span></td>
+                <td v-if="item.status == 'Trading'" ><span class="role trading">ĐANG GD</span></td>
+                <td v-if="item.status == 'Complete'" ><span class="role complete">HOÀN THÀNH</span></td>
+                <td v-if="item.status == 'Cancel'" ><span class="role cancel">ĐÃ HỦY</span></td>
                 <td v-if="item.status == 'Waiting'" ><span class="role waiting">ĐANG ĐỢI</span></td>
-                <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="editExchangeDetail(item.id, item.exchangeId)">LƯU</button>  </td>
+                <td><button class="tableBtnAction" v-on:click="editExchangeDetail(item.id, item.exchangeId)"><Icon icon="dashicons:cloud-saved"/></button></td>
               </tr>
               </tbody>
             </table>
             <div class="divBtn">
-              <button v-if="!showEditED" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router btnUpdate" v-on:click="showEditED = true">CẬP NHẬT</button>
-              <button v-if="showEditED" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router btnUpdate" v-on:click="showEditED = false">HỦY CẬP NHẬT</button>
+              <button v-if="!showEditED" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router btnUpdate" v-on:click="showEditED = true">Cập nhật</button>
+              <button v-if="showEditED" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router btnUpdate" v-on:click="showEditED = false">Xong</button>
             </div>
           </ExchangeDetailDialog>
           <ExchangeBillDialog :show="showDialogBD"
@@ -92,7 +94,7 @@
                 <td>{{item.totalBook}}</td>
                 <td>{{item.depositFee.toLocaleString()}}đ</td>
                 <td>{{item.feeId1Navigation.price.toLocaleString()}}đ</td>
-                <td v-if="item.feeId3Navigation">{{item.feeId2Navigation.price.toLocaleString()}}đ + {{item.totalBook}}x{{item.feeId3Navigation.price}}đ</td>
+                <td v-if="item.feeId3Navigation">{{item.feeId2Navigation.price.toLocaleString()}}đ + {{item.totalBook-1}}x{{item.feeId3Navigation.price}}đ</td>
                 <td v-else>{{item.feeId2Navigation.price.toLocaleString()}}đ</td>
                 <td>{{item.totalAmount}}</td>
                 <td v-if="item.isPaid"><span class="role paid">ĐÃ THANH TOÁN</span></td>
@@ -163,6 +165,7 @@
             </div>
           </UpdateExchangeDialog>
           <div class="user-data m-b-30">
+            <LoadingDialog v-show="spinner" style="z-index: 999999"></LoadingDialog>
             <div class="titleMB">QUẢN LÝ GIAO DỊCH ĐỔI</div>
             <hr>
             <div class="search-transaction">
@@ -184,10 +187,10 @@
                 <tr>
                   <td>Chi tiết</td>
                   <td>Mã GD</td>
-                  <td>Mã - Tên KH1</td>
-                  <td>TT Lưu trữ sách - KH1</td>
-                  <td>Mã - Tên KH2</td>
-                  <td>TT Lưu trữ sách - KH2</td>
+                  <td>Khách hàng 1</td>
+                  <td>Vận đơn KH1</td>
+                  <td>Khách hàng 2</td>
+                  <td>Vận đơn KH2</td>
                   <td>Ngày tạo</td>
                   <td>Trạng thái</td>
                   <td>Hóa đơn</td>
@@ -196,36 +199,38 @@
                 </thead>
                 <tbody v-for="item of listExchanges" :key="item.id">
                 <tr>
-                  <td>
-                    <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="openDialogDetail(item.id)">XEM</button>
-                  </td>
+                  <td style="padding-left: 12px"><button class="tableBtnAction" v-on:click="openDialogDetail(item.id)"><Icon icon="ic:baseline-remove-red-eye"/></button></td>
                   <td>{{ item.id }}</td>
                   <td>{{ item.userId1 }} - {{ item.userId1Navigation.fullname }}</td>
                   <td v-if="item.storageStatus1 == 'Waiting'" ><span class="role tradingWaiting">ĐANG ĐỢI</span></td>
-                  <td v-if="item.storageStatus1 == 'Received'"><span class="role tradingReceived">ĐÃ NHẬN - {{item.receiveDate1|formatDate}}</span></td>
-                  <td v-if="item.storageStatus1 == 'Sent'" ><span class="role tradingSent">ĐÃ GỬI - {{item.sendDate1|formatDate}}</span></td>
-                  <td v-if="item.storageStatus1 == 'Recall'" ><span class="role tradingRecall">ĐÃ THU HỒI - {{item.recallDate1|formatDate}}</span></td>
-                  <td v-if="item.storageStatus1 == 'Refund'" ><span class="role tradingRefund">ĐÃ HOÀN TRẢ - {{item.refundDate1|formatDate}}</span></td>
+                  <td v-if="item.storageStatus1 == 'Received'"><span class="role tradingStatus">ĐÃ NHẬN - {{item.receiveDate1|formatDate}}</span></td>
+                  <td v-if="item.storageStatus1 == 'Sent'" ><span class="role tradingStatus">ĐÃ GỬI - {{item.sendDate1|formatDate}}</span></td>
+                  <td v-if="item.storageStatus1 == 'Recall'" ><span class="role tradingStatus">ĐÃ THU HỒI - {{item.recallDate1|formatDate}}</span></td>
+                  <td v-if="item.storageStatus1 == 'Refund'" ><span class="role tradingStatus">ĐÃ HOÀN TRẢ - {{item.refundDate1|formatDate}}</span></td>
                   <td>{{ item.userId2 }} - {{ item.userId2Navigation.fullname }}</td>
                   <td v-if="item.storageStatus2 == 'Waiting'" ><span class="role tradingWaiting">ĐANG ĐỢI</span></td>
-                  <td v-if="item.storageStatus2 == 'Received'" ><span class="role tradingReceived">ĐÃ NHẬN - {{item.receiveDate2|formatDate}}</span></td>
-                  <td v-if="item.storageStatus2 == 'Sent'" ><span class="role tradingSent">ĐÃ GỬI - {{item.sendDate2|formatDate}}</span></td>
-                  <td v-if="item.storageStatus2 == 'Recall'" ><span class="role tradingRecall">ĐÃ THU HÔI - {{item.recallDate2|formatDate}}</span></td>
-                  <td v-if="item.storageStatus2 == 'Refund'" ><span class="role tradingRefund">ĐÃ HOÀN TRẢ - {{item.refundDate2|formatDate}}</span></td>
+                  <td v-if="item.storageStatus2 == 'Received'" ><span class="role tradingStatus">ĐÃ NHẬN - {{item.receiveDate2|formatDate}}</span></td>
+                  <td v-if="item.storageStatus2 == 'Sent'" ><span class="role tradingStatus">ĐÃ GỬI - {{item.sendDate2|formatDate}}</span></td>
+                  <td v-if="item.storageStatus2 == 'Recall'" ><span class="role tradingStatus">ĐÃ THU HÔI - {{item.recallDate2|formatDate}}</span></td>
+                  <td v-if="item.storageStatus2 == 'Refund'" ><span class="role tradingStatus">ĐÃ HOÀN TRẢ - {{item.refundDate2|formatDate}}</span></td>
                   <td>{{ item.date | formatDate}}</td>
-                  <td v-if="item.status == 'Trading'"><span class="role approved">ĐANG GD</span></td>
-                  <td v-if="item.status == 'Complete'"><span class="role complete">XONG</span></td>
-                  <td v-if="item.status == 'Cancel'"><span class="role denied">ĐÃ HỦY</span></td>
+                  <td v-if="item.status == 'Trading'"><span class="role trading">ĐANG GD</span></td>
+                  <td v-if="item.status == 'Complete'"><span class="role complete">HOÀN THÀNH</span></td>
+                  <td v-if="item.status == 'Cancel'"><span class="role cancel">ĐÃ HỦY</span></td>
                   <td v-if="item.status == 'Waiting'"><span class="role waiting">ĐANG ĐỢI</span></td>
                   <td>
-                    <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="openDialogBill(item.id)">XEM</button>
+                    <button class="tableBtnAction" v-on:click="openDialogBill(item.id)"><Icon icon="ic:baseline-remove-red-eye"/></button>
                   </td>
                   <td v-if="item.status == 'Waiting'">
-                    <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="HandleTrading(item.id)">DUYỆT</button>
-                    <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="HandleCanCelExchange(item.id)">Hủy</button>
+                    <button class="tableBtnAction" v-on:click="HandleTrading(item.id)"><Icon icon="material-symbols:check-box-rounded"/></button>
+                    <button class="tableBtnAction" v-on:click="HandleCanCelExchange(item.id)"><Icon icon="mdi:cancel-box"/></button>
                   </td>
-                  <td v-if="item.status == 'Trading'">
-                    <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="openDialogUE(item.id)">CẬP NHẬT</button>
+                  <td v-if="item.status == 'Complete' || item.status == 'Cancel'">
+                    <button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="material-symbols:check-box-rounded"/></button>
+                    <button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="mdi:cancel-box"/></button>
+                  </td>
+                  <td v-if="item.status == 'Trading'" style="padding-left: 25px">
+                    <button class="tableBtnAction" v-on:click="openDialogUE(item.id)"><Icon icon="material-symbols:edit-document-rounded"/></button>
                   </td>
                 </tr>
                 </tbody>
@@ -301,7 +306,6 @@
             </div>
           </div>
         </div>
-        <LoadingDialog v-show="spinner"></LoadingDialog>
       </div>
     </div>
   </Side_Bar>
@@ -315,10 +319,11 @@ import LoadingDialog from "@/components/LoadingDialog";
 import ExchangeDetailDialog from "@/pages/ManageTransaction/ExchangeDetailDialog";
 import ExchangeBillDialog from "@/pages/ManageTransaction/ExchangeBillDialog";
 import UpdateExchangeDialog from "@/pages/ManageTransaction/UpdateExchangeDialog";
+import {Icon} from '@iconify/vue2';
 
 export default {
   name: "GetExchanges",
-  components: {Side_Bar, LoadingDialog, ExchangeDetailDialog, ExchangeBillDialog, UpdateExchangeDialog},
+  components: {Side_Bar, LoadingDialog, ExchangeDetailDialog, ExchangeBillDialog, UpdateExchangeDialog, Icon},
   data() {
     return {
       listExchanges: '',

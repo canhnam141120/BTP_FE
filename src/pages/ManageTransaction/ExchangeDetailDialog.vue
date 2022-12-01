@@ -33,7 +33,7 @@ export default {
   background: #F0ECE4;
   height: auto;
   border-radius: 10px;
-  margin: 2% auto auto auto;
+  margin: 90px auto auto auto;
   display: block;
 }
 
@@ -42,7 +42,9 @@ export default {
 }
 
 .btnUpdate{
-  height: 40px;
+  width: 200px;
+  height: 50px;
+  font-size: 14px;
   margin-top: 20px;
   margin-bottom: 10px;
 }

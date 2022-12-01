@@ -79,6 +79,11 @@ const routers = [
         component: () => import('@/pages/Personal/MyPosts'),
     },
     {
+        path:'/AllNotification',
+        name:'AllNotification',
+        component: () => import('@/pages/AllNotification'),
+    },
+    {
         path:'/MyFavorites',
         name:'MyFavorites',
         component: () => import('@/pages/Personal/MyFavorites'),

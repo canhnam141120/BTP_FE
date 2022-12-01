@@ -159,15 +159,15 @@
                     <img v-bind:src="item.image">
                   </router-link>
                   <div class="infoMB">
-                    <div class="book-titleMB">{{ item.title }}</div>
-                    <div class="book-statusMB">Thể loại: {{ item.categoryId }}</div>
+                    <div class="book-titleMB"><strong>{{ item.title }}</strong></div>
+                    <div class="book-statusMB">Thể loại: <strong>{{ item.category.name }}</strong></div>
                     <label class="book-statusMB">Giá bìa: <strong>{{
                         item.coverPrice.toLocaleString()
                       }}đ</strong></label>
                     <label class="book-statusMB">{{ item.statusBook }}</label>
                     <label v-if="item.status == 'Approved'" class="book-statusMB">Trạng thái: <strong style="color: green">Đã được
                       duyệt</strong></label>
-                    <label v-if="item.status == 'Denied'" class="book-statusMB">Trạng thái: <strong  style="color: red">Đã bị
+                    <label v-if="item.status == 'Denied'" class="book-statusMB">Trạng thái: <strong  style="color: #ca0303;">Đã bị
                       hủy</strong></label>
                     <label v-if="item.status == 'Waiting'" class="book-statusMB">Trạng thái: <strong>Đang đợi
                       duyệt</strong></label>
@@ -468,6 +468,7 @@ main {
 
 strong {
   color: #9D6B54;
+  font-weight: 600;
 }
 
 .MB {
@@ -565,6 +566,7 @@ strong {
 }
 
 .right-contentMB .gridMB .itemMB {
+  color: #9D6B54;
   border-radius: 10px;
   width: 260px;
   height: auto;

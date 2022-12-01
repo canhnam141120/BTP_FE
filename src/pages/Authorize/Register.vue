@@ -12,7 +12,7 @@
               <div class="column">
                 <div class="data">
                   <label>Email</label>
-                  <input type="text" maxlength="50" required placeholder="Ví dụ: acb@gmail.com" v-model="email">
+                  <input type="text" maxlength="30" required placeholder="Ví dụ: acb@gmail.com" v-model="email">
                   <label class="err" v-if="errMail.length">{{this.errMail}}</label>
                 </div>
                 <div class="data">
