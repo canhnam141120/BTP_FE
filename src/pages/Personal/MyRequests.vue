@@ -186,7 +186,7 @@ strong {
   background: #F0F0F0;
   max-width: 1230px;
   border-radius: 10px;
-  margin: 0px auto 20px auto;
+  margin: 0px auto 10px auto;
   display: flex;
   justify-content: space-between;
 }
@@ -205,7 +205,7 @@ strong {
   background: #F0ECE4;
   border-radius: 10px;
   display: flex;
-  margin-top: 30px;
+  margin-top: 10px;
   padding-bottom: 100px;
   border: 1px solid #9D6B54;
 }
@@ -214,7 +214,7 @@ strong {
   background: #F0ECE4;
   border-radius: 10px;
   display: flex;
-  margin-top: 30px;
+  margin-top: 10px;
   border: 1px solid #9D6B54;
   display: block;
 }

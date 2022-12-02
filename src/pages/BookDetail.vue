@@ -69,12 +69,14 @@
           </div>
         </div>
       </ConfirmDialog>
-      <b-alert :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
-        Yêu cầu trao đổi sách của bạn đã được gửi!
+
+      <b-alert v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+        {{responseMessage}}
       </b-alert>
-      <b-alert :show="dismissCountDownRent" variant="success" @dismissed="dismissCountDownRent=0" @dismiss-count-down="countDownChangedRent">
-        Giao dịch thuê của bạn đã được tạo! Vui lòng thanh toán trong vòng ngày hôm nay để giao dịch được bắt đầu!
+      <b-alert v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+        {{responseMessage}}
       </b-alert>
+
       <div class="bookDetail">
         <div class="container">
           <div class="bookdetail-top">
@@ -314,9 +316,11 @@ export default {
   components: {Layout, ExchangeDialog, LoadingDialog, ConfirmDialog},
   data() {
     return {
+      responseFlag: true,
+      responseMessage: '',
       dismissSecs: 5,
       dismissCountDown: 0,
-      dismissCountDownRent: 0,
+
       err: '',
       userByToken: '',
       book: '',
@@ -435,11 +439,20 @@ export default {
         bookOffer
       }).then((res) => {
         if (res.data.message === 'REQUEST_SUCCESS') {
-          this.dismissCountDown = this.dismissSecs
+          this.responseFlag = true
+          this.responseMessage = 'Yêu cầu trao đổi sách của bạn đã được gửi!'
         }
+        if(res.data.message == 'SHIP_INFO_EMPTY'){
+          this.responseFlag = false
+          this.responseMessage = 'Vui lòng cập nhật thông tin vận chuyển của bạn trước khi gửi yêu cầu!'
+        }
+        this.dismissCountDown = this.dismissSecs
         this.showConfirmDialog = false
         this.showDialog = false
+        this.getBookById()
       }).catch(() => {
+        this.responseFlag = false
+        this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
       });
     },
     HandleRent(){
@@ -456,18 +469,24 @@ export default {
         userId: this.userByToken.UserId
       }).then((res) => {
         if (res.data.message === 'SUCCESS') {
-          this.dismissCountDownRent = this.dismissSecs
+          this.responseFlag = true
+          this.responseMessage = 'Giao dịch thuê của bạn đã được tạo! Vui lòng thanh toán trong ngày hôm nay để giao dịch được bắt đầu!'
         }
+        if(res.data.message == 'SHIP_INFO_EMPTY'){
+          this.responseFlag = false
+          this.responseMessage = 'Vui lòng cập nhật thông tin vận chuyển của bạn trước khi dùng dịch vụ!'
+        }
+        this.dismissCountDown = this.dismissSecs
         this.showRentDialog = false
+        this.getBookById()
       }).catch(() => {
+        this.responseFlag = false
+        this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
       });
     },
 
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown
-    },
-    countDownChangedRent(dismissCountDownRent) {
-      this.dismissCountDownRent = dismissCountDownRent
     },
   },
   filters: {
@@ -589,8 +608,8 @@ strong {
   background: #F0ECE4;
   border-radius: 10px;
   display: flex;
-  margin-bottom: 20px;
-  margin-top: 30px;
+  margin-bottom: 10px;
+  margin-top: 10px;
   border: 1px solid #9D6B54;
 }
 

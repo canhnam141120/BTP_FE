@@ -28,7 +28,7 @@ export default {
   background: #F0ECE4;
   height: auto;
   border-radius: 10px;
-  margin: 50px auto auto auto;
+  margin: 90px auto auto auto;
 }
 
 .dialogBody{

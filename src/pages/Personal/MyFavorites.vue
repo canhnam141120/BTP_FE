@@ -352,8 +352,8 @@ strong {
   background: #F0ECE4;
   border-radius: 10px;
   display: flex;
-  margin-bottom: 20px;
-  margin-top: 30px;
+  margin-bottom: 10px;
+  margin-top: 10px;
   padding-bottom: 100px;
   border: 1px solid #9D6B54;
 }
@@ -362,8 +362,8 @@ strong {
   background: #F0ECE4;
   border-radius: 10px;
   display: flex;
-  margin-bottom: 20px;
-  margin-top: 30px;
+  margin-bottom: 10px;
+  margin-top: 10px;
   border: 1px solid #9D6B54;
   display: block;
 }

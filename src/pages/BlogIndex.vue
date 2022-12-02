@@ -316,10 +316,15 @@ strong {
 }
 
 .body-blog .title {
+  max-width: 1230px;
+  border-radius: 10px;
+  background-color: #F0ECE4;
   font-weight: bold;
   color: #9D6B54;
   font-size: 2rem;
   text-align: center;
+  margin: 10px auto 10px auto;
+  border: 1px solid #9D6B54;
 }
 
 .body-blog .container-blog .content {

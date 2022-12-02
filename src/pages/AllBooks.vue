@@ -4,7 +4,7 @@
       <div class="body">
         <div class="title">TỦ SÁCH</div>
         <div class="container-book">
-          <div class="menu-sidebarPS">
+          <div class="menu-sidebarFT">
             <div class="filter">
               <div class="filter-service">
                 <div class="titleFT">BỘ LỌC</div>
@@ -65,7 +65,6 @@
               </div>
             </div>
           </div>
-
           <div class="content">
             <div class="search">
               <input type="text" v-model="search" placeholder="Nhập tên sản phẩm">
@@ -320,10 +319,15 @@ strong {
 }
 
 .body .title {
+  max-width: 1230px;
+  border-radius: 10px;
+  background-color: #F0ECE4;
   font-weight: bold;
   color: #9D6B54;
   font-size: 2rem;
   text-align: center;
+  margin: 10px auto 10px auto;
+  border: 1px solid #9D6B54;
 }
 
 
@@ -335,7 +339,8 @@ strong {
   margin-top: 20px;
 }
 
-.menu-sidebarPS {
+.menu-sidebarFT {
+  border: 1px solid #9D6B54;
   width: 320px;
   height: auto;
   background: #F0ECE4;

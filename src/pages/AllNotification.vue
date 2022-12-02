@@ -184,19 +184,25 @@ strong {
   background: #F0F0F0;
 }
 
-.container {
-  background: #F0F0F0;
-  max-width: 1250px;
+.body-noti .titleNoti {
+  max-width: 1230px;
   border-radius: 10px;
-  margin: px auto 20px auto;
-  display: block;
-}
-
-.titleNoti {
+  background-color: #F0ECE4;
   font-weight: bold;
   color: #9D6B54;
   font-size: 2rem;
   text-align: center;
+  margin: 10px auto 10px auto;
+  border: 1px solid #9D6B54;
+}
+
+.container {
+  background: #F0F0F0;
+  max-width: 1230px;
+  padding: 0px 0px;
+  border-radius: 10px;
+  margin: 10px auto 20px auto;
+  display: block;
 }
 
 .background-tab {

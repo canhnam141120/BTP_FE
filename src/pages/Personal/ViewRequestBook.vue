@@ -2,6 +2,33 @@
   <Layout>
     <main style="flex-grow: 1">
       <LoadingDialog style="z-index: 999999" v-show="spinner"></LoadingDialog>
+      <ConfirmDialog :show="showAcceptDialog" v-if="showAcceptDialog" class="modal">
+        <div>
+          <div class="dialogTitle">XÁC NHẬN</div>
+          <div style="color: #9d6b54; text-align: center;">Xác nhận chấp nhận yêu cầu trao đổi sách!</div>
+          <div class="dialogGroupBtn">
+            <button class="dialogBtn" v-on:click="cancelAcceptDialog">Hủy</button>
+            <button class="dialogBtn" v-on:click="HandleAccept">Xác nhận</button>
+          </div>
+        </div>
+      </ConfirmDialog>
+      <ConfirmDialog :show="showConfirmDialog" v-if="showConfirmDialog" class="modal">
+        <div>
+          <div class="dialogTitle">XÁC NHẬN</div>
+          <div style="color: #9d6b54; text-align: center;">Xác nhận từ chối yêu cầu trao đổi sách!</div>
+          <div class="dialogGroupBtn">
+            <button class="dialogBtn" v-on:click="cancelConfirmDialog">Hủy</button>
+            <button class="dialogBtn" v-on:click="HandleConfirm">Xác nhận</button>
+          </div>
+        </div>
+      </ConfirmDialog>
+      <b-alert v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+        {{responseMessage}}
+      </b-alert>
+      <b-alert v-else :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+        {{responseMessage}}
+      </b-alert>
+
       <div class="VR">
         <CreateBookDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
           <div>
@@ -177,12 +204,20 @@ import apiFactory from "@/config/apiFactory";
 import VueJwtDecode from "vue-jwt-decode";
 import LoadingDialog from "@/components/LoadingDialog";
 import CreateBookDialog from "@/pages/Personal/CreateBookDialog";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 export default {
   name: "ViewRequestBook",
-  components: {LoadingDialog, SideBar_Personal, Layout, CreateBookDialog},
+  components: {LoadingDialog, SideBar_Personal, Layout, CreateBookDialog, ConfirmDialog},
   data() {
     return {
+      dismissSecs: 5,
+      dismissCountDown: 0,
+      showConfirmDialog: false,
+      showAcceptDialog: false,
+      responseFlag: true,
+      responseMessage: '',
+
       book: '',
       listRequestReceive: '',
       loading: false,
@@ -190,6 +225,7 @@ export default {
       userByToken: '',
       spinner: false,
       showDialog: false,
+      tmpId: ''
     }
   },
   created() {
@@ -217,36 +253,7 @@ export default {
       }).catch(() => {
       });
     },
-    HandleApproved(requestId){
-      let token = this.$cookies.get('token');
-      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
-      const url = API_REQUEST.ACCEPT_REQUEST + requestId
-      apiFactory.callApi(url, 'PUT', {
-        userId: this.userByToken.UserId
-      }).then((res) => {
-        if (res.data.message === 'SUCCESS') {
-          console.log(alert('Chấp nhận thành công'))
-          this.getRequestReceived()
-        }
-      }).catch(() => {
-        alert('Không thành công!')
-      });
-    },
-    HandleDenied(requestId){
-      let token = this.$cookies.get('token');
-      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
-      const url = API_REQUEST.DENIED_REQUEST + requestId
-      apiFactory.callApi(url, 'PUT', {
-        userId: this.userByToken.UserId
-      }).then((res) => {
-        if (res.data.message === 'SUCCESS') {
-          console.log(alert('Hủy thành công'))
-          this.getRequestReceived()
-        }
-      }).catch(() => {
-        alert('Không thành công!')
-      });
-    },
+
     HandleHide(bookId){
       this.spinner = true
       const url = API_BOOK.HIDE_BOOK + bookId
@@ -319,6 +326,67 @@ export default {
       }
       reader.readAsDataURL(file);
     },
+
+    HandleApproved(requestId){
+      this.tmpId = requestId
+      this.showAcceptDialog = true
+    },
+    cancelAcceptDialog(){
+      this.showAcceptDialog = false
+    },
+    HandleAccept(){
+      this.spinner = true
+      window.scroll(0,0)
+      this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+      apiFactory.callApi(API_REQUEST.ACCEPT_REQUEST +  this.tmpId, 'PUT', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        if (res.data.message === 'SUCCESS') {
+          this.getRequestReceived()
+          this.responseFlag = true
+          this.responseMessage = 'Chấp nhận yêu cầu trao đổi sách - Thành công!'
+        }else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại!'
+        }
+        this.dismissCountDown = this.dismissSecs
+        this.spinner = false
+        this.showAcceptDialog = false
+      }).catch(() => {});
+    },
+
+    HandleDenied(requestId){
+      this.tmpId = requestId
+      this.showConfirmDialog = true
+    },
+    cancelConfirmDialog(){
+      this.showConfirmDialog = false
+    },
+    HandleConfirm(){
+      this.spinner = true
+      window.scroll(0,0)
+      this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+      const url = API_REQUEST.DENIED_REQUEST + this.tmpId
+      apiFactory.callApi(url, 'PUT', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        if (res.data.message === 'SUCCESS') {
+          this.getRequestReceived()
+          this.responseMessage = 'Từ chối yêu cầu trao đổi sách - Thành công!'
+        }
+        else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại!'
+        }
+        this.dismissCountDown = this.dismissSecs
+        this.showConfirmDialog = false
+        this.spinner = false
+      }).catch(() => {});
+    },
+
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
   }
 }
 </script>
@@ -344,7 +412,7 @@ strong {
   background: #F0F0F0;
   max-width: 1230px;
   border-radius: 10px;
-  margin: 0px auto 20px auto;
+  margin: 0px auto 10px auto;
   display: flex;
   justify-content: space-between;
 }
@@ -354,7 +422,7 @@ strong {
   background: #F0ECE4;
   border-radius: 10px;
   display: flex;
-  margin-top: 30px;
+  margin-top: 10px;
   padding-bottom: 100px;
   border: 1px solid #9D6B54;
 }
@@ -363,7 +431,7 @@ strong {
   width: 71%;
   background: #F0ECE4;
   border-radius: 10px;
-  margin-top: 30px;
+  margin-top: 10px;
   border: 1px solid #9D6B54;
   display: block;
 }

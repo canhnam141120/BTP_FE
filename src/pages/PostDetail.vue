@@ -11,7 +11,10 @@
                   <div style="margin-left: auto; margin-right: auto; width: 80px"><img class="authorAvatar" v-bind:src="post.user?.avatar" alt="Ảnh đại diện"></div>
                   <div class="authorName">{{post.user?.fullname}}</div>
                   <div class="authorNumber">{{post.user?.likeNumber}} người thích</div>
-                  <div style="margin-left: auto; margin-right: auto; width: 54px"><router-link class="authorBtn" :to="{ name: 'OtherPerson', query: {id:post.userId}}">Xem</router-link></div>
+                  <div style="margin-left: auto; margin-right: auto; width: fit-content">
+                    <router-link v-if="userByToken.UserId != post.userId" class="authorBtn" :to="{ name: 'OtherPerson', query: {id:post.userId}}">Xem</router-link>
+                    <router-link v-else class="authorBtn" to="/MyBooks">Trang cá nhân</router-link>
+                  </div>
                   <hr>
                 </div>
                 <div class="contentPD">
@@ -66,14 +69,16 @@ export default {
   components: {Layout, Icon, LoadingDialog},
   data() {
     return {
+      userByToken: '',
       info: '',
       post: '',
       list6Post: '',
       listUserPost: '',
-      spinner: false
+      spinner: false,
     }
   },
   created() {
+    this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
     this.getPostById()
     this.get6Post()
     this.getMyInformation()
@@ -256,7 +261,7 @@ strong {
   border-radius: 5px;
   background-color: #9D6B54;
   color: white;
-  padding: 5px 10px 5px 10px;
+  padding: 5px 10px 7px 10px;
   text-decoration: none;
   border: 1px solid #9D6B54;
 }
