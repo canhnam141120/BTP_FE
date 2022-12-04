@@ -4,6 +4,11 @@ Vue.use(VueRouter)
 
 const routers = [
     {
+        path:'*',
+        name:'404Page',
+        component: () => import('@/pages/404Page'),
+    },
+    {
         path:'/ResultPayment',
         name:'ResultPayment',
         component: () => import('@/pages/ResultPayment'),

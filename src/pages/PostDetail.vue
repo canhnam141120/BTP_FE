@@ -27,7 +27,7 @@
                 <div class="mainPD">{{post.content}}</div>
                 <div class="endPD">
                   <div class="createDate"><Icon class="iconTime" icon="ic:twotone-access-time"/>{{post.createdDate | formatDate}}</div>
-                  <button class="btnLike">
+                  <button v-if="userByToken != ''" class="btnLike">
                     <Icon icon="ant-design:like-filled" style="width: 20px; height: 20px; margin-right: 2%"/>
                     Thích
                   </button></div>
@@ -78,7 +78,9 @@ export default {
     }
   },
   created() {
-    this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+    if(this.$cookies.get('token')){
+      this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8')
+    }
     this.getPostById()
     this.get6Post()
     this.getMyInformation()
@@ -88,8 +90,12 @@ export default {
       this.spinner = true
       const url = API_POST.DETAIL_POST+ this.$route.query.id
       apiFactory.callApi(url,'GET',{}).then((res)=>{
-        this.post = res.data.data
-        this.getPostUser(this.post.userId)
+        if(res.data.data){
+          this.post = res.data.data
+          this.getPostUser(this.post.userId)
+        }else{
+          this.$router.push({name: "404Page"})
+        }
         this.spinner = false
       }).catch(() => {
       });
@@ -164,7 +170,6 @@ strong {
   background: #F0ECE4;
   width: 100%;
   height: 100px;
-  border-radius: 10px;
   margin: 5px auto 15px auto;
   display: flex;
   border: 1px solid #9D6B54;
@@ -326,6 +331,7 @@ strong {
   font-weight: 600;
   margin-left: 5%;
   padding-top: 15px;
+  padding-bottom: 10px;
 }
 
 .btnLike{

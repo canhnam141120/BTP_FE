@@ -125,7 +125,7 @@
                   </div>
                 </div>
               </div>
-              <div v-if="userByToken.UserId != book.user?.id">
+              <div v-if="userByToken && userByToken.UserId != book.user?.id">
                 <div v-if="!book.isTrade" class="btn-tran">
                   <button v-if="book.isExchange" class="active" v-on:click="openDialog">Trao đổi</button>
                   <button v-else class="disable">Trao đổi</button>
@@ -137,6 +137,7 @@
                   <button class="disable">Thuê</button>
                 </div>
               </div>
+              <router-link  v-if="userByToken == ''" class="notLogin" to="/Login">Đăng nhập để có thể giao dịch!</router-link>
             </div>
           </div>
           <div class="bookdetail-mid">
@@ -341,7 +342,9 @@ export default {
     }
   },
   created() {
-    this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+    if(this.$cookies.get('token')){
+      this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+    }
     this.getBookById(1)
   },
   methods: {
@@ -349,12 +352,17 @@ export default {
       this.spinner = true
       const url = API_BOOK.DETAIL_BOOK + this.$route.query.id
       apiFactory.callApi(url, 'GET', {}).then((res) => {
-        this.book = res.data.data
-        this.get6BookUser(this.book.userId)
-        this.get6BookCategory(this.book.categoryId)
-        this.getFeedback(this.$route.query.id, pageNumber)
-        this.spinner = false
+        if(res.data.data){
+          this.book = res.data.data
+          this.spinner = false
+          this.get6BookUser(this.book.userId)
+          this.get6BookCategory(this.book.categoryId)
+          this.getFeedback(this.$route.query.id, pageNumber)
+        }else{
+          this.$router.push({name: "404Page"})
+        }
       }).catch(() => {
+
       });
     },
     get6BookUser(userId) {
@@ -442,17 +450,24 @@ export default {
           this.responseFlag = true
           this.responseMessage = 'Yêu cầu trao đổi sách của bạn đã được gửi!'
         }
-        if(res.data.message == 'SHIP_INFO_EMPTY'){
+        else{
           this.responseFlag = false
-          this.responseMessage = 'Vui lòng cập nhật thông tin vận chuyển của bạn trước khi gửi yêu cầu!'
+          if(res.data.message == 'SHIP_INFO_EMPTY'){
+            this.responseMessage = 'Vui lòng cập nhật thông tin vận chuyển của bạn trước khi gửi yêu cầu!'
+          }else{
+            this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
+          }
         }
         this.dismissCountDown = this.dismissSecs
         this.showConfirmDialog = false
         this.showDialog = false
         this.getBookById()
       }).catch(() => {
+        this.getBookById()
         this.responseFlag = false
         this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
+        this.dismissCountDown = this.dismissSecs
+        this.showDialog = false
       });
     },
     HandleRent(){
@@ -472,16 +487,23 @@ export default {
           this.responseFlag = true
           this.responseMessage = 'Giao dịch thuê của bạn đã được tạo! Vui lòng thanh toán trong ngày hôm nay để giao dịch được bắt đầu!'
         }
-        if(res.data.message == 'SHIP_INFO_EMPTY'){
+        else{
           this.responseFlag = false
-          this.responseMessage = 'Vui lòng cập nhật thông tin vận chuyển của bạn trước khi dùng dịch vụ!'
+          if(res.data.message == 'SHIP_INFO_EMPTY'){
+            this.responseMessage = 'Vui lòng cập nhật thông tin vận chuyển của bạn trước khi dùng dịch vụ!'
+          }else {
+            this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
+          }
         }
         this.dismissCountDown = this.dismissSecs
-        this.showRentDialog = false
         this.getBookById()
+        this.showRentDialog = false
       }).catch(() => {
+        this.dismissCountDown = this.dismissSecs
         this.responseFlag = false
         this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
+        this.getBookById()
+        this.showRentDialog = false
       });
     },
 
@@ -712,7 +734,7 @@ strong {
 .bookdetail-top .right .infoBD .userBD .userInfoBD .btn {
   border-radius: 5px;
   background-color: #9D6B54;
-  color: white;
+  color: #F0ECE4;
   margin-top: 10px;
   width: fit-content;
   padding: 5px;
@@ -989,4 +1011,22 @@ strong {
   padding-bottom: 10px;
 }
 
+.notLogin{
+  text-decoration: none;
+  border-radius: 10px;
+  height: 50px;
+  background-color: #9d6b54;
+  color: #F0ECE4;
+  text-align: center;
+  font-size: 18px;
+  padding: 10px 10px;
+  border: 1px solid #9d6b54;
+  font-weight: 600;
+}
+
+.notLogin:hover{
+  background-color: #F0ECE4;
+  color: #9d6b54;
+  border: 1px solid #9d6b54;
+}
 </style>

@@ -6,7 +6,8 @@
         <div class="container">
           <div class="profile">
             <div>
-              <b-avatar badge badge-left class="avatar-personal"><img style="width: 190px; height: 190px;" v-bind:src="info.avatar"></b-avatar>
+              <b-avatar badge badge-left class="avatar-personal"><img style="width: 190px; height: 190px;"
+                                                                      v-bind:src="info.avatar"></b-avatar>
             </div>
             <div>
               <div class="infor">
@@ -27,12 +28,12 @@
                 </div>
               </div>
               <div class="edit">
-                <button class="btn-edit" v-on:click="HandleLike">
-                  <Icon icon="ant-design:like-filled" style="width: 20px; height: 20px; margin-right: 2%"/>
+                <button v-if="userByToken != ''" class="btn-edit" v-on:click="HandleLike">
+                  <Icon icon="mdi:like" style="width: 20px; height: 20px; margin-right: 2%"/>
                   Thích
                 </button>
                 <div class="likeNumber">
-                  <Icon class="iconSmall" icon="material-symbols:check-circle-rounded"/>
+                  <Icon class="iconSmall" icon="mdi:like"/>
                   <label style="font-weight: 600">{{ info.likeNumber }} người thích</label>
                 </div>
               </div>
@@ -48,7 +49,7 @@
                   </div>
                   <b-skeleton-wrapper :loading="loading">
                     <template #loading>
-                      <div class="grid-bookOP" >
+                      <div class="grid-bookOP">
                         <div class="item-bookOP" v-for='i in 10' :key="i">
                           <b-card no-body img-top style="height: 380px">
                             <b-skeleton-img card-img="top" aspect="3:1" height="250px"></b-skeleton-img>
@@ -63,22 +64,24 @@
                     </template>
                     <div class="grid-bookOP">
                       <div class="item-bookOP" v-for="item of listBook" :key="item.id">
-                        <router-link  :to="{ name: 'BookDetail', query: { id:item.id }}">
+                        <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">
                           <img v-bind:src="item.image">
                         </router-link>
                         <div class="infoOP">
                           <div class="book-titleOP"><strong>{{ item.title }}</strong></div>
-                          <label class="book-statusOP">Thể loại: <strong>{{ item.category?.name}}</strong></label>
+                          <label class="book-statusOP">Thể loại: <strong>{{ item.category?.name }}</strong></label>
                           <label class="book-statusOP">Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
                           <label class="book-statusOP">{{ item.statusBook }}</label>
-                          <label class="book-statusOP" style="color: #ca0303; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
+                          <label class="book-statusOP" style="color: #ca0303; font-weight: bold" v-if="item.isTrade">Đang
+                            giao dịch</label>
                           <label class="book-statusOP" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
                         </div>
                       </div>
                     </div>
                   </b-skeleton-wrapper>
                   <div class="pagingBook">
-                    <b-pagination class="page-number" @input="getBooks" v-model="pageBook" :total-rows="totalBook" :per-page="10">
+                    <b-pagination class="page-number" @input="getBooks" v-model="pageBook" :total-rows="totalBook"
+                                  :per-page="10">
                       <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
                       <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
                       <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
@@ -115,13 +118,13 @@
                     </template>
                     <div class="gridPost">
                       <div class="itemPost" v-for="item of listPost" :key="item.id">
-                        <router-link  :to="{ name: 'PostDetail', query: { id:item.id }}">
+                        <router-link :to="{ name: 'PostDetail', query: { id:item.id }}">
                           <img class="imagePost" v-bind:src="item.image">
                         </router-link>
                         <button class="actionPost">Xem chi tiết</button>
                         <div class="infoPost">
                           <div class="titlePost"><strong>{{ item.title }}</strong></div>
-                          <div class="contentPost">Đăng lúc: <strong>{{item.createdDate | formatDate}}</strong></div>
+                          <div class="contentPost">Đăng lúc: <strong>{{ item.createdDate | formatDate }}</strong></div>
                           <label class="contentPost">{{ item.content }}</label>
                         </div>
                       </div>
@@ -166,6 +169,7 @@ export default {
   components: {Layout, Icon, LoadingDialog},
   data() {
     return {
+      userByToken: '',
       info: '',
       listBook: '',
       totalBook: '',
@@ -182,6 +186,9 @@ export default {
     }
   },
   created() {
+    if (this.$cookies.get('token')) {
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8')
+    }
     this.getInformation()
     this.getBooks(1)
     this.getPost(1)
@@ -192,14 +199,18 @@ export default {
       apiFactory.callApi(API_PERSONAL.INFORMATION, 'POST', {
         userId: this.$route.query.id
       }).then((res) => {
-        this.info = res.data.data
-        this.spinner = false
+        if (res.data.data) {
+          this.info = res.data.data
+          this.spinner = false
+        } else {
+          this.$router.push({name: "404Page"})
+        }
       }).catch(() => {
       });
     },
     getBooks(pageNumber) {
       this.loading = true;
-      if(this.isSearchBook){
+      if (this.isSearchBook) {
         apiFactory.callApi(API_BOOK.SEARCH_BOOK_USER + this.$route.query.id + '?page=' + pageNumber, 'POST', {
           search: this.searchBook
         }).then((res) => {
@@ -209,9 +220,8 @@ export default {
           this.loading = false
         }).catch(() => {
         });
-      }else{
-        apiFactory.callApi(API_BOOK.USER_BOOK + this.$route.query.id + '?page=' + pageNumber, 'GET', {
-        }).then((res) => {
+      } else {
+        apiFactory.callApi(API_BOOK.USER_BOOK + this.$route.query.id + '?page=' + pageNumber, 'GET', {}).then((res) => {
           this.listBook = res.data.data
           this.totalBook = res.data.numberOfRecords
           this.pageBook = pageNumber
@@ -222,7 +232,7 @@ export default {
     },
     getPost(pageNumber) {
       this.loading = true;
-      if(this.isSearchPost){
+      if (this.isSearchPost) {
         apiFactory.callApi(API_POST.SEARCH_POST_USER + this.$route.query.id + '?page=' + pageNumber, 'POST', {
           search: this.searchPost
         }).then((res) => {
@@ -232,9 +242,8 @@ export default {
           this.loading = false
         }).catch(() => {
         });
-      }else{
-        apiFactory.callApi(API_POST.USER_POST + this.$route.query.id + '?page=' + pageNumber, 'GET', {
-        }).then((res) => {
+      } else {
+        apiFactory.callApi(API_POST.USER_POST + this.$route.query.id + '?page=' + pageNumber, 'GET', {}).then((res) => {
           this.listPost = res.data.data
           this.totalPost = res.data.numberOfRecords
           this.pagePost = pageNumber
@@ -259,14 +268,14 @@ export default {
       }
       return this.getPost(1)
     },
-    HandleLike(){
+    HandleLike() {
       this.spinner = true
       let token = this.$cookies.get('token');
       this.userByToken = VueJwtDecode.decode(token, 'utf-8');
       apiFactory.callApi(API_PERSONAL.ADD_USER_FAVORITE + this.$route.query.id, 'POST', {
         userId: this.userByToken.UserId
       }).then((res) => {
-        if(res.data.message == 'ADD_SUCCESS'){
+        if (res.data.message == 'ADD_SUCCESS') {
           this.getInformation()
           this.spinner = false;
         }
@@ -276,7 +285,7 @@ export default {
     }
   },
   filters: {
-    formatDate(value){
+    formatDate(value) {
       return new Date(value).toLocaleString('en-GB')
     }
   }
@@ -341,7 +350,7 @@ strong {
 }
 
 .infor {
-  width: 800px;
+  width: 1000px;
   display: block;
   color: #9D6B54;
   margin-top: 5%;
@@ -365,7 +374,7 @@ strong {
   line-height: 35.16px;
 }
 
-.infoDes{
+.infoDes {
   width: 75%;
   justify-content: space-between;
   display: flex;
@@ -376,7 +385,7 @@ strong {
   margin-left: 10px;
 }
 
-.iconSmall{
+.iconSmall {
   font-size: 24px;
 }
 
@@ -390,13 +399,13 @@ strong {
   justify-content: center;
 }
 
-.likeNumber{
+.likeNumber {
   display: flex;
   margin-left: 10px;
   color: #9D6B54;
 }
 
-.likeNumber label{
+.likeNumber label {
   font-weight: bold;
   color: grey;
   margin-left: 5px;
@@ -482,7 +491,7 @@ strong {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }
 
-.item-bookOP img{
+.item-bookOP img {
   border-radius: 10px;
   height: 260px;
   width: 210px;
@@ -597,7 +606,7 @@ strong {
   -webkit-line-clamp: 4;
 }
 
-.gridPost .actionPost{
+.gridPost .actionPost {
   position: absolute;
   width: 200px;
   height: 50px;
@@ -612,7 +621,7 @@ strong {
   font-size: 16px;
 }
 
-.gridPost .actionPost:hover{
+.gridPost .actionPost:hover {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }
 
@@ -621,7 +630,7 @@ strong {
   padding-bottom: 10px;
 }
 
-.gridPost .actionPost{
+.gridPost .actionPost {
   position: absolute;
   width: 200px;
   height: 50px;
@@ -636,11 +645,11 @@ strong {
   font-size: 16px;
 }
 
-.gridPost .actionPost:hover{
+.gridPost .actionPost:hover {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }
 
-.gridPost .itemPost:hover .actionPost{
+.gridPost .itemPost:hover .actionPost {
   display: block;
 }
 

@@ -1,6 +1,7 @@
 <template>
   <Layout>
     <main style="flex-grow: 1;">
+      <LoadingDialog v-show="spinner" style="z-index: 999999"></LoadingDialog>
       <CreatePostDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
         <div>
           <div class="dialogTitle">VIẾT BÀI</div>
@@ -39,6 +40,13 @@
           <button class="dialogBtn" v-on:click="save">Đăng</button>
         </div>
       </CreatePostDialog>
+      <b-alert v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+        {{responseMessage}}
+      </b-alert>
+      <b-alert v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+        {{responseMessage}}
+      </b-alert>
+
       <div class="body-blog">
         <div class="title">TRẠM ĐỌC</div>
         <div class="container-blog">
@@ -79,7 +87,6 @@
                   <router-link  :to="{ name: 'PostDetail', query: { id:item.id }}">
                     <img class="post-image" v-bind:src="item.image">
                   </router-link>
-                  <button class="action">Xem chi tiết</button>
                   <div class="info">
                     <div class="post-title">{{ item.title }}</div>
                     <div><img src="../image/user.png" >{{ item.user.fullname }}</div>
@@ -117,12 +124,19 @@ import Layout from "@/components/Layout";
 import {Icon} from '@iconify/vue2';
 import VueJwtDecode from "vue-jwt-decode";
 import CreatePostDialog from "@/pages/CreatePostDialog";
+import LoadingDialog from "@/components/LoadingDialog";
 
 export default {
   name: "BlogIndex",
-  components: {Layout, Icon, CreatePostDialog},
+  components: {Layout, Icon, CreatePostDialog, LoadingDialog},
   data() {
     return {
+      spinner: false,
+      responseFlag: true,
+      responseMessage: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
+
       listPost: '',
       totalPost: '',
       info: '',
@@ -194,6 +208,7 @@ export default {
       this.showDialog = false
     },
     save(){
+      this.spinner = true
       let token = this.$cookies.get('token');
       this.userByToken = VueJwtDecode.decode(token, 'utf-8');
       apiFactory.callApi(API_POST.CREATE_POST, 'POST', {
@@ -203,10 +218,22 @@ export default {
         content: this.content
       }).then((res) => {
         if (res.data.message === 'CREATE_SUCCESS') {
-          console.log(alert('Đăng bài thành công'))
-          this.showDialog = false
+          this.responseFlag = true
+          this.responseMessage = 'Bài viết của bạn đã được gửi cho QTV để duyệt!'
         }
+        else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra, vui lòng thử lại!!'
+        }
+        this.dismissCountDown = this.dismissSecs
+        this.showDialog = false
+        this.spinner = false
       }).catch(() => {
+        this.dismissCountDown = this.dismissSecs
+        this.responseFlag = false
+        this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
+        this.showDialog = false
+        this.spinner = false
       });
     },
     handleFileUpload(e) {
@@ -224,7 +251,11 @@ export default {
       }
       console.log(this.imageSrc)
       reader.readAsDataURL(file);
-    }
+    },
+
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
   },
   filters:{
     formatDate(value){
@@ -383,8 +414,8 @@ strong {
 
 .body-blog .container-blog .content .grid .item:hover {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
-  background: grey;
-  opacity: 0.9;
+  /*background: grey;
+  opacity: 0.9;*/
 }
 
 .body-blog .container-blog .content .grid .item .post-image {
@@ -434,7 +465,7 @@ strong {
   -webkit-line-clamp: 4;
 }
 
-.body-blog .container-blog .content .grid .action{
+/*.body-blog .container-blog .content .grid .action{
   position: absolute;
   width: 200px;
   height: 50px;
@@ -455,7 +486,7 @@ strong {
 
 .body-blog .container-blog .content .grid .item:hover .action{
   display: block;
-}
+}*/
 
 .body-blog .container-blog .content .paging {
   margin-top: 10px;
