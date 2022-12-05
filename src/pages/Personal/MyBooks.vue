@@ -162,8 +162,10 @@
               </template>
               <div class="gridMB">
                 <div class="itemMB" v-for="item of listBook" :key="item.id">
-                  <router-link v-if="item.isReady && item.status == 'Approved'" class="active" :to="{ name: 'ViewRequestBook', query: { id:item.id }}">
+                  <router-link style="position: relative" v-if="item.isReady && item.status == 'Approved'" :to="{ name: 'ViewRequestBook', query: { id:item.id }}">
                     <img class="book-image" v-bind:src="item.image">
+                    <label class="laye1" v-if="item.isTrade">Đang giao dịch</label>
+                    <label class="laye2" v-else>Sẵn sàng</label>
                   </router-link>
                   <router-link v-else  style="position: relative" class="active" :to="{ name: 'ViewRequestBook', query: { id:item.id }}">
                     <img class="book-image" v-bind:src="item.image">
@@ -586,6 +588,26 @@ strong {
   height: 40px;
   width: 80px;
   margin-left: 10px;
+}
+
+.laye2{
+  margin-left: 20px;
+  position: absolute;
+  left: 0;
+  background-color: green;
+  font-size: 12px;
+  color: #F0ECE4;
+  padding: 5px;
+}
+
+.laye1{
+  margin-left: 20px;
+  position: absolute;
+  left: 0;
+  font-size: 12px;
+  background-color: #ca0303;
+  color: #F0ECE4;
+  padding: 5px;
 }
 
 .right-contentMB .searchMB .btnMB:hover {

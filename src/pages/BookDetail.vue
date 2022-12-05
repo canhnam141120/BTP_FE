@@ -69,23 +69,20 @@
           </div>
         </div>
       </ConfirmDialog>
-
       <b-alert v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
         {{responseMessage}}
       </b-alert>
       <b-alert v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
         {{responseMessage}}
       </b-alert>
-
       <div class="bookDetail">
         <div class="container">
           <div class="bookdetail-top">
             <div class="left">
               <img class="imgBD" v-bind:src="book.image">
               <div style="text-align: center; margin-bottom: 10px">
-                <label class="book-statusMB" style="color: red; font-weight: bold" v-if="book.isTrade">Đang giao
-                  dịch</label>
-                <label class="book-statusMB" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
+                <label v-if="book.isTrade" class="layerRed">Đang giao dịch</label>
+                <label v-else class="layerGreen">Sẵn sàng</label>
                 <div style="text-align: center">
                   <button v-if="userByToken != '' && !checkLike" class="btnLike" v-on:click="HandleLike">
                     <Icon icon="ant-design:like-filled" style="width: 20px; height: 20px; margin-right: 2%"/>
@@ -250,8 +247,10 @@
               </template>
               <div class="grid-book">
                 <div class="item-book" v-for="item of book6user" :key="item.id">
-                  <router-link @click.native="loadPage" :to="{ name: 'BookDetail', query: { id:item.id }}">
+                  <router-link style="position: relative" @click.native="loadPage" :to="{ name: 'BookDetail', query: { id:item.id }}">
                     <img v-bind:src="item.image">
+                    <label class="lay1" v-if="item.isTrade">Đang giao dịch</label>
+                    <label class="lay2" v-else>Sẵn sàng</label>
                   </router-link>
                   <div class="info">
                     <div class="book-title"><strong>{{ item.title }}</strong></div>
@@ -260,9 +259,6 @@
                         item.depositPrice?.toLocaleString()
                       }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
-                    <label class="book-status" style="color: #ca0303; font-weight: bold" v-if="item.isTrade">Đang giao
-                      dịch</label>
-                    <label class="book-status" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
                   </div>
                 </div>
               </div>
@@ -287,8 +283,10 @@
               </template>
               <div class="grid-book">
                 <div class="item-book" v-for="item of book6category" :key="item.id">
-                  <router-link @click.native="loadPage" :to="{ name: 'BookDetail', query: { id:item.id }}">
+                  <router-link style="position: relative" @click.native="loadPage" :to="{ name: 'BookDetail', query: { id:item.id }}">
                     <img v-bind:src="item.image">
+                    <label class="lay1" v-if="item.isTrade">Đang giao dịch</label>
+                    <label class="lay2" v-else>Sẵn sàng</label>
                   </router-link>
                   <div class="info">
                     <div class="book-title"><strong>{{ item.title }}</strong></div>
@@ -297,9 +295,6 @@
                         item.depositPrice?.toLocaleString()
                       }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
-                    <label class="book-status" style="color: #ca0303; font-weight: bold" v-if="item.isTrade">Đang giao
-                      dịch</label>
-                    <label class="book-status" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
                   </div>
                 </div>
               </div>
@@ -622,6 +617,46 @@ strong {
   border-radius: 10px;
 }
 
+.layerGreen{
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 80px;
+  margin-top: 30px;
+  background-color: green;
+  color: #F0ECE4;
+  padding: 5px;
+}
+
+.layerRed{
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 80px;
+  margin-top: 30px;
+  background-color: #ca0303;
+  color: #F0ECE4;
+  padding: 5px;
+}
+
+.lay2{
+  position: absolute;
+  left: 0;
+  background-color: green;
+  font-size: 12px;
+  color: #F0ECE4;
+  padding: 5px;
+}
+
+.lay1{
+  position: absolute;
+  left: 0;
+  font-size: 12px;
+  background-color: #ca0303;
+  color: #F0ECE4;
+  padding: 5px;
+}
+
 .dialogBook .gridMB .infoMB {
   height: 120px;
   padding: 5px;
@@ -710,9 +745,9 @@ strong {
 .btnLike{
   position: absolute;
   top: 0;
-  left: 0;
+  right: 0;
   margin-top: 30px;
-  margin-left: 80px;
+  margin-right: 90px;
   height: 40px;
   width: 40px;
   border-radius: 10px;

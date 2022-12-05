@@ -35,16 +35,18 @@
               </template>
               <div class="grid-book">
                 <div class="item-book" v-for="item of listBook" :key="item.id">
-                  <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">
+                  <router-link :to="{ name: 'BookDetail', query: { id:item.id }}" style="position: relative">
                     <img class="imgBook" v-bind:src="item.image">
+                    <label v-if="item.isTrade" class="layer">Đang giao dịch</label>
+                    <label v-else class="layer1">Sẵn sàng</label>
                   </router-link>
                   <div class="info">
                     <div class="book-title"><strong>{{ item.title }}</strong></div>
                     <div class="book-status">Đăng bởi: <strong>{{ item.user.fullname }}</strong></div>
                     <label class="book-status">Giá cọc: <strong>{{ item.depositPrice.toLocaleString() }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
-                    <label class="book-status" style="color: #ca0303; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
-                    <label class="book-status" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
+<!--                    <label class="book-status" style="color: #ca0303; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
+                    <label class="book-status" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>-->
                   </div>
                 </div>
               </div>
@@ -288,6 +290,24 @@ strong {
 
 .item-book:hover {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+}
+
+.layer{
+  position: absolute;
+  left: 0;
+  background-color: #ca0303;
+  color: #F0ECE4;
+  font-size: 12px;
+  padding: 5px;
+}
+
+.layer1{
+  position: absolute;
+  left: 0;
+  background-color: green;
+  color: #F0ECE4;
+  font-size: 12px;
+  padding: 5px;
 }
 
 .item-book .imgBook{
