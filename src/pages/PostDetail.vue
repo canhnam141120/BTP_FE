@@ -27,10 +27,15 @@
                 <div class="mainPD">{{post.content}}</div>
                 <div class="endPD">
                   <div class="createDate"><Icon class="iconTime" icon="ic:twotone-access-time"/>{{post.createdDate | formatDate}}</div>
-                  <button v-if="userByToken != ''" class="btnLike">
+                  <button v-if="userByToken != '' && !checkLike" class="btnLike" v-on:click="HandleLike">
                     <Icon icon="ant-design:like-filled" style="width: 20px; height: 20px; margin-right: 2%"/>
                     Thích
-                  </button></div>
+                  </button>
+                  <button v-if="userByToken != '' && checkLike" class="btnLike" v-on:click="HandleUnLike">
+                    <Icon icon="ant-design:dislike-filled" style="width: 20px; height: 20px; margin-right: 2%"/>
+                    Bỏ Thích
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -75,6 +80,7 @@ export default {
       list6Post: '',
       listUserPost: '',
       spinner: false,
+      checkLike: false
     }
   },
   created() {
@@ -84,6 +90,7 @@ export default {
     this.getPostById()
     this.get6Post()
     this.getMyInformation()
+    this.CheckLike()
   },
   methods: {
     getPostById() {
@@ -128,7 +135,49 @@ export default {
     },
     loadPage(){
       this.loading = true
+      this.CheckLike()
       this.getPostById()
+    },
+    HandleLike() {
+      this.spinner = true
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+      apiFactory.callApi(API_PERSONAL.ADD_POST_FAVORITE + this.$route.query.id, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        if (res.data.message == 'ADD_SUCCESS') {
+          this.getPostById()
+          this.checkLike = true
+        }
+        this.spinner = false;
+      }).catch(() => {
+      });
+    },
+    HandleUnLike() {
+      this.spinner = true
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+      apiFactory.callApi(API_PERSONAL.DELETE_POST_FAVORITE + this.$route.query.id, 'DELETE', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        if (res.data.message == 'DELETE_SUCCESS') {
+          this.getPostById()
+          this.checkLike = false
+        }
+        this.spinner = false
+      }).catch(() => {
+      });
+    },
+    CheckLike(){
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+      apiFactory.callApi(API_PERSONAL.CHECK_POST_LIKE + this.$route.query.id, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        if (res.data.message == 'TRUE') {
+          this.checkLike = true
+        }else{
+          this.checkLike = false
+        }
+      }).catch(() => {
+      });
     }
   },
   filters:{

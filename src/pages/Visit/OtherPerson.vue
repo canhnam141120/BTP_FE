@@ -28,9 +28,13 @@
                 </div>
               </div>
               <div class="edit">
-                <button v-if="userByToken != ''" class="btn-edit" v-on:click="HandleLike">
-                  <Icon icon="mdi:like" style="width: 20px; height: 20px; margin-right: 2%"/>
+                <button v-if="userByToken != '' && !checkLike" class="btn-edit" v-on:click="HandleLike">
+                  <Icon icon="ant-design:like-filled" style="width: 20px; height: 20px; margin-right: 2%"/>
                   Thích
+                </button>
+                <button v-if="userByToken != '' && checkLike" class="btn-edit" v-on:click="HandleUnLike">
+                  <Icon icon="ant-design:dislike-filled" style="width: 20px; height: 20px; margin-right: 2%"/>
+                  Bỏ Thích
                 </button>
                 <div class="likeNumber">
                   <Icon class="iconSmall" icon="mdi:like"/>
@@ -182,7 +186,8 @@ export default {
       isSearchPost: false,
       pageBook: 1,
       pagePost: 1,
-      spinner: false
+      spinner: false,
+      checkLike: false
     }
   },
   created() {
@@ -201,6 +206,7 @@ export default {
       }).then((res) => {
         if (res.data.data) {
           this.info = res.data.data
+          this.CheckLike()
           this.spinner = false
         } else {
           this.$router.push({name: "404Page"})
@@ -270,16 +276,43 @@ export default {
     },
     HandleLike() {
       this.spinner = true
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.ADD_USER_FAVORITE + this.$route.query.id, 'POST', {
         userId: this.userByToken.UserId
       }).then((res) => {
         if (res.data.message == 'ADD_SUCCESS') {
           this.getInformation()
+          this.checkLike = true
           this.spinner = false;
         }
         this.spinner = false;
+      }).catch(() => {
+      });
+    },
+    HandleUnLike() {
+      this.spinner = true
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+      apiFactory.callApi(API_PERSONAL.DELETE_USER_FAVORITE + this.$route.query.id, 'DELETE', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        if (res.data.message == 'DELETE_SUCCESS') {
+          this.getInformation()
+          this.checkLike = false
+        }
+        this.spinner = false
+      }).catch(() => {
+      });
+    },
+    CheckLike(){
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+      apiFactory.callApi(API_PERSONAL.CHECK_USER_LIKE + this.$route.query.id, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        if (res.data.message == 'TRUE') {
+          this.checkLike = true
+        }else{
+          this.checkLike = false
+        }
       }).catch(() => {
       });
     }
@@ -314,7 +347,7 @@ strong {
   max-width: 1230px;
   background: #F0F0F0;
   border-radius: 10px;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 

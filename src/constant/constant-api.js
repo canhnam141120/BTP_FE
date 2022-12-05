@@ -52,6 +52,9 @@ export const API_MANAGE_FEE = Object.freeze({
 })
 
 export const API_PERSONAL = Object.freeze({
+    CHECK_USER_LIKE: "https://book-trading-platform.herokuapp.com/api/Personal/checkUserLike/",
+    CHECK_BOOK_LIKE: "https://book-trading-platform.herokuapp.com/api/Personal/checkBookLike/",
+    CHECK_POST_LIKE: "https://book-trading-platform.herokuapp.com/api/Personal/checkPostLike/",
     NOTIFICATION: "https://book-trading-platform.herokuapp.com/api/Personal/notification/all",
     NOTIFICATION_NOT_READ: "https://book-trading-platform.herokuapp.com/api/Personal/notification/notRead",
     NOTIFICATION_10: "https://book-trading-platform.herokuapp.com/api/Personal/notification/top10new",

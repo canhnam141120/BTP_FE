@@ -86,6 +86,14 @@
                 <label class="book-statusMB" style="color: red; font-weight: bold" v-if="book.isTrade">Đang giao
                   dịch</label>
                 <label class="book-statusMB" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
+                <div style="text-align: center">
+                  <button v-if="userByToken != '' && !checkLike" class="btnLike" v-on:click="HandleLike">
+                    <Icon icon="ant-design:like-filled" style="width: 20px; height: 20px; margin-right: 2%"/>
+                  </button>
+                  <button v-if="userByToken != '' && checkLike" class="btnLike" v-on:click="HandleUnLike">
+                    <Icon icon="ant-design:dislike-filled" style="width: 20px; height: 20px; margin-right: 2%"/>
+                  </button>
+                </div>
               </div>
             </div>
             <div class="right">
@@ -311,10 +319,11 @@ import ExchangeDialog from "@/components/ExchangeDialog";
 import VueJwtDecode from "vue-jwt-decode";
 import LoadingDialog from "@/components/LoadingDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import {Icon} from '@iconify/vue2';
 
 export default {
   name: "BookDetail",
-  components: {Layout, ExchangeDialog, LoadingDialog, ConfirmDialog},
+  components: {Layout, ExchangeDialog, LoadingDialog, ConfirmDialog, Icon},
   data() {
     return {
       responseFlag: true,
@@ -338,7 +347,8 @@ export default {
       spinner: false,
       loading: false,
       listIdBook: [],
-      page: 1
+      page: 1,
+      checkLike: false
     }
   },
   created() {
@@ -358,6 +368,7 @@ export default {
           this.get6BookUser(this.book.userId)
           this.get6BookCategory(this.book.categoryId)
           this.getFeedback(this.$route.query.id, pageNumber)
+          this.CheckLike()
         }else{
           this.$router.push({name: "404Page"})
         }
@@ -506,6 +517,47 @@ export default {
         this.showRentDialog = false
       });
     },
+    HandleLike() {
+      this.spinner = true
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+      apiFactory.callApi(API_PERSONAL.ADD_BOOK_FAVORITE + this.$route.query.id, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        if (res.data.message == 'ADD_SUCCESS') {
+          this.getBookById(1)
+          this.checkLike = true
+        }
+        this.spinner = false;
+      }).catch(() => {
+      });
+    },
+    HandleUnLike() {
+      this.spinner = true
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+      apiFactory.callApi(API_PERSONAL.DELETE_BOOK_FAVORITE + this.$route.query.id, 'DELETE', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        if (res.data.message == 'DELETE_SUCCESS') {
+          this.getBookById(1)
+          this.checkLike = false
+        }
+        this.spinner = false
+      }).catch(() => {
+      });
+    },
+    CheckLike(){
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+      apiFactory.callApi(API_PERSONAL.CHECK_BOOK_LIKE + this.$route.query.id, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        if (res.data.message == 'TRUE') {
+          this.checkLike = true
+        }else{
+          this.checkLike = false
+        }
+      }).catch(() => {
+      });
+    },
 
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown
@@ -636,13 +688,14 @@ strong {
 }
 
 .bookdetail-top .left {
+  position: relative;
   width: 420px;
   border-radius: 10px;
 }
 
 .bookdetail-top .left .imgBD {
-  width: 270px;
-  height: 391px;
+  width: 250px;
+  height: 371px;
   margin-left: 80px;
   margin-top: 30px;
   margin-bottom: 10px;
@@ -650,9 +703,31 @@ strong {
   border: 1px solid #9D6B54;
 }
 
-
 .bookdetail-top .right {
   width: 726px;
+}
+
+.btnLike{
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-top: 30px;
+  margin-left: 80px;
+  height: 40px;
+  width: 40px;
+  border-radius: 10px;
+  border: 1px solid #9D6B54;
+  background: #9D6B54;
+  color: #F0ECE4;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.btnLike:hover {
+  background: #F0ECE4;
+  color: #9D6B54;
+  font-size: 16px;
+  border: 1px solid #9D6B54;
 }
 
 .bookdetail-top .right .titleBD {
