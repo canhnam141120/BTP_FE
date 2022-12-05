@@ -85,13 +85,13 @@ export default {
           link: '/ManagePost',
           name: 'Quản lý bài đăng',
           tooltip: 'Files',
-          icon: 'bx-book-content',
+          icon: 'bx-receipt',
         },
         {
           link: '/ManageTransaction/exchange',
           name: 'Quản lý giao dịch',
           tooltip: 'Dashboard',
-          icon: 'bx-cart-alt',
+          icon: 'bx-git-compare',
         },
         {
           link: '/ManageCategory',
@@ -115,7 +115,7 @@ export default {
           link: '/ManageAdmin',
           name: 'Quản lý admin',
           tooltip: 'Messages',
-          icon: 'bx-cog',
+          icon: 'bx-globe',
         },
         {
           link: '/',

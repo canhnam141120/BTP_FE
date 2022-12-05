@@ -98,6 +98,9 @@ export default {
     }
   },
   created() {
+    if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
     this.getAllNoti(1)
     this.getAllNotiNotRead(1)
   },

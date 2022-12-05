@@ -159,6 +159,9 @@ export default {
     }
   },
   created() {
+    if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
     this.isSearch = false
     this.getPostsAll(1)
   },

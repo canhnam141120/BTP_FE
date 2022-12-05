@@ -4,6 +4,22 @@
       <LoadingDialog v-show="spinner" style="z-index: 1;"></LoadingDialog>
       <Dashboard></Dashboard>
       <div class="row">
+        <ConfirmDialog :show="showConfirmDialog" v-if="showConfirmDialog" class="modal">
+          <div>
+            <div class="dialogTitle">XÁC NHẬN</div>
+            <div style="color: #9d6b54; text-align: center;">Xác nhận hủy quyền QTV người dùng!</div>
+            <div class="dialogGroupBtn">
+              <button class="dialogBtn" v-on:click="cancelConfirmDialog">Hủy</button>
+              <button class="dialogBtn" v-on:click="HandleConfirm">Xác nhận</button>
+            </div>
+          </div>
+        </ConfirmDialog>
+        <b-alert style="padding-left: 60px" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          {{responseMessage}}
+        </b-alert>
+        <b-alert style="padding-left: 60px" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          {{responseMessage}}
+        </b-alert>
         <div class="col-lg-6">
           <div class="user-data m-b-30">
               <div class="titleMB">QUẢN LÝ QUẢN TRỊ VIÊN</div>
@@ -58,12 +74,20 @@ import Side_Bar from "../../components/Side_Bar";
 import LoadingDialog from "@/components/LoadingDialog";
 import {Icon} from '@iconify/vue2';
 import Dashboard from "@/components/Dashboard";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 export default {
   name: "GetAdmins",
-  components: {Side_Bar,Dashboard, LoadingDialog, Icon},
+  components: {Side_Bar,Dashboard, LoadingDialog, Icon, ConfirmDialog},
   data() {
     return {
+      responseFlag: true,
+      responseMessage: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
+      showConfirmDialog: false,
+      tmpId: '',
+
       listAdmins: '',
       search: '',
       spinner: false,
@@ -71,6 +95,9 @@ export default {
     }
   },
   created() {
+    if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
     this.getAdmins()
   },
   methods: {
@@ -93,13 +120,27 @@ export default {
       }
     },
     HandleAuthority(id) {
+      this.tmpId = id
+      this.showConfirmDialog = true
+    },
+    cancelConfirmDialog(){
+      this.showConfirmDialog = false
+    },
+    HandleConfirm(){
       this.spinner = true
-      apiFactory.callApi(API_MANAGE_ADMIN.REMOVE_ADMIN + id, 'PUT', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_ADMIN.REMOVE_ADMIN + this.tmpId , 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
           this.getAdmins()
+          this.responseFlag = true
+          this.responseMessage = 'Hủy quyền QTV thành công!'
+        }else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
         }
+        this.dismissCountDown = this.dismissSecs
+        this.showConfirmDialog = false
+        this.spinner = false
       }).catch(() => {
-        alert('Hủy quyền không thành công!')
       });
     },
     HandleSearch() {
@@ -109,7 +150,10 @@ export default {
         this.isSearch = true;
       }
       return this.getAdmins()
-    }
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
   }
 };
 </script>

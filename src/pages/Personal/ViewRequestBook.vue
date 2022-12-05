@@ -152,16 +152,16 @@
           <div class="right-contentVR">
             <div class="topVR">
               <div class="left">
-                <router-link v-if="book.isReady && book.status == 'Approved'" :to="{ name: 'BookDetail', query: { id:book.id }}">
+                <router-link style="position: relative" v-if="book.isReady && book.status == 'Approved'" :to="{ name: 'BookDetail', query: { id:book.id }}">
                   <img class="imgBD" v-bind:src="book.image">
+                  <label class="layer1" v-if="book.isTrade">Đang giao dịch</label>
+                  <label class="layer2" v-else>Sẵn sàng</label>
                 </router-link>
                 <div v-else style="position: relative">
                   <img class="imgBD" v-bind:src="book.image">
-                  <label class="hide">Đang ẩn</label>
-                </div>
-                <div style="text-align: center; margin-bottom: 10px; margin-top: 10px">
-                  <label class="book-statusMB" style="color: red; font-weight: bold" v-if="book.isTrade">Đang giao dịch</label>
-                  <label class="book-statusMB" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
+                  <label v-if="!book.isReady && book.status == 'Approved'" class="hide">Đang ẩn</label>
+                  <label v-if="book.isReady && book.status == 'Waiting'" class="status">Đang đợi duyệt</label>
+                  <label v-if="book.isReady && book.status == 'Denied'" class="status">Không được duyệt</label>
                 </div>
                 <div class="extra">
                   <button class="editBtn" v-on:click="openDialog">Chỉnh sửa</button>
@@ -169,8 +169,8 @@
               </div>
               <div class="right">
                 <label class="titleBD"><strong>{{book.title}}</strong></label>
-                <button v-if="book.isReady && book.status == 'Approved'" class="hideBtn" v-on:click="HandleHide(book.id)">Ẩn</button>
-                <button v-if="book.isReady == false && book.status == 'Approved'" class="hideBtn" v-on:click="HandleShow(book.id)">Hiện</button>
+                <button v-if="book.isReady && book.status == 'Approved' && !book.isTrade" class="hideBtn" v-on:click="HandleHide(book.id)">Ẩn</button>
+                <button v-if="book.isReady == false && book.status == 'Approved' && !book.isTrade" class="hideBtn" v-on:click="HandleShow(book.id)">Hiện</button>
                 <div class="contentRight">
                   <div class="bookInfoBD">
                     <div>Thể loại: <span>{{book.category.name}}</span></div>
@@ -257,6 +257,9 @@ export default {
     }
   },
   created() {
+    if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
     this.getBookById()
     this.getRequestReceived()
   },
@@ -538,6 +541,22 @@ strong {
   padding-top: 100px;
 }
 
+.status{
+  border-radius: 10px;
+  left: 0;
+  margin-left: 20px;
+  margin-top: 20px;
+  color: white;
+  position: absolute;
+  width: 200px;
+  height: 290px;
+  background-color: grey;
+  opacity: 0.8;
+  font-size: 26px;
+  text-align: center;
+  padding-top: 100px;
+}
+
 .right-contentVR .topVR .right{
   width: 635px;
   border-radius: 10px;
@@ -712,5 +731,25 @@ strong {
   color: #9D6B54;
 }
 
+.layer2{
+  margin-top: 20px;
+  margin-left: 20px;
+  position: absolute;
+  left: 0;
+  background-color: green;
+  font-size: 12px;
+  color: #F0ECE4;
+  padding: 5px;
+}
 
+.layer1{
+  margin-top: 20px;
+  margin-left: 20px;
+  position: absolute;
+  left: 0;
+  font-size: 12px;
+  background-color: #ca0303;
+  color: #F0ECE4;
+  padding: 5px;
+}
 </style>

@@ -125,8 +125,8 @@
                     <div><strong>{{ book.user?.fullname }}</strong></div>
                     <div>{{ book.user?.likeNumber }} người thích</div>
                     <div>{{ book.user?.numberOfTransaction }} lần giao dịch</div>
-                    <router-link v-if="userByToken.UserId != book.user?.id" class="btn" :to="{ name: 'OtherPerson', query: {id:book.user?.id}}">Xem trang cá nhân</router-link>
-                    <router-link v-else class="btn" to="/MyBooks">Về trang cá nhân</router-link>
+                    <router-link v-if="userByToken.UserId != book.user?.id" class="btn" :to="{ name: 'OtherPerson', query: {id:book.user?.id}}">Ghé xem</router-link>
+                    <router-link v-else class="btn" to="/MyBooks">Trang cá nhân</router-link>
                   </div>
                 </div>
               </div>

@@ -691,6 +691,9 @@ export default {
     }
   },
   created() {
+    if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
     this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
     this.getExchanges()
     this.getRents()

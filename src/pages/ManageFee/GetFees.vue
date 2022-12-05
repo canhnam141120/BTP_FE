@@ -11,6 +11,12 @@
           <label class="labelFee">Giá: </label><input class="inputFee" maxlength="6" type="number" required placeholder="Nhập giá mới" v-model="fee.price">đ
         </div>
       </CreateFeeDialog>
+      <b-alert style="padding-left: 60px" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+        {{responseMessage}}
+      </b-alert>
+      <b-alert style="padding-left: 60px" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+        {{responseMessage}}
+      </b-alert>
       <div class="col-lg-6">
         <div class="user-data m-b-30">
           <div class="titleMB">QUẢN LÝ PHÍ</div>
@@ -57,6 +63,10 @@ export default {
   components: {Side_Bar,Dashboard, LoadingDialog, CreateFeeDialog, Icon},
   data() {
     return {
+      responseFlag: true,
+      responseMessage: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
       listFees: '',
       fee: '',
       showDialog: false,
@@ -64,6 +74,9 @@ export default {
     }
   },
   created() {
+    if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
     this.getFees()
   },
   methods: {
@@ -96,14 +109,22 @@ export default {
         price: this.fee.price
       }).then((res) => {
         if (res.data.message === 'CREATE_SUCCESS') {
-          console.log(alert('Chỉnh sửa phí thành công'))
-          this.showDialog = false
           this.getFees()
+          this.responseFlag = true
+          this.responseMessage = 'Sửa phí thành công!'
+        }else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
         }
+        this.dismissCountDown = this.dismissSecs
+        this.showDialog = false
       }).catch(() => {
       });
       this.showDialog = false
-    }
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
   }
 }
 </script>

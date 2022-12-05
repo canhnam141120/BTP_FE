@@ -227,6 +227,9 @@ export default {
     }
   },
   created() {
+    if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
     this.getBookFavorite(1)
     this.getPostFavorite(1)
     this.getUserFavorite(1)

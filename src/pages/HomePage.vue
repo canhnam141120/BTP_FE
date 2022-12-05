@@ -42,6 +42,7 @@
                   </router-link>
                   <div class="info">
                     <div class="book-title"><strong>{{ item.title }}</strong></div>
+                    <div class="book-status">Thể loại: <strong>{{ item.category.name }}</strong></div>
                     <div class="book-status">Đăng bởi: <strong>{{ item.user.fullname }}</strong></div>
                     <label class="book-status">Giá cọc: <strong>{{ item.depositPrice.toLocaleString() }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
@@ -85,13 +86,13 @@
               </div>
             </b-skeleton-wrapper>
           </div>
-          <div class="listUser">
+          <div class="listUserHP">
             <div class="home-title2">TOP NGƯỜI DÙNG ĐƯỢC YÊU THÍCH</div>
             <hr style="margin-top: 0px">
             <b-skeleton-wrapper :loading="loading">
               <template #loading>
-                <div class="gridUser">
-                  <div class="itemUser" v-for='i in 6' :key="i">
+                <div class="gridUserHP">
+                  <div class="itemUserHP" v-for='i in 6' :key="i">
                     <b-card no-body img-top style="height: 250px">
                       <b-skeleton type="avatar" height="140px" width="140px" style="margin-left: 20px"></b-skeleton>
                       <b-card style="height: 110px">
@@ -103,8 +104,8 @@
                   </div>
                 </div>
               </template>
-              <div class="gridUser">
-                <div class="itemUser" v-for="item of listUser" :key="item.id">
+              <div class="gridUserHP">
+                <div class="itemUserHP" v-for="item of listUser" :key="item.id">
                   <router-link class="active" :to="{ name: 'OtherPerson', query: { id:item.id}}">
                     <img v-bind:src="item.avatar">
                   </router-link>
@@ -262,7 +263,7 @@ strong {
   border: 1px solid #9D6B54;
 }
 
-.listUser {
+.listUserHP {
   max-width: 1230px;
   background: #F0ECE4;
   border-radius: 10px;
@@ -416,12 +417,12 @@ strong {
 }
 
 
-.gridUser {
+.gridUserHP {
   display: inline-grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
-.gridUser .itemUser {
+.gridUserHP .itemUserHP {
   border-radius: 10px;
   width: 185px;
   height: auto;
@@ -431,11 +432,11 @@ strong {
   text-align: center;
 }
 
-.gridUser .itemUser:hover {
+.gridUserHP .itemUserHP:hover {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }
 
-.gridUser .itemUser img {
+.gridUserHP .itemUserHP img {
   margin-top: 10px;
   height: 140px;
   width: 140px;
@@ -443,13 +444,13 @@ strong {
   border: 2px outset #9D6B54;
 }
 
-.gridUser .itemUserInfo {
+.gridUserHP .itemUserInfo {
   text-align: center;
   height: auto;
   padding: 5px;
 }
 
-.gridUser .itemUserInfo .username {
+.gridUserHP .itemUserInfo .username {
   color: #9D6B54;
 }
 

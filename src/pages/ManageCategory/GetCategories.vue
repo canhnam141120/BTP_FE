@@ -15,6 +15,22 @@
             <label class="labelFee">Tên thể loại: </label><input class="inputFee" maxlength="50" type="text" required placeholder="Nhập thể loại" v-model="category.name">
           </div>
         </EditCategoryDialog>
+        <ConfirmDialog :show="showConfirmDialog" v-if="showConfirmDialog" class="modal">
+          <div>
+            <div class="dialogTitle">XÁC NHẬN</div>
+            <div style="color: #9d6b54; text-align: center;">Xác nhận xóa thể loại!</div>
+            <div class="dialogGroupBtn">
+              <button class="dialogBtn" v-on:click="cancelConfirmDialog">Hủy</button>
+              <button class="dialogBtn" v-on:click="HandleConfirm">Xác nhận</button>
+            </div>
+          </div>
+        </ConfirmDialog>
+        <b-alert style="padding-left: 60px" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          {{responseMessage}}
+        </b-alert>
+        <b-alert style="padding-left: 60px" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          {{responseMessage}}
+        </b-alert>
         <div class="col-lg-6">
           <div class="user-data m-b-30">
             <div class="titleMB">QUẢN LÝ THỂ LOẠI</div>
@@ -59,12 +75,20 @@ import CreateCategoryDialog from "@/pages/ManageCategory/CreateCategoryDialog";
 import EditCategoryDialog from "@/pages/ManageCategory/EditCategoryDialog";
 import {Icon} from '@iconify/vue2';
 import Dashboard from "@/components/Dashboard";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 export default {
   name: "GetCategories",
-  components: {Side_Bar,Dashboard, LoadingDialog, CreateCategoryDialog, Icon, EditCategoryDialog},
+  components: {Side_Bar,Dashboard, LoadingDialog, CreateCategoryDialog, Icon, EditCategoryDialog, ConfirmDialog},
   data() {
     return {
+      responseFlag: true,
+      responseMessage: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
+      showConfirmDialog: false,
+      tmpId: '',
+
       listCategories: '',
       category: '',
       categoryName: '',
@@ -74,6 +98,9 @@ export default {
     }
   },
   created() {
+    if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
     this.getCategories()
   },
   methods: {
@@ -86,15 +113,28 @@ export default {
       });
     },
     HandleDelete(id) {
-      apiFactory.callApi(API_MANAGE_CATEGORY.DELETE_CATEGORY + id, 'PUT', {}).then((res) => {
+      this.tmpId = id
+      this.showConfirmDialog = true
+    },
+    cancelConfirmDialog(){
+      this.showConfirmDialog = false
+    },
+    HandleConfirm(){
+      apiFactory.callApi(API_MANAGE_CATEGORY.DELETE_CATEGORY + this.tmpId, 'PUT', {}).then((res) => {
         if (res.data.message === 'DELETE_SUCCESS') {
-          alert('Xóa thành công!')
           this.getCategories()
+          this.responseFlag = true
+          this.responseMessage = 'Xóa thể loại thành công!'
+        }else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
         }
+        this.dismissCountDown = this.dismissSecs
+        this.showConfirmDialog = false
       }).catch(() => {
-        alert('Xóa không thành công!')
       });
     },
+
     getCategoryById(categoryId){
       apiFactory.callApi(API_MANAGE_CATEGORY.DETAIL_CATEGORY + categoryId, 'GET', {}).then((res) => {
         this.category = res.data.data
@@ -114,10 +154,12 @@ export default {
         name: this.category.name
       }).then((res) => {
         if (res.data.message === 'UPDATE_SUCCESS') {
-          alert('Sửa thể loại thành công')
-          this.showDialogEdit = false
           this.getCategories()
+          this.responseFlag = true
+          this.responseMessage = 'Sửa thể loại thành công!'
         }
+        this.dismissCountDown = this.dismissSecs
+        this.showDialogEdit = false
       }).catch(() => {
       });
       this.showDialogEdit = false
@@ -133,13 +175,20 @@ export default {
         name: this.categoryName
       }).then((res) => {
         if (res.data.message === 'CREATE_SUCCESS') {
-          alert('Thêm thể loại mới thành công')
-          this.showDialog = false
           this.getCategories()
+          this.responseFlag = true
+          this.responseMessage = 'Thêm thể loại thành công!'
+        }else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
         }
+        this.dismissCountDown = this.dismissSecs
+        this.showDialog = false
       }).catch(() => {
       });
-      this.showDialog = false
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
     },
   }
 }

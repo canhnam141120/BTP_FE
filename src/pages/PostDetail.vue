@@ -86,11 +86,11 @@ export default {
   created() {
     if(this.$cookies.get('token')){
       this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8')
+      this.CheckLike()
     }
     this.getPostById()
     this.get6Post()
     this.getMyInformation()
-    this.CheckLike()
   },
   methods: {
     getPostById() {
@@ -123,8 +123,7 @@ export default {
     },
     getMyInformation() {
       //this.loading = true
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.INFORMATION, 'POST', {
         userId: this.userByToken.UserId
       }).then((res) => {
@@ -135,7 +134,9 @@ export default {
     },
     loadPage(){
       this.loading = true
-      this.CheckLike()
+      if(this.$cookies.get('token')){
+        this.CheckLike()
+      }
       this.getPostById()
     },
     HandleLike() {

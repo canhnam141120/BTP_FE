@@ -176,17 +176,17 @@
                   <div class="infoMB">
                     <div class="book-titleMB"><strong>{{ item.title }}</strong></div>
                     <div class="book-statusMB">Thể loại: <strong>{{ item.category.name }}</strong></div>
-                    <label class="book-statusMB">Giá bìa: <strong>{{
-                        item.coverPrice.toLocaleString()
+                    <label class="book-statusMB">Giá cọc: <strong>{{
+                        item.depositPrice.toLocaleString()
                       }}đ</strong></label>
                     <label class="book-statusMB">{{ item.statusBook }}</label>
-                    <label v-if="item.status == 'Approved'" class="book-statusMB">Trạng thái: <strong style="color: green">Đã được
+<!--                    <label v-if="item.status == 'Approved'" class="book-statusMB">Trạng thái: <strong style="color: green">Đã được
                       duyệt</strong></label>
                     <label v-if="item.status == 'Denied'" class="book-statusMB">Trạng thái: <strong  style="color: #ca0303;">Không được duyệt</strong></label>
                     <label v-if="item.status == 'Waiting'" class="book-statusMB">Trạng thái: <strong>Đang đợi
                       duyệt</strong></label>
                     <label class="book-statusMB" style="color: red; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
-                    <label class="book-statusMB" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
+                    <label class="book-statusMB" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>-->
                   </div>
                 </div>
               </div>
@@ -317,6 +317,9 @@ export default {
     }
   },
   created() {
+    if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
     this.getMyBooks(1)
   },
   methods: {
@@ -339,25 +342,24 @@ export default {
     getMyBooks(pageNumber) {
       window.scroll(0, 0)
       this.loading = true;
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       if (this.isSearch) {
         apiFactory.callApi(API_PERSONAL.SEARCH_MY_BOOK + '?page=' + pageNumber, 'POST', {
           userId: this.userByToken.UserId,
           search: this.search
         }).then((res) => {
-          this.listBook = res.data.data
-          this.totalBook = res.data.numberOfRecords
-          this.loading = false;
+            this.listBook = res.data.data
+            this.totalBook = res.data.numberOfRecords
+            this.loading = false;
         }).catch(() => {
         });
       } else {
         apiFactory.callApi(API_PERSONAL.LIST_BOOK + '?page=' + pageNumber, 'POST', {
           userId: this.userByToken.UserId
         }).then((res) => {
-          this.listBook = res.data.data
-          this.totalBook = res.data.numberOfRecords
-          this.loading = false;
+            this.listBook = res.data.data
+            this.totalBook = res.data.numberOfRecords
+            this.loading = false;
         }).catch(() => {
         });
       }

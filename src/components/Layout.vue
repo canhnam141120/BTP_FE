@@ -8,7 +8,7 @@
           </a>
         </div>
         <div>
-          <nav class="Main__nav">
+          <nav style="padding-left: 50px" class="Main__nav">
             <router-link
                 to="/"
                 class="Main__list__item home"

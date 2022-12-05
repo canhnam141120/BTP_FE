@@ -68,17 +68,16 @@
                     </template>
                     <div class="grid-bookOP">
                       <div class="item-bookOP" v-for="item of listBook" :key="item.id">
-                        <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">
+                        <router-link style="position: relative" :to="{ name: 'BookDetail', query: { id:item.id }}">
                           <img v-bind:src="item.image">
+                          <label class="layer1OP" v-if="item.isTrade">Đang giao dịch</label>
+                          <label class="layer2OP"  v-else>Sẵn sàng</label>
                         </router-link>
                         <div class="infoOP">
                           <div class="book-titleOP"><strong>{{ item.title }}</strong></div>
                           <label class="book-statusOP">Thể loại: <strong>{{ item.category?.name }}</strong></label>
-                          <label class="book-statusOP">Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                          <label class="book-statusOP">Giá cọc: <strong>{{ item.depositPrice.toLocaleString() }}đ</strong></label>
                           <label class="book-statusOP">{{ item.statusBook }}</label>
-                          <label class="book-statusOP" style="color: #ca0303; font-weight: bold" v-if="item.isTrade">Đang
-                            giao dịch</label>
-                          <label class="book-statusOP" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
                         </div>
                       </div>
                     </div>
@@ -206,7 +205,9 @@ export default {
       }).then((res) => {
         if (res.data.data) {
           this.info = res.data.data
-          this.CheckLike()
+          if (this.$cookies.get('token')) {
+            this.CheckLike()
+          }
           this.spinner = false
         } else {
           this.$router.push({name: "404Page"})
@@ -522,6 +523,24 @@ strong {
 
 .item-bookOP:hover {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+}
+
+.layer2OP{
+  position: absolute;
+  left: 0;
+  background-color: green;
+  font-size: 12px;
+  color: #F0ECE4;
+  padding: 5px;
+}
+
+.layer1OP{
+  position: absolute;
+  left: 0;
+  font-size: 12px;
+  background-color: #ca0303;
+  color: #F0ECE4;
+  padding: 5px;
 }
 
 .item-bookOP img {
