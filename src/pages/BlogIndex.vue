@@ -209,8 +209,7 @@ export default {
     },
     save(){
       this.spinner = true
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_POST.CREATE_POST, 'POST', {
         image: this.imageSrc,
         userId: this.userByToken.UserId,

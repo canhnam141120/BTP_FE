@@ -1,9 +1,6 @@
 <template>
   <div v-show="show" class="dialog">
     <div class="dialogContent">
-      <div>
-        <div class="dialogTitle">HÓA ĐƠN</div>
-      </div>
       <slot></slot>
     </div>
   </div>
@@ -33,23 +30,41 @@ export default {
   margin: 5% auto auto auto;
 }
 
+.topDialog{
+  display: flex;
+  justify-content: space-between;
+  padding-left: 50px;
+  padding-top: 10px;
+  padding-right: 10px;
+}
+
 .dialogTitle {
   color: #9D6B54;
   font-weight: bold;
   font-size: 22px;
+  padding-left: 50px;
   padding-top: 10px;
   text-align: center;
   margin-bottom: 10px;
 }
 
+.dialogExit{
+  border-radius: 10px;
+  background-color: #9D6B54;
+  color: white;
+  border: 1px solid;
+  width: 30px;
+  height: 30px;
+}
+
+.dialogExit:hover {
+  border-color: #9D6B54;
+  background: #F0ECE4;
+  color: #9D6B54;
+}
+
 .dialogGroupBtn {
-  display: flex;
-  width: 80%;
-  margin-top: 20px;
-  margin-right: auto;
-  margin-left: 30px;
-  padding-bottom: 20px;
-  justify-content: space-between;
+  text-align: center;
 }
 
 .dialogBtn {
@@ -59,6 +74,8 @@ export default {
   border: 1px solid;
   height: 50px;
   width: 140px;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .dialogBtn:hover {

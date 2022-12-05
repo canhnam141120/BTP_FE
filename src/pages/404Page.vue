@@ -4,8 +4,10 @@
       <div class="body">
         <div class="container">
           <div class="content">
-            <Icon class="iconErr" icon="tabler:error-404-off"/>
-            <div class="textErr">Có lỗi xảy ra! Vui lòng quay về trang chủ!</div>
+            <Icon class="iconErr" icon="fa6-solid:4"/>
+            <Icon class="iconMid" icon="uiw:setting"/>
+            <Icon class="iconErr" icon="fa6-solid:4"/><label class="iText">!</label>
+            <div class="textErr">Xin lỗi, không thể tìm thấy trang bạn yêu cầu!</div>
           </div>
         </div>
       </div>
@@ -54,13 +56,25 @@ main {
   margin-bottom: 10px;
   margin-top: 10px;
   border: 1px solid #9D6B54;
-  padding-bottom: 20px;
+  padding-bottom: 50px;
 }
 
 .iconErr{
   font-weight: bold;
-  font-size: 300px;
+  font-size: 200px;
   color: #9D6B54;
+}
+
+.iconMid{
+  font-weight: bold;
+  font-size: 170px;
+  color: #9D6B54;
+}
+
+.iText{
+  color: #9D6B54;
+  font-weight: bold;
+  font-size: 150px;
 }
 
 .textErr{

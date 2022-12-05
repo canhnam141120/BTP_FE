@@ -2,6 +2,7 @@
   <Layout>
     <main style="flex-grow: 1">
       <div class="MI">
+        <LoadingDialog v-show="spinner" style="z-index: 999999"></LoadingDialog>
         <ChangePassDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
           <div class="dialogBody">
             <label class="labelPass">Mật khẩu cũ: </label>
@@ -10,8 +11,35 @@
             <input class="inputPass" maxlength="50" type="password" required placeholder="Nhập mật khẩu mới" v-model="newPassword">
             <label class="labelPass">Nhập lại mật khẩu mới: </label>
             <input class="inputPass" maxlength="50" type="password" required placeholder="Nhập mật khẩu cũ" v-model="copyNewPassword">
+            <div style="color: #ca0303; padding-top: 5px; padding-left: 150px">{{err}}</div>
           </div>
         </ChangePassDialog>
+        <ConfirmDialog :show="showConfirmDialog" v-if="showConfirmDialog" class="modal">
+          <div>
+            <div class="dialogTitle">XÁC NHẬN</div>
+            <div style="color: #9d6b54; text-align: center;">Xác nhận đổi mật khẩu!</div>
+            <div class="dialogGroupBtn">
+              <button class="dialogBtn" v-on:click="cancelConfirmDialog">Hủy</button>
+              <button class="dialogBtn" v-on:click="HandleConfirm">Xác nhận</button>
+            </div>
+          </div>
+        </ConfirmDialog>
+        <ConfirmDialog :show="showConfirmDialogShip" v-if="showConfirmDialogShip" class="modal">
+          <div>
+            <div class="dialogTitle">XÁC NHẬN</div>
+            <div style="color: #9d6b54; text-align: center;">Xác nhận cập nhật thông tin vận chuyển!</div>
+            <div class="dialogGroupBtn">
+              <button class="dialogBtn" v-on:click="cancelConfirmDialogShip">Hủy</button>
+              <button class="dialogBtn" v-on:click="HandleConfirmShip">Xác nhận</button>
+            </div>
+          </div>
+        </ConfirmDialog>
+        <b-alert v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          {{responseMessage}}
+        </b-alert>
+        <b-alert v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          {{responseMessage}}
+        </b-alert>
         <div class="containerMI">
           <div class="left-contentMI">
             <SideBar_Personal></SideBar_Personal>
@@ -100,12 +128,23 @@ import Layout from "@/components/Layout";
 import VueJwtDecode from "vue-jwt-decode";
 import {Icon} from '@iconify/vue2';
 import ChangePassDialog from "@/pages/Personal/ChangePassDialog";
+import LoadingDialog from "@/components/LoadingDialog";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 export default {
   name: "MyInformation",
-  components: {SideBar_Personal, Layout, Icon, ChangePassDialog},
+  components: {SideBar_Personal, Layout, Icon, ChangePassDialog, LoadingDialog, ConfirmDialog},
   data() {
     return {
+      spinner: false,
+      responseFlag: true,
+      responseMessage: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
+      showConfirmDialog: false,
+      showConfirmDialogShip: false,
+
+      err: '',
       info: '',
       infoShip: '',
       userId: '',
@@ -146,8 +185,15 @@ export default {
       });
     },
     HandleUpdateInfoShip(){
-      let token = this.$cookies.get('token');
-      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      this.showConfirmDialogShip = true
+    },
+    cancelConfirmDialogShip(){
+      this.showConfirmDialogShip = false
+    },
+    HandleConfirmShip(){
+      this.spinner = true
+      window.scroll(0,0)
+      this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.EDIT_SHIP_INFO, 'PUT', {
         userId: this.userByToken.UserId,
         sendIsMonday: this.infoShip.sendIsMonday,
@@ -164,14 +210,21 @@ export default {
         refundIsFriday: this.infoShip.refundIsFriday,
       }).then((res) => {
         if(res.data.message == 'UPDATE_SUCCESS'){
-          alert('Cập nhật thông tin vận chuyển thành công!')
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật thông tin vận chuyển thành công!'
+        }else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra, vui lòng thử lại!!'
         }
+        this.dismissCountDown = this.dismissSecs
+        this.spinner = false
+        this.showConfirmDialogShip = false
       }).catch(() => {
       });
     },
     HandleEdit(){
-      let token = this.$cookies.get('token');
-      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      this.spinner = true
+      this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.EDIT_INFORMATION, 'PUT', {
         userId: this.userByToken.UserId,
         fullname: this.info.fullname,
@@ -180,10 +233,16 @@ export default {
         avatar: this.info.avatar
       }).then((res) => {
         if(res.data.message == 'UPDATE_SUCCESS'){
-          alert('Thay đổi thành công')
-          this.edit = false
-          this.showUpload = false
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật thành công!'
+        }else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra, vui lòng thử lại!!'
         }
+        this.dismissCountDown = this.dismissSecs
+        this.edit = false
+        this.showUpload = false
+        this.spinner = false
       }).catch(() => {
       });
     },
@@ -213,20 +272,47 @@ export default {
       this.showDialog = false
     },
     save(){
-      let token = this.$cookies.get('token');
-      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      this.showConfirmDialog = true
+    },
+    cancelConfirmDialog(){
+      this.showConfirmDialog = false
+    },
+    HandleConfirm(){
+      this.spinner = true
+      this.err = ''
+      this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.CHANGE_PASSWORD, 'PUT', {
         userId: this.userByToken.UserId,
         oldPassword: this.oldPassword,
         newPassword: this.newPassword,
       }).then((res) => {
         if(res.data.message == 'UPDATE_SUCCESS'){
-          alert('Thay đổi mật khẩu thành công')
+          this.responseFlag = true
+          this.responseMessage = 'Đổi mật khẩu thành công!'
+          this.dismissCountDown = this.dismissSecs
+          this.showConfirmDialog = false
+          this.showDialog = false
+        }else{
+          if(res.data.message == 'OLD_PASSWORD_INCORRECT'){
+            this.err = 'Mật khẩu cũ không chính xác!'
+            this.showConfirmDialog = false
+          }
+          else{
+            this.responseFlag = true
+            this.responseMessage = 'Đổi mật khẩu thành công!'
+            this.dismissCountDown = this.dismissSecs
+            this.showConfirmDialog = false
+            this.showDialog = false
+          }
         }
+        this.spinner = false
       }).catch(() => {
       });
-      this.showDialog = false
-    }
+    },
+
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
   }
 }
 </script>

@@ -22,6 +22,26 @@
           </div>
         </div>
       </ConfirmDialog>
+      <ConfirmDialog :show="showConfirmDialogHide" v-if="showConfirmDialogHide" class="modal">
+        <div>
+          <div class="dialogTitle">XÁC NHẬN</div>
+          <div style="color: #9d6b54; text-align: center;">Xác nhận ẩn sách!</div>
+          <div class="dialogGroupBtn">
+            <button class="dialogBtn" v-on:click="cancelConfirmDialogHide">Hủy</button>
+            <button class="dialogBtn" v-on:click="HandleConfirmHide">Xác nhận</button>
+          </div>
+        </div>
+      </ConfirmDialog>
+      <ConfirmDialog :show="showConfirmDialogShow" v-if="showConfirmDialogShow" class="modal">
+        <div>
+          <div class="dialogTitle">XÁC NHẬN</div>
+          <div style="color: #9d6b54; text-align: center;">Xác nhận hiện sách!</div>
+          <div class="dialogGroupBtn">
+            <button class="dialogBtn" v-on:click="cancelConfirmDialogShow">Hủy</button>
+            <button class="dialogBtn" v-on:click="HandleConfirmShow">Xác nhận</button>
+          </div>
+        </div>
+      </ConfirmDialog>
       <b-alert v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
         {{responseMessage}}
       </b-alert>
@@ -132,7 +152,13 @@
           <div class="right-contentVR">
             <div class="topVR">
               <div class="left">
-                <img class="imgBD" v-bind:src="book.image">
+                <router-link v-if="book.isReady && book.status == 'Approved'" :to="{ name: 'BookDetail', query: { id:book.id }}">
+                  <img class="imgBD" v-bind:src="book.image">
+                </router-link>
+                <div v-else style="position: relative">
+                  <img class="imgBD" v-bind:src="book.image">
+                  <label class="hide">Đang ẩn</label>
+                </div>
                 <div style="text-align: center; margin-bottom: 10px; margin-top: 10px">
                   <label class="book-statusMB" style="color: red; font-weight: bold" v-if="book.isTrade">Đang giao dịch</label>
                   <label class="book-statusMB" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
@@ -217,6 +243,8 @@ export default {
       showAcceptDialog: false,
       responseFlag: true,
       responseMessage: '',
+      showConfirmDialogHide: false,
+      showConfirmDialogShow: false,
 
       book: '',
       listRequestReceive: '',
@@ -255,29 +283,56 @@ export default {
     },
 
     HandleHide(bookId){
+      this.tmpId = bookId
+      this.showConfirmDialogHide = true
+    },
+    cancelConfirmDialogHide(){
+      this.showConfirmDialogHide = false
+    },
+    HandleConfirmHide(){
       this.spinner = true
-      const url = API_BOOK.HIDE_BOOK + bookId
+      const url = API_BOOK.HIDE_BOOK + this.tmpId
       apiFactory.callApi(url, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
-          this.getBookById()
-          this.spinner = false
+          this.responseFlag = true
+          this.responseMessage = 'Ẩn sách thành công!'
+        }else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
         }
+        this.dismissCountDown = this.dismissSecs
+        this.getBookById()
+        this.showConfirmDialogHide = false
+        this.spinner = false
       }).catch(() => {
-        alert('Không thành công!')
       });
     },
     HandleShow(bookId){
+      this.tmpId = bookId
+      this.showConfirmDialogShow = true
+    },
+    cancelConfirmDialogShow(){
+      this.showConfirmDialogShow = false
+    },
+    HandleConfirmShow(){
       this.spinner = true
-      const url = API_BOOK.SHOW_BOOK + bookId
+      const url = API_BOOK.SHOW_BOOK + this.tmpId
       apiFactory.callApi(url, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
-          this.getBookById()
-          this.spinner = false
+          this.responseFlag = true
+          this.responseMessage = 'Hiện sách thành công!'
+        }else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
         }
+        this.getBookById()
+        this.dismissCountDown = this.dismissSecs
+        this.showConfirmDialogShow = false
+        this.spinner = false
       }).catch(() => {
-        alert('Không thành công!')
       });
     },
+
     openDialog() {
       this.showDialog = true
     },
@@ -304,10 +359,17 @@ export default {
         isRent: this.book.isRent,
         rentFee: this.book.rentFee
       }).then((res) => {
+        this.responseMessage = ''
         if (res.data.message === 'UPDATE_SUCCESS') {
-          this.showDialog = false
-          this.spinner = false
+          this.responseFlag = true
+          this.responseMessage = 'Sách của bạn đã được gửi lại QTV để duyệt!'
+        }else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại!'
         }
+        this.dismissCountDown = this.dismissSecs
+        this.showDialog = false
+        this.spinner = false
       }).catch(() => {
       });
     },
@@ -458,6 +520,22 @@ strong {
   margin-top: 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+}
+
+.hide{
+  border-radius: 10px;
+  left: 0;
+  margin-left: 20px;
+  margin-top: 20px;
+  color: white;
+  position: absolute;
+  width: 200px;
+  height: 290px;
+  background-color: #9d6b54;
+  opacity: 0.8;
+  font-size: 26px;
+  text-align: center;
+  padding-top: 100px;
 }
 
 .right-contentVR .topVR .right{
@@ -633,4 +711,6 @@ strong {
   background: #F0ECE4;
   color: #9D6B54;
 }
+
+
 </style>
