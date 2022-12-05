@@ -1,6 +1,8 @@
 <template>
   <Side_Bar>
     <div class="ml">
+      <LoadingDialog v-show="spinner" style="z-index: 1;"></LoadingDialog>
+      <Dashboard></Dashboard>
       <div class="row">
         <PostDetailDialog :show="showDialogPD" :cancel="cancel" v-if="showDialogPD" class="modal">
           <div class="topDialog">
@@ -16,7 +18,6 @@
         <div class="col-lg-6">
           <div class="user-data m-b-30">
             <div class="titleMB">QUẢN LÝ BÀI ĐĂNG</div>
-            <hr>
             <div class="search-post">
               <select class="selectCss"  v-model="filter" @change="onchange($event)">
                 <option v-bind:value="item" v-for="item of listFilter" :key="item">{{item}}</option>
@@ -126,7 +127,6 @@
             </div>
           </div>
         </div>
-        <LoadingDialog v-show="spinner"></LoadingDialog>
       </div>
     </div>
   </Side_Bar>
@@ -139,10 +139,11 @@ import Side_Bar from "../../components/Side_Bar";
 import LoadingDialog from "@/components/LoadingDialog";
 import PostDetailDialog from "@/pages/ManagePost/PostDetailDialog";
 import {Icon} from '@iconify/vue2';
+import Dashboard from "@/components/Dashboard";
 
 export default {
   name: "GetPosts",
-  components: {Side_Bar, LoadingDialog, PostDetailDialog, Icon},
+  components: {Side_Bar, LoadingDialog, PostDetailDialog, Icon, Dashboard},
   data() {
     return {
       post: '',

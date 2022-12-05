@@ -1,5 +1,7 @@
 <template>
   <div class="mlBook">
+    <LoadingDialog v-show="spinner" style="z-index: 1;"></LoadingDialog>
+    <Dashboard></Dashboard>
     <div class="row">
       <BookDetailDialog :show="showDialogBD" :cancel="cancel" v-if="showDialogBD" class="modal">
         <div class="topVRN">
@@ -59,7 +61,6 @@
       <div class="col-lg-6">
         <div class="user-data m-b-30">
           <div class="titleMB">QUẢN LÝ SÁCH</div>
-          <hr>
           <div class="search-book">
             <select class="selectCss"  v-model="filter" @change="onchange($event)">
               <option v-bind:value="item" v-for="item of listFilter" :key="item">{{item}}</option>
@@ -189,7 +190,6 @@
           </div>
         </div>
       </div>
-      <LoadingDialog v-show="spinner"></LoadingDialog>
     </div>
   </div>
 </template>
@@ -201,10 +201,11 @@ import LoadingDialog from "@/components/LoadingDialog";
 import BookDetailDialog from "@/pages/ManageBook/BookDetailDialog";
 import FeedbackDialog from "@/pages/ManageBook/FeedbackDialog";
 import {Icon} from '@iconify/vue2';
+import Dashboard from "@/components/Dashboard";
 
 export default {
   name: "GetBooks",
-  components: {BookDetailDialog, LoadingDialog, FeedbackDialog, Icon},
+  components: {BookDetailDialog, LoadingDialog, FeedbackDialog, Icon, Dashboard},
   data() {
     return {
       book: '',

@@ -1,11 +1,12 @@
 <template>
   <Side_Bar>
     <div class="ml">
+      <LoadingDialog v-show="spinner" style="z-index: 1;"></LoadingDialog>
+      <Dashboard></Dashboard>
       <div class="row">
         <div class="col-lg-6">
           <div class="user-data m-b-30">
               <div class="titleMB">QUẢN LÝ QUẢN TRỊ VIÊN</div>
-              <hr>
             <div class="search-admin">
                 <input type="text" v-model="search" placeholder="Nhập tên hoặc số điện thoại">
                 <button v-on:click="HandleSearch">Tìm</button>
@@ -45,7 +46,6 @@
             </div>
           </div>
         </div>
-        <LoadingDialog v-show="spinner"></LoadingDialog>
       </div>
     </div>
   </Side_Bar>
@@ -57,10 +57,11 @@ import {API_MANAGE_ADMIN} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
 import LoadingDialog from "@/components/LoadingDialog";
 import {Icon} from '@iconify/vue2';
+import Dashboard from "@/components/Dashboard";
 
 export default {
   name: "GetAdmins",
-  components: {Side_Bar, LoadingDialog, Icon},
+  components: {Side_Bar,Dashboard, LoadingDialog, Icon},
   data() {
     return {
       listAdmins: '',

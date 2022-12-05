@@ -1,6 +1,8 @@
 <template>
   <Side_Bar>
     <div class="ml">
+      <LoadingDialog v-show="spinner" style="z-index: 1;"></LoadingDialog>
+      <Dashboard></Dashboard>
       <div class="row">
         <div class="col-lg-6">
           <ExchangeDetailDialog :show="showDialogED"
@@ -165,9 +167,7 @@
             </div>
           </UpdateExchangeDialog>
           <div class="user-data m-b-30">
-            <LoadingDialog v-show="spinner" style="z-index: 999999"></LoadingDialog>
             <div class="titleMB">QUẢN LÝ GIAO DỊCH ĐỔI</div>
-            <hr>
             <div class="search-transaction">
               <router-link to="/ManageTransaction/rent" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" style="height: 50px; padding-top: 10px">Xem giao dịch thuê</router-link>
               <select class="selectCss" v-model="filter" @change="onchange($event)">
@@ -320,10 +320,11 @@ import ExchangeDetailDialog from "@/pages/ManageTransaction/ExchangeDetailDialog
 import ExchangeBillDialog from "@/pages/ManageTransaction/ExchangeBillDialog";
 import UpdateExchangeDialog from "@/pages/ManageTransaction/UpdateExchangeDialog";
 import {Icon} from '@iconify/vue2';
+import Dashboard from "@/components/Dashboard";
 
 export default {
   name: "GetExchanges",
-  components: {Side_Bar, LoadingDialog, ExchangeDetailDialog, ExchangeBillDialog, UpdateExchangeDialog, Icon},
+  components: {Side_Bar, LoadingDialog,Dashboard, ExchangeDetailDialog, ExchangeBillDialog, UpdateExchangeDialog, Icon},
   data() {
     return {
       listExchanges: '',

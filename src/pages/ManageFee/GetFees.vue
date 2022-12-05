@@ -1,6 +1,8 @@
 <template>
   <Side_Bar>
   <div class="ml">
+    <LoadingDialog v-show="spinner" style="z-index: 1;"></LoadingDialog>
+    <Dashboard></Dashboard>
     <div class="row">
       <CreateFeeDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
         <div class="dialogBody">
@@ -12,7 +14,6 @@
       <div class="col-lg-6">
         <div class="user-data m-b-30">
           <div class="titleMB">QUẢN LÝ PHÍ</div>
-          <hr>
           <div class="table-responsive table-data">
             <table class="table">
               <thead>
@@ -37,7 +38,6 @@
           </div>
         </div>
       </div>
-      <LoadingDialog v-show="spinner"></LoadingDialog>
     </div>
   </div>
   </Side_Bar>
@@ -50,10 +50,11 @@ import Side_Bar from "../../components/Side_Bar";
 import LoadingDialog from "@/components/LoadingDialog";
 import CreateFeeDialog from "@/pages/ManageFee/CreateFeeDialog";
 import {Icon} from '@iconify/vue2';
+import Dashboard from "@/components/Dashboard";
 
 export default {
   name: "GetFees",
-  components: {Side_Bar, LoadingDialog, CreateFeeDialog, Icon},
+  components: {Side_Bar,Dashboard, LoadingDialog, CreateFeeDialog, Icon},
   data() {
     return {
       listFees: '',

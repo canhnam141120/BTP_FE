@@ -1,6 +1,8 @@
 <template>
   <Side_Bar>
     <div class="ml">
+      <LoadingDialog v-show="spinner" style="z-index: 1;"></LoadingDialog>
+      <Dashboard></Dashboard>
       <div class="row">
         <CreateCategoryDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
           <div class="dialogBody">
@@ -16,9 +18,8 @@
         <div class="col-lg-6">
           <div class="user-data m-b-30">
             <div class="titleMB">QUẢN LÝ THỂ LOẠI</div>
-            <hr>
             <div>
-              <button class="addBtn" v-on:click="openDialog()">
+              <button class="addBtnCate" v-on:click="openDialog()">
                 <Icon style="margin-bottom: 5px; margin-right: 10px" icon="material-symbols:add-circle-outline-rounded"/>Thêm mới
               </button>
             </div>
@@ -44,7 +45,6 @@
             </div>
           </div>
         </div>
-        <LoadingDialog v-show="spinner"></LoadingDialog>
       </div>
     </div>
   </Side_Bar>
@@ -58,10 +58,11 @@ import LoadingDialog from "@/components/LoadingDialog";
 import CreateCategoryDialog from "@/pages/ManageCategory/CreateCategoryDialog";
 import EditCategoryDialog from "@/pages/ManageCategory/EditCategoryDialog";
 import {Icon} from '@iconify/vue2';
+import Dashboard from "@/components/Dashboard";
 
 export default {
   name: "GetCategories",
-  components: {Side_Bar, LoadingDialog, CreateCategoryDialog, Icon, EditCategoryDialog},
+  components: {Side_Bar,Dashboard, LoadingDialog, CreateCategoryDialog, Icon, EditCategoryDialog},
   data() {
     return {
       listCategories: '',
@@ -153,7 +154,7 @@ export default {
   color:  #9D6B54;
   font-size: 30px;
 }
-.addBtn{
+.addBtnCate{
   height: 45px;
   border-radius: 10px;
   background-color: #9D6B54;
@@ -161,9 +162,10 @@ export default {
   border: 1px solid;
   width: 140px;
   margin-bottom: 10px;
+  font-weight: bold;
 }
 
-.addBtn:hover{
+.addBtnCate:hover{
   border-color: #9D6B54;
   background-color: #F0ECE4;
   color: #9D6B54;

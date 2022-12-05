@@ -1,11 +1,12 @@
 <template>
   <Side_Bar>
     <div class="ml">
+      <LoadingDialog v-show="spinner" style="z-index: 1;"></LoadingDialog>
+      <Dashboard></Dashboard>
       <div class="row">
         <div class="col-lg-6">
           <div class="user-data m-b-30">
             <div class="titleMB">QUẢN LÝ NGƯỜI DÙNG</div>
-            <hr>
             <div class="search-user">
               <select class="selectCss"  v-model="filter" @change="onchange($event)">
                 <option v-bind:value="item" v-for="item of listFilter" :key="item">{{item}}</option>
@@ -104,7 +105,6 @@
               </div>
             </div>
           </div>
-        <LoadingDialog v-show="spinner"></LoadingDialog>
         </div>
       </div>
   </Side_Bar>
@@ -116,10 +116,11 @@ import {API_MANAGE_USER} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
 import LoadingDialog from "@/components/LoadingDialog";
 import {Icon} from '@iconify/vue2';
+import Dashboard from "@/components/Dashboard";
 
 export default {
   name: "GetUsers",
-  components: {Side_Bar, LoadingDialog, Icon},
+  components: {Side_Bar,Dashboard, LoadingDialog, Icon},
   data() {
     return {
       listUsers: '',

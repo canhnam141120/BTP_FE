@@ -139,7 +139,7 @@ export const API_TRANSACTION = Object.freeze({
     CREATE_URL_PAY: "https://book-trading-platform.herokuapp.com/api/Transaction/payment/",
     UPDATE_PAY: "https://book-trading-platform.herokuapp.com/api/Transaction/payment/update?",
     CREATE_URL_PAY_RENT: "https://book-trading-platform.herokuapp.com/api/Transaction/paymentrent/",
-    UPDATE_PAY_RENT: "https://book-trading-platform.herokuapp.com/api/Transaction/paymentrent/update?"
+    UPDATE_PAY_RENT: "https://book-trading-platform.herokuapp.com/api/Transaction/paymentrent/update?",
 })
 
 export const API_MANAGE_USER= Object.freeze({
@@ -178,6 +178,7 @@ export const API_MANAGE_BOOK = Object.freeze({
     DENIED_BOOK: "https://book-trading-platform.herokuapp.com/api/ManageBook/denied/",
     FEEDBACK_BOOK: "https://book-trading-platform.herokuapp.com/api/ManageBook/feedback/",
     DELETE_FEEDBACK: "https://book-trading-platform.herokuapp.com/api/ManageBook/delete-feedback/",
+    DASHBOARD: "https://book-trading-platform.herokuapp.com/api/ManageBook/dashBoard",
 })
 
 export const API_MANAGE_TRANSACTION= Object.freeze({
@@ -207,4 +208,5 @@ export const API_MANAGE_TRANSACTION= Object.freeze({
     HANDLE_TRADE_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/trading/",
     HANDLE_COMPLETE_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/complete/",
     UPDATE_DETAIL_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent-detail/update-status/",
+    DASHBOARD: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/dashBoard"
 })
