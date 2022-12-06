@@ -183,7 +183,6 @@ export default {
       }
     },
     getPostsAll(pageNumber) {
-      this.spinner = true
       if(this.search){
         apiFactory.callApi(API_MANAGE_POST.SEARCH_POST + pageNumber, 'POST', {
           search: this.search
@@ -191,7 +190,6 @@ export default {
           this.listPosts = res.data.data
           this.totalPosts = res.data.numberOfRecords
           this.page = pageNumber
-          this.spinner = false
         }).catch(() => {
         });
       }
@@ -200,46 +198,38 @@ export default {
           this.listPosts = res.data.data
           this.totalPosts = res.data.numberOfRecords
           this.page = pageNumber
-          this.spinner = false
       }).catch(() => {
       });
       }
     },
     getPostsApproved(pageNumber) {
-      this.spinner = true
       this.isSearch = false;
       apiFactory.callApi(API_MANAGE_POST.LIST_POST_APPROVED + pageNumber, 'GET', {}).then((res) => {
         this.listPosts = res.data.data
         this.totalPosts = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     getPostsDenied(pageNumber) {
-      this.spinner = true
       this.isSearch = false;
       apiFactory.callApi(API_MANAGE_POST.LIST_POST_DENIED + pageNumber, 'GET', {}).then((res) => {
         this.listPosts = res.data.data
         this.totalPosts = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     getPostsWaiting(pageNumber) {
-      this.spinner = true
       this.isSearch = false;
       apiFactory.callApi(API_MANAGE_POST.LIST_POST_WAITING + pageNumber, 'GET', {}).then((res) => {
         this.listPosts = res.data.data
         this.totalPosts = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     HandleApproved(id) {
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_POST.APPROVED_POST + id, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
           if(this.filter === ''){
@@ -263,7 +253,6 @@ export default {
       });
     },
     HandleDenied(id) {
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_POST.DENIED_POST + id, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
           if(this.filter === ''){
@@ -297,10 +286,8 @@ export default {
       return this.getPostsAll(1)
     },
     getPostById(postId){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_POST.DETAIL_POST + postId, 'GET', {}).then((res) => {
         this.post = res.data.data
-        this.spinner = false
         this.showDialogPD = true
       }).catch(() => {
       });

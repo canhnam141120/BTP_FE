@@ -199,7 +199,6 @@ export default {
   },
   methods: {
     getInformation() {
-      this.spinner = true
       apiFactory.callApi(API_PERSONAL.INFORMATION, 'POST', {
         userId: this.$route.query.id
       }).then((res) => {
@@ -208,7 +207,6 @@ export default {
           if (this.$cookies.get('token')) {
             this.CheckLike()
           }
-          this.spinner = false
         } else {
           this.$router.push({name: "404Page"})
         }
@@ -276,7 +274,6 @@ export default {
       return this.getPost(1)
     },
     HandleLike() {
-      this.spinner = true
       this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.ADD_USER_FAVORITE + this.$route.query.id, 'POST', {
         userId: this.userByToken.UserId
@@ -284,14 +281,11 @@ export default {
         if (res.data.message == 'ADD_SUCCESS') {
           this.getInformation()
           this.checkLike = true
-          this.spinner = false;
         }
-        this.spinner = false;
       }).catch(() => {
       });
     },
     HandleUnLike() {
-      this.spinner = true
       this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.DELETE_USER_FAVORITE + this.$route.query.id, 'DELETE', {
         userId: this.userByToken.UserId
@@ -300,7 +294,6 @@ export default {
           this.getInformation()
           this.checkLike = false
         }
-        this.spinner = false
       }).catch(() => {
       });
     },
@@ -453,7 +446,6 @@ strong {
   border: white;
   align-items: center;
   text-decoration: none;
-  transition: all 0.4s ease;
   background: #9D6B54;
   justify-content: center;
   color: #F0ECE4;

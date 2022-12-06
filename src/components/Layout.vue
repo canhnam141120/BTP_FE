@@ -55,8 +55,9 @@
                 </template>
                 <div class="titleNoti">Thông Báo</div>
                 <div v-for="item of noti" :key="item.id" class="notification">
-                  "{{item.content}}"
-                  <hr style="margin-top: 0px; margin-bottom: 10px">
+                  <div v-if="!item.isRead" style="background-color: #F0ECE4; height: 25px; padding-left: 10px; padding-top: 5px">"{{item.content}}"</div>
+                  <div v-else style="padding-left: 10px;height: 25px;padding-top: 5px;">"{{item.content}}"</div>
+                  <hr style="margin-top: 0px; margin-bottom: 0px">
                 </div>
                 <div class="allNoti"><router-link class="linkAllNoti" to="AllNotification">Xem tất cả</router-link></div>
               </b-dropdown>
@@ -695,8 +696,9 @@ export default {
 }
 
 .notification{
-  width: 500px;
-  margin-right: 30px;
+  width: 550px;
+  margin-right: 10px;
+  margin-left: 10px;
   color: #9d6b54;
   font-size: 12px;
   display: block;

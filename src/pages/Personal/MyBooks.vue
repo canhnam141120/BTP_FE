@@ -1,7 +1,6 @@
 <template>
   <Layout>
     <main style="flex-grow: 1">
-      <LoadingDialog v-show="spinner" style="z-index: 999999"></LoadingDialog>
       <CreateBookDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
         <div>
           <div class="dialogTitle">ĐĂNG SÁCH</div>
@@ -60,7 +59,7 @@
             <b-row class="book-content">
               <b-col class="input-label" cols="2">Chọn ảnh:</b-col>
               <b-col class="input-div" cols="6"><input type="file" title=" " class="input-text-short" name="image"
-                                                       @change="handleFileUpload"></b-col>
+                                                       @change="uploadImage"></b-col>
             </b-row>
           </div>
           <div class="right-form">
@@ -95,14 +94,14 @@
             <b-col class="input-label" style="width: 60px" cols="2">Trạng thái:</b-col>
             <b-col class="input-div" cols="9">
               <textarea type="text" style="height: 100px; width: 1200px"
-                        maxlength="50" required placeholder="Nhập trạng thái"
+                        maxlength="250" required placeholder="Nhập trạng thái"
                         v-model="statusBook" class="input-text">
               </textarea></b-col>
           </b-row>
           <b-row class="book-content">
             <b-col class="input-label" style="width: 60px" cols="2">Nội dung:</b-col>
             <b-col class="input-div" cols="9">
-              <textarea type="text" maxlength="500" required style="height: 100px; width: 1200px"
+              <textarea type="text" required style="height: 100px; width: 1200px"
                         placeholder="Nhập mô tả nội dung sách"
                         v-model="description" class="input-text">
             </textarea></b-col>
@@ -268,14 +267,13 @@ import SideBar_Personal from "../../components/SideBar_Personal";
 import VueJwtDecode from "vue-jwt-decode";
 import {Icon} from '@iconify/vue2';
 import CreateBookDialog from "@/pages/Personal/CreateBookDialog";
-import LoadingDialog from "@/components/LoadingDialog";
+import {generateURLUpload} from "@/S3";
 
 export default {
   name: "MyBooks",
-  components: {SideBar_Personal, Layout, Icon, CreateBookDialog, LoadingDialog},
+  components: {SideBar_Personal, Layout, Icon, CreateBookDialog},
   data() {
     return {
-      spinner: false,
       responseFlag: true,
       responseMessage: '',
       dismissSecs: 5,
@@ -423,7 +421,6 @@ export default {
       this.showDialog = false
     },
     save() {
-      this.spinner = true
       this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_BOOK.CREATE_BOOK, 'POST', {
         image: this.imageSrc,
@@ -445,6 +442,7 @@ export default {
         rentFee: this.rentFee
       }).then((res) => {
         if (res.data.message === 'CREATE_SUCCESS') {
+          this.getMyBooks(1)
           this.responseFlag = true
           this.responseMessage = 'Sách của bạn đã được gửi cho QTV để duyệt!'
         }
@@ -454,16 +452,15 @@ export default {
         }
         this.dismissCountDown = this.dismissSecs
         this.showDialog = false
-        this.spinner = false
       }).catch(() => {
         this.dismissCountDown = this.dismissSecs
         this.responseFlag = false
         this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
         this.showDialog = false
-        this.spinner = false
       });
     },
-    handleFileUpload(e) {
+
+    /*handleFileUpload(e) {
       const file = document.querySelector('input[type=file]').files[0]
       var files = e.target.files
       if (!files[0]) {
@@ -478,7 +475,23 @@ export default {
       }
       console.log(this.imageSrc)
       reader.readAsDataURL(file);
+    },*/
+
+    async uploadImage(){
+      const image = document.querySelector('input[type=file]').files[0]
+      const url = await generateURLUpload(image.name)
+      await  fetch(url,{
+        method: "PUT",
+        headers: {
+          "Content-Type": "image/jpeg"
+        },
+        body: image
+      })
+
+      const  url_uploaded = url.split("?")[0]
+      this.imageSrc  = url_uploaded
     },
+
     HandleSearch() {
       if (!this.search) {
         this.filter= 'Tất Cả'

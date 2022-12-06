@@ -81,10 +81,8 @@ export default {
   },
   methods: {
     getFees() {
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_FEE.LIST_FEE, 'GET', {}).then((res) => {
         this.listFees = res.data.data
-        this.spinner = false
       }).catch(() => {
       });
     },

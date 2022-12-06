@@ -1,7 +1,6 @@
 <template>
   <Side_Bar>
     <div class="ml">
-      <LoadingDialog v-show="spinner" style="z-index: 1;"></LoadingDialog>
       <Dashboard></Dashboard>
       <div class="row">
         <ConfirmDialog :show="showConfirmDialog" v-if="showConfirmDialog" class="modal">
@@ -71,14 +70,13 @@
 import apiFactory from "@/config/apiFactory";
 import {API_MANAGE_ADMIN} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
-import LoadingDialog from "@/components/LoadingDialog";
 import {Icon} from '@iconify/vue2';
 import Dashboard from "@/components/Dashboard";
 import ConfirmDialog from "@/components/ConfirmDialog";
 
 export default {
   name: "GetAdmins",
-  components: {Side_Bar,Dashboard, LoadingDialog, Icon, ConfirmDialog},
+  components: {Side_Bar,Dashboard, Icon, ConfirmDialog},
   data() {
     return {
       responseFlag: true,
@@ -90,7 +88,6 @@ export default {
 
       listAdmins: '',
       search: '',
-      spinner: false,
       isSearch: false,
     }
   },
@@ -102,19 +99,16 @@ export default {
   },
   methods: {
     getAdmins() {
-      this.spinner = true
       if(this.search){
         apiFactory.callApi(API_MANAGE_ADMIN.SEARCH_ADMIN, 'POST', {
           search: this.search
         }).then((res) => {
           this.listAdmins = res.data.data
-          this.spinner = false
         }).catch(() => {
         });
       }else{
         apiFactory.callApi(API_MANAGE_ADMIN.LIST_ADMIN, 'GET', {}).then((res) => {
           this.listAdmins = res.data.data
-          this.spinner = false
         }).catch(() => {
         });
       }
@@ -127,7 +121,6 @@ export default {
       this.showConfirmDialog = false
     },
     HandleConfirm(){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_ADMIN.REMOVE_ADMIN + this.tmpId , 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
           this.getAdmins()
@@ -139,7 +132,6 @@ export default {
         }
         this.dismissCountDown = this.dismissSecs
         this.showConfirmDialog = false
-        this.spinner = false
       }).catch(() => {
       });
     },

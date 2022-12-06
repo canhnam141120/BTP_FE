@@ -1,7 +1,6 @@
 <template>
   <Layout>
     <main style="flex-grow: 1">
-      <LoadingDialog v-show="spinner" style="z-index: 999"></LoadingDialog>
       <div class="myFVR">
         <div class="containerMF">
           <div class="left-contentMF">
@@ -200,11 +199,10 @@ import apiFactory from "@/config/apiFactory";
 import {API_PERSONAL} from "@/constant/constant-api";
 import VueJwtDecode from "vue-jwt-decode";
 import {Icon} from '@iconify/vue2';
-import LoadingDialog from "@/components/LoadingDialog";
 
 export default {
   name: "MyFavorites",
-  components: {SideBar_Personal, Layout, Icon, LoadingDialog},
+  components: {SideBar_Personal, Layout, Icon},
   data(){
     return{
       loading: false,
@@ -222,8 +220,7 @@ export default {
       isSearchUser: false,
       pageUser: 1,
       listUser: '',
-      totalUser: '',
-      spinner: false
+      totalUser: ''
     }
   },
   created() {
@@ -274,7 +271,6 @@ export default {
       });
     },
     HandleUnlikeBook(bookId){
-      this.spinner = true
       let token = this.$cookies.get('token');
       this.userByToken = VueJwtDecode.decode(token, 'utf-8');
       apiFactory.callApi(API_PERSONAL.DELETE_BOOK_FAVORITE + bookId, 'DELETE', {
@@ -282,13 +278,11 @@ export default {
       }).then((res) => {
         if(res.data.message == 'DELETE_SUCCESS'){
           this.getBookFavorite(this.pageBook)
-          this.spinner = false;
         }
       }).catch(() => {
       });
     },
     HandleUnlikePost(postId){
-      this.spinner = true
       let token = this.$cookies.get('token');
       this.userByToken = VueJwtDecode.decode(token, 'utf-8');
       apiFactory.callApi(API_PERSONAL.DELETE_POST_FAVORITE + postId, 'DELETE', {
@@ -296,13 +290,11 @@ export default {
       }).then((res) => {
         if(res.data.message == 'DELETE_SUCCESS'){
           this.getPostFavorite(this.pagePost)
-          this.spinner = false;
         }
       }).catch(() => {
       });
     },
     HandleUnlikeUser(userId){
-      this.spinner = true
       let token = this.$cookies.get('token');
       this.userByToken = VueJwtDecode.decode(token, 'utf-8');
       apiFactory.callApi(API_PERSONAL.DELETE_USER_FAVORITE + userId, 'DELETE', {
@@ -310,7 +302,6 @@ export default {
       }).then((res) => {
         if(res.data.message == 'DELETE_SUCCESS'){
           this.getUserFavorite(this.pageUser)
-          this.spinner = false;
         }
       }).catch(() => {
       });

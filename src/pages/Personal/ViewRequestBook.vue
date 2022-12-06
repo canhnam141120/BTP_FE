@@ -93,7 +93,7 @@
               <b-row class="book-content">
                 <b-col class="input-label" cols="2">Chọn ảnh:</b-col>
                 <b-col class="input-div" cols="6"><input type="file" title=" " class="input-text-short"
-                                                         @change="handleFileUpload"></b-col>
+                                                         @change="uploadImage"></b-col>
               </b-row>
             </div>
             <div class="right-form">
@@ -128,7 +128,7 @@
               <b-col class="input-label" style="width: 60px" cols="2">Tình trạng:</b-col>
               <b-col class="input-div" cols="9">
               <textarea type="text" style="height: 100px; width: 1200px"
-                        maxlength="50" required placeholder="Nhập tình trạng sách"
+                        maxlength="250" required placeholder="Nhập tình trạng sách"
                         v-model="book.statusBook" class="input-text">
               </textarea></b-col>
             </b-row>
@@ -231,6 +231,7 @@ import VueJwtDecode from "vue-jwt-decode";
 import LoadingDialog from "@/components/LoadingDialog";
 import CreateBookDialog from "@/pages/Personal/CreateBookDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import {generateURLUpload} from "@/S3";
 
 export default {
   name: "ViewRequestBook",
@@ -265,11 +266,9 @@ export default {
   },
   methods: {
     getBookById() {
-      this.spinner = true
       const url = API_MANAGE_BOOK.DETAIL_BOOK + this.$route.query.id
       apiFactory.callApi(url, 'GET', {}).then((res) => {
         this.book = res.data.data
-        this.spinner = false
       }).catch(() => {
       });
     },
@@ -293,7 +292,6 @@ export default {
       this.showConfirmDialogHide = false
     },
     HandleConfirmHide(){
-      this.spinner = true
       const url = API_BOOK.HIDE_BOOK + this.tmpId
       apiFactory.callApi(url, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
@@ -306,7 +304,6 @@ export default {
         this.dismissCountDown = this.dismissSecs
         this.getBookById()
         this.showConfirmDialogHide = false
-        this.spinner = false
       }).catch(() => {
       });
     },
@@ -318,7 +315,6 @@ export default {
       this.showConfirmDialogShow = false
     },
     HandleConfirmShow(){
-      this.spinner = true
       const url = API_BOOK.SHOW_BOOK + this.tmpId
       apiFactory.callApi(url, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
@@ -331,7 +327,6 @@ export default {
         this.getBookById()
         this.dismissCountDown = this.dismissSecs
         this.showConfirmDialogShow = false
-        this.spinner = false
       }).catch(() => {
       });
     },
@@ -343,7 +338,6 @@ export default {
       this.showDialog = false
     },
     save() {
-      this.spinner = true
       apiFactory.callApi(API_BOOK.EDIT_BOOK + this.book.id, 'PUT', {
         categoryId: this.book.categoryId,
         title: this.book.title,
@@ -372,11 +366,10 @@ export default {
         }
         this.dismissCountDown = this.dismissSecs
         this.showDialog = false
-        this.spinner = false
       }).catch(() => {
       });
     },
-    handleFileUpload(e) {
+/*    handleFileUpload(e) {
       const file = document.querySelector('input[type=file]').files[0]
       var files = e.target.files
       if (!files[0]) {
@@ -390,6 +383,21 @@ export default {
         this.book.image = rawImg
       }
       reader.readAsDataURL(file);
+    },*/
+
+    async uploadImage(){
+      const image = document.querySelector('input[type=file]').files[0]
+      const url = await generateURLUpload(image.name)
+      await  fetch(url,{
+        method: "PUT",
+        headers: {
+          "Content-Type": "image/jpeg"
+        },
+        body: image
+      })
+
+      const  url_uploaded = url.split("?")[0]
+      this.book.image  = url_uploaded
     },
 
     HandleApproved(requestId){
@@ -574,7 +582,7 @@ strong {
 
 .right-contentVR .topVR .right .bookInfoBD{
   width: 70%;
-  height: 300px;
+  height: auto;
   margin-left: 20px;
   margin-top: 10px;
   display: block;

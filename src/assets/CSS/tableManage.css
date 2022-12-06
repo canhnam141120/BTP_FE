@@ -383,8 +383,7 @@ strong {
 }
 
 .table-data {
-    height: 600px;
-    overflow: auto;
+    min-height: 100vh;
 }
 
 .table-data thead tr td {

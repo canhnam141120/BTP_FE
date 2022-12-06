@@ -332,7 +332,6 @@ export default {
       }
     },
     getRents(pageNumber) {
-      this.spinner = true
       if(this.isSearch){
         apiFactory.callApi(API_MANAGE_TRANSACTION.SEARCH_RENT + pageNumber, 'POST', {
           id: this.search
@@ -340,7 +339,6 @@ export default {
           this.listRents = res.data.data
           this.totalRents = res.data.numberOfRecords
           this.page = pageNumber
-          this.spinner = false
         }).catch(() => {
         });
       }else{
@@ -348,48 +346,39 @@ export default {
           this.listRents = res.data.data
           this.totalRents = res.data.numberOfRecords
           this.page = pageNumber
-          this.spinner = false
         }).catch(() => {
         });
       }
     },
     getRentWaiting(pageNumber){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_TRANSACTION.WAITING_RENT + pageNumber, 'GET', {}).then((res) => {
         this.listRents = res.data.data
         this.totalRents = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     getRentTrading(pageNumber){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_TRANSACTION.TRADING_RENT + pageNumber, 'GET', {}).then((res) => {
         this.listRents = res.data.data
         this.totalRents = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     getRentComplete(pageNumber){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_TRANSACTION.COMPLETE_RENT + pageNumber, 'GET', {}).then((res) => {
         this.listRents = res.data.data
         this.totalRents = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     getRentCancel(pageNumber){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_TRANSACTION.CANCEL_RENT + pageNumber, 'GET', {}).then((res) => {
         this.listRents = res.data.data
         this.totalRents = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
@@ -470,7 +459,6 @@ export default {
       this.showDialogUR = false;
     },
     saveUR(){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_TRANSACTION.UPDATE_STATUS_RENT + this.rent.id, 'PUT', {
         storageStatus: this.rent.storageStatus,
         sendDate: this.rent.sendDate,
@@ -518,7 +506,6 @@ export default {
       });
     },
     HandleCanCelRent(rentId){
-      this.spinner = true
       apiFactory.callApi(API_TRANSACTION.CANCEL_RENT + rentId, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
           if(this.filter === ''){

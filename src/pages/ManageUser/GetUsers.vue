@@ -230,7 +230,6 @@ export default {
       }
     },
     getUsersAll(pageNumber) {
-      this.spinner = true
       if(this.search){
         apiFactory.callApi(API_MANAGE_USER.SEARCH_USER + pageNumber, 'POST', {
           search: this.search
@@ -238,7 +237,6 @@ export default {
           this.listUsers = res.data.data
           this.totalUsers = res.data.numberOfRecords
           this.page = pageNumber
-          this.spinner = false
         }).catch(() => {
         });
       }
@@ -247,28 +245,23 @@ export default {
           this.listUsers = res.data.data
           this.totalUsers = res.data.numberOfRecords
           this.page = pageNumber
-          this.spinner = false
         }).catch(() => {
         });
       }
     },
     getUsersBan(pageNumber) {
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_USER.LIST_BAN_USER + pageNumber, 'GET', {}).then((res) => {
         this.listUsers = res.data.data
         this.totalUsers = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     getUsersActive(pageNumber) {
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_USER.LIST_ACTIVE_USER + pageNumber, 'GET', {}).then((res) => {
         this.listUsers = res.data.data
         this.totalUsers = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
@@ -280,7 +273,6 @@ export default {
       this.showConfirmDialogBan = false
     },
     HandleConfirmBan(){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_USER.BAN_USER + this.tmpId, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
           this.responseFlag = true
@@ -303,7 +295,6 @@ export default {
         }
         this.dismissCountDown = this.dismissSecs
         this.showConfirmDialogBan = false
-        this.spinner = false
       }).catch(() => {
       });
     },
@@ -315,7 +306,6 @@ export default {
       this.showConfirmDialogActive = false
     },
     HandleConfirmActive(){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_USER.ACTIVE_USER + this.tmpId, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
           this.responseFlag = true
@@ -338,7 +328,6 @@ export default {
         }
         this.dismissCountDown = this.dismissSecs
         this.showConfirmDialogActive = false
-        this.spinner = false
       }).catch(() => {
       });
     },
@@ -351,7 +340,6 @@ export default {
     },
     HandleConfirm(){
       window.scroll(0,0)
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_USER.AUTHORITY_USER + this.tmpId, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
           this.responseFlag = true
@@ -374,7 +362,6 @@ export default {
         }
         this.dismissCountDown = this.dismissSecs
         this.showConfirmDialog = false
-        this.spinner = false
       }).catch(() => {
       });
     },

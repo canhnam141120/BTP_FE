@@ -107,7 +107,6 @@ export default {
   methods: {
     getAllNoti(pageNumber) {
       window.scroll(0 , 0)
-      this.spinner = true
       this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.NOTIFICATION + '?page=' + pageNumber, 'POST', {
         userId: this.userByToken.UserId
@@ -115,13 +114,11 @@ export default {
         this.listNoti = res.data.data
         this.totalNoti = res.data.numberOfRecords
         this.pageAll = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     getAllNotiNotRead(pageNumber) {
       window.scroll(0 , 0)
-      this.spinner = true
       this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.NOTIFICATION_NOT_READ + '?page=' + pageNumber, 'POST', {
         userId: this.userByToken.UserId
@@ -129,12 +126,10 @@ export default {
         this.listNotiNotRead = res.data.data
         this.totalNotiNotRead = res.data.numberOfRecords
         this.pageNotRead = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     markReadAll(){
-      this.spinner = true
       this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.MARK_READ_NOTIFICATION_ALL, 'PUT', {
         userId: this.userByToken.UserId
@@ -143,12 +138,10 @@ export default {
           this.getAllNoti(this.pageAll)
           this.getAllNotiNotRead(this.pageNotRead)
         }
-        this.spinner = false
       }).catch(() => {
       });
     },
     markRead(id){
-      this.spinner = true
       this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.MARK_READ_NOTIFICATION + id, 'PUT', {
         userId: this.userByToken.UserId
@@ -157,7 +150,6 @@ export default {
           this.getAllNoti(this.pageAll)
           this.getAllNotiNotRead(this.pageNotRead)
         }
-        this.spinner = false
       }).catch(() => {
       });
     }

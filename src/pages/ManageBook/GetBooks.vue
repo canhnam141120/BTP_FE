@@ -248,7 +248,7 @@ export default {
       }
     },
     getBooksAll(pageNumber) {
-      this.spinner = true
+      window.scroll(0,0)
       if (this.isSearch) {
         apiFactory.callApi(API_MANAGE_BOOK.SEARCH_BOOK + pageNumber, 'POST', {
           search: this.search
@@ -256,7 +256,6 @@ export default {
           this.listBooks = res.data.data
           this.totalBook = res.data.numberOfRecords
           this.page = pageNumber
-          this.spinner = false
         }).catch(() => {
         });
       }
@@ -265,46 +264,41 @@ export default {
           this.listBooks = res.data.data
           this.totalBook = res.data.numberOfRecords
           this.page = pageNumber
-          this.spinner = false
         }).catch(() => {
         });
       }
     },
     getBooksApproved(pageNumber) {
-      this.spinner = true
+      window.scroll(0,0)
       this.isSearch = false;
       apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK_APPROVED + pageNumber, 'GET', {}).then((res) => {
         this.listBooks = res.data.data
         this.totalBook = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     getBooksDenied(pageNumber) {
-      this.spinner = true
+      window.scroll(0,0)
       this.isSearch = false;
       apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK_DENIED + pageNumber, 'GET', {}).then((res) => {
         this.listBooks = res.data.data
         this.totalBook = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     getBooksWaiting(pageNumber) {
-      this.spinner = true
+      window.scroll(0,0)
       this.isSearch = false;
       apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK_WAITING + pageNumber, 'GET', {}).then((res) => {
         this.listBooks = res.data.data
         this.totalBook = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     HandleApproved(id) {
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_BOOK.APPROVED_BOOK + id, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
           if(this.filter === ''){
@@ -328,7 +322,7 @@ export default {
       });
     },
     HandleDenied(id) {
-      this.spinner = true
+
       apiFactory.callApi(API_MANAGE_BOOK.DENIED_BOOK + id, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
           if(this.filter === ''){
@@ -352,21 +346,17 @@ export default {
       });
     },
     getBookById(bookId) {
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_BOOK.DETAIL_BOOK + bookId, 'GET', {}).then((res) => {
         this.book = res.data.data
-        this.spinner = false
         this.showDialogBD = true
       }).catch(() => {
       });
     },
     getFeedback(bookId) {
-      this.spinner = true
       const url = API_MANAGE_BOOK.FEEDBACK_BOOK + bookId
       apiFactory.callApi(url, 'GET', {}).then((res) => {
         this.listFeedbacks = res.data.data
         this.totalFeedbacks = res.data.numberOfRecords
-        this.spinner = false
         this.showDialogFB = true
       }).catch(() => {
       });

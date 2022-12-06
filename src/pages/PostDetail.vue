@@ -94,7 +94,6 @@ export default {
   },
   methods: {
     getPostById() {
-      this.spinner = true
       const url = API_POST.DETAIL_POST+ this.$route.query.id
       apiFactory.callApi(url,'GET',{}).then((res)=>{
         if(res.data.data){
@@ -103,7 +102,6 @@ export default {
         }else{
           this.$router.push({name: "404Page"})
         }
-        this.spinner = false
       }).catch(() => {
       });
     },
@@ -140,7 +138,6 @@ export default {
       this.getPostById()
     },
     HandleLike() {
-      this.spinner = true
       this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.ADD_POST_FAVORITE + this.$route.query.id, 'POST', {
         userId: this.userByToken.UserId
@@ -149,12 +146,10 @@ export default {
           this.getPostById()
           this.checkLike = true
         }
-        this.spinner = false;
       }).catch(() => {
       });
     },
     HandleUnLike() {
-      this.spinner = true
       this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.DELETE_POST_FAVORITE + this.$route.query.id, 'DELETE', {
         userId: this.userByToken.UserId
@@ -163,7 +158,6 @@ export default {
           this.getPostById()
           this.checkLike = false
         }
-        this.spinner = false
       }).catch(() => {
       });
     },
@@ -346,7 +340,7 @@ strong {
 .imgPD{
   margin-left: auto;
   margin-right: auto;
-  width: 40%;
+  width: 70%;
   height: auto;
   border: 1px solid grey;
 }

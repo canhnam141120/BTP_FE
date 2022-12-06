@@ -2,7 +2,6 @@
   <Layout>
     <main style="flex-grow: 1">
       <div class="MI">
-        <LoadingDialog v-show="spinner" style="z-index: 999999"></LoadingDialog>
         <ChangePassDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
           <div class="dialogBody">
             <label class="labelPass">Mật khẩu cũ: </label>
@@ -79,7 +78,7 @@
                     <Icon icon="mdi:password-reset" style="width: 20px; height: 20px; margin-right: 5%"/>Đổi mật khẩu</button>
                 </div>
                 <div>
-                  <input type="file" hidden accept="image/*" ref="file" @change="handleFileUpload"/>
+                  <input type="file" hidden accept="image/*" ref="file" @change="uploadImage"/>
                   <button v-if="!showUpload" class="imgBtn" v-on:click="browse"><Icon icon="material-symbols:flip-camera-ios"/></button>
                   <button v-else class="imgBtn" v-on:click="HandleEdit"><Icon icon="dashicons:saved"/></button>
                   <img class="imgMI" v-bind:src="info.avatar">
@@ -128,15 +127,14 @@ import Layout from "@/components/Layout";
 import VueJwtDecode from "vue-jwt-decode";
 import {Icon} from '@iconify/vue2';
 import ChangePassDialog from "@/pages/Personal/ChangePassDialog";
-import LoadingDialog from "@/components/LoadingDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import {generateURLUpload} from "@/S3";
 
 export default {
   name: "MyInformation",
-  components: {SideBar_Personal, Layout, Icon, ChangePassDialog, LoadingDialog, ConfirmDialog},
+  components: {SideBar_Personal, Layout, Icon, ChangePassDialog, ConfirmDialog},
   data() {
     return {
-      spinner: false,
       responseFlag: true,
       responseMessage: '',
       dismissSecs: 5,
@@ -194,7 +192,6 @@ export default {
       this.showConfirmDialogShip = false
     },
     HandleConfirmShip(){
-      this.spinner = true
       window.scroll(0,0)
       this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.EDIT_SHIP_INFO, 'PUT', {
@@ -220,13 +217,11 @@ export default {
           this.responseMessage = 'Có lỗi xảy ra, vui lòng thử lại!!'
         }
         this.dismissCountDown = this.dismissSecs
-        this.spinner = false
         this.showConfirmDialogShip = false
       }).catch(() => {
       });
     },
     HandleEdit(){
-      this.spinner = true
       this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.EDIT_INFORMATION, 'PUT', {
         userId: this.userByToken.UserId,
@@ -245,7 +240,6 @@ export default {
         this.dismissCountDown = this.dismissSecs
         this.edit = false
         this.showUpload = false
-        this.spinner = false
       }).catch(() => {
       });
     },
@@ -264,6 +258,24 @@ export default {
       }
       reader.readAsDataURL(file);
     },
+
+    async uploadImage(){
+      const image = document.querySelector('input[type=file]').files[0]
+      const url = await generateURLUpload(image.name)
+      console.log(url)
+      await  fetch(url,{
+        method: "PUT",
+        headers: {
+          "Content-Type": "image/jpeg"
+        },
+        body: image
+      })
+
+      const  url_uploaded = url.split("?")[0]
+      console.log(url_uploaded)
+      this.info.avatar = url_uploaded
+    },
+
     browse(){
       this.$refs.file.click();
       this.showUpload = true
@@ -281,7 +293,6 @@ export default {
       this.showConfirmDialog = false
     },
     HandleConfirm(){
-      this.spinner = true
       this.err = ''
       this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.CHANGE_PASSWORD, 'PUT', {
@@ -308,7 +319,6 @@ export default {
             this.showDialog = false
           }
         }
-        this.spinner = false
       }).catch(() => {
       });
     },

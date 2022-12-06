@@ -377,7 +377,6 @@ export default {
       }
     },
     getExchanges(pageNumber) {
-      this.spinner = true
       if(this.isSearch){
         apiFactory.callApi(API_MANAGE_TRANSACTION.SEARCH_EXCHANGE + pageNumber, 'POST', {
           id: this.search
@@ -385,7 +384,6 @@ export default {
           this.listExchanges = res.data.data
           this.totalExchanges = res.data.numberOfRecords
           this.page = pageNumber
-          this.spinner = false
         }).catch(() => {
         });
       }else{
@@ -393,48 +391,39 @@ export default {
           this.listExchanges = res.data.data
           this.totalExchanges = res.data.numberOfRecords
           this.page = pageNumber
-          this.spinner = false
         }).catch(() => {
         });
       }
     },
     getExchangeWaiting(pageNumber){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_TRANSACTION.WAITING_EXCHANGE + pageNumber, 'GET', {}).then((res) => {
         this.listExchanges = res.data.data
         this.totalExchanges = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     getExchangeTrading(pageNumber){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_TRANSACTION.TRADING_EXCHANGE + pageNumber, 'GET', {}).then((res) => {
         this.listExchanges = res.data.data
         this.totalExchanges = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     getExchangeComplete(pageNumber){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_TRANSACTION.COMPLETE_EXCHANGE + pageNumber, 'GET', {}).then((res) => {
         this.listExchanges = res.data.data
         this.totalExchanges = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     getExchangeCancel(pageNumber){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_TRANSACTION.CANCEL_EXCHANGE + pageNumber, 'GET', {}).then((res) => {
         this.listExchanges = res.data.data
         this.totalExchanges = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
@@ -515,7 +504,6 @@ export default {
       this.showDialogUE = false;
     },
     saveUE(){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_TRANSACTION.UPDATE_STATUS_EXCHANGE + this.exchange.id, 'PUT', {
         storageStatus1: this.exchange.storageStatus1,
         storageStatus2: this.exchange.storageStatus2,
@@ -570,7 +558,6 @@ export default {
       });
     },
     HandleCanCelExchange(exchangeId){
-      this.spinner = true
       apiFactory.callApi(API_TRANSACTION.CANCEL_EXCHANGE + exchangeId, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
           if(this.filter === ''){

@@ -354,12 +354,10 @@ export default {
   },
   methods: {
     getBookById(pageNumber) {
-      this.spinner = true
       const url = API_BOOK.DETAIL_BOOK + this.$route.query.id
       apiFactory.callApi(url, 'GET', {}).then((res) => {
         if(res.data.data){
           this.book = res.data.data
-          this.spinner = false
           this.get6BookUser(this.book.userId)
           this.get6BookCategory(this.book.categoryId)
           this.getFeedback(this.$route.query.id, pageNumber)
@@ -513,7 +511,6 @@ export default {
       });
     },
     HandleLike() {
-      this.spinner = true
       this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.ADD_BOOK_FAVORITE + this.$route.query.id, 'POST', {
         userId: this.userByToken.UserId
@@ -522,12 +519,10 @@ export default {
           this.getBookById(1)
           this.checkLike = true
         }
-        this.spinner = false;
       }).catch(() => {
       });
     },
     HandleUnLike() {
-      this.spinner = true
       this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.DELETE_BOOK_FAVORITE + this.$route.query.id, 'DELETE', {
         userId: this.userByToken.UserId
@@ -536,7 +531,6 @@ export default {
           this.getBookById(1)
           this.checkLike = false
         }
-        this.spinner = false
       }).catch(() => {
       });
     },

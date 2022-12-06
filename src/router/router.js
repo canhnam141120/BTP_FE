@@ -139,26 +139,6 @@ const routers = [
         component: () => import('@/pages/ManageUser/GetUsers'),
     },
     {
-        path:'/ManageBill/exchange-bill',
-        name:'GetExchangeBills',
-        component: () => import('@/pages/ManageBill/GetExchangeBills'),
-    },
-    {
-        path:'/ManageBill/exchange-bill/detail',
-        name:'DetailExchangeBill',
-        component: () => import('@/pages/ManageBill/DetailExchangeBill'),
-    },
-    {
-        path:'/ManageBill/rent-bill',
-        name:'GetRentBills',
-        component: () => import('@/pages/ManageBill/GetRentBills'),
-    },
-    {
-        path:'/ManageBill/rent-bill/detail',
-        name:'DetailRentBill',
-        component: () => import('@/pages/ManageBill/DetailRentBill'),
-    },
-    {
         path:'/ManageTransaction/exchange',
         name:'GetExchanges',
         component: () => import('@/pages/ManageTransaction/GetExchanges'),

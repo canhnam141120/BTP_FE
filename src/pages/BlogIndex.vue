@@ -29,7 +29,7 @@
               <b-row class="post-content">
                 <b-col class="input-label" cols="2">Chọn ảnh:</b-col>
                 <b-col class="input-div" cols="6"><input type="file" title=" " class="input-text-short" name="image"
-                                                         @change="handleFileUpload"></b-col>
+                                                         @change="uploadImage"></b-col>
               </b-row>
               <img v-bind:src="imageSrc" style="width: 300px; height: 300px; object-fit: scale-down">
             </div>
@@ -125,6 +125,7 @@ import {Icon} from '@iconify/vue2';
 import VueJwtDecode from "vue-jwt-decode";
 import CreatePostDialog from "@/pages/CreatePostDialog";
 import LoadingDialog from "@/components/LoadingDialog";
+import {generateURLUpload} from "@/S3";
 
 export default {
   name: "BlogIndex",
@@ -208,7 +209,6 @@ export default {
       this.showDialog = false
     },
     save(){
-      this.spinner = true
       this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_POST.CREATE_POST, 'POST', {
         image: this.imageSrc,
@@ -226,13 +226,11 @@ export default {
         }
         this.dismissCountDown = this.dismissSecs
         this.showDialog = false
-        this.spinner = false
       }).catch(() => {
         this.dismissCountDown = this.dismissSecs
         this.responseFlag = false
         this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
         this.showDialog = false
-        this.spinner = false
       });
     },
     handleFileUpload(e) {
@@ -250,6 +248,21 @@ export default {
       }
       console.log(this.imageSrc)
       reader.readAsDataURL(file);
+    },
+
+    async uploadImage(){
+      const image = document.querySelector('input[type=file]').files[0]
+      const url = await generateURLUpload(image.name)
+      await  fetch(url,{
+        method: "PUT",
+        headers: {
+          "Content-Type": "image/jpeg"
+        },
+        body: image
+      })
+
+      const  url_uploaded = url.split("?")[0]
+      this.imageSrc  = url_uploaded
     },
 
     countDownChanged(dismissCountDown) {

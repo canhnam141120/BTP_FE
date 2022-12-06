@@ -105,10 +105,8 @@ export default {
   },
   methods: {
     getCategories() {
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_CATEGORY.All_CATEGORY, 'GET', {}).then((res) => {
         this.listCategories = res.data.data
-        this.spinner = false
       }).catch(() => {
       });
     },

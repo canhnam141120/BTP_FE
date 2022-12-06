@@ -30,7 +30,7 @@
                 <b-row class="post-content">
                   <b-col class="input-label" cols="2">Chọn ảnh:</b-col>
                   <b-col class="input-div" cols="6"><input type="file" title=" " class="input-text-short" name="image"
-                                                           @change="handleFileUpload"></b-col>
+                                                           @change="uploadImage"></b-col>
                 </b-row>
                 <img v-bind:src="post.image" style="width: 300px; height: 300px; object-fit: scale-down">
               </div>
@@ -210,6 +210,7 @@ import VueJwtDecode from "vue-jwt-decode";
 import LoadingDialog from "@/components/LoadingDialog";
 import CreatePostDialog from "@/pages/CreatePostDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import {generateURLUpload} from "@/S3";
 
 export default {
   name: "MyPosts",
@@ -346,7 +347,6 @@ export default {
     },
     HandleConfirm() {
       window.scroll(0, 0)
-      this.spinner = true
       apiFactory.callApi(API_POST.HIDE_POST + this.tmpId, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
           this.responseFlag = true
@@ -372,13 +372,11 @@ export default {
         }
         this.dismissCountDown = this.dismissSecs
         this.showConfirmDialog = false
-        this.spinner = false
       }).catch(() => {
         this.responseFlag = false
         this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
         this.dismissCountDown = this.dismissSecs
         this.showConfirmDialog = false
-        this.spinner = false
       });
     },
 
@@ -391,7 +389,6 @@ export default {
     },
     HandleConfirmShow() {
       window.scroll(0, 0)
-      this.spinner = true
       apiFactory.callApi(API_POST.SHOW_POST + this.tmpId, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
           this.responseFlag = true
@@ -413,14 +410,12 @@ export default {
           }
           this.dismissCountDown = this.dismissSecs
           this.showConfirmDialogShow = false
-          this.spinner = false
         }
       }).catch(() => {
         this.responseFlag = false
         this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
         this.dismissCountDown = this.dismissSecs
         this.showConfirmDialogShow = false
-        this.spinner = false
       });
     },
     HandleSearch() {
@@ -434,15 +429,14 @@ export default {
       return this.getMyPosts(1)
     },
     getPostById(postId) {
-      this.spinner = true
       const url = API_MANAGE_POST.DETAIL_POST + postId
       apiFactory.callApi(url, 'GET', {}).then((res) => {
         this.post = res.data.data
-        this.spinner = false
       }).catch(() => {
       });
     },
     openEditPostDialog(postId) {
+      this.post = ''
       this.getPostById(postId)
       this.showDialog = true
     },
@@ -451,7 +445,6 @@ export default {
     },
     save() {
       window.scroll(0,0)
-      this.spinner = true
       const url = API_POST.UPDATE_POST + this.post.id
       apiFactory.callApi(url, 'PUT', {
         title: this.post.title,
@@ -483,11 +476,10 @@ export default {
         }
         this.showDialog = false
         this.dismissCountDown = this.dismissSecs
-        this.spinner = false
       }).catch(() => {
       });
     },
-    handleFileUpload(e) {
+    /*handleFileUpload(e) {
       const file = document.querySelector('input[type=file]').files[0]
       var files = e.target.files
       if (!files[0]) {
@@ -502,6 +494,21 @@ export default {
       }
       console.log(this.imageSrc)
       reader.readAsDataURL(file);
+    },*/
+
+    async uploadImage(){
+      const image = document.querySelector('input[type=file]').files[0]
+      const url = await generateURLUpload(image.name)
+      await  fetch(url,{
+        method: "PUT",
+        headers: {
+          "Content-Type": "image/jpeg"
+        },
+        body: image
+      })
+
+      const  url_uploaded = url.split("?")[0]
+      this.post.image  = url_uploaded
     },
 
     countDownChanged(dismissCountDown) {
