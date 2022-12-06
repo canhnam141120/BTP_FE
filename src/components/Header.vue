@@ -67,19 +67,25 @@
                 <template v-slot:button-content>
                   <img class="icon" v-bind:src="user.avatar">
                 </template>
-                <div class="dropdown-item-top"><Icon class="iconPerson" icon="ic:round-person-pin"/>{{user.fullname}}</div>
+                <div class="dropdown-item-top">
+                  <img class="icon" v-bind:src="user.avatar">
+                  <div>{{user.fullname}}</div>
+                  <div style="color: grey">{{user.email}}</div>
+                </div>
                 <hr style="margin: 5px" />
                 <router-link to="/MyBooks" class="dropdown-item">
-                  Trang cá nhân
+                  <Icon class="iconPerson" icon="ic:round-person-pin"/> Trang cá nhân
                 </router-link>
                 <hr style="margin: 5px" />
                 <div v-if="user.roleId == 1 || user.roleId == 2">
                   <router-link  to="/ManageIndex" class="dropdown-item">
-                    Quản trị
+                    <Icon class="iconPerson" icon="bi:list-task"/> Quản trị
                   </router-link>
                   <hr style="margin: 5px" />
                 </div>
-                <button v-on:click="HandleLogout" class="dropdown-item">Đăng xuất</button>
+                <button v-on:click="HandleLogout" class="dropdown-item">
+                  <Icon class="iconPerson" icon="uil:signout"/> Đăng xuất
+                </button>
               </b-dropdown>
             </li>
           </nav>
@@ -440,6 +446,10 @@ export default {
   top: 50px !important;
 }
 
+.dropdown-item{
+  color: #9d6b54;
+}
+
 .dropdown-item:hover{
   background-color: #9D6B54;
   color: white;
@@ -447,18 +457,17 @@ export default {
 }
 
 .dropdown-item-top{
-  text-transform: uppercase;
-  background-color: #9D6B54;
-  color: white;
-  padding-left: 10px;
+  width: auto;
+  color: #9d6b54;
+  text-align: center;
   border-radius: 5px;
-  height: 30px;
+  height: auto;
   padding-top: 3px;
 }
 
-.dropdown-item-top .iconPerson{
+.iconPerson{
   font-size: 26px;
-  padding-bottom: 5px;
+  margin-right: 15px;
 }
 
 .contact{
