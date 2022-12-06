@@ -52,7 +52,7 @@ export default {
 .topDialog{
   display: flex;
   justify-content: space-between;
-  padding-left: 480px;
+  padding-left: 500px;
   padding-top: 10px;
   padding-right: 10px;
 }

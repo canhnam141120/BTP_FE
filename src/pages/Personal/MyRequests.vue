@@ -11,7 +11,7 @@
       </div>
     </div>
   </ConfirmDialog>
-  <b-alert :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+  <b-alert style="position: absolute; right: 0;" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
     Hủy yêu cầu trao đổi sách - Thành công!
   </b-alert>
   <div class="MR">

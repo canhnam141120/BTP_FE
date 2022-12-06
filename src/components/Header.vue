@@ -8,19 +8,14 @@
           </a>
         </div>
         <div>
-          <nav class="Main__nav">
+          <nav style="padding-left: 50px" class="Main__nav">
             <router-link
                 to="/"
                 class="Main__list__item home"
                 active-color="#9D6B54"
             >Trang Chủ
             </router-link>
-            <router-link
-                to="/AllBooks"
-                class="Main__list__item course-management"
-                active-color="#9D6B54"
-            >Tủ sách
-            </router-link>
+            <router-link to="/AllBooks" class="Main__list__item course-management btnCategory" active-color="#9D6B54">Tủ sách</router-link>
             <router-link
                 to="/BlogIndex"
                 class="Main__list__item class-management"
@@ -28,7 +23,7 @@
             >Trạm đọc
             </router-link>
             <router-link
-                to="/users-management"
+                to="/Policy&Terms"
                 class="Main__list__item musers-management"
                 active-color="#9D6B54"
             >Chính sách & điều khoản
@@ -54,13 +49,17 @@
           </nav>
           <nav v-else>
             <li>
-              <b-dropdown right text="Right align" variant="black" no-caret>
+              <b-dropdown variant="black" no-caret>
                 <template v-slot:button-content>
-                  <img class="icon"  src="../image/bell.png">
+                  <Icon class="icon" icon="tabler:bell-ringing-2"/><div class="countNoti">{{count}}</div>
                 </template>
-                <div v-for="item of noti" :key="item.id" class="dropdown-item notification">
-                  "{{item.content}}"
+                <div class="titleNoti">Thông Báo</div>
+                <div v-for="item of noti" :key="item.id" class="notification">
+                  <div v-if="!item.isRead" style="background-color: #F0ECE4; height: 25px; padding-left: 10px; padding-top: 5px">"{{item.content}}"</div>
+                  <div v-else style="padding-left: 10px;height: 25px;padding-top: 5px;">"{{item.content}}"</div>
+                  <hr style="margin-top: 0px; margin-bottom: 0px">
                 </div>
+                <div class="allNoti"><router-link class="linkAllNoti" to="AllNotification">Xem tất cả</router-link></div>
               </b-dropdown>
             </li>
             <li>
@@ -68,8 +67,10 @@
                 <template v-slot:button-content>
                   <img class="icon" v-bind:src="user.avatar">
                 </template>
-                <router-link to="/PersonalIndex" class="dropdown-item">
-                  {{user.fullname}}
+                <div class="dropdown-item-top"><Icon class="iconPerson" icon="ic:round-person-pin"/>{{user.fullname}}</div>
+                <hr style="margin: 5px" />
+                <router-link to="/MyBooks" class="dropdown-item">
+                  Trang cá nhân
                 </router-link>
                 <hr style="margin: 5px" />
                 <div v-if="user.roleId == 1 || user.roleId == 2">
@@ -93,20 +94,24 @@
 import VueJwtDecode from 'vue-jwt-decode';
 import {API_PERSONAL} from "@/constant/constant-api";
 import apiFactory from "@/config/apiFactory";
+import {Icon} from '@iconify/vue2';
 
 export default {
-  name: "Header",
+  name: "Layout",
+  components: {Icon},
   data(){
     return{
       userByToken: '',
       user:'',
       noti: '',
       userId: '',
+      count: ''
     }
   },
   created() {
     this.getUserInfoByToken()
     this.getNotifications()
+    this.getNotificationsNotRead()
   },
   methods:{
     getUserInfoByToken(){
@@ -129,12 +134,19 @@ export default {
       }).catch(() => {
       });
     },
+    getNotificationsNotRead() {
+      let token = this.$cookies.get('token');
+      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.NOTIFICATION_NOT_READ, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        this.count = res.data.numberOfRecords
+      }).catch(() => {
+      });
+    },
     HandleLogout(){
       this.$cookies.remove('token')
-      this.$router.push({
-        name: 'HomePage'
-      })
-      window.location.reload();
+      window.location.replace('/');
     },
   }
 }
@@ -417,6 +429,8 @@ export default {
 }
 
 .dropdown-menu {
+  padding-left: 10px;
+  padding-right: 10px;
   min-width: 220px;
   max-width: 300px;
   right: 0 !important;
@@ -429,6 +443,22 @@ export default {
 .dropdown-item:hover{
   background-color: #9D6B54;
   color: white;
+  border-radius: 5px;
+}
+
+.dropdown-item-top{
+  text-transform: uppercase;
+  background-color: #9D6B54;
+  color: white;
+  padding-left: 10px;
+  border-radius: 5px;
+  height: 30px;
+  padding-top: 3px;
+}
+
+.dropdown-item-top .iconPerson{
+  font-size: 26px;
+  padding-bottom: 5px;
 }
 
 .contact{
@@ -526,10 +556,13 @@ export default {
   color: #737373;
   padding: 3px 0;
   align-items: center;
+  list-style: none;
+  transition: 300ms;
 }
 
 .item-link:hover{
   color: #9D6B54;
+  transform: translateX(0.25rem);
 }
 
 .contact_info{
@@ -543,21 +576,73 @@ export default {
 }
 
 .icon{
+  color: #9d6b54;
   width: 40px;
   height: 40px;
   border-radius: 20px;
+  margin-left: 14px;
+  margin-right: 14px;
+  padding: 5px;
+  background-color: #F0ECE4;
+}
+
+.icon:hover{
+  background-color: #c4a698;
+  color: #F0ECE4;
 }
 
 .dropdown-menu{
-  max-width: 400px;
+  max-width: 600px;
 }
 
 .notification{
-  margin-right: 30px;
-  font-size: 0.7rem;
+  width: 550px;
+  margin-right: 10px;
+  margin-left: 10px;
+  color: #9d6b54;
+  font-size: 12px;
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.countNoti{
+  position: absolute;
+  top: 0;
+  margin-left: 35px;
+  background-color: red;
+  width: 20px;
+  height: 20px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding-top: 1px;
+  vertical-align: middle;
+  border-radius: 10px;
+}
+
+.allNoti{
+  text-align: center;
+}
+
+.linkAllNoti{
+  padding: 5px;
+  border-radius: 5px;
+  color: #9d6b54;
+  font-weight: 600;
+}
+
+.linkAllNoti:hover{
+  background-color: #F0ECE4;
+  color: #9d6b54;
+}
+
+.titleNoti{
+  color: #9d6b54;
+  font-weight: bold;
+  padding-bottom: 5px;
+  font-size: 16px;
+  border-radius: 10px;
 }
 </style>

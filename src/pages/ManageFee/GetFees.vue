@@ -11,14 +11,14 @@
           <label class="labelFee">Giá: </label><input class="inputFee" maxlength="6" type="number" required placeholder="Nhập giá mới" v-model="fee.price">đ
         </div>
       </CreateFeeDialog>
-      <b-alert style="padding-left: 60px" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
-        {{responseMessage}}
-      </b-alert>
-      <b-alert style="padding-left: 60px" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
-        {{responseMessage}}
-      </b-alert>
-      <div class="col-lg-6">
-        <div class="user-data m-b-30">
+     <div class="col-lg-6">
+       <b-alert style="position: absolute; right: 0; margin-top: 10px" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+         {{responseMessage}}
+       </b-alert>
+       <b-alert style="position: absolute; right: 0; margin-top: 10px" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+         {{responseMessage}}
+       </b-alert>
+       <div class="user-data m-b-30">
           <div class="titleMB">QUẢN LÝ PHÍ</div>
           <div class="table-responsive table-data">
             <table class="table">

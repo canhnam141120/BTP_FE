@@ -1,7 +1,6 @@
 <template>
   <Header>
     <main style="flex-grow: 1; background-image: url('https://f5-zpcloud.zdn.vn/2258788996442817451/dd48482006abc0f599ba.jpg'); background-size: cover">
-
       <div id="login">
         <div class="container">
         <label for="show"></label>
