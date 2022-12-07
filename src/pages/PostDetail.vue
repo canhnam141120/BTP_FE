@@ -350,6 +350,7 @@ strong {
 }
 
 .mainPD{
+  color: grey;
   padding: 15px 5% 20px 5%;
   text-indent: 5%;
   min-height: 320px;

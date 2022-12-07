@@ -159,7 +159,7 @@
                   </div>
                 </div>
               </template>
-              <div class="gridMB">
+              <div v-if="totalBook != 0" class="gridMB">
                 <div class="itemMB" v-for="item of listBook" :key="item.id">
                   <router-link style="position: relative" v-if="item.isReady && item.status == 'Approved'" :to="{ name: 'ViewRequestBook', query: { id:item.id }}">
                     <img class="book-image" v-bind:src="item.image">
@@ -189,8 +189,9 @@
                   </div>
                 </div>
               </div>
+              <div v-else class="noBook">Danh sách trống!</div>
             </b-skeleton-wrapper>
-            <div class="pagingMB">
+            <div v-if="totalBook != 0" class="pagingMB">
               <b-pagination v-if="filter==''" class="page-numberMB" @input="getMyBooks" v-model="page"
                             :total-rows="totalBook"
                             :per-page="6">
@@ -762,5 +763,13 @@ strong {
 .create-book:hover {
   background: #9D6B54;
   color: white;
+}
+
+.noBook{
+  text-align: center;
+  padding-top: 50px;
+  color: grey;
+  font-style: italic;
+  font-size: 26px;
 }
 </style>

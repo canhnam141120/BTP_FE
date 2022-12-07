@@ -110,6 +110,10 @@ export default {
       }
       if(!this.password){
         this.errPass = 'Vui lòng nhập mật khẩu!'
+      } else{
+        if(this.password.length <= 8 || this.password >= 30){
+          this.errPass = 'Mật khẩu phải có độ dài từ 8 - 30 ký tự!'
+        }
       }
       if(!this.passwordCheck){
         this.errPassCheck = 'Vui lòng xác nhận mật khẩu!'

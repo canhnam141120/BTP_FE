@@ -46,7 +46,7 @@
               </div>
             </div>
           </template>
-          <div class="gridMR">
+          <div v-if="totalRequest != 0" class="gridMR">
             <div class="itemMR" v-for="item of listRequest" :key="item.id">
               <div class="item-bookMR">
                 <div>
@@ -71,8 +71,9 @@
               <button class="activeMR"  @click="HandleCancel(item.id)">Hủy</button>
             </div>
           </div>
+          <div v-else class="noBook">Danh sách trống!</div>
         </b-skeleton-wrapper>
-        <div class="pagingMR">
+        <div v-if="totalRequest != 0" class="pagingMR">
           <b-pagination class="page-numberMR" @input="getMyRequest" v-model="page" :total-rows="totalRequest" :per-page="4">
             <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
             <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
@@ -309,4 +310,11 @@ strong {
   border-color: #9D6B54;
 }
 
+.noBook{
+  text-align: center;
+  padding-top: 50px;
+  color: grey;
+  font-style: italic;
+  font-size: 26px;
+}
 </style>

@@ -66,7 +66,7 @@
                         </div>
                       </div>
                     </template>
-                    <div class="grid-bookOP">
+                    <div v-if="totalBook != 0" class="grid-bookOP">
                       <div class="item-bookOP" v-for="item of listBook" :key="item.id">
                         <router-link style="position: relative" :to="{ name: 'BookDetail', query: { id:item.id }}">
                           <img v-bind:src="item.image">
@@ -81,8 +81,9 @@
                         </div>
                       </div>
                     </div>
+                    <div v-else class="noBook">Danh sách trống!</div>
                   </b-skeleton-wrapper>
-                  <div class="pagingBook">
+                  <div v-if="totalBook != 0" class="pagingBook">
                     <b-pagination class="page-number" @input="getBooks" v-model="pageBook" :total-rows="totalBook"
                                   :per-page="10">
                       <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
@@ -119,7 +120,7 @@
                         </div>
                       </div>
                     </template>
-                    <div class="gridPost">
+                    <div v-if="totalPost != 0" class="gridPost">
                       <div class="itemPost" v-for="item of listPost" :key="item.id">
                         <router-link :to="{ name: 'PostDetail', query: { id:item.id }}">
                           <img class="imagePost" v-bind:src="item.image">
@@ -132,8 +133,9 @@
                         </div>
                       </div>
                     </div>
+                    <div v-else class="noBook">Danh sách trống!</div>
                   </b-skeleton-wrapper>
-                  <div class="pagingPost">
+                  <div v-if="totalPost != 0" class="pagingPost">
                     <div class="pagePost">
                       <b-pagination @input="getPost" v-model="pagePost" :total-rows="totalPost" :per-page="6">
                         <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
@@ -495,6 +497,8 @@ strong {
 
 .background-tab {
   background-color: #EFECE3;
+  width: 100%;
+  border-radius: 10px;
   border: none;
   color: black;
 }
@@ -598,8 +602,6 @@ strong {
 
 .gridPost .itemPost:hover {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
-  background: grey;
-  opacity: 0.9;
   border: 1px solid #9D6B54;
 }
 
@@ -689,12 +691,20 @@ strong {
   font-size: 16px;
 }
 
-.gridPost .actionPost:hover {
+/*.gridPost .actionPost:hover {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }
 
 .gridPost .itemPost:hover .actionPost {
   display: block;
-}
+}*/
 
+.noBook{
+  text-align: center;
+  padding-top: 50px;
+  color: grey;
+  font-style: italic;
+  font-size: 26px;
+  padding-bottom: 30px;
+}
 </style>

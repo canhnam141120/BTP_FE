@@ -78,7 +78,7 @@
                   </router-link>
                   <div class="info">
                     <div class="post-title"><strong>{{ item.title }}</strong></div>
-                    <div class="post-content">Tác giả: <strong>{{ item.user.fullname }}</strong></div>
+                    <div class="post-content" style="color: #9d6b54">Tác giả: <strong>{{ item.user.fullname }}</strong></div>
                     <div class="createDate"><Icon class="iconTime" icon="ic:twotone-access-time"/>{{item.createdDate | formatDate}}</div>
                     <div class="post-content">{{ item.content }}</div>
                   </div>
@@ -287,6 +287,7 @@ strong {
   width: 191px;
   height: auto;
   margin: 5px;
+  border: 1px solid #9D6B54;
 }
 
 .item-book:hover {
@@ -361,6 +362,7 @@ strong {
   width: 392px;
   margin: 5px;
   height: auto;
+  border: 1px solid #9D6B54;
 }
 
 .item-post:hover {
@@ -408,6 +410,7 @@ strong {
 
 
 .grid-post .info .post-content {
+  color: grey;
   font-size: 14px;
   margin-left: 2px;
   overflow: hidden;

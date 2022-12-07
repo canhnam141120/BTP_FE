@@ -3,6 +3,12 @@
     <main style="flex-grow: 1;">
       <LoadingDialog v-show="spinner" style="z-index: 999999;"></LoadingDialog>
       <div class="body-noti">
+        <b-alert style="position: absolute; right: 0;" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          {{responseMessage}}
+        </b-alert>
+        <b-alert style="position: absolute; right: 0;" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          {{responseMessage}}
+        </b-alert>
         <div class="titleNoti">THÔNG BÁO</div>
         <div class="container">
           <div class="contentNoti">
@@ -10,7 +16,7 @@
               <b-tabs>
                 <div style="text-align: right"><button class="btnReadAll" v-on:click="markReadAll">Đánh dấu tất cả đã đọc</button></div>
                 <b-tab title="Tất cả" active>
-                  <div class="listNoti" v-for="item of listNoti" :key="item.id">
+                  <div v-if="totalNoti != 0"><div class="listNoti" v-for="item of listNoti" :key="item.id">
                     <label v-if="item.isRead == false" class="read"><button class="btnRead" v-on:click="markRead(item.id)"><Icon class="iconRead" icon="mdi:eye-plus"/></button></label>
                     <label v-else class="read"><button disabled style="border: none; background-color: #F0ECE4;"></button></label>
                     <label v-if="item.isRead == false"  class="labelNotiNotRead">
@@ -21,8 +27,9 @@
                       <div style="font-weight: 600">{{item.createdDate | formatDate}}</div>
                       <div>{{item.content}}</div>
                     </label>
-                  </div>
-                  <div class="paging">
+                  </div></div>
+                  <div v-else class="noBook">Danh sách trống!</div>
+                  <div v-if="totalNoti != 0" class="paging">
                     <div class="page">
                       <b-pagination @input="getAllNoti" v-model="pageAll" :total-rows="totalNoti" :per-page="20">
                         <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
@@ -38,7 +45,7 @@
                   </div>
                 </b-tab>
                 <b-tab title="Chưa đọc">
-                  <div class="listNoti" v-for="item of listNotiNotRead" :key="item.id">
+                  <div v-if="totalNotiNotRead != 0"><div class="listNoti" v-for="item of listNotiNotRead" :key="item.id">
                     <label v-if="item.isRead == false" class="read"><button class="btnRead" v-on:click="markRead(item.id)"><Icon class="iconRead" icon="mdi:eye-plus"/></button></label>
                     <label v-else class="read"><button disabled style="border: none; background-color: #F0ECE4;"></button></label>
                     <label v-if="item.isRead == false"  class="labelNotiNotRead">
@@ -49,8 +56,9 @@
                       <div style="font-weight: 600">{{item.createdDate | formatDate}}</div>
                       <div>{{item.content}}</div>
                     </label>
-                  </div>
-                  <div class="paging">
+                  </div></div>
+                  <div v-else class="noBook">Danh sách trống!</div>
+                  <div v-if="totalNotiNotRead != 0" class="paging">
                     <div class="page">
                       <b-pagination @input="getAllNotiNotRead" v-model="pageNotRead" :total-rows="totalNotiNotRead" :per-page="20">
                         <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
@@ -87,6 +95,11 @@ export default {
   components: {Layout, LoadingDialog, Icon},
   data(){
     return {
+      responseFlag: true,
+      responseMessage: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
+
       userByToken: '',
       spinner: false,
       pageAll: 1,
@@ -137,6 +150,9 @@ export default {
         if(res.data.message == 'SUCCESS'){
           this.getAllNoti(this.pageAll)
           this.getAllNotiNotRead(this.pageNotRead)
+          this.responseFlag = true
+          this.responseMessage = 'Đánh dấu tất cả thông báo đã đọc - Thành công'
+          this.dismissCountDown = this.dismissSecs
         }
       }).catch(() => {
       });
@@ -149,10 +165,16 @@ export default {
         if(res.data.message == 'SUCCESS'){
           this.getAllNoti(this.pageAll)
           this.getAllNotiNotRead(this.pageNotRead)
+          this.responseFlag = true
+          this.responseMessage = 'Đánh dấu thông báo đã đọc - Thành công'
+          this.dismissCountDown = this.dismissSecs
         }
       }).catch(() => {
       });
-    }
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
   },
   filters: {
     formatDate(value){
@@ -196,7 +218,7 @@ strong {
   max-width: 1230px;
   padding: 0px 0px;
   border-radius: 10px;
-  margin: 10px auto 20px auto;
+  margin: 10px auto 0px auto;
   display: block;
 }
 
@@ -210,7 +232,6 @@ strong {
 .btnReadAll{
   padding: 10px;
   border-radius: 5px;
-  border: none;
   color: #F0ECE4;
   background-color: #9d6b54;
   border: 1px solid #9d6b54;
@@ -274,5 +295,14 @@ strong {
 .paging ul {
   justify-content: right;
   margin-right: 15px;
+}
+
+.noBook{
+  text-align: center;
+  padding-top: 50px;
+  color: grey;
+  font-style: italic;
+  font-size: 26px;
+  padding-bottom: 30px;
 }
 </style>

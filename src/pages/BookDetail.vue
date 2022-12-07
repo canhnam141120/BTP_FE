@@ -1003,8 +1003,8 @@ strong {
   background: #F0ECE4;
   border-radius: 10px;
   display: block;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .title {

@@ -54,12 +54,15 @@
                   <Icon class="icon" icon="tabler:bell-ringing-2"/><div class="countNoti">{{count}}</div>
                 </template>
                 <div class="titleNoti">Thông Báo</div>
-                <div v-for="item of noti" :key="item.id" class="notification">
-                  <div v-if="!item.isRead" style="background-color: #F0ECE4; height: 25px; padding-left: 10px; padding-top: 5px">"{{item.content}}"</div>
-                  <div v-else style="padding-left: 10px;height: 25px;padding-top: 5px;">"{{item.content}}"</div>
-                  <hr style="margin-top: 0px; margin-bottom: 0px">
+                <div v-if="noti != ''">
+                  <div v-for="item of noti" :key="item.id" class="notification">
+                    <div v-if="!item.isRead" style="background-color: #F0ECE4; height: 25px; padding-left: 10px; padding-top: 5px">"{{item.content}}"</div>
+                    <div v-else style="padding-left: 10px;height: 25px;padding-top: 5px;">"{{item.content}}"</div>
+                    <hr style="margin-top: 0px; margin-bottom: 0px">
+                  </div>
+                  <div class="allNoti"><router-link class="linkAllNoti" to="AllNotification">Xem tất cả</router-link></div>
                 </div>
-                <div class="allNoti"><router-link class="linkAllNoti" to="AllNotification">Xem tất cả</router-link></div>
+                <div v-else class="noBookNoti">Danh sách trống!</div>
               </b-dropdown>
             </li>
             <li>
@@ -753,5 +756,14 @@ export default {
   padding-bottom: 5px;
   font-size: 16px;
   border-radius: 10px;
+}
+
+.noBookNoti{
+  text-align: center;
+  padding-top: 5px;
+  color: grey;
+  font-style: italic;
+  font-size: 14px;
+  padding-bottom: 5px;
 }
 </style>

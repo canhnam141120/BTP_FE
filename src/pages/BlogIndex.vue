@@ -82,21 +82,23 @@
                 </div>
               </template>
 
-              <div class="grid">
+              <div v-if="totalPost != 0" class="grid">
                 <div class="item" v-for="item of listPost" :key="item.id">
                   <router-link  :to="{ name: 'PostDetail', query: { id:item.id }}">
                     <img class="post-image" v-bind:src="item.image">
                   </router-link>
                   <div class="info">
                     <div class="post-title">{{ item.title }}</div>
-                    <div><img src="../image/user.png" >{{ item.user.fullname }}</div>
+                    <div><img src="../image/user.png" ><strong>{{ item.user.fullname }}</strong></div>
                     <div class="createDate"><Icon class="iconTime" icon="ic:twotone-access-time"/>{{item.createdDate | formatDate}}</div>
                     <label class="post-content">{{ item.content }}</label>
                   </div>
                 </div>
               </div>
+
+              <div v-else class="noPost">Không tìm thấy bài viết phù hợp!</div>
             </b-skeleton-wrapper>
-            <div class="paging">
+            <div v-if="totalPost != 0" class="paging">
               <div class="page">
                 <b-pagination @input="getListPost" v-model="page" :total-rows="totalPost" :per-page="10">
                   <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
@@ -288,6 +290,7 @@ main {
 
 strong {
   color: #9D6B54;
+  font-weight: 600;
 }
 
 .createDate{
@@ -354,7 +357,7 @@ strong {
   background: #F0F0F0;
   max-width: 1230px;
   border-radius: 10px;
-  margin: 5px auto 30px auto;
+  margin: 5px auto 10px auto;
   display: block;
 }
 
@@ -416,12 +419,14 @@ strong {
 }
 
 .body-blog .container-blog .content .grid .item {
+  color: #9d6b54;
   border-radius: 10px;
   width: 593px;
   height: auto;
   margin: 10px 0px 10px 15px;
   display: flex;
   padding-bottom: 5px;
+  border: 1px solid #9D6B54;
 }
 
 .body-blog .container-blog .content .grid .item:hover {
@@ -467,6 +472,7 @@ strong {
 }
 
 .body-blog .container-blog .content .grid .info .post-content {
+  color: grey;
   margin-left: 5px;
   margin-right: 10px;
   font-size: 0.8rem;
@@ -502,12 +508,19 @@ strong {
 
 .body-blog .container-blog .content .paging {
   margin-top: 10px;
-  padding-bottom: 10px;
 }
 
-.body-blog .container-blog .content .paging .page {
-  width: 17%;
-  margin-right: auto;
-  margin-left: auto;
+.body-blog .container-blog .content .paging ul {
+  justify-content: right;
+  padding-right: 15px;
+}
+
+.noPost{
+  height: 50vh;
+  text-align: center;
+  padding-top: 50px;
+  color: grey;
+  font-style: italic;
+  font-size: 26px;
 }
 </style>

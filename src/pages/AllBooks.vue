@@ -90,7 +90,7 @@
                 </div>
               </template>
 
-              <div class="grid">
+              <div v-if="totalBook != 0" class="grid">
                 <div class="item" v-for="item of listBook" :key="item.id">
                   <router-link style="position: relative" :to="{ name: 'BookDetail', query: { id:item.id }}">
                     <img v-bind:src="item.image">
@@ -116,8 +116,9 @@
                   </div>
                 </div>
               </div>
+              <div v-else class="noBook">Không tìm thấy sách phù hợp!</div>
             </b-skeleton-wrapper>
-            <div class="paging">
+            <div v-if="totalBook != 0" class="paging">
               <b-pagination v-if="isSearch && !fromUser" class="page-number" @input="searchBook" v-model="page" :total-rows="totalBook"
                             :per-page="9">
                 <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
@@ -315,7 +316,7 @@ strong {
   background: #F0F0F0;
   max-width: 1230px;
   border-radius: 10px;
-  margin: 5px auto 30px auto;
+  margin: 5px auto 10px auto;
   display: flex;
   justify-content: space-between;
 }
@@ -566,4 +567,11 @@ strong {
   padding-right: 15px;
 }
 
+.noBook{
+  text-align: center;
+  padding-top: 50px;
+  color: grey;
+  font-style: italic;
+  font-size: 26px;
+}
 </style>

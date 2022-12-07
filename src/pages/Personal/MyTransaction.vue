@@ -236,7 +236,7 @@
                       <button class="btnMP" v-on:click="SearchExchange">Tìm</button>
                     </div>
                   </div>
-                  <div class="listTrans">
+                  <div v-if="listExchanges != ''" class="listTrans">
                     <table class="table">
                       <thead>
                       <tr>
@@ -501,6 +501,7 @@
                       </tbody>
                     </table>
                   </div>
+                  <div v-else class="noBook">Danh sách trống!</div>
                 </b-tab>
                 <b-tab title="Thuê">
                   <div class="searchMP">
@@ -512,7 +513,7 @@
                       <button class="btnMP" v-on:click="SearchRent">Tìm</button>
                     </div>
                   </div>
-                  <div class="listTrans">
+                  <div v-if="listRents != ''" class="listTrans">
                     <table class="table">
                       <thead>
                       <tr>
@@ -623,6 +624,7 @@
                       </tbody>
                     </table>
                   </div>
+                  <div v-else class="noBook">Danh sách trống!</div>
                 </b-tab>
               </b-tabs>
             </b-card>
@@ -1163,5 +1165,13 @@ strong {
   background-color: #6e4b3b;
   color: white;
   border-radius: 5px;
+}
+
+.noBook{
+  text-align: center;
+  padding-top: 50px;
+  color: grey;
+  font-style: italic;
+  font-size: 26px;
 }
 </style>

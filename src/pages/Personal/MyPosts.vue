@@ -103,7 +103,7 @@
                 </div>
               </template>
 
-              <div class="grid">
+              <div v-if="totalPost != 0" class="grid">
                 <div class="item" v-for="item of listPosts" :key="item.id">
                   <router-link v-if="!item.isHide && item.status == 'Approved'"
                                :to="{ name: 'PostDetail', query: { id:item.id }}">
@@ -134,8 +134,9 @@
                   </div>
                 </div>
               </div>
+              <div v-else class="noBook">Danh sách trống!</div>
             </b-skeleton-wrapper>
-            <div class="paging">
+            <div v-if="totalPost != 0" class="paging">
               <div class="page">
                 <b-pagination v-if="filter==''" @input="getMyPosts" v-model="page" :total-rows="totalPost"
                               :per-page="5">
@@ -757,6 +758,14 @@ strong {
   color: white;
   font-weight: bold;
   background: #9D6B54;
+}
+
+.noBook{
+  text-align: center;
+  padding-top: 50px;
+  color: grey;
+  font-style: italic;
+  font-size: 26px;
 }
 </style>
 
