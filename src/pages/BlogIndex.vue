@@ -419,6 +419,8 @@ strong {
 }
 
 .body-blog .container-blog .content .grid .item {
+  /*background-color: white;*/
+  background-color: #f5f5f5;
   color: #9d6b54;
   border-radius: 10px;
   width: 593px;

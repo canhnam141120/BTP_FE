@@ -181,13 +181,13 @@
           <div class="user-data m-b-30">
             <div class="titleMB">QUẢN LÝ GIAO DỊCH ĐỔI</div>
             <div class="search-transaction">
-              <router-link to="/ManageTransaction/rent" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" style="height: 50px; padding-top: 10px">Xem giao dịch thuê</router-link>
+              <button class="autoTrading" v-on:click="autoTrading">Duyệt GD hợp lệ</button>
               <select class="selectCss" v-model="filter" @change="onchange($event)">
                 <option v-bind:value="item" v-for="item of listFilter" :key="item">{{ item }}</option>
               </select>
               <div>
                 <input type="number" v-model="search" placeholder="Nhập mã giao dịch">
-                <button v-on:click="HandleSearch">Tìm</button>
+                <button class="btnSearch" v-on:click="HandleSearch">Tìm</button>
               </div>
             </div>
             <div v-if="totalExchanges==0 && filter == ''" class="table-responsive table-data noResult">
@@ -603,6 +603,28 @@ export default {
       }).catch(() => {
       });
     },
+    autoTrading(){
+      apiFactory.callApi(API_MANAGE_TRANSACTION.AUTO_TRADING_EX, 'PUT', {
+      }).then((res) => {
+        if (res.data.message === 'SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Tụ động duyệt giao dịch thành công!'
+          if(this.filter === ''){
+            this.getExchanges(this.page)
+          }
+          if(this.filter === 'Tất Cả'){
+            this.getExchanges(this.page)
+          }
+          if(this.filter === 'Đang Đợi'){
+            this.getExchangeWaiting(this.page)
+          }
+        }
+        this.dismissCountDown = this.dismissSecs
+        this.dismissCountDown = this.dismissSecs
+      }).catch(() => {
+      });
+    },
+
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown
     },
@@ -632,7 +654,7 @@ export default {
   display: flex;
   justify-content: space-between;
   margin: 20px 0px 10px 20px;
-  width: 90%;
+  width: 95%;
 }
 
 .titleMB {
@@ -662,7 +684,7 @@ export default {
   color: #9D6B54;
 }
 
-.search-transaction button {
+.search-transaction .btnSearch {
   border-radius: 7px;
   background-color: #9D6B54;
   color: white;
@@ -673,7 +695,7 @@ export default {
   margin-left: 10px;
 }
 
-.search-transaction button:hover {
+.search-transaction .btnSearch:hover {
   border-color: #9D6B54;
   background-color: white;
   color: #9D6B54;
@@ -694,5 +716,21 @@ export default {
 }
 .row{
   font-size: 12px;
+}
+
+.autoTrading{
+  border-radius: 10px;
+  background-color: #9D6B54;
+  color: white;
+  font-weight: bold;
+  border: 1px solid grey;
+  height: 45px;
+  width: 150px;
+}
+
+.autoTrading:hover{
+  border-color: #9D6B54;
+  background-color: #F0ECE4;
+  color: #9D6B54;
 }
 </style>

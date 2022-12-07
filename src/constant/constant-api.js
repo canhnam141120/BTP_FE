@@ -208,5 +208,7 @@ export const API_MANAGE_TRANSACTION= Object.freeze({
     HANDLE_TRADE_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/trading/",
     HANDLE_COMPLETE_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent/complete/",
     UPDATE_DETAIL_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/rent-detail/update-status/",
-    DASHBOARD: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/dashBoard"
+    DASHBOARD: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/dashBoard",
+    AUTO_TRADING_EX: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/autoTradingExchange",
+    AUTO_TRADING_RENT: "https://book-trading-platform.herokuapp.com/api/ManageTransaction/autoTradingRent"
 })

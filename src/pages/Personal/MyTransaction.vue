@@ -43,6 +43,11 @@
                 <Icon icon="material-symbols:cancel-presentation"/>
               </button>
             </td>
+            <td v-if="item.status == 'Complete'">
+              <button class="tableBtn" v-on:click="FeedbackBook(item.book1Id)">
+                <Icon icon="mdi:feedback"/>
+              </button>
+            </td>
           </tr>
           </tbody>
         </table>
@@ -110,10 +115,30 @@
                 <Icon icon="material-symbols:cancel-presentation"/>
               </button>
             </td>
+            <td v-if="item.status == 'Complete'">
+              <button class="tableBtn" v-on:click="FeedbackBook(item.bookId)">
+                <Icon icon="mdi:feedback"/>
+              </button>
+            </td>
           </tr>
           </tbody>
         </table>
       </ExchangeDetailDialog>
+      <FeedbackDialog :show="showDialogFeedback"
+                  :cancel="cancelDialogFeedback"
+                  :feedback="feedback"
+                  v-if="showDialogFeedback" class="modal">
+        <div class="topDialog">
+          <div class="dialogTitle">ĐÁNH GIÁ SÁCH</div>
+          <button class="dialogExit" v-on:click="cancelDialogFeedback">X</button>
+        </div>
+        <div>
+          <textarea class="inputFB" type="text" required placeholder="Nhập đánh giá của bạn" v-model="feedbackContent"></textarea>
+        </div>
+        <div class="dialogGroupBtn">
+          <button class="dialogBtn" v-on:click="feedback">Đánh giá</button>
+        </div>
+      </FeedbackDialog>
       <BillDialog :show="showDialogRB"
                   :cancel="cancelDialogRentBill"
                   :pay="payRent"
@@ -135,11 +160,15 @@
           <div v-else>Phí dịch vụ: {{ billRent.feeId2Navigation.price.toLocaleString() }}đ</div>
           <div>Tổng chi phí: {{ billRent.totalAmount.toLocaleString() }}đ</div>
           <div v-if="billRent.isPaid">
-            <div>Trạng thái: Đã thanh toán thanh toán</div>
+            <div>TT Thanh toán: Đã thanh toán</div>
             <div>Thanh toán lúc: {{ billRent.paidDate | format}}</div>
-            <div>Phương thức: {{ billRent.payments }}</div>
+            <div>Phương thức: {{ billRent.payment }}</div>
           </div>
           <div v-else>Trạng thái thanh toán: Chưa thanh toán</div>
+          <div v-if="billRent.isRefund">
+            <div>TT Hoàn tiền: Đã hoàn tiền</div>
+            <div>Ngày hoàn tiền: {{ billRent.refundDate | formatDate}}</div>
+          </div>
         </div>
         <div v-if="!billRent.isPaid" class="dialogGroupBtn">
           <button class="dialogBtn" v-on:click="payRent(billRent.id)">Thanh toán</button>
@@ -199,18 +228,18 @@
       <ConfirmDialog :show="showConfirmDialogPayRent" v-if="showConfirmDialogPayRent" class="modal">
         <div>
           <div class="dialogTitle">XÁC NHẬN</div>
-          <div style="color: #9d6b54; text-align: center;">Xác nhận thanh xoán giao dịch thuê!</div>
+          <div style="color: #9d6b54; text-align: center;">Xác nhận thanh toán giao dịch thuê!</div>
           <div class="dialogGroupBtn">
             <button class="dialogBtn" v-on:click="cancelConfirmDialogPayRent">Hủy</button>
             <button class="dialogBtn" v-on:click="HandleConfirmPayRent">Xác nhận</button>
           </div>
         </div>
       </ConfirmDialog>
-      <b-alert style="position: absolute; right: 0;" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0"
+      <b-alert style="position: absolute; right: 0; z-index: 999999" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0"
                @dismiss-count-down="countDownChanged">
         {{ responseMessage }}
       </b-alert>
-      <b-alert style="position: absolute; right: 0;" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0"
+      <b-alert style="position: absolute; right: 0; z-index: 999999" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0"
                @dismiss-count-down="countDownChanged">
         {{ responseMessage }}
       </b-alert>
@@ -639,17 +668,18 @@
 import SideBar_Personal from "@/components/SideBar_Personal";
 import Layout from "@/components/Layout";
 import apiFactory from "@/config/apiFactory";
-import {API_MANAGE_TRANSACTION, API_PERSONAL, API_TRANSACTION} from "@/constant/constant-api";
+import {API_BOOK, API_MANAGE_TRANSACTION, API_PERSONAL, API_TRANSACTION} from "@/constant/constant-api";
 import VueJwtDecode from "vue-jwt-decode";
 import BillDialog from "@/pages/Personal/BillDialog";
 import {Icon} from '@iconify/vue2';
 import LoadingDialog from "@/components/LoadingDialog";
 import ExchangeDetailDialog from "@/pages/ManageTransaction/ExchangeDetailDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import FeedbackDialog from "@/pages/Personal/FeedbackDialog";
 
 export default {
   name: "MyTransaction",
-  components: {SideBar_Personal, Layout, BillDialog, Icon, LoadingDialog, ExchangeDetailDialog, ConfirmDialog},
+  components: {SideBar_Personal, Layout, BillDialog, Icon, FeedbackDialog, LoadingDialog, ExchangeDetailDialog, ConfirmDialog},
   data() {
     return {
       responseFlag: true,
@@ -664,6 +694,8 @@ export default {
       showConfirmDialogCancelRentDetail: false,
       showConfirmDialogPayExchange: false,
       showConfirmDialogPayRent: false,
+      showDialogFeedback: false,
+      feedbackContent: '',
       tmpId: '',
       tmpId2: '',
 
@@ -800,7 +832,7 @@ export default {
       this.getExchanges()
     },
     getExchangeBill(billId) {
-      this.bill = ''
+      this.billExchange = ''
       const url = API_PERSONAL.BILL_EXCHANGE + billId
       apiFactory.callApi(url, 'POST', {
         userId: this.userByToken.UserId
@@ -975,6 +1007,36 @@ export default {
         this.dismissCountDown = this.dismissSecs
         this.showConfirmDialogPayRent = false
       }).catch(() => {
+      });
+    },
+    FeedbackBook(bookId){
+      this.tmpId = bookId
+      this.showDialogFeedback = true
+    },
+    cancelDialogFeedback(){
+      this.showDialogFeedback = false
+    },
+    feedback(){
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+      apiFactory.callApi(API_BOOK.FEEDBACK_BOOK + this.tmpId, 'POST', {
+        userId: this.userByToken.UserId,
+        content: this.feedbackContent,
+      }).then((res) => {
+        if (res.data.message === 'SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Đánh giá sách thành công!'
+        }
+        else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra, vui lòng thử lại!!'
+        }
+        this.dismissCountDown = this.dismissSecs
+        this.showDialogFeedback = false
+      }).catch(() => {
+        this.dismissCountDown = this.dismissSecs
+        this.responseFlag = false
+        this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
+        this.showDialogFeedback = false
       });
     },
 

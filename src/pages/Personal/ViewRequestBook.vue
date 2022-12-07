@@ -196,7 +196,7 @@
             <hr>
             <div class="bottomVR">
               <div class="title-bottom">Yêu cầu muốn đổi</div>
-              <div class="gridMB">
+              <div v-if="listRequestReceive != ''" class="gridMB">
                 <div class="itemMB" v-for="item of listRequestReceive" :key="item.id">
                   <router-link :to="{ name: 'BookDetail', query: { id:item.bookOfferId }}">
                     <img v-bind:src="item.bookOffer.image">
@@ -214,6 +214,7 @@
                   </div>
                 </div>
               </div>
+              <div v-else class="noBook">Danh sách trống</div>
             </div>
           </div>
         </div>
@@ -667,7 +668,7 @@ strong {
   border-radius: 10px;
    border: 1px solid #9D6B54;
   width: 220px;
-  height: 470px;
+  height: auto;
   margin: 10px 0px 10px 20px;
 }
 
@@ -682,7 +683,7 @@ strong {
 }
 
  .gridMB .infoMB {
-  height: 120px;
+  height: auto;
   padding: 5px;
 }
 
@@ -759,5 +760,13 @@ strong {
   background-color: #ca0303;
   color: #F0ECE4;
   padding: 5px;
+}
+
+.noBook{
+  text-align: center;
+  padding-top: 50px;
+  color: grey;
+  font-style: italic;
+  font-size: 26px;
 }
 </style>

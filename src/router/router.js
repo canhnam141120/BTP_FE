@@ -14,6 +14,11 @@ const routers = [
         component: () => import('@/pages/ResultPayment'),
     },
     {
+        path:'/ResultPaymentRent',
+        name:'ResultPaymentRent',
+        component: () => import('@/pages/ResultPaymentRent'),
+    },
+    {
         path:'/',
         name:'HomePage',
         component: () => import('@/pages/HomePage'),

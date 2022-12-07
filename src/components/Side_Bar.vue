@@ -89,9 +89,15 @@ export default {
         },
         {
           link: '/ManageTransaction/exchange',
-          name: 'Quản lý giao dịch',
+          name: 'Quản lý giao dịch đổi',
           tooltip: 'Dashboard',
           icon: 'bx-git-compare',
+        },
+        {
+          link: '/ManageTransaction/rent',
+          name: 'Quản lý giao dịch thuê',
+          tooltip: 'Dashboard',
+          icon: 'bx-time',
         },
         {
           link: '/ManageCategory',
