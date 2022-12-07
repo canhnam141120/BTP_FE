@@ -27,7 +27,7 @@ export default {
 }
 
 .dialogContent {
-  width: 1200px;
+  width: 1400px;
   padding-right: 10px;
   padding-left: 10px;
   background: #F0ECE4;

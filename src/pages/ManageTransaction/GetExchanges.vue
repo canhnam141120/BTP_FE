@@ -87,6 +87,8 @@
                 <td>TT Thanh toán</td>
                 <td>Ngày thanh toán</td>
                 <td>Phương thức thanh toán</td>
+                <td>TT Hoàn Tiền</td>
+                <td>Ngày Hoàn Tiền</td>
               </tr>
               </thead>
               <tbody v-for="item of listExchangeBills" :key="item.id">
@@ -104,6 +106,10 @@
                 <td v-if="item.paidDate">{{item.paidDate}}</td>
                 <td v-else>Chưa thanh toán</td>
                 <td>{{item.payments}}</td>
+                <td v-if="item.isRefund"><span class="role paid">ĐÃ HOÀN TIỀN</span></td>
+                <td v-else><span class="role notPaid">CHƯA HOÀN TIỀN</span></td>
+                <td v-if="item.refundDate">{{item.refundDate}}</td>
+                <td v-else>Chưa hoàn tiền</td>
               </tr>
               </tbody>
             </table>
@@ -166,6 +172,12 @@
               <button v-else  class="dialogBtn" v-on:click="saveUE">Cập Nhật</button>
             </div>
           </UpdateExchangeDialog>
+          <b-alert style="position: absolute; right: 0; margin-top: 10px" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+            {{responseMessage}}
+          </b-alert>
+          <b-alert style="position: absolute; right: 0; margin-top: 10px" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+            {{responseMessage}}
+          </b-alert>
           <div class="user-data m-b-30">
             <div class="titleMB">QUẢN LÝ GIAO DỊCH ĐỔI</div>
             <div class="search-transaction">
@@ -229,8 +241,9 @@
                     <button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="material-symbols:check-box-rounded"/></button>
                     <button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="mdi:cancel-box"/></button>
                   </td>
-                  <td v-if="item.status == 'Trading'" style="padding-left: 25px">
+                  <td v-if="item.status == 'Trading'">
                     <button class="tableBtnAction" v-on:click="openDialogUE(item.id)"><Icon icon="material-symbols:edit-document-rounded"/></button>
+                    <button class="tableBtnAction" v-on:click="HandleCanCelExchange(item.id)"><Icon icon="mdi:cancel-box"/></button>
                   </td>
                 </tr>
                 </tbody>
@@ -327,6 +340,11 @@ export default {
   components: {Side_Bar, LoadingDialog,Dashboard, ExchangeDetailDialog, ExchangeBillDialog, UpdateExchangeDialog, Icon},
   data() {
     return {
+      responseFlag: true,
+      responseMessage: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
+
       listExchanges: '',
       totalExchanges: '',
       listExchangeDetail: '',
@@ -461,6 +479,8 @@ export default {
     HandleTrading(exchangeId){
       apiFactory.callApi(API_MANAGE_TRANSACTION.HANDLE_TRADE_EXCHANGE + exchangeId, 'PUT', {}).then((res) => {
         if (res.data.message === 'UPDATE_SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật giao dịch thành công!'
           if(this.filter === ''){
             this.getExchanges(this.page)
           }
@@ -471,14 +491,18 @@ export default {
             this.getExchangeWaiting(this.page)
           }
         }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
       });
     },
     HandleComplete(exchangeId){
       apiFactory.callApi(API_MANAGE_TRANSACTION.HANDLE_COMPLETE_EXCHANGE + exchangeId, 'PUT', {}).then((res) => {
         if (res.data.message === 'UPDATE_SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật giao dịch thành công!'
           this.saveUE()
         }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
       });
     },
@@ -517,7 +541,8 @@ export default {
         refundDate2: this.exchange.refundDate2,
       }).then((res) => {
         if (res.data.message === 'UPDATE_SUCCESS') {
-          alert('Cập nhật thành công')
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật giao dịch thành công!'
           if(this.filter === ''){
             this.getExchanges(this.page)
           }
@@ -529,6 +554,7 @@ export default {
           }
           this.showDialogUE = false
         }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
       });
       this.showDialogUE = false;
@@ -542,9 +568,11 @@ export default {
         afterStatusBook2:  item[0].afterStatusBook2,
       }).then((res) => {
         if (res.data.message === 'UPDATE_SUCCESS') {
-          alert('Cập nhật thành công!')
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật chi tiết giao dịch thành công!'
           this.getExchangeDetail(exchangeId)
         }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
       });
     },
@@ -554,12 +582,13 @@ export default {
           this.getExchangeDetail(exchangeId)
         }
       }).catch(() => {
-        alert('Không thành công!')
       });
     },
     HandleCanCelExchange(exchangeId){
       apiFactory.callApi(API_TRANSACTION.CANCEL_EXCHANGE + exchangeId, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Hủy giao dịch thành công!'
           if(this.filter === ''){
             this.getExchanges(this.page)
           }
@@ -570,10 +599,13 @@ export default {
             this.getExchangeWaiting(this.page)
           }
         }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
-        alert('Không thành công!')
       });
-    }
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
   },
   filters: {
     formatDate(value) {

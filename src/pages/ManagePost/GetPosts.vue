@@ -16,6 +16,12 @@
           <div class="date">Đăng lúc: {{post.createdDate | format}}</div>
         </PostDetailDialog>
         <div class="col-lg-6">
+          <b-alert style="position: absolute; right: 0; margin-top: 10px" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+            {{responseMessage}}
+          </b-alert>
+          <b-alert style="position: absolute; right: 0; margin-top: 10px" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+            {{responseMessage}}
+          </b-alert>
           <div class="user-data m-b-30">
             <div class="titleMB">QUẢN LÝ BÀI ĐĂNG</div>
             <div class="search-post">
@@ -146,6 +152,12 @@ export default {
   components: {Side_Bar, LoadingDialog, PostDetailDialog, Icon, Dashboard},
   data() {
     return {
+      responseFlag: true,
+      responseMessage: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
+      showConfirmDialog: false,
+
       post: '',
       listPosts: '',
       totalPosts: '',
@@ -232,6 +244,8 @@ export default {
     HandleApproved(id) {
       apiFactory.callApi(API_MANAGE_POST.APPROVED_POST + id, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Duyệt bài đăng thành công!'
           if(this.filter === ''){
             this.getPostsAll(this.page)
           }
@@ -248,6 +262,11 @@ export default {
             this.getPostsWaiting(this.page)
           }
         }
+        else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
+        }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
         alert('Duyệt không thành công!')
       });
@@ -255,6 +274,8 @@ export default {
     HandleDenied(id) {
       apiFactory.callApi(API_MANAGE_POST.DENIED_POST + id, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Hủy bài đăng thành công!'
           if(this.filter === ''){
             this.getPostsAll(this.page)
           }
@@ -271,8 +292,12 @@ export default {
             this.getPostsWaiting(this.page)
           }
         }
+        else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
+        }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
-        alert('Hủy không thành công!')
       });
     },
     HandleSearch(){
@@ -297,6 +322,9 @@ export default {
     },
     cancel() {
       this.showDialogPD = false
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
     },
   },
   filters: {

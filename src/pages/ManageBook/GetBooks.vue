@@ -58,7 +58,23 @@
           <div class="no-feedback">Chưa có đánh giá, bình luận!</div>
         </div>
       </FeedbackDialog>
+      <ConfirmDialog :show="showConfirmDialog" v-if="showConfirmDialog" class="modal">
+        <div>
+          <div class="dialogTitle">XÁC NHẬN</div>
+          <div style="color: #9d6b54; text-align: center;">Xác nhận xóa đánh giá!</div>
+          <div class="dialogGroupBtn">
+            <button class="dialogBtn" v-on:click="cancelConfirmDialog">Hủy</button>
+            <button class="dialogBtn" v-on:click="HandleConfirm">Xác nhận</button>
+          </div>
+        </div>
+      </ConfirmDialog>
       <div class="col-lg-6">
+        <b-alert style="position: absolute; right: 0; margin-top: 10px" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          {{responseMessage}}
+        </b-alert>
+        <b-alert style="position: absolute; right: 0; margin-top: 10px" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          {{responseMessage}}
+        </b-alert>
         <div class="user-data m-b-30">
           <div class="titleMB">QUẢN LÝ SÁCH</div>
           <div class="search-book">
@@ -202,12 +218,21 @@ import BookDetailDialog from "@/pages/ManageBook/BookDetailDialog";
 import FeedbackDialog from "@/pages/ManageBook/FeedbackDialog";
 import {Icon} from '@iconify/vue2';
 import Dashboard from "@/components/Dashboard";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 export default {
   name: "GetBooks",
-  components: {BookDetailDialog, LoadingDialog, FeedbackDialog, Icon, Dashboard},
+  components: {BookDetailDialog, LoadingDialog, FeedbackDialog, Icon, Dashboard, ConfirmDialog},
   data() {
     return {
+      responseFlag: true,
+      responseMessage: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
+      showConfirmDialog: false,
+      tmpId1: '',
+      tmpId2: '',
+
       book: '',
       listBooks: '',
       totalBook: '',
@@ -301,6 +326,8 @@ export default {
     HandleApproved(id) {
       apiFactory.callApi(API_MANAGE_BOOK.APPROVED_BOOK + id, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Duyệt sách thành công!'
           if(this.filter === ''){
             this.getBooksAll(this.page)
           }
@@ -316,15 +343,19 @@ export default {
           if(this.filter === 'Đang Đợi'){
             this.getBooksWaiting(this.page)
           }
+        }else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
         }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
-        alert('Duyệt không thành công!')
       });
     },
     HandleDenied(id) {
-
       apiFactory.callApi(API_MANAGE_BOOK.DENIED_BOOK + id, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Hủy sách thành công!'
           if(this.filter === ''){
             this.getBooksAll(this.page)
           }
@@ -341,6 +372,11 @@ export default {
             this.getBooksWaiting(this.page)
           }
         }
+        else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
+        }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
         alert('Hủy không thành công!')
       });
@@ -362,14 +398,21 @@ export default {
       });
     },
     HandleDelete(feedbackId, bookId){
-      const url = API_MANAGE_BOOK.DELETE_FEEDBACK + feedbackId
+      this.tmpId1 = feedbackId
+      this.tmpId2 = bookId
+      this.showConfirmDialog = true
+    },
+    cancelConfirmDialog(){
+      this.showConfirmDialog = false
+    },
+    HandleConfirm(){
+      const url = API_MANAGE_BOOK.DELETE_FEEDBACK + this.tmpId1
       apiFactory.callApi(url, 'DELETE', {}).then((res) => {
         if (res.data.message === 'DELETE_SUCCESS') {
-          this.getFeedback(bookId)
-          console.log(alert('Xóa thành công!'))
+          this.getFeedback(this.tmpId2 )
         }
+        this.showConfirmDialog = false
       }).catch(() => {
-        alert('Xóa không thành công!')
       });
     },
     HandleSearch() {
@@ -391,6 +434,9 @@ export default {
     cancel() {
       this.showDialogBD = false
       this.showDialogFB = false
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
     },
   },
   filters: {

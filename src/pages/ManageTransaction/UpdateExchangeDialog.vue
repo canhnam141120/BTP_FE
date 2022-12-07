@@ -21,9 +21,8 @@ export default {
   background: rgba(0, 0, 0, 0.4);
 }
 
-.updateBody{
-  display: flex;
-  justify-content: space-between;
+.updateBodyRent{
+  text-align: center;
   margin-right: 30px;
 }
 
@@ -48,7 +47,7 @@ export default {
 
 .dialogContent {
   padding-left: 30px;
-  width: 600px;
+  width: 500px;
   background: #F0ECE4;
   height: auto;
   border-radius: 10px;
@@ -58,7 +57,7 @@ export default {
 .topDialog {
   display: flex;
   justify-content: space-between;
-  padding-left: 120px;
+  padding-left: 20px;
   padding-top: 10px;
   padding-right: 10px;
 }

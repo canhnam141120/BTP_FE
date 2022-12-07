@@ -76,6 +76,8 @@
                 <td>TT Thanh toán</td>
                 <td>Ngày thanh toán</td>
                 <td>Phương thức thanh toán</td>
+                <td>TT Hoàn Tiền</td>
+                <td>Ngày Hoàn Tiền</td>
               </tr>
               </thead>
               <tbody v-for="item of listRentBills" :key="item.id">
@@ -93,6 +95,10 @@
                 <td v-if="item.paidDate">{{item.paidDate}}</td>
                 <td v-else>Chưa thanh toán</td>
                 <td>{{item.payments}}</td>
+                <td v-if="item.isRefund"><span class="role paid">ĐÃ HOÀN TIỀN</span></td>
+                <td v-else><span class="role notPaid">CHƯA HOÀN TIỀN</span></td>
+                <td v-if="item.refundDate">{{item.refundDate}}</td>
+                <td v-else>Chưa hoàn tiền</td>
               </tr>
               </tbody>
             </table>
@@ -102,7 +108,7 @@
               <div class="dialogTitle">CẬP NHẬT GIAO DỊCH THUÊ SỐ {{rent.id}}</div>
               <button class="dialogExit" v-on:click="cancelDialogUE">X</button>
             </div>
-            <div class="updateBody">
+            <div class="updateBodyRent">
               <label class="labelFee">TT Vận Chuyển: </label>
               <select class="sl" v-model="rent.storageStatus">
                 <option v-bind:value="item.id" v-for="item of listStatus" :key="item.id">{{ item.name }}</option>
@@ -129,6 +135,12 @@
               <button v-else  class="dialogBtn" v-on:click="saveUR">Cập Nhật</button>
             </div>
           </UpdateExchangeDialog>
+          <b-alert style="position: absolute; right: 0; margin-top: 10px" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+            {{responseMessage}}
+          </b-alert>
+          <b-alert style="position: absolute; right: 0; margin-top: 10px" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+            {{responseMessage}}
+          </b-alert>
           <div class="user-data m-b-30">
             <div class="titleMB">QUẢN LÝ GIAO DỊCH THUÊ</div>
             <div class="search-transaction">
@@ -186,8 +198,9 @@
                     <button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="material-symbols:check-box-rounded"/></button>
                     <button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="mdi:cancel-box"/></button>
                   </td>
-                  <td v-if="item.status == 'Trading'" style="padding-left: 25px">
+                  <td v-if="item.status == 'Trading'">
                     <button class="tableBtnAction" v-on:click="openDialogUR(item.id)"><Icon icon="material-symbols:edit-document-rounded"/></button>
+                    <button class="tableBtnAction" v-on:click="HandleCanCelRent(item.id)"><Icon icon="mdi:cancel-box"/></button>
                   </td>
                 </tr>
                 </tbody>
@@ -284,6 +297,11 @@ export default {
   components: {Side_Bar,Dashboard, LoadingDialog, ExchangeDetailDialog, ExchangeBillDialog, UpdateExchangeDialog, Icon},
   data() {
     return {
+      responseFlag: true,
+      responseMessage: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
+
       listRents: '',
       totalRents: '',
       listRentDetail: '',
@@ -416,6 +434,8 @@ export default {
     HandleTrading(rentId){
       apiFactory.callApi(API_MANAGE_TRANSACTION.HANDLE_TRADE_RENT + rentId, 'PUT', {}).then((res) => {
         if (res.data.message === 'UPDATE_SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật giao dịch thành công!'
           if(this.filter === ''){
             this.getRents(this.page)
           }
@@ -426,14 +446,18 @@ export default {
             this.getRentWaiting(this.page)
           }
         }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
       });
     },
     HandleComplete(rentId){
       apiFactory.callApi(API_MANAGE_TRANSACTION.HANDLE_COMPLETE_RENT + rentId, 'PUT', {}).then((res) => {
         if (res.data.message === 'UPDATE_SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật giao dịch thành công!'
           this.saveUE()
         }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
       });
     },
@@ -467,7 +491,8 @@ export default {
         refundDate: this.rent.refundDate
       }).then((res) => {
         if (res.data.message === 'UPDATE_SUCCESS') {
-          alert('Cập nhật thành công')
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật giao dịch thành công!'
           if(this.filter === ''){
             this.getRents(this.page)
           }
@@ -479,6 +504,7 @@ export default {
           }
           this.showDialogUR = false
         }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
       });
       this.showDialogUE = false;
@@ -490,9 +516,11 @@ export default {
         afterStatusBook:  item[0].afterStatusBook,
       }).then((res) => {
         if (res.data.message === 'UPDATE_SUCCESS') {
-          alert('Cập nhật thành công!')
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật chi tiết giao dịch thành công!'
           this.getRents(rentId)
         }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
       });
     },
@@ -502,12 +530,13 @@ export default {
           this.getRentDetail(rentId)
         }
       }).catch(() => {
-        alert('Không thành công!')
       });
     },
     HandleCanCelRent(rentId){
       apiFactory.callApi(API_TRANSACTION.CANCEL_RENT + rentId, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Hủy giao dịch thành công!'
           if(this.filter === ''){
             this.getRents(this.page)
           }
@@ -518,10 +547,14 @@ export default {
             this.getRentWaiting(this.page)
           }
         }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
         alert('Không thành công!')
       });
-    }
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
   },
   filters: {
     formatDate(value) {
