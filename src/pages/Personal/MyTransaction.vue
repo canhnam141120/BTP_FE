@@ -17,17 +17,23 @@
             <td>Thời gian tạo</td>
             <td>Hạn GD</td>
             <td>Trạng thái</td>
-            <td>Hủy</td>
+            <td></td>
           </tr>
           </thead>
           <tbody v-for="item of listExchangeDetail" :key="item.id">
           <tr class="rowData">
-            <td>{{ item.book1Id }}</td>
+            <td style="display: flex; width: 150px;">
+              <img class="imageBook" v-bind:src="item.book1.image">
+              <div style="margin-left: 5px;">{{ item.book1.title}}</div>
+            </td>
             <td v-if="item.beforeStatusBook1==null">Chưa cập nhật</td>
             <td v-else>{{ item.beforeStatusBook1 }}</td>
             <td v-if="item.afterStatusBook1==null">Chưa cập nhật</td>
             <td v-else>{{ item.afterStatusBook1 }}</td>
-            <td>{{ item.book2Id }}</td>
+            <td style="display: flex; width: 150px;">
+              <img class="imageBook" v-bind:src="item.book2.image">
+              <div style="margin-left: 5px;">{{ item.book2.title}}</div>
+            </td>
             <td v-if="item.beforeStatusBook2==null">Chưa cập nhật</td>
             <td v-else>{{ item.beforeStatusBook2 }}</td>
             <td v-if="item.afterStatusBook2==null">Chưa cập nhật</td>
@@ -44,7 +50,10 @@
               </button>
             </td>
             <td v-if="item.status == 'Complete'">
-              <button class="tableBtn" v-on:click="FeedbackBook(item.book1Id)">
+              <button v-if="userByToken.UserId == tmpUserId" class="tableBtn" v-on:click="FeedbackBook(item.book2Id)">
+                <Icon icon="mdi:feedback"/>
+              </button>
+              <button v-else class="tableBtn" v-on:click="FeedbackBook(item.book1Id)">
                 <Icon icon="mdi:feedback"/>
               </button>
             </td>
@@ -72,9 +81,13 @@
           <div v-else>Phí dịch vụ: {{ billExchange.feeId2Navigation.price.toLocaleString() }}đ</div>
           <div>Tổng chi phí: {{ billExchange.totalAmount.toLocaleString() }}đ</div>
           <div v-if="billExchange.isPaid">
-            <div>Trạng thái: Đã thanh toán thanh toán</div>
+            <div>TT Thanh toán: Đã thanh toán</div>
             <div>Thanh toán lúc: {{ billExchange.paidDate | format}}</div>
             <div>Phương thức: {{ billExchange.payments }}</div>
+          </div>
+          <div v-if="billExchange.isRefund">
+            <div>TT Hoàn tiền: Đã hoàn tiền</div>
+            <div>Ngày hoàn tiền: {{ billExchange.refundDate | formatDate}}</div>
           </div>
           <div v-else>Trạng thái thanh toán: Chưa thanh toán</div>
         </div>
@@ -94,12 +107,15 @@
             <td>Thời gian tạo</td>
             <td>Hạn GD</td>
             <td>Trạng thái</td>
-            <td>Hủy</td>
+            <td></td>
           </tr>
           </thead>
           <tbody v-for="item of listRentDetail" :key="item.id">
           <tr class="rowData">
-            <td>{{ item.bookId }}</td>
+            <td style="display: flex; width: 150px;">
+              <img class="imageBook" v-bind:src="item.book.image">
+              <div style="margin-left: 5px;">{{ item.book.title}}</div>
+            </td>
             <td v-if="item.beforeStatusBook==null">Chưa cập nhật</td>
             <td v-else>{{ item.beforeStatusBook }}</td>
             <td v-if="item.afterStatusBook==null">Chưa cập nhật</td>
@@ -116,7 +132,7 @@
               </button>
             </td>
             <td v-if="item.status == 'Complete'">
-              <button class="tableBtn" v-on:click="FeedbackBook(item.bookId)">
+              <button v-if="userByToken.UserId == tmpUserId" class="tableBtn" v-on:click="FeedbackBook(item.bookId)">
                 <Icon icon="mdi:feedback"/>
               </button>
             </td>
@@ -283,7 +299,7 @@
                       <tbody v-for="item of listExchanges" :key="item.id">
                       <tr v-if="filterDataExchange && item.status == filterDataExchange" class="rowData">
                         <td class="tdBtn">
-                          <button class="tableBtn" v-on:click="openDialogExchangeDetail(item.id)">
+                          <button class="tableBtn" v-on:click="openDialogExchangeDetail(item.id, item.userId1 )">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -365,7 +381,7 @@
                       </tr>
                       <tr v-if="!filterDataExchange" class="rowData">
                         <td class="tdBtn">
-                          <button class="tableBtn" v-on:click="openDialogExchangeDetail(item.id)">
+                          <button class="tableBtn" v-on:click="openDialogExchangeDetail(item.id, item.userId1 )">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -447,7 +463,7 @@
                       </tr>
                       <tr v-if="filterDataExchange == 'Search' && item.id == searchExchange" class="rowData">
                         <td class="tdBtn">
-                          <button class="tableBtn" v-on:click="openDialogExchangeDetail(item.id)">
+                          <button class="tableBtn" v-on:click="openDialogExchangeDetail(item.id, item.userId1 )">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -559,7 +575,7 @@
                       <tbody v-for="item of listRents" :key="item.id">
                       <tr v-if="filterDataRent && item.status == filterDataRent" class="rowData">
                         <td style="padding-left: 10px">
-                          <button class="tableBtn" v-on:click="openDialogRentDetail(item.id)">
+                          <button class="tableBtn" v-on:click="openDialogRentDetail(item.id, item.renterId)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -590,7 +606,7 @@
                       </tr>
                       <tr v-if="!filterDataRent" class="rowData">
                         <td style="padding-left: 10px">
-                          <button class="tableBtn" v-on:click="openDialogRentDetail(item.id)">
+                          <button class="tableBtn" v-on:click="openDialogRentDetail(item.id, item.renterId)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -621,7 +637,7 @@
                       </tr>
                       <tr v-if="filterDataRent == 'Search' && item.id == searchRent" class="rowData">
                         <td style="padding-left: 10px">
-                          <button class="tableBtn" v-on:click="openDialogRentDetail(item.id)">
+                          <button class="tableBtn" v-on:click="openDialogRentDetail(item.id, item.renterId)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -710,6 +726,7 @@ export default {
       pageExchange: 1,
       showDialogEB: false,
       showDialogED: false,
+      tmpUserId: '',
 
       listRents: '',
       totalRents: '',
@@ -767,8 +784,9 @@ export default {
       }).catch(() => {
       });
     },
-    openDialogExchangeDetail(exchangeId) {
-      this.showDialogED = true;
+    openDialogExchangeDetail(exchangeId, user1Id) {
+      this.tmpUserId = user1Id
+      this.showDialogED = true
       this.getExchangeDetail(exchangeId)
     },
     cancelDialogExchangeDetail() {
@@ -906,6 +924,7 @@ export default {
       });
     },
     openDialogRentDetail(rentId) {
+      this.tmpUserId =
       this.showDialogRD = true;
       this.getRentDetail(rentId)
     },
@@ -1235,5 +1254,10 @@ strong {
   color: grey;
   font-style: italic;
   font-size: 26px;
+}
+
+.imageBook{
+  width: 50px;
+  height: auto;
 }
 </style>

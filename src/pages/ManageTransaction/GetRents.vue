@@ -12,7 +12,7 @@
               <thead>
               <tr class="header">
                 <td>Mã</td>
-                <td>Mã Sách</td>
+                <td>Sách</td>
                 <td>TT Sách trước GD</td>
                 <td>TT Sách sau GD</td>
                 <td>Thời gian tạo</td>
@@ -25,7 +25,10 @@
               <tbody v-for="item of listRentDetail" :key="item.id">
               <tr v-if="!showEditRD">
                 <td>{{ item.id}}</td>
-                <td>{{ item.bookId}}</td>
+                <td style="display: flex; width: 150px;">
+                  <img class="imageBook" v-bind:src="item.book.image">
+                  <div style="margin-left: 5px;">{{ item.book.title}}</div>
+                </td>
                 <td v-if="item.beforeStatusBook==null">Chưa cập nhật</td>
                 <td v-else>{{ item.beforeStatusBook}}</td>
                 <td v-if="item.afterStatusBook==null">Chưa cập nhật</td>
@@ -42,9 +45,12 @@
               </tr>
               <tr v-if="showEditRD && item.status != 'Cancel' && item.status != 'Waiting'" >
                 <td>{{ item.id}}</td>
-                <td>{{ item.bookId}}</td>
-                <td><input type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" style="width: 200px" v-model="item.beforeStatusBook"></td>
-                <td><input type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" style="width: 200px" v-model="item.afterStatusBook"></td>
+                <td style="display: flex; width: 150px;">
+                  <img class="imageBook" v-bind:src="item.book.image">
+                  <div style="margin-left: 5px;">{{ item.book.title}}</div>
+                </td>
+                <td><textarea type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" style="width: 200px" v-model="item.beforeStatusBook"></textarea></td>
+                <td><textarea type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" style="width: 200px" v-model="item.afterStatusBook"></textarea></td>
                 <td>{{ item.requestTime |  format}}</td>
                 <td>{{ item.expiredDate |  formatDate}}</td>
                 <td v-if="item.status == 'Trading'" ><span class="role trading">ĐANG GD</span></td>
@@ -135,10 +141,10 @@
               <button v-else  class="dialogBtn" v-on:click="saveUR">Cập Nhật</button>
             </div>
           </UpdateExchangeDialog>
-          <b-alert style="position: absolute; right: 0; margin-top: 10px" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          <b-alert style="position: absolute; right: 0; margin-top: 10px; z-index: 999999" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
             {{responseMessage}}
           </b-alert>
-          <b-alert style="position: absolute; right: 0; margin-top: 10px" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          <b-alert style="position: absolute; right: 0; margin-top: 10px; z-index: 999999" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
             {{responseMessage}}
           </b-alert>
           <div class="user-data m-b-30">

@@ -12,10 +12,10 @@
               <thead>
               <tr class="header">
                 <td>Mã</td>
-                <td>Mã Sách 1</td>
+                <td>Sách 1</td>
                 <td>TT Sách 1 trước GD</td>
                 <td>TT Sách 1 sau GD</td>
-                <td>Mã Sách 2</td>
+                <td>Sách 2</td>
                 <td>TT Sách 2 trước GD</td>
                 <td>TT Sách 2 sau GD</td>
                 <td>Thời gian tạo</td>
@@ -28,12 +28,18 @@
               <tbody v-for="item of listExchangeDetail" :key="item.id">
               <tr v-if="!showEditED">
                 <td>{{ item.id}}</td>
-                <td>{{ item.book1Id}}</td>
+                <td style="display: flex; width: 150px;">
+                  <img class="imageBook" v-bind:src="item.book1.image">
+                  <div style="margin-left: 5px;">{{ item.book1.title}}</div>
+                </td>
                 <td v-if="item.beforeStatusBook1==null">Chưa cập nhật</td>
                 <td v-else>{{ item.beforeStatusBook1}}</td>
                 <td v-if="item.afterStatusBook1==null">Chưa cập nhật</td>
                 <td v-else>{{ item.afterStatusBook1}}</td>
-                <td>{{ item.book2Id}}</td>
+                <td style="display: flex; width: 150px;">
+                  <img class="imageBook" v-bind:src="item.book2.image">
+                  <div style="margin-left: 5px;">{{ item.book2.title}}</div>
+                </td>
                 <td v-if="item.beforeStatusBook2==null">Chưa cập nhật</td>
                 <td v-else>{{ item.beforeStatusBook2}}</td>
                 <td v-if="item.afterStatusBook2==null">Chưa cập nhật</td>
@@ -50,12 +56,18 @@
               </tr>
               <tr v-if="showEditED && item.status != 'Cancel' && item.status != 'Waiting'" >
                 <td>{{ item.id}}</td>
-                <td>{{ item.book1Id}}</td>
-                <td><input type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.beforeStatusBook1"></td>
-                <td><input type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.afterStatusBook1"></td>
-                <td>{{ item.book2Id}}</td>
-                <td><input type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.beforeStatusBook2"></td>
-                <td><input type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.afterStatusBook2"></td>
+                <td style="display: flex; width: 150px;">
+                  <img class="imageBook" v-bind:src="item.book1.image">
+                  <div style="margin-left: 5px;">{{ item.book1.title}}</div>
+                </td>
+                <td><textarea type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.beforeStatusBook1"></textarea></td>
+                <td><textarea type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.afterStatusBook1"></textarea></td>
+                <td style="display: flex; width: 150px;">
+                  <img class="imageBook" v-bind:src="item.book2.image">
+                  <div style="margin-left: 5px;">{{ item.book2.title}}</div>
+                </td>
+                <td><textarea type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.beforeStatusBook2"></textarea></td>
+                <td><textarea type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.afterStatusBook2"></textarea></td>
                 <td>{{ item.requestTime |  format}}</td>
                 <td>{{ item.expiredDate |  formatDate}}</td>
                 <td v-if="item.status == 'Trading'" ><span class="role trading">ĐANG GD</span></td>
@@ -103,12 +115,12 @@
                 <td>{{item.totalAmount}}</td>
                 <td v-if="item.isPaid"><span class="role paid">ĐÃ THANH TOÁN</span></td>
                 <td v-else><span class="role notPaid">CHƯA THANH TOÁN</span></td>
-                <td v-if="item.paidDate">{{item.paidDate}}</td>
+                <td v-if="item.paidDate">{{item.paidDate | format}}</td>
                 <td v-else>Chưa thanh toán</td>
                 <td>{{item.payments}}</td>
                 <td v-if="item.isRefund"><span class="role paid">ĐÃ HOÀN TIỀN</span></td>
                 <td v-else><span class="role notPaid">CHƯA HOÀN TIỀN</span></td>
-                <td v-if="item.refundDate">{{item.refundDate}}</td>
+                <td v-if="item.refundDate">{{item.refundDate | formatDate}}</td>
                 <td v-else>Chưa hoàn tiền</td>
               </tr>
               </tbody>
@@ -121,7 +133,7 @@
             </div>
             <div class="updateBody">
               <div class="updateLeft">
-                <div class="customer">KHÁCH HÀNG 1</div>
+                <div class="customer">Khách hàng: {{exchange.userId1}}/{{exchange.userId1Navigation.fullname}}</div>
                 <label class="labelFee">TT Vận Chuyển: </label>
                 <select class="sl" v-model="exchange.storageStatus1">
                   <option v-bind:value="item.id" v-for="item of listStatus" :key="item.id">{{ item.name }}</option>
@@ -144,7 +156,7 @@
                 <input v-else type="date" class="sl" disabled required v-model="exchange.refundDate1"><br>
               </div>
               <div class="updateRight">
-                <div class="customer">KHÁCH HÀNG 2</div>
+                <div class="customer">Khách hàng: {{exchange.userId2}}/{{exchange.userId2Navigation.fullname}}</div>
                 <label class="labelFee">TT Vận Chuyển: </label>
                 <select class="sl" v-model="exchange.storageStatus2">
                   <option v-bind:value="item.id" v-for="item of listStatus" :key="item.id">{{ item.name }}</option>
@@ -172,10 +184,10 @@
               <button v-else  class="dialogBtn" v-on:click="saveUE">Cập Nhật</button>
             </div>
           </UpdateExchangeDialog>
-          <b-alert style="position: absolute; right: 0; margin-top: 10px" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          <b-alert style="position: absolute; right: 0; margin-top: 10px; z-index: 999999" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
             {{responseMessage}}
           </b-alert>
-          <b-alert style="position: absolute; right: 0; margin-top: 10px" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          <b-alert style="position: absolute; right: 0; margin-top: 10px; z-index: 999999" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
             {{responseMessage}}
           </b-alert>
           <div class="user-data m-b-30">

@@ -61,11 +61,11 @@
             </div>
           </div>
         </ConfirmDialog>
-        <b-alert style="position: absolute; right: 0;" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0"
+        <b-alert style="position: absolute; right: 0; z-index: 999999" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0"
                  @dismiss-count-down="countDownChanged">
           {{ responseMessage }}
         </b-alert>
-        <b-alert style="position: absolute; right: 0;" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0"
+        <b-alert style="position: absolute; right: 0; z-index: 999999" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0"
                  @dismiss-count-down="countDownChanged">
           {{ responseMessage }}
         </b-alert>

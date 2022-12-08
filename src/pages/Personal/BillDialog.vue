@@ -27,7 +27,7 @@ export default {
   background: #F0ECE4;
   height: auto;
   border-radius: 10px;
-  margin: 5% auto auto auto;
+  margin: 20vh auto auto auto;
 }
 
 .topDialog{

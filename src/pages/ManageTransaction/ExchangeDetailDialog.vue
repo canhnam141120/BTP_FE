@@ -33,7 +33,7 @@ export default {
   background: #F0ECE4;
   height: auto;
   border-radius: 10px;
-  margin: 90px auto auto auto;
+  margin: 20vh auto auto auto;
   display: block;
 }
 
@@ -51,7 +51,7 @@ export default {
 
 .editInput{
   color: #9D6B54;
-  height: 30px;
+  height: 70px;
   padding-left: 10px;
   border-radius: 5px;
 }
