@@ -2,14 +2,24 @@
   <Layout>
     <main style="flex-grow: 1">
       <div class="MI">
+        <LoadingDialog v-show="spinner" style="z-index: 999999"></LoadingDialog>
         <ChangePassDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
           <div class="dialogBody">
-            <label class="labelPass">Mật khẩu cũ: </label>
-            <input class="inputPass" maxlength="50" type="password" required placeholder="Nhập mật khẩu cũ" v-model="oldPassword">
-            <label class="labelPass">Mật khẩu mới: </label>
-            <input class="inputPass" maxlength="50" type="password" required placeholder="Nhập mật khẩu mới" v-model="newPassword">
-            <label class="labelPass">Nhập lại mật khẩu mới: </label>
-            <input class="inputPass" maxlength="50" type="password" required placeholder="Nhập mật khẩu cũ" v-model="copyNewPassword">
+            <div>
+              <label class="labelPass">Mật khẩu cũ: </label>
+              <input class="inputPass" maxlength="50" type="password" required placeholder="Nhập mật khẩu cũ" v-model="oldPassword">
+              <label class="err" v-if="errPassOld.length">{{this.errPassOld}}</label>
+            </div>
+            <div>
+              <label class="labelPass">Mật khẩu mới: </label>
+              <input class="inputPass" maxlength="50" type="password" required placeholder="Nhập mật khẩu mới" v-model="newPassword">
+              <label class="err" v-if="errPassNew.length">{{this.errPassNew}}</label>
+            </div>
+            <div>
+              <label class="labelPass">Nhập lại mật khẩu mới: </label>
+              <input class="inputPass" maxlength="50" type="password" required placeholder="Nhập mật khẩu cũ" v-model="copyNewPassword">
+              <label class="err" v-if="errPassNewCheck.length">{{this.errPassNewCheck}}</label>
+            </div>
             <div style="color: #ca0303; padding-top: 5px; padding-left: 150px">{{err}}</div>
           </div>
         </ChangePassDialog>
@@ -80,7 +90,10 @@
                 <div>
                   <input type="file" hidden accept="image/*" ref="file" @change="uploadImage"/>
                   <button v-if="!showUpload" class="imgBtn" v-on:click="browse"><Icon icon="material-symbols:flip-camera-ios"/></button>
-                  <button v-else class="imgBtn" v-on:click="HandleEdit"><Icon icon="dashicons:saved"/></button>
+                  <div v-else>
+                    <button class="imgBtn1" v-on:click="HandleCancel"><Icon icon="mdi:cancel-outline"/></button>
+                    <button class="imgBtn" v-on:click="HandleEdit"><Icon icon="mdi:check-outline"/></button>
+                  </div>
                   <img class="imgMI" v-bind:src="info.avatar">
                   <div class="numberMI">
                     <div class="">{{info.likeNumber}} người thích</div>
@@ -128,11 +141,12 @@ import VueJwtDecode from "vue-jwt-decode";
 import {Icon} from '@iconify/vue2';
 import ChangePassDialog from "@/pages/Personal/ChangePassDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import LoadingDialog from "@/components/LoadingDialog";
 import {generateURLUpload} from "@/S3";
 
 export default {
   name: "MyInformation",
-  components: {SideBar_Personal, Layout, Icon, ChangePassDialog, ConfirmDialog},
+  components: {SideBar_Personal, Layout, Icon, ChangePassDialog,LoadingDialog, ConfirmDialog},
   data() {
     return {
       responseFlag: true,
@@ -142,6 +156,10 @@ export default {
       showConfirmDialog: false,
       showConfirmDialogShip: false,
 
+      errPassOld: '',
+      errPassNew: '',
+      errPassNewCheck: '',
+      spinner: false,
       err: '',
       info: '',
       infoShip: '',
@@ -209,7 +227,7 @@ export default {
         recallIsFriday: this.infoShip.recallIsFriday,
         refundIsFriday: this.infoShip.refundIsFriday,
       }).then((res) => {
-        if(res.data.message == 'UPDATE_SUCCESS'){
+        if(res.data.message === 'UPDATE_SUCCESS'){
           this.responseFlag = true
           this.responseMessage = 'Cập nhật thông tin vận chuyển thành công!'
         }else{
@@ -221,6 +239,10 @@ export default {
       }).catch(() => {
       });
     },
+    HandleCancel(){
+      this.getMyInformation()
+      this.showUpload = false
+    },
     HandleEdit(){
       this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.EDIT_INFORMATION, 'PUT', {
@@ -230,7 +252,7 @@ export default {
         addressMain: this.info.addressMain,
         avatar: this.info.avatar
       }).then((res) => {
-        if(res.data.message == 'UPDATE_SUCCESS'){
+        if(res.data.message === 'UPDATE_SUCCESS'){
           this.responseFlag = true
           this.responseMessage = 'Cập nhật thành công!'
         }else{
@@ -287,12 +309,35 @@ export default {
       this.showDialog = false
     },
     save(){
-      this.showConfirmDialog = true
+      this.errPassOld = '';
+      this.errPassNew = '';
+      this.errPassNewCheck = '';
+      if(!this.oldPassword){
+        this.errPassOld = 'Vui lòng nhập mật khẩu cũ!'
+      }
+      if(!this.newPassword){
+        this.errPassNew = 'Vui lòng nhập mật khẩu mới!'
+      } else{
+        if(this.newPassword.length < 8 || this.newPassword > 30){
+          this.errPassNew = 'Mật khẩu phải có độ dài từ 8 - 30 ký tự!'
+        }
+      }
+      if(!this.copyNewPassword){
+        this.errPassNewCheck = 'Vui lòng xác nhận mật khẩu mới!'
+      }else{
+        if(this.newPassword !== this.copyNewPassword){
+          this.errPassNewCheck = 'Không khớp với mật khẩu mới!'
+        }
+      }
+      if(this.errPassOld === '' && this.errPassNew === '' && this.errPassNewCheck === '' ){
+        this.showConfirmDialog = true
+      }
     },
     cancelConfirmDialog(){
       this.showConfirmDialog = false
     },
     HandleConfirm(){
+      this.spinner = true
       this.err = ''
       this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.CHANGE_PASSWORD, 'PUT', {
@@ -300,14 +345,14 @@ export default {
         oldPassword: this.oldPassword,
         newPassword: this.newPassword,
       }).then((res) => {
-        if(res.data.message == 'UPDATE_SUCCESS'){
+        if(res.data.message === 'UPDATE_SUCCESS'){
           this.responseFlag = true
           this.responseMessage = 'Đổi mật khẩu thành công!'
           this.dismissCountDown = this.dismissSecs
           this.showConfirmDialog = false
           this.showDialog = false
         }else{
-          if(res.data.message == 'OLD_PASSWORD_INCORRECT'){
+          if(res.data.message === 'OLD_PASSWORD_INCORRECT'){
             this.err = 'Mật khẩu cũ không chính xác!'
             this.showConfirmDialog = false
           }
@@ -319,6 +364,7 @@ export default {
             this.showDialog = false
           }
         }
+        this.spinner = false
       }).catch(() => {
       });
     },
@@ -448,6 +494,20 @@ strong {
   margin-right: 50px;
 }
 
+.imgBtn1{
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  color: white;
+  background: #9D6B54;
+  border: 1px hidden;
+  margin-top: 200px;
+  margin-left: 40px;
+  font-size: 26px;
+  padding-bottom: 8px;
+}
+
 .imgBtn{
   position: absolute;
   width: 50px;
@@ -463,6 +523,12 @@ strong {
 }
 
 .imgBtn:hover{
+  border: 1px solid #9D6B54;
+  color: #9D6B54;
+  background: #F0ECE4;
+}
+
+.imgBtn1:hover{
   border: 1px solid #9D6B54;
   color: #9D6B54;
   background: #F0ECE4;
@@ -556,5 +622,11 @@ strong {
   border: 1px solid #9D6B54;
   color: #9D6B54;
   text-align: center;
+}
+
+.err{
+  margin-left: 180px;
+  margin-top: 2px;
+  color: #ca0303;
 }
 </style>

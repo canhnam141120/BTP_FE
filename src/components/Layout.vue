@@ -53,12 +53,11 @@
                 <template v-slot:button-content>
                   <Icon class="icon" icon="tabler:bell-ringing-2"/><div class="countNoti">{{count}}</div>
                 </template>
-                <div class="titleNoti">Thông Báo</div>
+                <div class="titleNoti">THÔNG BÁO</div>
                 <div v-if="noti != ''">
                   <div v-for="item of noti" :key="item.id" class="notification">
-                    <div v-if="!item.isRead" style="background-color: #F0ECE4; height: 25px; padding-left: 10px; padding-top: 5px">"{{item.content}}"</div>
-                    <div v-else style="padding-left: 10px;height: 25px;padding-top: 5px;">"{{item.content}}"</div>
-                    <hr style="margin-top: 0px; margin-bottom: 0px">
+                    <div v-if="!item.isRead" style="background-color: #F0ECE4; border-radius: 5px; padding: 5px 10px;">{{item.content}}</div>
+                    <div v-else style="padding: 5px 10px;">{{item.content}}</div>
                   </div>
                   <div class="allNoti"><router-link class="linkAllNoti" to="AllNotification">Xem tất cả</router-link></div>
                 </div>
@@ -708,15 +707,14 @@ export default {
 }
 
 .notification{
-  width: 550px;
+  word-wrap: break-word;
+  width: 500px;
+  height: auto;
   margin-right: 10px;
   margin-left: 10px;
+  margin-bottom: 2px;
   color: #9d6b54;
   font-size: 12px;
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .countNoti{

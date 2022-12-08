@@ -18,6 +18,10 @@ export default {
 </script>
 
 <style scoped>
+.imageBook{
+  width: 50px;
+  height: auto;
+}
 
 .dialog {
   position: fixed;

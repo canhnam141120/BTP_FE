@@ -687,4 +687,6 @@ export default {
   background-color: #F0ECE4;
   color: #9D6B54;
 }
+
+
 </style>
