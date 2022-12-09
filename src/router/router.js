@@ -29,6 +29,11 @@ const routers = [
         component: () => import('@/pages/Policy&Terms'),
     },
     {
+        path:'/Introduce',
+        name:'Introduce',
+        component: () => import('@/pages/Introduce'),
+    },
+    {
         path:'/PostDetail',
         name:'PostDetail',
         component: () => import('@/pages/PostDetail'),

@@ -40,7 +40,7 @@
             >Quy trình
             </router-link>
             <router-link
-                to="/users-management"
+                to="/Introduce"
                 class="Main__list__item musers-management"
                 active-color="#9D6B54"
             >Giới thiệu
