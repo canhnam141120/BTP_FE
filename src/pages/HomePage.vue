@@ -329,12 +329,10 @@ strong {
 
 .grid-book .info .book-title {
   color: #9D6B54;
-  margin-left: 5px;
-  margin-right: 5px;
-  display: block;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .grid-book .info .book-status {

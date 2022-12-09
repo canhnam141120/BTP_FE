@@ -76,12 +76,24 @@
                 </div>
                 <hr style="margin: 5px" />
                 <router-link to="/MyBooks" class="dropdown-item">
-                  <Icon class="iconPerson" icon="ic:round-person-pin"/> Trang cá nhân
+                  <Icon class="iconPerson" icon="ph:folder-user-bold"/> Quản lý cá nhân
+                </router-link>
+                <hr style="margin: 5px" />
+                <router-link to="/MyTransaction" class="dropdown-item">
+                  <Icon class="iconPerson" icon="uil:transaction"/> Giao dịch
+                </router-link>
+                <hr style="margin: 5px" />
+                <router-link to="/MyRequests" class="dropdown-item">
+                  <Icon class="iconPerson" icon="bx:mail-send"/> Yêu cầu đã gửi
+                </router-link>
+                <hr style="margin: 5px" />
+                <router-link to="/MyInformation" class="dropdown-item">
+                  <Icon class="iconPerson" icon="mdi:user-card-details-outline"/> Thông tin cá nhân
                 </router-link>
                 <hr style="margin: 5px" />
                 <div v-if="user.roleId == 1 || user.roleId == 2">
                   <router-link  to="/ManageIndex" class="dropdown-item">
-                    <Icon class="iconPerson" icon="bi:list-task"/> Quản trị
+                    <Icon class="iconPerson" icon="material-symbols:format-list-bulleted-rounded"/> Quản trị
                   </router-link>
                   <hr style="margin: 5px" />
                 </div>

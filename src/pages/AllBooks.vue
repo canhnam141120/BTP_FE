@@ -473,8 +473,9 @@ strong {
   margin-right: 10px;
   display: block;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   color: #9D6B54;
 }
 

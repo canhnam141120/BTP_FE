@@ -135,7 +135,7 @@ export default {
       if(!this.address){
         this.errAddress = 'Vui lòng nhập địa chỉ!'
       }
-      if(regxMail.test(this.email) && this.password && this.fullname && regxPhone.test(this.phone) && this.address ){
+      if(this.errMail === ''  && this.errPass === ''  && this.errPassCheck === '' && this.errName === ''  && this.errPhone === ''  && this.errAddress === ''){
         this.spinner = true
         apiFactory.callApi(API_USER.USER_REGISTER, 'POST', {
           email: this.email,
