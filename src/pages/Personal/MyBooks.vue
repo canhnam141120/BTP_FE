@@ -59,7 +59,7 @@
             <b-row class="book-content">
               <b-col class="input-label" cols="2">Chọn ảnh:</b-col>
               <b-col class="input-div" cols="6"><input type="file" title=" " class="input-text-short" name="image"
-                                                       @change="handleFileUpload"></b-col>
+                                                       @change="uploadImage"></b-col>
             </b-row>
           </div>
           <div class="right-form">
@@ -94,14 +94,14 @@
             <b-col class="input-label" style="width: 60px" cols="2">Trạng thái:</b-col>
             <b-col class="input-div" cols="9">
               <textarea type="text" style="height: 100px; width: 1200px"
-                        maxlength="50" required placeholder="Nhập trạng thái"
+                        maxlength="250" required placeholder="Nhập trạng thái"
                         v-model="statusBook" class="input-text">
               </textarea></b-col>
           </b-row>
           <b-row class="book-content">
             <b-col class="input-label" style="width: 60px" cols="2">Nội dung:</b-col>
             <b-col class="input-div" cols="9">
-              <textarea type="text" maxlength="500" required style="height: 100px; width: 1200px"
+              <textarea type="text" required style="height: 100px; width: 1200px"
                         placeholder="Nhập mô tả nội dung sách"
                         v-model="description" class="input-text">
             </textarea></b-col>
@@ -112,6 +112,12 @@
           <button class="dialogBtn" v-on:click="save">Xác nhận</button>
         </div>
       </CreateBookDialog>
+      <b-alert style="position: absolute; right: 0; z-index: 999999" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+        {{responseMessage}}
+      </b-alert>
+      <b-alert style="position: absolute; right: 0; z-index: 999999" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+        {{responseMessage}}
+      </b-alert>
       <div class="MB">
         <div class="containerMB">
           <div class="left-contentMB">
@@ -153,31 +159,39 @@
                   </div>
                 </div>
               </template>
-              <div class="gridMB">
+              <div v-if="totalBook != 0" class="gridMB">
                 <div class="itemMB" v-for="item of listBook" :key="item.id">
-                  <router-link class="active" :to="{ name: 'ViewRequestBook', query: { id:item.id }}">
-                    <img v-bind:src="item.image">
+                  <router-link style="position: relative" v-if="item.isReady && item.status == 'Approved'" :to="{ name: 'ViewRequestBook', query: { id:item.id }}">
+                    <img class="book-image" v-bind:src="item.image">
+                    <label class="laye1" v-if="item.isTrade">Đang giao dịch</label>
+                    <label class="laye2" v-else>Sẵn sàng</label>
+                  </router-link>
+                  <router-link v-else  style="position: relative" class="active" :to="{ name: 'ViewRequestBook', query: { id:item.id }}">
+                    <img class="book-image" v-bind:src="item.image">
+                    <label v-if="!item.isReady && item.status == 'Approved'" class="labelHideBook">Đang ẩn</label>
+                    <label v-if="item.isReady && item.status == 'Waiting'" class="labelStatusBook">Đang đợi duyệt</label>
+                    <label v-if="item.isReady && item.status == 'Denied'" class="labelStatusBook">Không được duyệt</label>
                   </router-link>
                   <div class="infoMB">
-                    <div class="book-titleMB">{{ item.title }}</div>
-                    <div class="book-statusMB">Thể loại: {{ item.categoryId }}</div>
-                    <label class="book-statusMB">Giá bìa: <strong>{{
-                        item.coverPrice.toLocaleString()
+                    <div class="book-titleMB"><strong>{{ item.title }}</strong></div>
+                    <div class="book-statusMB">Thể loại: <strong>{{ item.category.name }}</strong></div>
+                    <label class="book-statusMB">Giá cọc: <strong>{{
+                        item.depositPrice.toLocaleString()
                       }}đ</strong></label>
                     <label class="book-statusMB">{{ item.statusBook }}</label>
-                    <label v-if="item.status == 'Approved'" class="book-statusMB">Trạng thái: <strong style="color: green">Đã được
+<!--                    <label v-if="item.status == 'Approved'" class="book-statusMB">Trạng thái: <strong style="color: green">Đã được
                       duyệt</strong></label>
-                    <label v-if="item.status == 'Denied'" class="book-statusMB">Trạng thái: <strong  style="color: red">Đã bị
-                      hủy</strong></label>
+                    <label v-if="item.status == 'Denied'" class="book-statusMB">Trạng thái: <strong  style="color: #ca0303;">Không được duyệt</strong></label>
                     <label v-if="item.status == 'Waiting'" class="book-statusMB">Trạng thái: <strong>Đang đợi
                       duyệt</strong></label>
                     <label class="book-statusMB" style="color: red; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
-                    <label class="book-statusMB" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
+                    <label class="book-statusMB" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>-->
                   </div>
                 </div>
               </div>
+              <div v-else class="noBook">Danh sách trống!</div>
             </b-skeleton-wrapper>
-            <div class="pagingMB">
+            <div v-if="totalBook != 0" class="pagingMB">
               <b-pagination v-if="filter==''" class="page-numberMB" @input="getMyBooks" v-model="page"
                             :total-rows="totalBook"
                             :per-page="6">
@@ -254,12 +268,18 @@ import SideBar_Personal from "../../components/SideBar_Personal";
 import VueJwtDecode from "vue-jwt-decode";
 import {Icon} from '@iconify/vue2';
 import CreateBookDialog from "@/pages/Personal/CreateBookDialog";
+import {generateURLUpload} from "@/S3";
 
 export default {
   name: "MyBooks",
   components: {SideBar_Personal, Layout, Icon, CreateBookDialog},
   data() {
     return {
+      responseFlag: true,
+      responseMessage: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
+
       imageSrc: '',
       listBook: '',
       totalBook: '',
@@ -291,11 +311,14 @@ export default {
       statusBook: '',
       isExchange: false,
       isRent: false,
-      rentFee: '',
+      rentFee: 0,
       image: ''
     }
   },
   created() {
+    if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
     this.getMyBooks(1)
   },
   methods: {
@@ -318,25 +341,24 @@ export default {
     getMyBooks(pageNumber) {
       window.scroll(0, 0)
       this.loading = true;
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       if (this.isSearch) {
         apiFactory.callApi(API_PERSONAL.SEARCH_MY_BOOK + '?page=' + pageNumber, 'POST', {
           userId: this.userByToken.UserId,
           search: this.search
         }).then((res) => {
-          this.listBook = res.data.data
-          this.totalBook = res.data.numberOfRecords
-          this.loading = false;
+            this.listBook = res.data.data
+            this.totalBook = res.data.numberOfRecords
+            this.loading = false;
         }).catch(() => {
         });
       } else {
         apiFactory.callApi(API_PERSONAL.LIST_BOOK + '?page=' + pageNumber, 'POST', {
           userId: this.userByToken.UserId
         }).then((res) => {
-          this.listBook = res.data.data
-          this.totalBook = res.data.numberOfRecords
-          this.loading = false;
+            this.listBook = res.data.data
+            this.totalBook = res.data.numberOfRecords
+            this.loading = false;
         }).catch(() => {
         });
       }
@@ -400,8 +422,7 @@ export default {
       this.showDialog = false
     },
     save() {
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_BOOK.CREATE_BOOK, 'POST', {
         image: this.imageSrc,
         userId: this.userByToken.UserId,
@@ -422,12 +443,25 @@ export default {
         rentFee: this.rentFee
       }).then((res) => {
         if (res.data.message === 'CREATE_SUCCESS') {
-          this.showDialog = false
+          this.getMyBooks(1)
+          this.responseFlag = true
+          this.responseMessage = 'Sách của bạn đã được gửi cho QTV để duyệt!'
         }
+        else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra, vui lòng thử lại!!'
+        }
+        this.dismissCountDown = this.dismissSecs
+        this.showDialog = false
       }).catch(() => {
+        this.dismissCountDown = this.dismissSecs
+        this.responseFlag = false
+        this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
+        this.showDialog = false
       });
     },
-    handleFileUpload(e) {
+
+    /*handleFileUpload(e) {
       const file = document.querySelector('input[type=file]').files[0]
       var files = e.target.files
       if (!files[0]) {
@@ -442,7 +476,23 @@ export default {
       }
       console.log(this.imageSrc)
       reader.readAsDataURL(file);
+    },*/
+
+    async uploadImage(){
+      const image = document.querySelector('input[type=file]').files[0]
+      const url = await generateURLUpload(image.name)
+      await  fetch(url,{
+        method: "PUT",
+        headers: {
+          "Content-Type": "image/jpeg"
+        },
+        body: image
+      })
+
+      const  url_uploaded = url.split("?")[0]
+      this.imageSrc  = url_uploaded
     },
+
     HandleSearch() {
       if (!this.search) {
         this.filter= 'Tất Cả'
@@ -452,6 +502,9 @@ export default {
         this.isSearch = true;
       }
       return this.getMyBooks(1)
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
     },
   }
 }
@@ -468,6 +521,7 @@ main {
 
 strong {
   color: #9D6B54;
+  font-weight: 600;
 }
 
 .MB {
@@ -478,7 +532,7 @@ strong {
   background: #F0F0F0;
   max-width: 1230px;
   border-radius: 10px;
-  margin: 0px auto 20px auto;
+  margin: 0px auto 10px auto;
   display: flex;
   justify-content: space-between;
 }
@@ -488,7 +542,7 @@ strong {
   background: #F0ECE4;
   border-radius: 10px;
   display: flex;
-  margin-top: 30px;
+  margin-top: 10px;
   padding-bottom: 100px;
   border: 1px solid #9D6B54;
 }
@@ -497,7 +551,7 @@ strong {
   width: 71%;
   background: #F0ECE4;
   border-radius: 10px;
-  margin-top: 30px;
+  margin-top: 10px;
   display: block;
   border: 1px solid #9D6B54;
 }
@@ -552,6 +606,26 @@ strong {
   margin-left: 10px;
 }
 
+.laye2{
+  margin-left: 20px;
+  position: absolute;
+  left: 0;
+  background-color: green;
+  font-size: 12px;
+  color: #F0ECE4;
+  padding: 5px;
+}
+
+.laye1{
+  margin-left: 20px;
+  position: absolute;
+  left: 0;
+  font-size: 12px;
+  background-color: #ca0303;
+  color: #F0ECE4;
+  padding: 5px;
+}
+
 .right-contentMB .searchMB .btnMB:hover {
   border-color: #9D6B54;
   background-color: #F0ECE4;
@@ -565,6 +639,7 @@ strong {
 }
 
 .right-contentMB .gridMB .itemMB {
+  color: #9D6B54;
   border-radius: 10px;
   width: 260px;
   height: auto;
@@ -576,22 +651,56 @@ strong {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }
 
-.right-contentMB .gridMB .itemMB img {
+.right-contentMB .gridMB .itemMB .book-image {
   margin-left: 20px;
   height: 290px;
   width: 220px;
+}
+
+.labelHideBook {
+  left: 0;
+  object-fit: scale-down;
+  margin-left: 20px;
+  color: white;
+  position: absolute;
+  height: 290px;
+  width: 220px;
+  background-color: #9d6b54;
+  opacity: 0.8;
+  font-size: 26px;
+  text-align: center;
+  padding-top: 100px;
+}
+
+.labelHideBook:hover{
+  cursor: pointer;
+}
+
+.labelStatusBook{
+  left: 0;
+  object-fit: scale-down;
+  margin-left: 20px;
+  color: white;
+  position: absolute;
+  height: 290px;
+  width: 220px;
+  background-color: grey;
+  opacity: 0.8;
+  font-size: 26px;
+  text-align: center;
+  padding-top: 100px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.labelStatusBook:hover{
+  cursor: pointer;
 }
 
 .right-contentMB .gridMB .infoMB {
   height: auto;
   padding: 5px;
   margin-bottom: 10px;
-}
-
-.right-contentMB .gridMB .infoMB img {
-  width: 20px;
-  height: 20px;
-  margin-left: 15px;
 }
 
 .right-contentMB .gridMB .infoMB label {
@@ -635,7 +744,6 @@ strong {
 
 .create-book {
   border: none;
-  border: none;
   border-radius: 8px;
   background: #DFD5CB;
   width: 118px;
@@ -655,6 +763,13 @@ strong {
 .create-book:hover {
   background: #9D6B54;
   color: white;
+}
 
+.noBook{
+  text-align: center;
+  padding-top: 50px;
+  color: grey;
+  font-style: italic;
+  font-size: 26px;
 }
 </style>

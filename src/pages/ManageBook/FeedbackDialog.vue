@@ -46,13 +46,13 @@ export default {
   height: auto;
   max-height: 600px;
   border-radius: 10px;
-  margin: 5% auto auto auto;
+  margin: 10vh auto auto auto;
 }
 
 .topDialog{
   display: flex;
   justify-content: space-between;
-  padding-left: 480px;
+  padding-left: 500px;
   padding-top: 10px;
   padding-right: 10px;
 }

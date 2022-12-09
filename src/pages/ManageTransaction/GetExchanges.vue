@@ -1,6 +1,8 @@
 <template>
   <Side_Bar>
     <div class="ml">
+      <LoadingDialog v-show="spinner" style="z-index: 1;"></LoadingDialog>
+      <Dashboard></Dashboard>
       <div class="row">
         <div class="col-lg-6">
           <ExchangeDetailDialog :show="showDialogED"
@@ -9,11 +11,11 @@
             <table class="table">
               <thead>
               <tr class="header">
-                <td>Mã chi tiết</td>
-                <td>Mã Sách 1</td>
+                <td>Mã</td>
+                <td>Sách 1</td>
                 <td>TT Sách 1 trước GD</td>
                 <td>TT Sách 1 sau GD</td>
-                <td>Mã Sách 2</td>
+                <td>Sách 2</td>
                 <td>TT Sách 2 trước GD</td>
                 <td>TT Sách 2 sau GD</td>
                 <td>Thời gian tạo</td>
@@ -26,45 +28,59 @@
               <tbody v-for="item of listExchangeDetail" :key="item.id">
               <tr v-if="!showEditED">
                 <td>{{ item.id}}</td>
-                <td>{{ item.book1Id}}</td>
+                <td style="display: flex; width: 150px;">
+                  <img class="imageBook" v-bind:src="item.book1.image">
+                  <div style="margin-left: 5px;">{{ item.book1.title}}</div>
+                </td>
                 <td v-if="item.beforeStatusBook1==null">Chưa cập nhật</td>
                 <td v-else>{{ item.beforeStatusBook1}}</td>
                 <td v-if="item.afterStatusBook1==null">Chưa cập nhật</td>
                 <td v-else>{{ item.afterStatusBook1}}</td>
-                <td>{{ item.book2Id}}</td>
+                <td style="display: flex; width: 150px;">
+                  <img class="imageBook" v-bind:src="item.book2.image">
+                  <div style="margin-left: 5px;">{{ item.book2.title}}</div>
+                </td>
                 <td v-if="item.beforeStatusBook2==null">Chưa cập nhật</td>
                 <td v-else>{{ item.beforeStatusBook2}}</td>
                 <td v-if="item.afterStatusBook2==null">Chưa cập nhật</td>
                 <td v-else>{{ item.afterStatusBook2}}</td>
                 <td>{{ item.requestTime |  format}}</td>
                 <td>{{ item.expiredDate |  formatDate}}</td>
-                <td v-if="item.status == 'Trading'" ><span class="role approved">ĐANG GD</span></td>
-                <td v-if="item.status == 'Complete'" ><span class="role approved">HOÀN THÀNH</span></td>
-                <td v-if="item.status == 'Cancel'" ><span class="role denied">ĐÃ HỦY</span></td>
+                <td v-if="item.status == 'Trading'" ><span class="role trading">ĐANG GD</span></td>
+                <td v-if="item.status == 'Complete'" ><span class="role complete">HOÀN THÀNH</span></td>
+                <td v-if="item.status == 'Cancel'" ><span class="role cancel">ĐÃ HỦY</span></td>
                 <td v-if="item.status == 'Waiting'" ><span class="role waiting">ĐANG ĐỢI</span></td>
-                <td v-if="item.status == 'Waiting'"><button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="HandleCancelExchangeDetail(item.id, item.exchangeId)">Hủy</button></td>
+                <td v-if="item.status == 'Waiting'"><button class="tableBtnAction" v-on:click="HandleCancelExchangeDetail(item.id, item.exchangeId)"><Icon icon="mdi:cancel-box"/></button></td>
+                <td v-else><button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="mdi:cancel-box"/></button></td>
+
               </tr>
               <tr v-if="showEditED && item.status != 'Cancel' && item.status != 'Waiting'" >
                 <td>{{ item.id}}</td>
-                <td>{{ item.book1Id}}</td>
-                <td><input type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.beforeStatusBook1"></td>
-                <td><input type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.afterStatusBook1"></td>
-                <td>{{ item.book2Id}}</td>
-                <td><input type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.beforeStatusBook2"></td>
-                <td><input type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.afterStatusBook2"></td>
+                <td style="display: flex; width: 150px;">
+                  <img class="imageBook" v-bind:src="item.book1.image">
+                  <div style="margin-left: 5px;">{{ item.book1.title}}</div>
+                </td>
+                <td><textarea type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.beforeStatusBook1"></textarea></td>
+                <td><textarea type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.afterStatusBook1"></textarea></td>
+                <td style="display: flex; width: 150px;">
+                  <img class="imageBook" v-bind:src="item.book2.image">
+                  <div style="margin-left: 5px;">{{ item.book2.title}}</div>
+                </td>
+                <td><textarea type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.beforeStatusBook2"></textarea></td>
+                <td><textarea type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" v-model="item.afterStatusBook2"></textarea></td>
                 <td>{{ item.requestTime |  format}}</td>
                 <td>{{ item.expiredDate |  formatDate}}</td>
-                <td v-if="item.status == 'Trading'" ><span class="role approved">ĐANG GD</span></td>
-                <td v-if="item.status == 'Complete'" ><span class="role approved">HOÀN THÀNH</span></td>
-                <td v-if="item.status == 'Cancel'" ><span class="role denied">ĐÃ HỦY</span></td>
+                <td v-if="item.status == 'Trading'" ><span class="role trading">ĐANG GD</span></td>
+                <td v-if="item.status == 'Complete'" ><span class="role complete">HOÀN THÀNH</span></td>
+                <td v-if="item.status == 'Cancel'" ><span class="role cancel">ĐÃ HỦY</span></td>
                 <td v-if="item.status == 'Waiting'" ><span class="role waiting">ĐANG ĐỢI</span></td>
-                <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="editExchangeDetail(item.id, item.exchangeId)">LƯU</button>  </td>
+                <td><button class="tableBtnAction" v-on:click="editExchangeDetail(item.id, item.exchangeId)"><Icon icon="dashicons:cloud-saved"/></button></td>
               </tr>
               </tbody>
             </table>
             <div class="divBtn">
-              <button v-if="!showEditED" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router btnUpdate" v-on:click="showEditED = true">CẬP NHẬT</button>
-              <button v-if="showEditED" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router btnUpdate" v-on:click="showEditED = false">HỦY CẬP NHẬT</button>
+              <button v-if="!showEditED" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router btnUpdate" v-on:click="showEditED = true">Cập nhật</button>
+              <button v-if="showEditED" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router btnUpdate" v-on:click="showEditED = false">Xong</button>
             </div>
           </ExchangeDetailDialog>
           <ExchangeBillDialog :show="showDialogBD"
@@ -83,6 +99,8 @@
                 <td>TT Thanh toán</td>
                 <td>Ngày thanh toán</td>
                 <td>Phương thức thanh toán</td>
+                <td>TT Hoàn Tiền</td>
+                <td>Ngày Hoàn Tiền</td>
               </tr>
               </thead>
               <tbody v-for="item of listExchangeBills" :key="item.id">
@@ -92,14 +110,18 @@
                 <td>{{item.totalBook}}</td>
                 <td>{{item.depositFee.toLocaleString()}}đ</td>
                 <td>{{item.feeId1Navigation.price.toLocaleString()}}đ</td>
-                <td v-if="item.feeId3Navigation">{{item.feeId2Navigation.price.toLocaleString()}}đ + {{item.totalBook}}x{{item.feeId3Navigation.price}}đ</td>
+                <td v-if="item.feeId3Navigation">{{item.feeId2Navigation.price.toLocaleString()}}đ + {{item.totalBook-1}}x{{item.feeId3Navigation.price}}đ</td>
                 <td v-else>{{item.feeId2Navigation.price.toLocaleString()}}đ</td>
                 <td>{{item.totalAmount}}</td>
                 <td v-if="item.isPaid"><span class="role paid">ĐÃ THANH TOÁN</span></td>
                 <td v-else><span class="role notPaid">CHƯA THANH TOÁN</span></td>
-                <td v-if="item.paidDate">{{item.paidDate}}</td>
+                <td v-if="item.paidDate">{{item.paidDate | format}}</td>
                 <td v-else>Chưa thanh toán</td>
                 <td>{{item.payments}}</td>
+                <td v-if="item.isRefund"><span class="role paid">ĐÃ HOÀN TIỀN</span></td>
+                <td v-else><span class="role notPaid">CHƯA HOÀN TIỀN</span></td>
+                <td v-if="item.refundDate">{{item.refundDate | formatDate}}</td>
+                <td v-else>Chưa hoàn tiền</td>
               </tr>
               </tbody>
             </table>
@@ -111,7 +133,7 @@
             </div>
             <div class="updateBody">
               <div class="updateLeft">
-                <div class="customer">KHÁCH HÀNG 1</div>
+                <div class="customer">Khách hàng: {{exchange.userId1}}/{{exchange.userId1Navigation.fullname}}</div>
                 <label class="labelFee">TT Vận Chuyển: </label>
                 <select class="sl" v-model="exchange.storageStatus1">
                   <option v-bind:value="item.id" v-for="item of listStatus" :key="item.id">{{ item.name }}</option>
@@ -134,7 +156,7 @@
                 <input v-else type="date" class="sl" disabled required v-model="exchange.refundDate1"><br>
               </div>
               <div class="updateRight">
-                <div class="customer">KHÁCH HÀNG 2</div>
+                <div class="customer">Khách hàng: {{exchange.userId2}}/{{exchange.userId2Navigation.fullname}}</div>
                 <label class="labelFee">TT Vận Chuyển: </label>
                 <select class="sl" v-model="exchange.storageStatus2">
                   <option v-bind:value="item.id" v-for="item of listStatus" :key="item.id">{{ item.name }}</option>
@@ -162,17 +184,22 @@
               <button v-else  class="dialogBtn" v-on:click="saveUE">Cập Nhật</button>
             </div>
           </UpdateExchangeDialog>
+          <b-alert style="position: absolute; right: 0; margin-top: 10px; z-index: 999999" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+            {{responseMessage}}
+          </b-alert>
+          <b-alert style="position: absolute; right: 0; margin-top: 10px; z-index: 999999" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+            {{responseMessage}}
+          </b-alert>
           <div class="user-data m-b-30">
             <div class="titleMB">QUẢN LÝ GIAO DỊCH ĐỔI</div>
-            <hr>
             <div class="search-transaction">
-              <router-link to="/ManageTransaction/rent" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" style="height: 50px; padding-top: 10px">Xem giao dịch thuê</router-link>
+              <button class="autoTrading" v-on:click="autoTrading">Duyệt GD hợp lệ</button>
               <select class="selectCss" v-model="filter" @change="onchange($event)">
                 <option v-bind:value="item" v-for="item of listFilter" :key="item">{{ item }}</option>
               </select>
               <div>
                 <input type="number" v-model="search" placeholder="Nhập mã giao dịch">
-                <button v-on:click="HandleSearch">Tìm</button>
+                <button class="btnSearch" v-on:click="HandleSearch">Tìm</button>
               </div>
             </div>
             <div v-if="totalExchanges==0 && filter == ''" class="table-responsive table-data noResult">
@@ -184,10 +211,10 @@
                 <tr>
                   <td>Chi tiết</td>
                   <td>Mã GD</td>
-                  <td>Mã - Tên KH1</td>
-                  <td>TT Lưu trữ sách - KH1</td>
-                  <td>Mã - Tên KH2</td>
-                  <td>TT Lưu trữ sách - KH2</td>
+                  <td>Khách hàng 1</td>
+                  <td>Vận đơn KH1</td>
+                  <td>Khách hàng 2</td>
+                  <td>Vận đơn KH2</td>
                   <td>Ngày tạo</td>
                   <td>Trạng thái</td>
                   <td>Hóa đơn</td>
@@ -196,36 +223,39 @@
                 </thead>
                 <tbody v-for="item of listExchanges" :key="item.id">
                 <tr>
-                  <td>
-                    <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="openDialogDetail(item.id)">XEM</button>
-                  </td>
+                  <td style="padding-left: 12px"><button class="tableBtnAction" v-on:click="openDialogDetail(item.id)"><Icon icon="ic:baseline-remove-red-eye"/></button></td>
                   <td>{{ item.id }}</td>
                   <td>{{ item.userId1 }} - {{ item.userId1Navigation.fullname }}</td>
                   <td v-if="item.storageStatus1 == 'Waiting'" ><span class="role tradingWaiting">ĐANG ĐỢI</span></td>
-                  <td v-if="item.storageStatus1 == 'Received'"><span class="role tradingReceived">ĐÃ NHẬN - {{item.receiveDate1|formatDate}}</span></td>
-                  <td v-if="item.storageStatus1 == 'Sent'" ><span class="role tradingSent">ĐÃ GỬI - {{item.sendDate1|formatDate}}</span></td>
-                  <td v-if="item.storageStatus1 == 'Recall'" ><span class="role tradingRecall">ĐÃ THU HỒI - {{item.recallDate1|formatDate}}</span></td>
-                  <td v-if="item.storageStatus1 == 'Refund'" ><span class="role tradingRefund">ĐÃ HOÀN TRẢ - {{item.refundDate1|formatDate}}</span></td>
+                  <td v-if="item.storageStatus1 == 'Received'"><span class="role tradingStatus">ĐÃ NHẬN - {{item.receiveDate1|formatDate}}</span></td>
+                  <td v-if="item.storageStatus1 == 'Sent'" ><span class="role tradingStatus">ĐÃ GỬI - {{item.sendDate1|formatDate}}</span></td>
+                  <td v-if="item.storageStatus1 == 'Recall'" ><span class="role tradingStatus">ĐÃ THU HỒI - {{item.recallDate1|formatDate}}</span></td>
+                  <td v-if="item.storageStatus1 == 'Refund'" ><span class="role tradingStatus">ĐÃ HOÀN TRẢ - {{item.refundDate1|formatDate}}</span></td>
                   <td>{{ item.userId2 }} - {{ item.userId2Navigation.fullname }}</td>
                   <td v-if="item.storageStatus2 == 'Waiting'" ><span class="role tradingWaiting">ĐANG ĐỢI</span></td>
-                  <td v-if="item.storageStatus2 == 'Received'" ><span class="role tradingReceived">ĐÃ NHẬN - {{item.receiveDate2|formatDate}}</span></td>
-                  <td v-if="item.storageStatus2 == 'Sent'" ><span class="role tradingSent">ĐÃ GỬI - {{item.sendDate2|formatDate}}</span></td>
-                  <td v-if="item.storageStatus2 == 'Recall'" ><span class="role tradingRecall">ĐÃ THU HÔI - {{item.recallDate2|formatDate}}</span></td>
-                  <td v-if="item.storageStatus2 == 'Refund'" ><span class="role tradingRefund">ĐÃ HOÀN TRẢ - {{item.refundDate2|formatDate}}</span></td>
+                  <td v-if="item.storageStatus2 == 'Received'" ><span class="role tradingStatus">ĐÃ NHẬN - {{item.receiveDate2|formatDate}}</span></td>
+                  <td v-if="item.storageStatus2 == 'Sent'" ><span class="role tradingStatus">ĐÃ GỬI - {{item.sendDate2|formatDate}}</span></td>
+                  <td v-if="item.storageStatus2 == 'Recall'" ><span class="role tradingStatus">ĐÃ THU HÔI - {{item.recallDate2|formatDate}}</span></td>
+                  <td v-if="item.storageStatus2 == 'Refund'" ><span class="role tradingStatus">ĐÃ HOÀN TRẢ - {{item.refundDate2|formatDate}}</span></td>
                   <td>{{ item.date | formatDate}}</td>
-                  <td v-if="item.status == 'Trading'"><span class="role approved">ĐANG GD</span></td>
-                  <td v-if="item.status == 'Complete'"><span class="role complete">XONG</span></td>
-                  <td v-if="item.status == 'Cancel'"><span class="role denied">ĐÃ HỦY</span></td>
+                  <td v-if="item.status == 'Trading'"><span class="role trading">ĐANG GD</span></td>
+                  <td v-if="item.status == 'Complete'"><span class="role complete">HOÀN THÀNH</span></td>
+                  <td v-if="item.status == 'Cancel'"><span class="role cancel">ĐÃ HỦY</span></td>
                   <td v-if="item.status == 'Waiting'"><span class="role waiting">ĐANG ĐỢI</span></td>
                   <td>
-                    <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="openDialogBill(item.id)">XEM</button>
+                    <button class="tableBtnAction" v-on:click="openDialogBill(item.id)"><Icon icon="ic:baseline-remove-red-eye"/></button>
                   </td>
                   <td v-if="item.status == 'Waiting'">
-                    <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="HandleTrading(item.id)">DUYỆT</button>
-                    <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="HandleCanCelExchange(item.id)">Hủy</button>
+                    <button class="tableBtnAction" v-on:click="HandleTrading(item.id)"><Icon icon="material-symbols:check-box-rounded"/></button>
+                    <button class="tableBtnAction" v-on:click="HandleCanCelExchange(item.id)"><Icon icon="mdi:cancel-box"/></button>
+                  </td>
+                  <td v-if="item.status == 'Complete' || item.status == 'Cancel'">
+                    <button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="material-symbols:check-box-rounded"/></button>
+                    <button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="mdi:cancel-box"/></button>
                   </td>
                   <td v-if="item.status == 'Trading'">
-                    <button class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router" v-on:click="openDialogUE(item.id)">CẬP NHẬT</button>
+                    <button class="tableBtnAction" v-on:click="openDialogUE(item.id)"><Icon icon="material-symbols:edit-document-rounded"/></button>
+                    <button class="tableBtnAction" v-on:click="HandleCanCelExchange(item.id)"><Icon icon="mdi:cancel-box"/></button>
                   </td>
                 </tr>
                 </tbody>
@@ -301,7 +331,6 @@
             </div>
           </div>
         </div>
-        <LoadingDialog v-show="spinner"></LoadingDialog>
       </div>
     </div>
   </Side_Bar>
@@ -315,12 +344,19 @@ import LoadingDialog from "@/components/LoadingDialog";
 import ExchangeDetailDialog from "@/pages/ManageTransaction/ExchangeDetailDialog";
 import ExchangeBillDialog from "@/pages/ManageTransaction/ExchangeBillDialog";
 import UpdateExchangeDialog from "@/pages/ManageTransaction/UpdateExchangeDialog";
+import {Icon} from '@iconify/vue2';
+import Dashboard from "@/components/Dashboard";
 
 export default {
   name: "GetExchanges",
-  components: {Side_Bar, LoadingDialog, ExchangeDetailDialog, ExchangeBillDialog, UpdateExchangeDialog},
+  components: {Side_Bar, LoadingDialog,Dashboard, ExchangeDetailDialog, ExchangeBillDialog, UpdateExchangeDialog, Icon},
   data() {
     return {
+      responseFlag: true,
+      responseMessage: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
+
       listExchanges: '',
       totalExchanges: '',
       listExchangeDetail: '',
@@ -344,6 +380,9 @@ export default {
     }
   },
   created() {
+    if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
     this.isSearch = false
     this.getExchanges(1)
   },
@@ -368,7 +407,6 @@ export default {
       }
     },
     getExchanges(pageNumber) {
-      this.spinner = true
       if(this.isSearch){
         apiFactory.callApi(API_MANAGE_TRANSACTION.SEARCH_EXCHANGE + pageNumber, 'POST', {
           id: this.search
@@ -376,7 +414,6 @@ export default {
           this.listExchanges = res.data.data
           this.totalExchanges = res.data.numberOfRecords
           this.page = pageNumber
-          this.spinner = false
         }).catch(() => {
         });
       }else{
@@ -384,48 +421,39 @@ export default {
           this.listExchanges = res.data.data
           this.totalExchanges = res.data.numberOfRecords
           this.page = pageNumber
-          this.spinner = false
         }).catch(() => {
         });
       }
     },
     getExchangeWaiting(pageNumber){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_TRANSACTION.WAITING_EXCHANGE + pageNumber, 'GET', {}).then((res) => {
         this.listExchanges = res.data.data
         this.totalExchanges = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     getExchangeTrading(pageNumber){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_TRANSACTION.TRADING_EXCHANGE + pageNumber, 'GET', {}).then((res) => {
         this.listExchanges = res.data.data
         this.totalExchanges = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     getExchangeComplete(pageNumber){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_TRANSACTION.COMPLETE_EXCHANGE + pageNumber, 'GET', {}).then((res) => {
         this.listExchanges = res.data.data
         this.totalExchanges = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     getExchangeCancel(pageNumber){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_TRANSACTION.CANCEL_EXCHANGE + pageNumber, 'GET', {}).then((res) => {
         this.listExchanges = res.data.data
         this.totalExchanges = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
@@ -463,6 +491,8 @@ export default {
     HandleTrading(exchangeId){
       apiFactory.callApi(API_MANAGE_TRANSACTION.HANDLE_TRADE_EXCHANGE + exchangeId, 'PUT', {}).then((res) => {
         if (res.data.message === 'UPDATE_SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật giao dịch thành công!'
           if(this.filter === ''){
             this.getExchanges(this.page)
           }
@@ -473,14 +503,18 @@ export default {
             this.getExchangeWaiting(this.page)
           }
         }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
       });
     },
     HandleComplete(exchangeId){
       apiFactory.callApi(API_MANAGE_TRANSACTION.HANDLE_COMPLETE_EXCHANGE + exchangeId, 'PUT', {}).then((res) => {
         if (res.data.message === 'UPDATE_SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật giao dịch thành công!'
           this.saveUE()
         }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
       });
     },
@@ -506,7 +540,6 @@ export default {
       this.showDialogUE = false;
     },
     saveUE(){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_TRANSACTION.UPDATE_STATUS_EXCHANGE + this.exchange.id, 'PUT', {
         storageStatus1: this.exchange.storageStatus1,
         storageStatus2: this.exchange.storageStatus2,
@@ -520,7 +553,8 @@ export default {
         refundDate2: this.exchange.refundDate2,
       }).then((res) => {
         if (res.data.message === 'UPDATE_SUCCESS') {
-          alert('Cập nhật thành công')
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật giao dịch thành công!'
           if(this.filter === ''){
             this.getExchanges(this.page)
           }
@@ -532,6 +566,7 @@ export default {
           }
           this.showDialogUE = false
         }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
       });
       this.showDialogUE = false;
@@ -545,9 +580,11 @@ export default {
         afterStatusBook2:  item[0].afterStatusBook2,
       }).then((res) => {
         if (res.data.message === 'UPDATE_SUCCESS') {
-          alert('Cập nhật thành công!')
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật chi tiết giao dịch thành công!'
           this.getExchangeDetail(exchangeId)
         }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
       });
     },
@@ -557,13 +594,13 @@ export default {
           this.getExchangeDetail(exchangeId)
         }
       }).catch(() => {
-        alert('Không thành công!')
       });
     },
     HandleCanCelExchange(exchangeId){
-      this.spinner = true
       apiFactory.callApi(API_TRANSACTION.CANCEL_EXCHANGE + exchangeId, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Hủy giao dịch thành công!'
           if(this.filter === ''){
             this.getExchanges(this.page)
           }
@@ -574,10 +611,35 @@ export default {
             this.getExchangeWaiting(this.page)
           }
         }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
-        alert('Không thành công!')
       });
-    }
+    },
+    autoTrading(){
+      apiFactory.callApi(API_MANAGE_TRANSACTION.AUTO_TRADING_EX, 'PUT', {
+      }).then((res) => {
+        if (res.data.message === 'SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Tụ động duyệt giao dịch thành công!'
+          if(this.filter === ''){
+            this.getExchanges(this.page)
+          }
+          if(this.filter === 'Tất Cả'){
+            this.getExchanges(this.page)
+          }
+          if(this.filter === 'Đang Đợi'){
+            this.getExchangeWaiting(this.page)
+          }
+        }
+        this.dismissCountDown = this.dismissSecs
+        this.dismissCountDown = this.dismissSecs
+      }).catch(() => {
+      });
+    },
+
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
   },
   filters: {
     formatDate(value) {
@@ -604,7 +666,7 @@ export default {
   display: flex;
   justify-content: space-between;
   margin: 20px 0px 10px 20px;
-  width: 90%;
+  width: 95%;
 }
 
 .titleMB {
@@ -634,7 +696,7 @@ export default {
   color: #9D6B54;
 }
 
-.search-transaction button {
+.search-transaction .btnSearch {
   border-radius: 7px;
   background-color: #9D6B54;
   color: white;
@@ -645,7 +707,7 @@ export default {
   margin-left: 10px;
 }
 
-.search-transaction button:hover {
+.search-transaction .btnSearch:hover {
   border-color: #9D6B54;
   background-color: white;
   color: #9D6B54;
@@ -666,5 +728,21 @@ export default {
 }
 .row{
   font-size: 12px;
+}
+
+.autoTrading{
+  border-radius: 10px;
+  background-color: #9D6B54;
+  color: white;
+  font-weight: bold;
+  border: 1px solid grey;
+  height: 45px;
+  width: 150px;
+}
+
+.autoTrading:hover{
+  border-color: #9D6B54;
+  background-color: #F0ECE4;
+  color: #9D6B54;
 }
 </style>

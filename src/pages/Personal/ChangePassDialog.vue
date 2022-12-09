@@ -81,6 +81,12 @@ export default {
   margin-bottom: 10px;
 }
 
+.btnSave:hover{
+  border-color: #9D6B54;
+  background: #F0ECE4;
+  color: #9D6B54;
+}
+
 .dialogBody{
   padding-left: 50px;
   padding-bottom: 20px;

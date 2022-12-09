@@ -6,7 +6,8 @@
         <div class="container">
           <div class="profile">
             <div>
-              <b-avatar badge badge-left class="avatar-personal"><img style="width: 190px; height: 190px;" v-bind:src="info.avatar"></b-avatar>
+              <b-avatar badge badge-left class="avatar-personal"><img style="width: 190px; height: 190px;"
+                                                                      v-bind:src="info.avatar"></b-avatar>
             </div>
             <div>
               <div class="infor">
@@ -14,26 +15,30 @@
                 <div class="infoDes">
                   <div class="description">
                     <Icon class="iconSmall" icon="mdi:email"/>
-                    <label>{{ info.email }}</label>
+                    <label style="font-weight: 600">{{ info.email }}</label>
                   </div>
                   <div class="description">
                     <Icon class="iconSmall" icon="material-symbols:call"/>
-                    <label>{{ info.phone }}</label>
+                    <label style="font-weight: 600">{{ info.phone }}</label>
                   </div>
                   <div class="description">
                     <Icon class="iconSmall" icon="material-symbols:location-on"/>
-                    <label>{{ info.addressMain }}</label>
+                    <label style="font-weight: 600">{{ info.addressMain }}</label>
                   </div>
                 </div>
               </div>
               <div class="edit">
-                <button class="btn-edit" v-on:click="HandleLike">
+                <button v-if="userByToken != '' && !checkLike" class="btn-edit" v-on:click="HandleLike">
                   <Icon icon="ant-design:like-filled" style="width: 20px; height: 20px; margin-right: 2%"/>
                   Thích
                 </button>
+                <button v-if="userByToken != '' && checkLike" class="btn-edit" v-on:click="HandleUnLike">
+                  <Icon icon="ant-design:dislike-filled" style="width: 20px; height: 20px; margin-right: 2%"/>
+                  Bỏ Thích
+                </button>
                 <div class="likeNumber">
-                  <Icon class="iconSmall" icon="material-symbols:check-circle-rounded"/>
-                  <label>{{ info.likeNumber }} người thích</label>
+                  <Icon class="iconSmall" icon="mdi:like"/>
+                  <label style="font-weight: 600">{{ info.likeNumber }} người thích</label>
                 </div>
               </div>
             </div>
@@ -48,7 +53,7 @@
                   </div>
                   <b-skeleton-wrapper :loading="loading">
                     <template #loading>
-                      <div class="grid-bookOP" >
+                      <div class="grid-bookOP">
                         <div class="item-bookOP" v-for='i in 10' :key="i">
                           <b-card no-body img-top style="height: 380px">
                             <b-skeleton-img card-img="top" aspect="3:1" height="250px"></b-skeleton-img>
@@ -61,22 +66,26 @@
                         </div>
                       </div>
                     </template>
-                    <div class="grid-bookOP">
+                    <div v-if="totalBook != 0" class="grid-bookOP">
                       <div class="item-bookOP" v-for="item of listBook" :key="item.id">
-                        <router-link  :to="{ name: 'BookDetail', query: { id:item.id }}">
+                        <router-link style="position: relative" :to="{ name: 'BookDetail', query: { id:item.id }}">
                           <img v-bind:src="item.image">
+                          <label class="layer1OP" v-if="item.isTrade">Đang giao dịch</label>
+                          <label class="layer2OP"  v-else>Sẵn sàng</label>
                         </router-link>
                         <div class="infoOP">
-                          <div class="book-titleOP">{{ item.title }}</div>
-                          <label class="book-statusOP">Thể loại: {{ item.category?.name}}</label>
-                          <label class="book-statusOP">Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                          <div class="book-titleOP"><strong>{{ item.title }}</strong></div>
+                          <label class="book-statusOP">Thể loại: <strong>{{ item.category?.name }}</strong></label>
+                          <label class="book-statusOP">Giá cọc: <strong>{{ item.depositPrice.toLocaleString() }}đ</strong></label>
                           <label class="book-statusOP">{{ item.statusBook }}</label>
                         </div>
                       </div>
                     </div>
+                    <div v-else class="noBook">Danh sách trống!</div>
                   </b-skeleton-wrapper>
-                  <div class="pagingBook">
-                    <b-pagination class="page-number" @input="getBooks" v-model="pageBook" :total-rows="totalBook" :per-page="10">
+                  <div v-if="totalBook != 0" class="pagingBook">
+                    <b-pagination class="page-number" @input="getBooks" v-model="pageBook" :total-rows="totalBook"
+                                  :per-page="10">
                       <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
                       <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
                       <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
@@ -111,21 +120,22 @@
                         </div>
                       </div>
                     </template>
-                    <div class="gridPost">
+                    <div v-if="totalPost != 0" class="gridPost">
                       <div class="itemPost" v-for="item of listPost" :key="item.id">
-                        <router-link  :to="{ name: 'PostDetail', query: { id:item.id }}">
+                        <router-link :to="{ name: 'PostDetail', query: { id:item.id }}">
                           <img class="imagePost" v-bind:src="item.image">
                         </router-link>
                         <button class="actionPost">Xem chi tiết</button>
                         <div class="infoPost">
-                          <div class="titlePost">{{ item.title }}</div>
-                          <div class="createDate"><Icon class="iconTime" icon="ic:twotone-access-time"/>{{item.createdDate | formatDate}}</div>
+                          <div class="titlePost"><strong>{{ item.title }}</strong></div>
+                          <div class="contentPost">Đăng lúc: <strong>{{ item.createdDate | formatDate }}</strong></div>
                           <label class="contentPost">{{ item.content }}</label>
                         </div>
                       </div>
                     </div>
+                    <div v-else class="noBook">Danh sách trống!</div>
                   </b-skeleton-wrapper>
-                  <div class="pagingPost">
+                  <div v-if="totalPost != 0" class="pagingPost">
                     <div class="pagePost">
                       <b-pagination @input="getPost" v-model="pagePost" :total-rows="totalPost" :per-page="6">
                         <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
@@ -164,6 +174,7 @@ export default {
   components: {Layout, Icon, LoadingDialog},
   data() {
     return {
+      userByToken: '',
       info: '',
       listBook: '',
       totalBook: '',
@@ -176,28 +187,37 @@ export default {
       isSearchPost: false,
       pageBook: 1,
       pagePost: 1,
-      spinner: false
+      spinner: false,
+      checkLike: false
     }
   },
   created() {
+    if (this.$cookies.get('token')) {
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8')
+    }
     this.getInformation()
     this.getBooks(1)
     this.getPost(1)
   },
   methods: {
     getInformation() {
-      this.spinner = true
       apiFactory.callApi(API_PERSONAL.INFORMATION, 'POST', {
         userId: this.$route.query.id
       }).then((res) => {
-        this.info = res.data.data
-        this.spinner = false
+        if (res.data.data) {
+          this.info = res.data.data
+          if (this.$cookies.get('token')) {
+            this.CheckLike()
+          }
+        } else {
+          this.$router.push({name: "404Page"})
+        }
       }).catch(() => {
       });
     },
     getBooks(pageNumber) {
       this.loading = true;
-      if(this.isSearchBook){
+      if (this.isSearchBook) {
         apiFactory.callApi(API_BOOK.SEARCH_BOOK_USER + this.$route.query.id + '?page=' + pageNumber, 'POST', {
           search: this.searchBook
         }).then((res) => {
@@ -207,9 +227,8 @@ export default {
           this.loading = false
         }).catch(() => {
         });
-      }else{
-        apiFactory.callApi(API_BOOK.USER_BOOK + this.$route.query.id + '?page=' + pageNumber, 'GET', {
-        }).then((res) => {
+      } else {
+        apiFactory.callApi(API_BOOK.USER_BOOK + this.$route.query.id + '?page=' + pageNumber, 'GET', {}).then((res) => {
           this.listBook = res.data.data
           this.totalBook = res.data.numberOfRecords
           this.pageBook = pageNumber
@@ -220,7 +239,7 @@ export default {
     },
     getPost(pageNumber) {
       this.loading = true;
-      if(this.isSearchPost){
+      if (this.isSearchPost) {
         apiFactory.callApi(API_POST.SEARCH_POST_USER + this.$route.query.id + '?page=' + pageNumber, 'POST', {
           search: this.searchPost
         }).then((res) => {
@@ -230,9 +249,8 @@ export default {
           this.loading = false
         }).catch(() => {
         });
-      }else{
-        apiFactory.callApi(API_POST.USER_POST + this.$route.query.id + '?page=' + pageNumber, 'GET', {
-        }).then((res) => {
+      } else {
+        apiFactory.callApi(API_POST.USER_POST + this.$route.query.id + '?page=' + pageNumber, 'GET', {}).then((res) => {
           this.listPost = res.data.data
           this.totalPost = res.data.numberOfRecords
           this.pagePost = pageNumber
@@ -257,24 +275,46 @@ export default {
       }
       return this.getPost(1)
     },
-    HandleLike(){
-      this.spinner = true
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+    HandleLike() {
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.ADD_USER_FAVORITE + this.$route.query.id, 'POST', {
         userId: this.userByToken.UserId
       }).then((res) => {
-        if(res.data.message == 'ADD_SUCCESS'){
+        if (res.data.message == 'ADD_SUCCESS') {
           this.getInformation()
-          this.spinner = false;
+          this.checkLike = true
         }
-        this.spinner = false;
+      }).catch(() => {
+      });
+    },
+    HandleUnLike() {
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+      apiFactory.callApi(API_PERSONAL.DELETE_USER_FAVORITE + this.$route.query.id, 'DELETE', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        if (res.data.message == 'DELETE_SUCCESS') {
+          this.getInformation()
+          this.checkLike = false
+        }
+      }).catch(() => {
+      });
+    },
+    CheckLike(){
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+      apiFactory.callApi(API_PERSONAL.CHECK_USER_LIKE + this.$route.query.id, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        if (res.data.message == 'TRUE') {
+          this.checkLike = true
+        }else{
+          this.checkLike = false
+        }
       }).catch(() => {
       });
     }
   },
   filters: {
-    formatDate(value){
+    formatDate(value) {
       return new Date(value).toLocaleString('en-GB')
     }
   }
@@ -290,6 +330,11 @@ main {
   background: #F0F0F0;
 }
 
+strong {
+  color: #9D6B54;
+  font-weight: 600;
+}
+
 .body {
   background: #F0F0F0;
 }
@@ -298,7 +343,7 @@ main {
   max-width: 1230px;
   background: #F0F0F0;
   border-radius: 10px;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 
@@ -334,7 +379,7 @@ strong {
 }
 
 .infor {
-  width: 800px;
+  width: 1000px;
   display: block;
   color: #9D6B54;
   margin-top: 5%;
@@ -358,7 +403,7 @@ strong {
   line-height: 35.16px;
 }
 
-.infoDes{
+.infoDes {
   width: 75%;
   justify-content: space-between;
   display: flex;
@@ -369,7 +414,7 @@ strong {
   margin-left: 10px;
 }
 
-.iconSmall{
+.iconSmall {
   font-size: 24px;
 }
 
@@ -383,13 +428,13 @@ strong {
   justify-content: center;
 }
 
-.likeNumber{
+.likeNumber {
   display: flex;
   margin-left: 10px;
   color: #9D6B54;
 }
 
-.likeNumber label{
+.likeNumber label {
   font-weight: bold;
   color: grey;
   margin-left: 5px;
@@ -403,7 +448,6 @@ strong {
   border: white;
   align-items: center;
   text-decoration: none;
-  transition: all 0.4s ease;
   background: #9D6B54;
   justify-content: center;
   color: #F0ECE4;
@@ -453,6 +497,8 @@ strong {
 
 .background-tab {
   background-color: #EFECE3;
+  width: 100%;
+  border-radius: 10px;
   border: none;
   color: black;
 }
@@ -464,9 +510,10 @@ strong {
 }
 
 .item-bookOP {
+  color: #9D6B54;
   border-radius: 10px;
   width: 210px;
-  height: 380px;
+  height: auto;
   margin: 5px;
 }
 
@@ -474,14 +521,32 @@ strong {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }
 
-.item-bookOP img{
+.layer2OP{
+  position: absolute;
+  left: 0;
+  background-color: green;
+  font-size: 12px;
+  color: #F0ECE4;
+  padding: 5px;
+}
+
+.layer1OP{
+  position: absolute;
+  left: 0;
+  font-size: 12px;
+  background-color: #ca0303;
+  color: #F0ECE4;
+  padding: 5px;
+}
+
+.item-bookOP img {
   border-radius: 10px;
   height: 260px;
   width: 210px;
 }
 
 .grid-bookOP .infoOP {
-  height: 120px;
+  height: auto;
   padding: 5px;
 }
 
@@ -526,6 +591,7 @@ strong {
 }
 
 .gridPost .itemPost {
+  color: #9D6B54;
   border-radius: 10px;
   border: 1px solid #9D6B54;
   width: auto;
@@ -536,8 +602,6 @@ strong {
 
 .gridPost .itemPost:hover {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
-  background: grey;
-  opacity: 0.9;
   border: 1px solid #9D6B54;
 }
 
@@ -588,7 +652,7 @@ strong {
   -webkit-line-clamp: 4;
 }
 
-.gridPost .actionPost{
+.gridPost .actionPost {
   position: absolute;
   width: 200px;
   height: 50px;
@@ -603,7 +667,7 @@ strong {
   font-size: 16px;
 }
 
-.gridPost .actionPost:hover{
+.gridPost .actionPost:hover {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }
 
@@ -612,7 +676,7 @@ strong {
   padding-bottom: 10px;
 }
 
-.gridPost .actionPost{
+.gridPost .actionPost {
   position: absolute;
   width: 200px;
   height: 50px;
@@ -627,12 +691,20 @@ strong {
   font-size: 16px;
 }
 
-.gridPost .actionPost:hover{
+/*.gridPost .actionPost:hover {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }
 
-.gridPost .itemPost:hover .actionPost{
+.gridPost .itemPost:hover .actionPost {
   display: block;
-}
+}*/
 
+.noBook{
+  text-align: center;
+  padding-top: 50px;
+  color: grey;
+  font-style: italic;
+  font-size: 26px;
+  padding-bottom: 30px;
+}
 </style>

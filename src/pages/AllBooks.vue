@@ -1,11 +1,70 @@
 <template>
   <Layout>
     <main style="flex-grow: 1;">
-      <!--==============body=============-->
       <div class="body">
         <div class="title">TỦ SÁCH</div>
         <div class="container-book">
-          <FilterAllBook></FilterAllBook>
+          <div class="menu-sidebarFT">
+            <div class="filter">
+              <div class="filter-service">
+                <div class="titleFT">BỘ LỌC</div>
+                <div class="itemFilter">
+                  <div class="titleFilter">Theo dịch vụ</div>
+                  <div class="groupFilter">
+                    <div><input name="type" type="radio" value="All" checked v-model="filter1" @change="HandleFilter">
+                      Tất cả
+                    </div>
+                    <div><input name="type" type="radio" value="Exchange" v-model="filter1" @change="HandleFilter"> Trao
+                      đổi
+                    </div>
+                    <div><input name="type" type="radio" value="Rent" v-model="filter1" @change="HandleFilter"> Thuê
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="titleFilter">Theo danh mục</div>
+                  <div class="groupFilter">
+                    <div><input type="radio" name="category" value="0" v-model="filter2" @change="HandleFilter"> Tất cả
+                    </div>
+                    <div v-for="item in listCategory" :key="item.id">
+                      <div><input type="radio" name="category" v-bind:value="item.id" v-model="filter2"
+                                  @change="HandleFilter"> {{ item.name }}
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="titleFilter">Theo giá cọc</div>
+                  <div class="groupFilter">
+                    <div><input name="price" type="radio" value="All" v-model="filter3" @change="HandleFilter"> Tất cả
+                    </div>
+                    <div><input name="price" type="radio" value="0-100000" v-model="filter3" @change="HandleFilter"> 0đ
+                      - 100,000đ
+                    </div>
+                    <div><input name="price" type="radio" value="100000-250000" v-model="filter3"
+                                @change="HandleFilter"> 100,000đ - 250,000đ
+                    </div>
+                    <div><input name="price" type="radio" value="250000-500000" v-model="filter3"
+                                @change="HandleFilter"> 250,000đ - 500,000đ
+                    </div>
+                    <div><input name="price" type="radio" value="500000-10000000" v-model="filter3"
+                                @change="HandleFilter"> Trên 500,000đ
+                    </div>
+                  </div>
+
+                  <div class="titleFilter">Theo ngôn ngữ</div>
+                  <div class="groupFilter">
+                    <div><input type="radio" name="language" value="All" v-model="filter4" @change="HandleFilter"> Tất
+                      cả
+                    </div>
+                    <div v-for="item in listLanguage" :key="item">
+                      <div><input type="radio" name="language" v-bind:value="item" v-model="filter4"
+                                  @change="HandleFilter"> {{ item }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="content">
             <div class="search">
               <input type="text" v-model="search" placeholder="Nhập tên sản phẩm">
@@ -31,16 +90,19 @@
                 </div>
               </template>
 
-              <div class="grid">
+              <div v-if="totalBook != 0" class="grid">
                 <div class="item" v-for="item of listBook" :key="item.id">
-                  <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">
+                  <router-link style="position: relative" :to="{ name: 'BookDetail', query: { id:item.id }}">
                     <img v-bind:src="item.image">
+                    <label v-if="item.isTrade" class="layerR">Đang giao dịch</label>
+                    <label v-else class="layerG">Sẵn sàng</label>
                   </router-link>
                   <div class="info">
-                    <div class="book-title">{{ item.title }}</div>
-                    <div><img src="../image/user.png"><strong>{{ item.user.fullname }}</strong> </div>
-                    <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
-                    <label>Dịch vụ:
+                    <div class="book-title"><strong>{{ item.title }}</strong></div>
+                    <div class="book-status">Thể loại: <strong>{{ item.category.name }}</strong></div>
+                    <div class="book-status">Đăng bởi: <strong>{{ item.user.fullname }}</strong></div>
+                    <label class="book-status">Giá cọc: <strong>{{ item.depositPrice.toLocaleString() }}đ</strong></label>
+                    <label class="book-status">Dịch vụ:
                       <strong>
                         <span v-if="item.isExchange && item.isRent">Trao đổi & Thuê</span>
                         <span v-if="!item.isRent && item.isExchange">Trao đổi</span>
@@ -48,23 +110,48 @@
                       </strong>
                     </label>
                     <label class="book-status">{{ item.statusBook }}</label>
-                    <label class="book-status" style="color: red; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
-                    <label class="book-status" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
+<!--                    <label class="book-status" style="color: red; font-weight: bold" v-if="item.isTrade">Đang giao
+                      dịch</label>
+                    <label class="book-status" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>-->
                   </div>
                 </div>
               </div>
+              <div v-else class="noBook">Không tìm thấy sách phù hợp!</div>
             </b-skeleton-wrapper>
-            <div class="paging">
-                <b-pagination class="page-number" @input="getAllBook" v-model="page" :total-rows="totalBook" :per-page="9">
-                  <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
-                  <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
-                  <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
-                  <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
-                  <template #page="{ page, active }">
-                    <b v-if="active" style="color: white;">{{ page }} </b>
-                    <b v-else style="color: #9D6B54;">{{ page }}</b>
-                  </template>
-                </b-pagination>
+            <div v-if="totalBook != 0" class="paging">
+              <b-pagination v-if="isSearch && !fromUser" class="page-number" @input="searchBook" v-model="page" :total-rows="totalBook"
+                            :per-page="9">
+                <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                <template #page="{ page, active }">
+                  <b v-if="active" style="color: white;">{{ page }} </b>
+                  <b v-else style="color: #9D6B54;">{{ page }}</b>
+                </template>
+              </b-pagination>
+              <b-pagination v-if="!isSearch && !fromUser" class="page-number" @input="getAllBookByFilter" v-model="page" :total-rows="totalBook"
+                            :per-page="9">
+                <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                <template #page="{ page, active }">
+                  <b v-if="active" style="color: white;">{{ page }} </b>
+                  <b v-else style="color: #9D6B54;">{{ page }}</b>
+                </template>
+              </b-pagination>
+              <b-pagination v-if="fromUser" class="page-number" @input="getAllBookFromLikeUser" v-model="page" :total-rows="totalBook"
+                            :per-page="9">
+                <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                <template #page="{ page, active }">
+                  <b v-if="active" style="color: white;">{{ page }} </b>
+                  <b v-else style="color: #9D6B54;">{{ page }}</b>
+                </template>
+              </b-pagination>
             </div>
           </div>
         </div>
@@ -75,61 +162,135 @@
 
 <script>
 import apiFactory from "@/config/apiFactory";
-import {API_BOOK} from "@/constant/constant-api";
+import {API_BOOK, API_MANAGE_CATEGORY} from "@/constant/constant-api";
 import Layout from "@/components/Layout";
-import FilterAllBook from "../components/Filter-AllBook";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "AllBooks",
-  components: {FilterAllBook, Layout},
+  components: {Layout},
   data() {
     return {
+      filter1: 'All',
+      filter2: 0,
+      filter3: 'All',
+      filter4: 'All',
+
+      userByToken: '',
+      listCategory: '',
+      listLanguage: ['Tiếng Việt', 'Tiếng Anh', 'Tiếng Hán', 'Tiếng Hàn', 'Tiếng Nhật',
+        'Tiếng Tây Ban Nha', 'Tiếng Pháp', 'Tiếng Đức', 'Tiếng Nga', 'Tiếng Bồ Đào Nha',
+        'Tiếng Hindi', 'Khác'],
+
       listBook: '',
       totalBook: '',
       search: '',
       isSearch: false,
       loading: false,
+      fromUser: false,
       page: 1
     }
   },
   created() {
     this.isSearch = false
-    this.getAllBook(1)
+    this.HandleFilter(1)
+    this.getListCategories()
   },
   methods: {
-    getAllBook(pageNumber) {
-      this.loading = true;
-      if (this.isSearch) {
-        window.scrollTo(0, 0)
+    searchBook(pageNumber) {
+        this.loading = true;
         const url = API_BOOK.SEARCH_BOOK + pageNumber
         apiFactory.callApi(url, 'POST', {
           search: this.search
         }).then((res) => {
           this.listBook = res.data.data
           this.totalBook = res.data.numberOfRecords
-          this.loading = false;
+          this.loading = false
+          this.page = pageNumber
         }).catch(() => {
         });
-      } else {
-        window.scrollTo(0, 0)
-        const url = API_BOOK.LIST_BOOK + '?page=' + pageNumber
-        apiFactory.callApi(url, 'GET', {}).then((res) => {
-          this.listBook = res.data.data
-          this.totalBook = res.data.numberOfRecords
-          this.loading = false;
-        }).catch(() => {
-        });
-      }
     },
+    /*getAllBookExchange(pageNumber) {
+      this.loading = true;
+      window.scrollTo(0, 0)
+      const url = API_BOOK.LIST_BOOK_EXCHANGE + '?page=' + pageNumber
+      apiFactory.callApi(url, 'GET', {}).then((res) => {
+        this.listBook = res.data.data
+        this.totalBook = res.data.numberOfRecords
+        this.loading = false
+        this.page = pageNumber
+      }).catch(() => {
+      });
+    },
+    getAllBookRent(pageNumber) {
+      this.loading = true;
+      window.scrollTo(0, 0)
+      const url = API_BOOK.LIST_BOOK_RENT + '?page=' + pageNumber
+      apiFactory.callApi(url, 'GET', {}).then((res) => {
+        this.listBook = res.data.data
+        this.totalBook = res.data.numberOfRecords
+        this.loading = false
+        this.page = pageNumber
+      }).catch(() => {
+      });
+
+    },*/
+    getAllBookFromLikeUser(pageNumber) {
+      this.fromUser = true
+      this.loading = true
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+      window.scrollTo(0, 0)
+      const url = API_BOOK.LIST_BOOK_FOLLOW + '?page=' + pageNumber
+      apiFactory.callApi(url, 'POST', {userId: this.userByToken.UserId,}).then((res) => {
+        this.listBook = res.data.data
+        this.totalBook = res.data.numberOfRecords
+        this.loading = false
+        this.page = pageNumber
+      }).catch(() => {
+      });
+    },
+
+    getAllBookByFilter(pageNumber) {
+      this.loading = true;
+      window.scrollTo(0, 0)
+      const url = API_BOOK.FILTER_BOOK + '?page=' + pageNumber
+      apiFactory.callApi(url, 'POST', {
+        filter1: this.filter1, filter2: this.filter2, filter3: this.filter3, filter4: this.filter4
+      }).then((res) => {
+        this.listBook = res.data.data
+        this.totalBook = res.data.numberOfRecords
+        this.loading = false
+        this.page = pageNumber
+      }).catch(() => {
+      });
+    },
+    HandleFilter() {
+      this.fromUser = false
+      this.search = ''
+      this.getAllBookByFilter(1)
+    },
+
     HandleSearch() {
+      this.fromUser = false
       if (!this.search) {
-        this.isSearch = false;
+        this.filter1 = 'All'
+        this.filter2 = 0
+        this.filter3 = 'All'
+        this.filter4 = 'All'
+        this.isSearch = false
+        return this.getAllBookByFilter(1)
       } else {
         this.isSearch = true;
+        return this.searchBook(1)
       }
-      return this.getAllBook(1)
     },
-  }
+    getListCategories() {
+      apiFactory.callApi(API_MANAGE_CATEGORY.All_CATEGORY, 'GET', {}).then((res) => {
+        this.listCategory = res.data.data
+      }).catch(() => {
+      });
+    }
+  },
 }
 </script>
 
@@ -144,6 +305,7 @@ main {
 
 strong {
   color: #9D6B54;
+  font-weight: 600;
 }
 
 .body {
@@ -154,24 +316,58 @@ strong {
   background: #F0F0F0;
   max-width: 1230px;
   border-radius: 10px;
-  margin: 5px auto 30px auto;
+  margin: 5px auto 10px auto;
   display: flex;
   justify-content: space-between;
 }
 
 .body .title {
+  max-width: 1230px;
+  border-radius: 10px;
+  background-color: #F0ECE4;
   font-weight: bold;
   color: #9D6B54;
   font-size: 2rem;
   text-align: center;
+  margin: 10px auto 10px auto;
+  border: 1px solid #9D6B54;
 }
 
-.body .container-book .sidebar-book {
-  width: 25%;
-  height: 1000px;
+
+.titleFT {
+  font-weight: bold;
+  color: #9D6B54;
+  font-size: 24px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.menu-sidebarFT {
+  border: 1px solid #9D6B54;
+  width: 320px;
+  height: auto;
   background: #F0ECE4;
-  border-radius: 10px;
-  border: 2px solid #9D6B54;
+  /*background: #F0ECE4;*/
+  border-radius: 8px;
+  padding-bottom: 50px;
+}
+
+.itemFilter {
+  margin-top: 20px;
+  margin-left: 40px;
+}
+
+.titleFilter {
+  font-size: 20px;
+  font-weight: 600;
+  color: #9D6B54;
+}
+
+.groupFilter {
+  color: #9d6b54;
+  padding-top: 5px;
+  padding-left: 30px;
+  padding-bottom: 5px;
 }
 
 .body .container-book .content {
@@ -182,8 +378,9 @@ strong {
 }
 
 .body .container-book .search {
+  text-align: right;
   margin: 20px 0px 10px 20px;
-  width: 80%;
+  width: 95%;
 }
 
 .body .container-book .search input {
@@ -229,6 +426,26 @@ strong {
   box-shadow: 0px 4px 6px 0 rgba(0, 0, 0, 0.2)
 }
 
+.layerR{
+  margin-left: 20px;
+  position: absolute;
+  left: 0;
+  background-color: #ca0303;
+  color: #F0ECE4;
+  font-size: 12px;
+  padding: 5px;
+}
+
+.layerG{
+  margin-left: 20px;
+  position: absolute;
+  left: 0;
+  background-color: green;
+  color: #F0ECE4;
+  font-size: 12px;
+  padding: 5px;
+}
+
 .body .container-book .content .grid .item img {
   margin-left: 20px;
   height: 290px;
@@ -236,6 +453,7 @@ strong {
 }
 
 .body .container-book .content .grid .info {
+  color: #9d6b54;
   height: auto;
   padding: 5px;
 }
@@ -255,8 +473,9 @@ strong {
   margin-right: 10px;
   display: block;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   color: #9D6B54;
 }
 
@@ -276,7 +495,7 @@ strong {
   margin-top: 5px;
 }
 
-.activeAll{
+.activeAll {
   border-radius: 5px;
   background-color: #9D6B54;
   color: #F0ECE4;
@@ -288,10 +507,10 @@ strong {
   text-align: center;
 }
 
-.activeAllR{
+.activeAllR {
   border-radius: 5px;
   background-color: #9D6B54;
-  color:#F0ECE4;
+  color: #F0ECE4;
   border: 1px solid grey;
   padding: 5px 15px 5px 15px;
   margin-left: 35px;
@@ -345,9 +564,15 @@ strong {
 }
 
 .body .container-book .content .paging ul {
-  margin-right: auto;
-  margin-left: auto;
-  width: 30%;
+  justify-content: right;
+  padding-right: 15px;
 }
 
+.noBook{
+  text-align: center;
+  padding-top: 50px;
+  color: grey;
+  font-style: italic;
+  font-size: 26px;
+}
 </style>

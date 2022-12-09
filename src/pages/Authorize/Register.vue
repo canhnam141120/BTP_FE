@@ -12,7 +12,7 @@
               <div class="column">
                 <div class="data">
                   <label>Email</label>
-                  <input type="text" maxlength="50" required placeholder="Ví dụ: acb@gmail.com" v-model="email">
+                  <input type="text" maxlength="30" required placeholder="Ví dụ: acb@gmail.com" v-model="email">
                   <label class="err" v-if="errMail.length">{{this.errMail}}</label>
                 </div>
                 <div class="data">
@@ -110,11 +110,15 @@ export default {
       }
       if(!this.password){
         this.errPass = 'Vui lòng nhập mật khẩu!'
+      } else{
+        if(this.password.length < 8 || this.password > 30){
+          this.errPass = 'Mật khẩu phải có độ dài từ 8 - 30 ký tự!'
+        }
       }
       if(!this.passwordCheck){
         this.errPassCheck = 'Vui lòng xác nhận mật khẩu!'
       }else{
-        if(this.password != this.passwordCheck){
+        if(this.password !== this.passwordCheck){
           this.errPassCheck = 'Không khớp với mật khẩu!'
         }
       }
@@ -124,7 +128,6 @@ export default {
       if(!this.phone){
         this.errPhone = 'Vui lòng nhập số điện thoại!'
       }else{
-
         if(!regxPhone.test(this.phone)){
           this.errPhone = 'Số điện thoại không hợp lệ!'
         }
@@ -132,7 +135,7 @@ export default {
       if(!this.address){
         this.errAddress = 'Vui lòng nhập địa chỉ!'
       }
-      if(regxMail.test(this.email) && this.password && this.fullname && regxPhone.test(this.phone) && this.address ){
+      if(this.errMail === ''  && this.errPass === ''  && this.errPassCheck === '' && this.errName === ''  && this.errPhone === ''  && this.errAddress === ''){
         this.spinner = true
         apiFactory.callApi(API_USER.USER_REGISTER, 'POST', {
           email: this.email,
@@ -226,7 +229,7 @@ body{
 
 .container .main .data .err{
   margin-top: 2px;
-  color: red;
+  color: #ca0303;
 }
 
 .container .main .data input{

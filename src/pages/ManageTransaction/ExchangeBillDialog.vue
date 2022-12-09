@@ -27,13 +27,13 @@ export default {
 }
 
 .dialogContent {
-  width: 1200px;
+  width: 1400px;
   padding-right: 10px;
   padding-left: 10px;
   background: #F0ECE4;
   height: auto;
   border-radius: 10px;
-  margin: 2% auto auto auto;
+  margin: 20vh auto auto auto;
   display: block;
 }
 

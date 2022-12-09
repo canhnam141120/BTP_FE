@@ -11,7 +11,10 @@
                   <div style="margin-left: auto; margin-right: auto; width: 80px"><img class="authorAvatar" v-bind:src="post.user?.avatar" alt="Ảnh đại diện"></div>
                   <div class="authorName">{{post.user?.fullname}}</div>
                   <div class="authorNumber">{{post.user?.likeNumber}} người thích</div>
-                  <div style="margin-left: auto; margin-right: auto; width: 54px"><router-link class="authorBtn" :to="{ name: 'OtherPerson', query: {id:post.userId}}">Xem</router-link></div>
+                  <div style="margin-left: auto; margin-right: auto; width: fit-content">
+                    <router-link v-if="userByToken.UserId != post.userId" class="authorBtn" :to="{ name: 'OtherPerson', query: {id:post.userId}}">Xem</router-link>
+                    <router-link v-else class="authorBtn" to="/MyBooks">Trang cá nhân</router-link>
+                  </div>
                   <hr>
                 </div>
                 <div class="contentPD">
@@ -24,10 +27,15 @@
                 <div class="mainPD">{{post.content}}</div>
                 <div class="endPD">
                   <div class="createDate"><Icon class="iconTime" icon="ic:twotone-access-time"/>{{post.createdDate | formatDate}}</div>
-                  <button class="btnLike">
+                  <button v-if="userByToken != '' && !checkLike" class="btnLike" v-on:click="HandleLike">
                     <Icon icon="ant-design:like-filled" style="width: 20px; height: 20px; margin-right: 2%"/>
                     Thích
-                  </button></div>
+                  </button>
+                  <button v-if="userByToken != '' && checkLike" class="btnLike" v-on:click="HandleUnLike">
+                    <Icon icon="ant-design:dislike-filled" style="width: 20px; height: 20px; margin-right: 2%"/>
+                    Bỏ Thích
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -66,26 +74,34 @@ export default {
   components: {Layout, Icon, LoadingDialog},
   data() {
     return {
+      userByToken: '',
       info: '',
       post: '',
       list6Post: '',
       listUserPost: '',
-      spinner: false
+      spinner: false,
+      checkLike: false
     }
   },
   created() {
+    if(this.$cookies.get('token')){
+      this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8')
+      this.CheckLike()
+    }
     this.getPostById()
     this.get6Post()
     this.getMyInformation()
   },
   methods: {
     getPostById() {
-      this.spinner = true
       const url = API_POST.DETAIL_POST+ this.$route.query.id
       apiFactory.callApi(url,'GET',{}).then((res)=>{
-        this.post = res.data.data
-        this.getPostUser(this.post.userId)
-        this.spinner = false
+        if(res.data.data){
+          this.post = res.data.data
+          this.getPostUser(this.post.userId)
+        }else{
+          this.$router.push({name: "404Page"})
+        }
       }).catch(() => {
       });
     },
@@ -105,8 +121,7 @@ export default {
     },
     getMyInformation() {
       //this.loading = true
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.INFORMATION, 'POST', {
         userId: this.userByToken.UserId
       }).then((res) => {
@@ -117,7 +132,47 @@ export default {
     },
     loadPage(){
       this.loading = true
+      if(this.$cookies.get('token')){
+        this.CheckLike()
+      }
       this.getPostById()
+    },
+    HandleLike() {
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+      apiFactory.callApi(API_PERSONAL.ADD_POST_FAVORITE + this.$route.query.id, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        if (res.data.message == 'ADD_SUCCESS') {
+          this.getPostById()
+          this.checkLike = true
+        }
+      }).catch(() => {
+      });
+    },
+    HandleUnLike() {
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+      apiFactory.callApi(API_PERSONAL.DELETE_POST_FAVORITE + this.$route.query.id, 'DELETE', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        if (res.data.message == 'DELETE_SUCCESS') {
+          this.getPostById()
+          this.checkLike = false
+        }
+      }).catch(() => {
+      });
+    },
+    CheckLike(){
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+      apiFactory.callApi(API_PERSONAL.CHECK_POST_LIKE + this.$route.query.id, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        if (res.data.message == 'TRUE') {
+          this.checkLike = true
+        }else{
+          this.checkLike = false
+        }
+      }).catch(() => {
+      });
     }
   },
   filters:{
@@ -159,7 +214,6 @@ strong {
   background: #F0ECE4;
   width: 100%;
   height: 100px;
-  border-radius: 10px;
   margin: 5px auto 15px auto;
   display: flex;
   border: 1px solid #9D6B54;
@@ -256,7 +310,7 @@ strong {
   border-radius: 5px;
   background-color: #9D6B54;
   color: white;
-  padding: 5px 10px 5px 10px;
+  padding: 5px 10px 7px 10px;
   text-decoration: none;
   border: 1px solid #9D6B54;
 }
@@ -286,7 +340,7 @@ strong {
 .imgPD{
   margin-left: auto;
   margin-right: auto;
-  width: 40%;
+  width: 70%;
   height: auto;
   border: 1px solid grey;
 }
@@ -296,6 +350,7 @@ strong {
 }
 
 .mainPD{
+  color: grey;
   padding: 15px 5% 20px 5%;
   text-indent: 5%;
   min-height: 320px;
@@ -321,6 +376,7 @@ strong {
   font-weight: 600;
   margin-left: 5%;
   padding-top: 15px;
+  padding-bottom: 10px;
 }
 
 .btnLike{

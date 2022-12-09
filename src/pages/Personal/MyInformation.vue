@@ -2,16 +2,53 @@
   <Layout>
     <main style="flex-grow: 1">
       <div class="MI">
+        <LoadingDialog v-show="spinner" style="z-index: 999999"></LoadingDialog>
         <ChangePassDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
           <div class="dialogBody">
-            <label class="labelPass">Mật khẩu cũ: </label>
-            <input class="inputPass" maxlength="50" type="password" required placeholder="Nhập mật khẩu cũ" v-model="oldPassword">
-            <label class="labelPass">Mật khẩu mới: </label>
-            <input class="inputPass" maxlength="50" type="password" required placeholder="Nhập mật khẩu mới" v-model="newPassword">
-            <label class="labelPass">Nhập lại mật khẩu mới: </label>
-            <input class="inputPass" maxlength="50" type="password" required placeholder="Nhập mật khẩu cũ" v-model="copyNewPassword">
+            <div>
+              <label class="labelPass">Mật khẩu cũ: </label>
+              <input class="inputPass" maxlength="50" type="password" required placeholder="Nhập mật khẩu cũ" v-model="oldPassword">
+              <label class="err" v-if="errPassOld.length">{{this.errPassOld}}</label>
+            </div>
+            <div>
+              <label class="labelPass">Mật khẩu mới: </label>
+              <input class="inputPass" maxlength="50" type="password" required placeholder="Nhập mật khẩu mới" v-model="newPassword">
+              <label class="err" v-if="errPassNew.length">{{this.errPassNew}}</label>
+            </div>
+            <div>
+              <label class="labelPass">Nhập lại mật khẩu mới: </label>
+              <input class="inputPass" maxlength="50" type="password" required placeholder="Nhập mật khẩu cũ" v-model="copyNewPassword">
+              <label class="err" v-if="errPassNewCheck.length">{{this.errPassNewCheck}}</label>
+            </div>
+            <div style="color: #ca0303; padding-top: 5px; padding-left: 150px">{{err}}</div>
           </div>
         </ChangePassDialog>
+        <ConfirmDialog :show="showConfirmDialog" v-if="showConfirmDialog" class="modal">
+          <div>
+            <div class="dialogTitle">XÁC NHẬN</div>
+            <div style="color: #9d6b54; text-align: center;">Xác nhận đổi mật khẩu!</div>
+            <div class="dialogGroupBtn">
+              <button class="dialogBtn" v-on:click="cancelConfirmDialog">Hủy</button>
+              <button class="dialogBtn" v-on:click="HandleConfirm">Xác nhận</button>
+            </div>
+          </div>
+        </ConfirmDialog>
+        <ConfirmDialog :show="showConfirmDialogShip" v-if="showConfirmDialogShip" class="modal">
+          <div>
+            <div class="dialogTitle">XÁC NHẬN</div>
+            <div style="color: #9d6b54; text-align: center;">Xác nhận cập nhật thông tin vận chuyển!</div>
+            <div class="dialogGroupBtn">
+              <button class="dialogBtn" v-on:click="cancelConfirmDialogShip">Hủy</button>
+              <button class="dialogBtn" v-on:click="HandleConfirmShip">Xác nhận</button>
+            </div>
+          </div>
+        </ConfirmDialog>
+        <b-alert style="position: absolute; right: 0; z-index: 999999" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          {{responseMessage}}
+        </b-alert>
+        <b-alert style="position: absolute; right: 0; z-index: 999999" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          {{responseMessage}}
+        </b-alert>
         <div class="containerMI">
           <div class="left-contentMI">
             <SideBar_Personal></SideBar_Personal>
@@ -51,9 +88,12 @@
                     <Icon icon="mdi:password-reset" style="width: 20px; height: 20px; margin-right: 5%"/>Đổi mật khẩu</button>
                 </div>
                 <div>
-                  <input type="file" hidden accept="image/*" ref="file" @change="handleFileUpload"/>
+                  <input type="file" hidden accept="image/*" ref="file" @change="uploadImage"/>
                   <button v-if="!showUpload" class="imgBtn" v-on:click="browse"><Icon icon="material-symbols:flip-camera-ios"/></button>
-                  <button v-else class="imgBtn" v-on:click="HandleEdit"><Icon icon="dashicons:saved"/></button>
+                  <div v-else>
+                    <button class="imgBtn1" v-on:click="HandleCancel"><Icon icon="mdi:cancel-outline"/></button>
+                    <button class="imgBtn" v-on:click="HandleEdit"><Icon icon="mdi:check-outline"/></button>
+                  </div>
                   <img class="imgMI" v-bind:src="info.avatar">
                   <div class="numberMI">
                     <div class="">{{info.likeNumber}} người thích</div>
@@ -100,12 +140,27 @@ import Layout from "@/components/Layout";
 import VueJwtDecode from "vue-jwt-decode";
 import {Icon} from '@iconify/vue2';
 import ChangePassDialog from "@/pages/Personal/ChangePassDialog";
+import ConfirmDialog from "@/components/ConfirmDialog";
+import LoadingDialog from "@/components/LoadingDialog";
+import {generateURLUpload} from "@/S3";
 
 export default {
   name: "MyInformation",
-  components: {SideBar_Personal, Layout, Icon, ChangePassDialog},
+  components: {SideBar_Personal, Layout, Icon, ChangePassDialog,LoadingDialog, ConfirmDialog},
   data() {
     return {
+      responseFlag: true,
+      responseMessage: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
+      showConfirmDialog: false,
+      showConfirmDialogShip: false,
+
+      errPassOld: '',
+      errPassNew: '',
+      errPassNewCheck: '',
+      spinner: false,
+      err: '',
       info: '',
       infoShip: '',
       userId: '',
@@ -119,6 +174,9 @@ export default {
     }
   },
   created() {
+    if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
     this.getMyInformation()
     this.getMyInfoShipping()
   },
@@ -146,8 +204,14 @@ export default {
       });
     },
     HandleUpdateInfoShip(){
-      let token = this.$cookies.get('token');
-      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      this.showConfirmDialogShip = true
+    },
+    cancelConfirmDialogShip(){
+      this.showConfirmDialogShip = false
+    },
+    HandleConfirmShip(){
+      window.scroll(0,0)
+      this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.EDIT_SHIP_INFO, 'PUT', {
         userId: this.userByToken.UserId,
         sendIsMonday: this.infoShip.sendIsMonday,
@@ -163,15 +227,24 @@ export default {
         recallIsFriday: this.infoShip.recallIsFriday,
         refundIsFriday: this.infoShip.refundIsFriday,
       }).then((res) => {
-        if(res.data.message == 'UPDATE_SUCCESS'){
-          alert('Cập nhật thông tin vận chuyển thành công!')
+        if(res.data.message === 'UPDATE_SUCCESS'){
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật thông tin vận chuyển thành công!'
+        }else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra, vui lòng thử lại!!'
         }
+        this.dismissCountDown = this.dismissSecs
+        this.showConfirmDialogShip = false
       }).catch(() => {
       });
     },
+    HandleCancel(){
+      this.getMyInformation()
+      this.showUpload = false
+    },
     HandleEdit(){
-      let token = this.$cookies.get('token');
-      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.EDIT_INFORMATION, 'PUT', {
         userId: this.userByToken.UserId,
         fullname: this.info.fullname,
@@ -179,11 +252,16 @@ export default {
         addressMain: this.info.addressMain,
         avatar: this.info.avatar
       }).then((res) => {
-        if(res.data.message == 'UPDATE_SUCCESS'){
-          alert('Thay đổi thành công')
-          this.edit = false
-          this.showUpload = false
+        if(res.data.message === 'UPDATE_SUCCESS'){
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật thành công!'
+        }else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra, vui lòng thử lại!!'
         }
+        this.dismissCountDown = this.dismissSecs
+        this.edit = false
+        this.showUpload = false
       }).catch(() => {
       });
     },
@@ -202,6 +280,24 @@ export default {
       }
       reader.readAsDataURL(file);
     },
+
+    async uploadImage(){
+      const image = document.querySelector('input[type=file]').files[0]
+      const url = await generateURLUpload(image.name)
+      console.log(url)
+      await  fetch(url,{
+        method: "PUT",
+        headers: {
+          "Content-Type": "image/jpeg"
+        },
+        body: image
+      })
+
+      const  url_uploaded = url.split("?")[0]
+      console.log(url_uploaded)
+      this.info.avatar = url_uploaded
+    },
+
     browse(){
       this.$refs.file.click();
       this.showUpload = true
@@ -213,20 +309,69 @@ export default {
       this.showDialog = false
     },
     save(){
-      let token = this.$cookies.get('token');
-      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      this.errPassOld = '';
+      this.errPassNew = '';
+      this.errPassNewCheck = '';
+      if(!this.oldPassword){
+        this.errPassOld = 'Vui lòng nhập mật khẩu cũ!'
+      }
+      if(!this.newPassword){
+        this.errPassNew = 'Vui lòng nhập mật khẩu mới!'
+      } else{
+        if(this.newPassword.length < 8 || this.newPassword > 30){
+          this.errPassNew = 'Mật khẩu phải có độ dài từ 8 - 30 ký tự!'
+        }
+      }
+      if(!this.copyNewPassword){
+        this.errPassNewCheck = 'Vui lòng xác nhận mật khẩu mới!'
+      }else{
+        if(this.newPassword !== this.copyNewPassword){
+          this.errPassNewCheck = 'Không khớp với mật khẩu mới!'
+        }
+      }
+      if(this.errPassOld === '' && this.errPassNew === '' && this.errPassNewCheck === '' ){
+        this.showConfirmDialog = true
+      }
+    },
+    cancelConfirmDialog(){
+      this.showConfirmDialog = false
+    },
+    HandleConfirm(){
+      this.spinner = true
+      this.err = ''
+      this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.CHANGE_PASSWORD, 'PUT', {
         userId: this.userByToken.UserId,
         oldPassword: this.oldPassword,
         newPassword: this.newPassword,
       }).then((res) => {
-        if(res.data.message == 'UPDATE_SUCCESS'){
-          alert('Thay đổi mật khẩu thành công')
+        if(res.data.message === 'UPDATE_SUCCESS'){
+          this.responseFlag = true
+          this.responseMessage = 'Đổi mật khẩu thành công!'
+          this.dismissCountDown = this.dismissSecs
+          this.showConfirmDialog = false
+          this.showDialog = false
+        }else{
+          if(res.data.message === 'OLD_PASSWORD_INCORRECT'){
+            this.err = 'Mật khẩu cũ không chính xác!'
+            this.showConfirmDialog = false
+          }
+          else{
+            this.responseFlag = true
+            this.responseMessage = 'Đổi mật khẩu thành công!'
+            this.dismissCountDown = this.dismissSecs
+            this.showConfirmDialog = false
+            this.showDialog = false
+          }
         }
+        this.spinner = false
       }).catch(() => {
       });
-      this.showDialog = false
-    }
+    },
+
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
   }
 }
 </script>
@@ -262,8 +407,8 @@ strong {
   background: #F0ECE4;
   border-radius: 10px;
   display: flex;
-  margin-bottom: 20px;
-  margin-top: 30px;
+  margin-bottom: 10px;
+  margin-top: 10px;
   padding-bottom: 100px;
   border: 1px solid #9D6B54;
 }
@@ -272,8 +417,8 @@ strong {
   background: #F0F0F0;
   border-radius: 10px;
   display: flex;
-  margin-bottom: 20px;
-  margin-top: 30px;
+  margin-bottom: 10px;
+  margin-top: 10px;
   display: block;
 }
 
@@ -349,6 +494,20 @@ strong {
   margin-right: 50px;
 }
 
+.imgBtn1{
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  color: white;
+  background: #9D6B54;
+  border: 1px hidden;
+  margin-top: 200px;
+  margin-left: 40px;
+  font-size: 26px;
+  padding-bottom: 8px;
+}
+
 .imgBtn{
   position: absolute;
   width: 50px;
@@ -364,6 +523,12 @@ strong {
 }
 
 .imgBtn:hover{
+  border: 1px solid #9D6B54;
+  color: #9D6B54;
+  background: #F0ECE4;
+}
+
+.imgBtn1:hover{
   border: 1px solid #9D6B54;
   color: #9D6B54;
   background: #F0ECE4;
@@ -393,6 +558,7 @@ strong {
 }
 
 .infoBottom{
+  color: grey;
   display: flex;
   justify-content: space-between;
   padding-top: 30px;
@@ -456,5 +622,11 @@ strong {
   border: 1px solid #9D6B54;
   color: #9D6B54;
   text-align: center;
+}
+
+.err{
+  margin-left: 180px;
+  margin-top: 2px;
+  color: #ca0303;
 }
 </style>

@@ -24,6 +24,11 @@ export default {
 .updateBody{
   display: flex;
   justify-content: space-between;
+  padding-right: 30px;
+}
+
+.updateBodyRent{
+  text-align: center;
   margin-right: 30px;
 }
 
@@ -52,13 +57,12 @@ export default {
   background: #F0ECE4;
   height: auto;
   border-radius: 10px;
-  margin: 5% auto auto auto;
+  margin: 20vh auto auto auto;
 }
 
 .topDialog {
   display: flex;
   justify-content: space-between;
-  padding-left: 120px;
   padding-top: 10px;
   padding-right: 10px;
 }

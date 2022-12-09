@@ -18,6 +18,10 @@ export default {
 </script>
 
 <style scoped>
+.imageBook{
+  width: 50px;
+  height: auto;
+}
 
 .dialog {
   position: fixed;
@@ -33,7 +37,7 @@ export default {
   background: #F0ECE4;
   height: auto;
   border-radius: 10px;
-  margin: 2% auto auto auto;
+  margin: 20vh auto auto auto;
   display: block;
 }
 
@@ -42,14 +46,16 @@ export default {
 }
 
 .btnUpdate{
-  height: 40px;
+  width: 200px;
+  height: 50px;
+  font-size: 14px;
   margin-top: 20px;
   margin-bottom: 10px;
 }
 
 .editInput{
   color: #9D6B54;
-  height: 30px;
+  height: 70px;
   padding-left: 10px;
   border-radius: 5px;
 }

@@ -88,15 +88,19 @@ export default {
       }
       if(!this.newPassword){
         this.errPass = 'Vui lòng nhập mật khẩu!'
+      }else{
+        if(this.newPassword.length <= 8 || this.newPassword >= 30){
+          this.errPass = 'Mật khẩu phải có độ dài từ 8 - 30 ký tự!'
+        }
       }
       if(!this.passwordCheck){
         this.errPassCheck = 'Vui lòng xác nhận mật khẩu!'
       }else{
-        if(this.newPassword != this.passwordCheck){
+        if(this.newPassword !== this.passwordCheck){
           this.errPassCheck = 'Không khớp với mật khẩu!'
         }
       }
-      if(regxMail.test(this.email) && this.forgotPasswordCode && this.newPassword){
+      if(this.errMail === '' && this.errCode=== '' && this.errPass=== '' && this.errPassCheck=== ''){
         this.spinner = true
         apiFactory.callApi(API_USER.RESET_PASSWORD, 'PUT', {
           email: this.email,

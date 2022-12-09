@@ -8,19 +8,14 @@
           </a>
         </div>
         <div>
-          <nav class="Main__nav">
+          <nav style="padding-left: 50px" class="Main__nav">
             <router-link
                 to="/"
                 class="Main__list__item home"
                 active-color="#9D6B54"
             >Trang Chủ
             </router-link>
-            <router-link
-                to="/AllBooks"
-                class="Main__list__item course-management"
-                active-color="#9D6B54"
-            >Tủ sách
-            </router-link>
+            <router-link to="/AllBooks" class="Main__list__item course-management btnCategory" active-color="#9D6B54">Tủ sách</router-link>
             <router-link
                 to="/BlogIndex"
                 class="Main__list__item class-management"
@@ -28,7 +23,7 @@
             >Trạm đọc
             </router-link>
             <router-link
-                to="/users-management"
+                to="/Policy&Terms"
                 class="Main__list__item musers-management"
                 active-color="#9D6B54"
             >Chính sách & điều khoản
@@ -54,13 +49,19 @@
           </nav>
           <nav v-else>
             <li>
-              <b-dropdown right text="Right align" variant="black" no-caret>
+              <b-dropdown variant="black" no-caret>
                 <template v-slot:button-content>
-                  <img class="icon"  src="../image/bell.png">
+                  <Icon class="icon" icon="tabler:bell-ringing-2"/><div class="countNoti">{{count}}</div>
                 </template>
-                <div v-for="item of noti" :key="item.id" class="dropdown-item notification">
-                  "{{item.content}}"
+                <div class="titleNoti">Thông Báo</div>
+                <div v-if="noti != ''">
+                  <div v-for="item of noti" :key="item.id" class="notification">
+                    <div v-if="!item.isRead" style="background-color: #F0ECE4; border-radius: 5px; padding: 5px 10px;">{{item.content}}</div>
+                    <div v-else style="padding: 5px 10px;">{{item.content}}</div>
+                  </div>
+                  <div class="allNoti"><router-link class="linkAllNoti" to="AllNotification">Xem tất cả</router-link></div>
                 </div>
+                <div v-else class="noBookNoti">Danh sách trống!</div>
               </b-dropdown>
             </li>
             <li>
@@ -68,17 +69,25 @@
                 <template v-slot:button-content>
                   <img class="icon" v-bind:src="user.avatar">
                 </template>
-                <router-link to="/PersonalIndex" class="dropdown-item">
-                  {{user.fullname}}
+                <div class="dropdown-item-top">
+                  <img class="icon" v-bind:src="user.avatar">
+                  <div>{{user.fullname}}</div>
+                  <div style="color: grey">{{user.email}}</div>
+                </div>
+                <hr style="margin: 5px" />
+                <router-link to="/MyBooks" class="dropdown-item">
+                  <Icon class="iconPerson" icon="ic:round-person-pin"/> Trang cá nhân
                 </router-link>
                 <hr style="margin: 5px" />
                 <div v-if="user.roleId == 1 || user.roleId == 2">
                   <router-link  to="/ManageIndex" class="dropdown-item">
-                    Quản trị
+                    <Icon class="iconPerson" icon="bi:list-task"/> Quản trị
                   </router-link>
                   <hr style="margin: 5px" />
                 </div>
-                <button v-on:click="HandleLogout" class="dropdown-item">Đăng xuất</button>
+                <button v-on:click="HandleLogout" class="dropdown-item">
+                  <Icon class="iconPerson" icon="uil:signout"/> Đăng xuất
+                </button>
               </b-dropdown>
             </li>
           </nav>
@@ -93,20 +102,24 @@
 import VueJwtDecode from 'vue-jwt-decode';
 import {API_PERSONAL} from "@/constant/constant-api";
 import apiFactory from "@/config/apiFactory";
+import {Icon} from '@iconify/vue2';
 
 export default {
-  name: "Header",
+  name: "Layout",
+  components: {Icon},
   data(){
     return{
       userByToken: '',
       user:'',
       noti: '',
       userId: '',
+      count: ''
     }
   },
   created() {
     this.getUserInfoByToken()
     this.getNotifications()
+    this.getNotificationsNotRead()
   },
   methods:{
     getUserInfoByToken(){
@@ -129,12 +142,19 @@ export default {
       }).catch(() => {
       });
     },
+    getNotificationsNotRead() {
+      let token = this.$cookies.get('token');
+      this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.NOTIFICATION_NOT_READ, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        this.count = res.data.numberOfRecords
+      }).catch(() => {
+      });
+    },
     HandleLogout(){
       this.$cookies.remove('token')
-      this.$router.push({
-        name: 'HomePage'
-      })
-      window.location.reload();
+      window.location.replace('/');
     },
   }
 }
@@ -417,6 +437,8 @@ export default {
 }
 
 .dropdown-menu {
+  padding-left: 10px;
+  padding-right: 10px;
   min-width: 220px;
   max-width: 300px;
   right: 0 !important;
@@ -426,9 +448,28 @@ export default {
   top: 50px !important;
 }
 
+.dropdown-item{
+  color: #9d6b54;
+}
+
 .dropdown-item:hover{
   background-color: #9D6B54;
   color: white;
+  border-radius: 5px;
+}
+
+.dropdown-item-top{
+  width: auto;
+  color: #9d6b54;
+  text-align: center;
+  border-radius: 5px;
+  height: auto;
+  padding-top: 3px;
+}
+
+.iconPerson{
+  font-size: 26px;
+  margin-right: 15px;
 }
 
 .contact{
@@ -526,10 +567,13 @@ export default {
   color: #737373;
   padding: 3px 0;
   align-items: center;
+  list-style: none;
+  transition: 300ms;
 }
 
 .item-link:hover{
   color: #9D6B54;
+  transform: translateX(0.25rem);
 }
 
 .contact_info{
@@ -543,21 +587,81 @@ export default {
 }
 
 .icon{
+  color: #9d6b54;
   width: 40px;
   height: 40px;
   border-radius: 20px;
+  margin-left: 14px;
+  margin-right: 14px;
+  padding: 5px;
+  background-color: #F0ECE4;
+}
+
+.icon:hover{
+  background-color: #c4a698;
+  color: #F0ECE4;
 }
 
 .dropdown-menu{
-  max-width: 400px;
+  max-width: 600px;
 }
 
 .notification{
-  margin-right: 30px;
-  font-size: 0.7rem;
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  word-wrap: break-word;
+  width: 500px;
+  height: auto;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-bottom: 2px;
+  color: #9d6b54;
+  font-size: 12px;
+}
+
+.countNoti{
+  position: absolute;
+  top: 0;
+  margin-left: 35px;
+  background-color: red;
+  width: 20px;
+  height: 20px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding-top: 1px;
+  vertical-align: middle;
+  border-radius: 10px;
+}
+
+.allNoti{
+  text-align: center;
+}
+
+.linkAllNoti{
+  padding: 5px;
+  border-radius: 5px;
+  color: #9d6b54;
+  font-weight: 600;
+}
+
+.linkAllNoti:hover{
+  background-color: #F0ECE4;
+  color: #9d6b54;
+}
+
+.titleNoti{
+  color: #9d6b54;
+  font-weight: bold;
+  padding-bottom: 5px;
+  font-size: 16px;
+  border-radius: 10px;
+}
+
+.noBookNoti{
+  text-align: center;
+  padding-top: 5px;
+  color: grey;
+  font-style: italic;
+  font-size: 14px;
+  padding-bottom: 5px;
 }
 </style>

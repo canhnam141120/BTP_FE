@@ -1,6 +1,8 @@
 <template>
   <Side_Bar>
     <div class="ml">
+      <LoadingDialog v-show="spinner" style="z-index: 1;"></LoadingDialog>
+      <Dashboard></Dashboard>
       <div class="row">
         <PostDetailDialog :show="showDialogPD" :cancel="cancel" v-if="showDialogPD" class="modal">
           <div class="topDialog">
@@ -14,9 +16,14 @@
           <div class="date">Đăng lúc: {{post.createdDate | format}}</div>
         </PostDetailDialog>
         <div class="col-lg-6">
+          <b-alert style="position: absolute; right: 0; margin-top: 10px; z-index: 999999" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+            {{responseMessage}}
+          </b-alert>
+          <b-alert style="position: absolute; right: 0; margin-top: 10px; z-index: 999999" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+            {{responseMessage}}
+          </b-alert>
           <div class="user-data m-b-30">
             <div class="titleMB">QUẢN LÝ BÀI ĐĂNG</div>
-            <hr>
             <div class="search-post">
               <select class="selectCss"  v-model="filter" @change="onchange($event)">
                 <option v-bind:value="item" v-for="item of listFilter" :key="item">{{item}}</option>
@@ -31,39 +38,38 @@
                 <thead>
                 <tr>
                   <td>Chi tiết</td>
-                  <td>Mã bài đăng</td>
-                  <td>Người đăng</td>
                   <td>Ảnh</td>
+                  <td>Mã</td>
+                  <td>Người đăng</td>
                   <td>Tiêu đề</td>
                   <td>Thời gian đăng</td>
                   <td>Trạng thái</td>
                   <td>Duyệt/Hủy</td>
-                  <td>Bình luận</td>
                 </tr>
                 </thead>
                 <tbody v-for="item of listPosts" :key="item.id">
                 <tr>
-                  <td><button v-on:click="openDialogPD(item.id)" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router">XEM</button>
-                  </td>
+                  <td style="padding-left: 13px"><button v-on:click="openDialogPD(item.id)" class="tableBtnAction"><Icon icon="ic:baseline-remove-red-eye"/></button></td>
+                  <td><img v-bind:src="item.image" style="height: 85px; width: 85px; object-fit: scale-down"></td>
                   <td>{{ item.id}}</td>
                   <td>{{ item.user.fullname }}</td>
-                  <td><img v-bind:src="item.image" style="height: 85px; width: 85px; object-fit: scale-down"></td>
                   <td>{{ item.title }}</td>
                   <td>{{ item.createdDate | format}}</td>
                   <td v-if="item.status == 'Approved'" ><span class="role approved">ĐÃ DUYỆT</span></td>
                   <td v-if="item.status == 'Denied'" ><span class="role denied">ĐÃ HỦY</span></td>
                   <td v-if="item.status == 'Waiting'" ><span class="role waiting">ĐANG ĐỢI</span></td>
                   <td v-if="item.status == 'Waiting'">
-                    <button style="display: block" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleApproved(item.id)">Duyệt</button>
-                    <button style="width: 53.5px" class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDenied(item.id)">Hủy</button>
+                    <button class="tableBtnAction" v-on:click="HandleApproved(item.id)"><Icon icon="material-symbols:check-box-rounded"/></button>
+                    <button class="tableBtnAction" v-on:click="HandleDenied(item.id)"><Icon icon="mdi:cancel-box"/></button>
                   </td>
                   <td v-if="item.status == 'Approved'">
-                    <button style="width: 53.5px"  class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleDenied(item.id)">Huỷ</button>
+                    <button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="material-symbols:check-box-rounded"/></button>
+                    <button class="tableBtnAction" v-on:click="HandleDenied(item.id)"><Icon icon="mdi:cancel-box"/></button>
                   </td>
                   <td v-if="item.status == 'Denied'">
-                    <button  class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="HandleApproved(item.id)">Duyệt</button>
+                    <button  class="tableBtnAction" v-on:click="HandleApproved(item.id)"><Icon icon="material-symbols:check-box-rounded"/></button>
+                    <button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="mdi:cancel-box"/></button>
                   </td>
-                  <td><router-link class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router"  :to="{ name: 'GetComments', query: { id:item.id }}">Xem bình luận</router-link></td>
                 </tr>
                 </tbody>
               </table>
@@ -127,7 +133,6 @@
             </div>
           </div>
         </div>
-        <LoadingDialog v-show="spinner"></LoadingDialog>
       </div>
     </div>
   </Side_Bar>
@@ -139,12 +144,20 @@ import {API_MANAGE_POST} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
 import LoadingDialog from "@/components/LoadingDialog";
 import PostDetailDialog from "@/pages/ManagePost/PostDetailDialog";
+import {Icon} from '@iconify/vue2';
+import Dashboard from "@/components/Dashboard";
 
 export default {
   name: "GetPosts",
-  components: {Side_Bar, LoadingDialog, PostDetailDialog},
+  components: {Side_Bar, LoadingDialog, PostDetailDialog, Icon, Dashboard},
   data() {
     return {
+      responseFlag: true,
+      responseMessage: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
+      showConfirmDialog: false,
+
       post: '',
       listPosts: '',
       totalPosts: '',
@@ -158,6 +171,9 @@ export default {
     }
   },
   created() {
+    if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
     this.isSearch = false
     this.getPostsAll(1)
   },
@@ -179,7 +195,6 @@ export default {
       }
     },
     getPostsAll(pageNumber) {
-      this.spinner = true
       if(this.search){
         apiFactory.callApi(API_MANAGE_POST.SEARCH_POST + pageNumber, 'POST', {
           search: this.search
@@ -187,7 +202,6 @@ export default {
           this.listPosts = res.data.data
           this.totalPosts = res.data.numberOfRecords
           this.page = pageNumber
-          this.spinner = false
         }).catch(() => {
         });
       }
@@ -196,48 +210,42 @@ export default {
           this.listPosts = res.data.data
           this.totalPosts = res.data.numberOfRecords
           this.page = pageNumber
-          this.spinner = false
       }).catch(() => {
       });
       }
     },
     getPostsApproved(pageNumber) {
-      this.spinner = true
       this.isSearch = false;
       apiFactory.callApi(API_MANAGE_POST.LIST_POST_APPROVED + pageNumber, 'GET', {}).then((res) => {
         this.listPosts = res.data.data
         this.totalPosts = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     getPostsDenied(pageNumber) {
-      this.spinner = true
       this.isSearch = false;
       apiFactory.callApi(API_MANAGE_POST.LIST_POST_DENIED + pageNumber, 'GET', {}).then((res) => {
         this.listPosts = res.data.data
         this.totalPosts = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     getPostsWaiting(pageNumber) {
-      this.spinner = true
       this.isSearch = false;
       apiFactory.callApi(API_MANAGE_POST.LIST_POST_WAITING + pageNumber, 'GET', {}).then((res) => {
         this.listPosts = res.data.data
         this.totalPosts = res.data.numberOfRecords
         this.page = pageNumber
-        this.spinner = false
       }).catch(() => {
       });
     },
     HandleApproved(id) {
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_POST.APPROVED_POST + id, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Duyệt bài đăng thành công!'
           if(this.filter === ''){
             this.getPostsAll(this.page)
           }
@@ -254,14 +262,20 @@ export default {
             this.getPostsWaiting(this.page)
           }
         }
+        else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
+        }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
         alert('Duyệt không thành công!')
       });
     },
     HandleDenied(id) {
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_POST.DENIED_POST + id, 'PUT', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Hủy bài đăng thành công!'
           if(this.filter === ''){
             this.getPostsAll(this.page)
           }
@@ -278,8 +292,12 @@ export default {
             this.getPostsWaiting(this.page)
           }
         }
+        else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
+        }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
-        alert('Hủy không thành công!')
       });
     },
     HandleSearch(){
@@ -293,10 +311,8 @@ export default {
       return this.getPostsAll(1)
     },
     getPostById(postId){
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_POST.DETAIL_POST + postId, 'GET', {}).then((res) => {
         this.post = res.data.data
-        this.spinner = false
         this.showDialogPD = true
       }).catch(() => {
       });
@@ -306,6 +322,9 @@ export default {
     },
     cancel() {
       this.showDialogPD = false
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
     },
   },
   filters: {

@@ -1,6 +1,8 @@
 <template>
   <Side_Bar>
   <div class="ml">
+    <LoadingDialog v-show="spinner" style="z-index: 1;"></LoadingDialog>
+    <Dashboard></Dashboard>
     <div class="row">
       <CreateFeeDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
         <div class="dialogBody">
@@ -9,10 +11,15 @@
           <label class="labelFee">Giá: </label><input class="inputFee" maxlength="6" type="number" required placeholder="Nhập giá mới" v-model="fee.price">đ
         </div>
       </CreateFeeDialog>
-      <div class="col-lg-6">
-        <div class="user-data m-b-30">
+     <div class="col-lg-6">
+       <b-alert style="position: absolute; right: 0; margin-top: 10px; z-index: 999999" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+         {{responseMessage}}
+       </b-alert>
+       <b-alert style="position: absolute; right: 0; margin-top: 10px; z-index: 999999" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+         {{responseMessage}}
+       </b-alert>
+       <div class="user-data m-b-30">
           <div class="titleMB">QUẢN LÝ PHÍ</div>
-          <hr>
           <div class="table-responsive table-data">
             <table class="table">
               <thead>
@@ -30,14 +37,13 @@
                 <td>{{item.code}}</td>
                 <td>{{item.name}}</td>
                 <td>{{item.price.toLocaleString()}}đ</td>
-                <td><button class="au-btn au-btn-icon au-btn--brown au-btn--small" v-on:click="openDialog(item.id)">Sửa giá</button></td>
+                <td><button style="padding-left: 13px" class="tableBtnAction" v-on:click="openDialog(item.id)"><Icon icon="uiw:setting"/></button></td>
               </tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
-      <LoadingDialog v-show="spinner"></LoadingDialog>
     </div>
   </div>
   </Side_Bar>
@@ -49,12 +55,18 @@ import {API_MANAGE_FEE} from "@/constant/constant-api";
 import Side_Bar from "../../components/Side_Bar";
 import LoadingDialog from "@/components/LoadingDialog";
 import CreateFeeDialog from "@/pages/ManageFee/CreateFeeDialog";
+import {Icon} from '@iconify/vue2';
+import Dashboard from "@/components/Dashboard";
 
 export default {
   name: "GetFees",
-  components: {Side_Bar, LoadingDialog, CreateFeeDialog},
+  components: {Side_Bar,Dashboard, LoadingDialog, CreateFeeDialog, Icon},
   data() {
     return {
+      responseFlag: true,
+      responseMessage: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
       listFees: '',
       fee: '',
       showDialog: false,
@@ -62,14 +74,15 @@ export default {
     }
   },
   created() {
+    if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
     this.getFees()
   },
   methods: {
     getFees() {
-      this.spinner = true
       apiFactory.callApi(API_MANAGE_FEE.LIST_FEE, 'GET', {}).then((res) => {
         this.listFees = res.data.data
-        this.spinner = false
       }).catch(() => {
       });
     },
@@ -94,14 +107,22 @@ export default {
         price: this.fee.price
       }).then((res) => {
         if (res.data.message === 'CREATE_SUCCESS') {
-          console.log(alert('Chỉnh sửa phí thành công'))
-          this.showDialog = false
           this.getFees()
+          this.responseFlag = true
+          this.responseMessage = 'Sửa phí thành công!'
+        }else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
         }
+        this.dismissCountDown = this.dismissSecs
+        this.showDialog = false
       }).catch(() => {
       });
       this.showDialog = false
-    }
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
   }
 }
 </script>

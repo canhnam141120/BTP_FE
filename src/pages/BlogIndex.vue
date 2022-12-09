@@ -1,6 +1,7 @@
 <template>
   <Layout>
     <main style="flex-grow: 1;">
+      <LoadingDialog v-show="spinner" style="z-index: 999999"></LoadingDialog>
       <CreatePostDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
         <div>
           <div class="dialogTitle">VIẾT BÀI</div>
@@ -28,7 +29,7 @@
               <b-row class="post-content">
                 <b-col class="input-label" cols="2">Chọn ảnh:</b-col>
                 <b-col class="input-div" cols="6"><input type="file" title=" " class="input-text-short" name="image"
-                                                         @change="handleFileUpload"></b-col>
+                                                         @change="uploadImage"></b-col>
               </b-row>
               <img v-bind:src="imageSrc" style="width: 300px; height: 300px; object-fit: scale-down">
             </div>
@@ -39,6 +40,13 @@
           <button class="dialogBtn" v-on:click="save">Đăng</button>
         </div>
       </CreatePostDialog>
+      <b-alert style="position: absolute; right: 0;" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+        {{responseMessage}}
+      </b-alert>
+      <b-alert style="position: absolute; right: 0;" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+        {{responseMessage}}
+      </b-alert>
+
       <div class="body-blog">
         <div class="title">TRẠM ĐỌC</div>
         <div class="container-blog">
@@ -74,22 +82,23 @@
                 </div>
               </template>
 
-              <div class="grid">
+              <div v-if="totalPost != 0" class="grid">
                 <div class="item" v-for="item of listPost" :key="item.id">
                   <router-link  :to="{ name: 'PostDetail', query: { id:item.id }}">
                     <img class="post-image" v-bind:src="item.image">
                   </router-link>
-                  <button class="action">Xem chi tiết</button>
                   <div class="info">
                     <div class="post-title">{{ item.title }}</div>
-                    <div><img src="../image/user.png" >{{ item.user.fullname }}</div>
+                    <div><img src="../image/user.png" ><strong>{{ item.user.fullname }}</strong></div>
                     <div class="createDate"><Icon class="iconTime" icon="ic:twotone-access-time"/>{{item.createdDate | formatDate}}</div>
                     <label class="post-content">{{ item.content }}</label>
                   </div>
                 </div>
               </div>
+
+              <div v-else class="noPost">Không tìm thấy bài viết phù hợp!</div>
             </b-skeleton-wrapper>
-            <div class="paging">
+            <div v-if="totalPost != 0" class="paging">
               <div class="page">
                 <b-pagination @input="getListPost" v-model="page" :total-rows="totalPost" :per-page="10">
                   <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
@@ -117,12 +126,20 @@ import Layout from "@/components/Layout";
 import {Icon} from '@iconify/vue2';
 import VueJwtDecode from "vue-jwt-decode";
 import CreatePostDialog from "@/pages/CreatePostDialog";
+import LoadingDialog from "@/components/LoadingDialog";
+import {generateURLUpload} from "@/S3";
 
 export default {
   name: "BlogIndex",
-  components: {Layout, Icon, CreatePostDialog},
+  components: {Layout, Icon, CreatePostDialog, LoadingDialog},
   data() {
     return {
+      spinner: false,
+      responseFlag: true,
+      responseMessage: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
+
       listPost: '',
       totalPost: '',
       info: '',
@@ -194,8 +211,7 @@ export default {
       this.showDialog = false
     },
     save(){
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_POST.CREATE_POST, 'POST', {
         image: this.imageSrc,
         userId: this.userByToken.UserId,
@@ -203,10 +219,20 @@ export default {
         content: this.content
       }).then((res) => {
         if (res.data.message === 'CREATE_SUCCESS') {
-          console.log(alert('Đăng bài thành công'))
-          this.showDialog = false
+          this.responseFlag = true
+          this.responseMessage = 'Bài viết của bạn đã được gửi cho QTV để duyệt!'
         }
+        else{
+          this.responseFlag = false
+          this.responseMessage = 'Có lỗi xảy ra, vui lòng thử lại!!'
+        }
+        this.dismissCountDown = this.dismissSecs
+        this.showDialog = false
       }).catch(() => {
+        this.dismissCountDown = this.dismissSecs
+        this.responseFlag = false
+        this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
+        this.showDialog = false
       });
     },
     handleFileUpload(e) {
@@ -224,7 +250,26 @@ export default {
       }
       console.log(this.imageSrc)
       reader.readAsDataURL(file);
-    }
+    },
+
+    async uploadImage(){
+      const image = document.querySelector('input[type=file]').files[0]
+      const url = await generateURLUpload(image.name)
+      await  fetch(url,{
+        method: "PUT",
+        headers: {
+          "Content-Type": "image/jpeg"
+        },
+        body: image
+      })
+
+      const  url_uploaded = url.split("?")[0]
+      this.imageSrc  = url_uploaded
+    },
+
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
   },
   filters:{
     formatDate(value){
@@ -245,6 +290,7 @@ main {
 
 strong {
   color: #9D6B54;
+  font-weight: 600;
 }
 
 .createDate{
@@ -311,15 +357,20 @@ strong {
   background: #F0F0F0;
   max-width: 1230px;
   border-radius: 10px;
-  margin: 5px auto 30px auto;
+  margin: 5px auto 10px auto;
   display: block;
 }
 
 .body-blog .title {
+  max-width: 1230px;
+  border-radius: 10px;
+  background-color: #F0ECE4;
   font-weight: bold;
   color: #9D6B54;
   font-size: 2rem;
   text-align: center;
+  margin: 10px auto 10px auto;
+  border: 1px solid #9D6B54;
 }
 
 .body-blog .container-blog .content {
@@ -368,18 +419,22 @@ strong {
 }
 
 .body-blog .container-blog .content .grid .item {
+  /*background-color: white;*/
+  background-color: #f5f5f5;
+  color: #9d6b54;
   border-radius: 10px;
   width: 593px;
   height: auto;
   margin: 10px 0px 10px 15px;
   display: flex;
   padding-bottom: 5px;
+  border: 1px solid #9D6B54;
 }
 
 .body-blog .container-blog .content .grid .item:hover {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
-  background: grey;
-  opacity: 0.9;
+  /*background: grey;
+  opacity: 0.9;*/
 }
 
 .body-blog .container-blog .content .grid .item .post-image {
@@ -419,6 +474,7 @@ strong {
 }
 
 .body-blog .container-blog .content .grid .info .post-content {
+  color: grey;
   margin-left: 5px;
   margin-right: 10px;
   font-size: 0.8rem;
@@ -429,7 +485,7 @@ strong {
   -webkit-line-clamp: 4;
 }
 
-.body-blog .container-blog .content .grid .action{
+/*.body-blog .container-blog .content .grid .action{
   position: absolute;
   width: 200px;
   height: 50px;
@@ -450,16 +506,23 @@ strong {
 
 .body-blog .container-blog .content .grid .item:hover .action{
   display: block;
-}
+}*/
 
 .body-blog .container-blog .content .paging {
   margin-top: 10px;
-  padding-bottom: 10px;
 }
 
-.body-blog .container-blog .content .paging .page {
-  width: 17%;
-  margin-right: auto;
-  margin-left: auto;
+.body-blog .container-blog .content .paging ul {
+  justify-content: right;
+  padding-right: 15px;
+}
+
+.noPost{
+  height: 50vh;
+  text-align: center;
+  padding-top: 50px;
+  color: grey;
+  font-style: italic;
+  font-size: 26px;
 }
 </style>

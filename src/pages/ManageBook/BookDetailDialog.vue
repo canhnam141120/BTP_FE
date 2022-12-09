@@ -26,19 +26,20 @@ export default {
 }
 
 .dialogContent {
-  width: 600px;
+  width: 900px;
   background: #F0ECE4;
   height: auto;
   border-radius: 10px;
-  margin: 2% auto auto auto;
+  margin: 15vh auto auto auto;
   display: block;
+  padding-bottom: 40px;
 }
 
 
 .topDialog{
   display: flex;
   justify-content: space-between;
-  padding-left: 250px;
+  padding-left: 50vh;
   padding-top: 10px;
   padding-right: 10px;
 }

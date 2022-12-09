@@ -35,16 +35,19 @@
               </template>
               <div class="grid-book">
                 <div class="item-book" v-for="item of listBook" :key="item.id">
-                  <router-link :to="{ name: 'BookDetail', query: { id:item.id }}">
+                  <router-link :to="{ name: 'BookDetail', query: { id:item.id }}" style="position: relative">
                     <img class="imgBook" v-bind:src="item.image">
+                    <label v-if="item.isTrade" class="layer">Đang giao dịch</label>
+                    <label v-else class="layer1">Sẵn sàng</label>
                   </router-link>
                   <div class="info">
-                    <div class="book-title">{{ item.title }}</div>
-                    <div><img class="imgUser" src="../image/user.png"> {{ item.user.fullname }}</div>
-                    <label>Giá bìa: <strong>{{ item.coverPrice.toLocaleString() }}đ</strong></label>
+                    <div class="book-title"><strong>{{ item.title }}</strong></div>
+                    <div class="book-status">Thể loại: <strong>{{ item.category.name }}</strong></div>
+                    <div class="book-status">Đăng bởi: <strong>{{ item.user.fullname }}</strong></div>
+                    <label class="book-status">Giá cọc: <strong>{{ item.depositPrice.toLocaleString() }}đ</strong></label>
                     <label class="book-status">{{ item.statusBook }}</label>
-                    <label class="book-status" style="color: red; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
-                    <label class="book-status" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
+<!--                    <label class="book-status" style="color: #ca0303; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
+                    <label class="book-status" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>-->
                   </div>
                 </div>
               </div>
@@ -74,10 +77,42 @@
                     <img class="imgPost" v-bind:src="item.image">
                   </router-link>
                   <div class="info">
-                    <div class="post-title">{{ item.title }}</div>
-                    <div><img class="imgUserPost" src="../image/user.png"> {{ item.user.fullname }}</div>
+                    <div class="post-title"><strong>{{ item.title }}</strong></div>
+                    <div class="post-content" style="color: #9d6b54">Tác giả: <strong>{{ item.user.fullname }}</strong></div>
                     <div class="createDate"><Icon class="iconTime" icon="ic:twotone-access-time"/>{{item.createdDate | formatDate}}</div>
                     <div class="post-content">{{ item.content }}</div>
+                  </div>
+                </div>
+              </div>
+            </b-skeleton-wrapper>
+          </div>
+          <div class="listUserHP">
+            <div class="home-title2">TOP NGƯỜI DÙNG ĐƯỢC YÊU THÍCH</div>
+            <hr style="margin-top: 0px">
+            <b-skeleton-wrapper :loading="loading">
+              <template #loading>
+                <div class="gridUserHP">
+                  <div class="itemUserHP" v-for='i in 6' :key="i">
+                    <b-card no-body img-top style="height: 250px">
+                      <b-skeleton type="avatar" height="140px" width="140px" style="margin-left: 20px"></b-skeleton>
+                      <b-card style="height: 110px">
+                        <b-skeleton animation="wave" width="85%"></b-skeleton>
+                        <b-skeleton animation="wave" width="55%"></b-skeleton>
+                        <b-skeleton animation="wave" width="70%"></b-skeleton>
+                      </b-card>
+                    </b-card>
+                  </div>
+                </div>
+              </template>
+              <div class="gridUserHP">
+                <div class="itemUserHP" v-for="item of listUser" :key="item.id">
+                  <router-link class="active" :to="{ name: 'OtherPerson', query: { id:item.id}}">
+                    <img v-bind:src="item.avatar">
+                  </router-link>
+                  <div class="itemUserInfo">
+                    <div class="username"><strong>{{item.fullname}}</strong></div>
+                    <div class="username">{{ item.likeNumber }} người thích</div>
+                    <div class="username">{{ item.numberOfTransaction}} lần giao dịch</div>
                   </div>
                 </div>
               </div>
@@ -91,7 +126,7 @@
 
 <script>
 import apiFactory from "@/config/apiFactory";
-import {API_BOOK, API_POST} from "@/constant/constant-api";
+import {API_BOOK, API_POST, API_MANAGE_USER} from "@/constant/constant-api";
 import Layout from "@/components/Layout";
 // import VueSlickCarousel from 'vue-slick-carousel'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
@@ -107,6 +142,7 @@ export default {
       loading: false,
       listBook: '',
       listPost: '',
+      listUser: '',
       slide: 'false',
       settings: {
         "dots": true,
@@ -126,6 +162,7 @@ export default {
   created() {
     this.getListBook()
     this.getListPost()
+    this.getListUser()
   },
   methods: {
     getListBook() {
@@ -140,6 +177,14 @@ export default {
       this.loading = true;
       apiFactory.callApi(API_POST.TOP_POST, 'GET', {}).then((res) => {
         this.listPost = res.data.data
+        this.loading = false
+      }).catch(() => {
+      });
+    },
+    getListUser() {
+      this.loading = true;
+      apiFactory.callApi(API_MANAGE_USER.TOP, 'GET', {}).then((res) => {
+        this.listUser = res.data.data
         this.loading = false
       }).catch(() => {
       });
@@ -164,10 +209,11 @@ main {
 
 strong {
   color: #9D6B54;
+  font-weight: 600;
 }
 
 .banner {
-  margin: 24px;
+  margin: 10px;
   justify-content: center;
   padding-left: 100px;
 }
@@ -180,14 +226,14 @@ strong {
   color: #9D6B54;
   font-size: 2.2rem;
   font-weight: 600;
-  margin-left: 470px;
+  text-align: center;
 }
 
 .home-title2{
   color: #9D6B54;
   font-size: 2.2rem;
   font-weight: 600;
-  margin-left: 490px;
+  text-align: center;
 }
 
 .homepage .container {
@@ -211,7 +257,18 @@ strong {
   background: #F0ECE4;
   border-radius: 10px;
   display: block;
-  margin-top: 20px;
+  margin-top: 10px;
+  padding-bottom: 20px;
+  margin-bottom: 10px;
+  border: 1px solid #9D6B54;
+}
+
+.listUserHP {
+  max-width: 1230px;
+  background: #F0ECE4;
+  border-radius: 10px;
+  display: block;
+  margin-top: 10px;
   padding-bottom: 20px;
   margin-bottom: 10px;
   border: 1px solid #9D6B54;
@@ -225,14 +282,34 @@ strong {
 }
 
 .item-book {
+  color: #9D6B54;
   border-radius: 10px;
   width: 191px;
   height: auto;
   margin: 5px;
+  border: 1px solid #9D6B54;
 }
 
 .item-book:hover {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+}
+
+.layer{
+  position: absolute;
+  left: 0;
+  background-color: #ca0303;
+  color: #F0ECE4;
+  font-size: 12px;
+  padding: 5px;
+}
+
+.layer1{
+  position: absolute;
+  left: 0;
+  background-color: green;
+  color: #F0ECE4;
+  font-size: 12px;
+  padding: 5px;
 }
 
 .item-book .imgBook{
@@ -246,24 +323,16 @@ strong {
   padding: 5px;
 }
 
-.grid-book .info .imgUser {
-  width: 20px;
-  height: 20px;
-  margin-left: 5px;
-}
-
 .grid-book .info label {
   margin-left: 5px;
 }
 
 .grid-book .info .book-title {
   color: #9D6B54;
-  margin-left: 5px;
-  margin-right: 5px;
-  display: block;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .grid-book .info .book-status {
@@ -285,11 +354,13 @@ strong {
 }
 
 .item-post {
+  color: #9D6B54;
   border-radius: 10px;
   display: flex;
   width: 392px;
   margin: 5px;
   height: auto;
+  border: 1px solid #9D6B54;
 }
 
 .item-post:hover {
@@ -306,13 +377,6 @@ strong {
   width: 201px;
   height: 120px;
   padding: 5px;
-}
-
-.grid-post .info .imgUserPost {
-  width: 18px;
-  height: 18px;
-  margin-left: 4px;
-  margin-bottom: 4px;
 }
 
 .grid-post .info label {
@@ -344,12 +408,51 @@ strong {
 
 
 .grid-post .info .post-content {
+  color: grey;
   font-size: 14px;
   margin-left: 2px;
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
+}
+
+
+.gridUserHP {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.gridUserHP .itemUserHP {
+  border-radius: 10px;
+  width: 185px;
+  height: auto;
+  margin: 10px 2px 10px 15px;
+  border: 1px solid #9D6B54;
+  /*padding-top: 10px;*/
+  text-align: center;
+}
+
+.gridUserHP .itemUserHP:hover {
+  box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
+}
+
+.gridUserHP .itemUserHP img {
+  margin-top: 10px;
+  height: 140px;
+  width: 140px;
+  border-radius: 70px;
+  border: 2px outset #9D6B54;
+}
+
+.gridUserHP .itemUserInfo {
+  text-align: center;
+  height: auto;
+  padding: 5px;
+}
+
+.gridUserHP .itemUserInfo .username {
+  color: #9D6B54;
 }
 
 .slick-initialized .slick-slide {

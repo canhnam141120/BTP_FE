@@ -4,9 +4,19 @@ Vue.use(VueRouter)
 
 const routers = [
     {
+        path:'*',
+        name:'404Page',
+        component: () => import('@/pages/404Page'),
+    },
+    {
         path:'/ResultPayment',
         name:'ResultPayment',
         component: () => import('@/pages/ResultPayment'),
+    },
+    {
+        path:'/ResultPaymentRent',
+        name:'ResultPaymentRent',
+        component: () => import('@/pages/ResultPaymentRent'),
     },
     {
         path:'/',
@@ -84,6 +94,11 @@ const routers = [
         component: () => import('@/pages/Personal/MyPosts'),
     },
     {
+        path:'/AllNotification',
+        name:'AllNotification',
+        component: () => import('@/pages/AllNotification'),
+    },
+    {
         path:'/MyFavorites',
         name:'MyFavorites',
         component: () => import('@/pages/Personal/MyFavorites'),
@@ -132,26 +147,6 @@ const routers = [
         path:'/ManageUser',
         name:'GetUsers',
         component: () => import('@/pages/ManageUser/GetUsers'),
-    },
-    {
-        path:'/ManageBill/exchange-bill',
-        name:'GetExchangeBills',
-        component: () => import('@/pages/ManageBill/GetExchangeBills'),
-    },
-    {
-        path:'/ManageBill/exchange-bill/detail',
-        name:'DetailExchangeBill',
-        component: () => import('@/pages/ManageBill/DetailExchangeBill'),
-    },
-    {
-        path:'/ManageBill/rent-bill',
-        name:'GetRentBills',
-        component: () => import('@/pages/ManageBill/GetRentBills'),
-    },
-    {
-        path:'/ManageBill/rent-bill/detail',
-        name:'DetailRentBill',
-        component: () => import('@/pages/ManageBill/DetailRentBill'),
     },
     {
         path:'/ManageTransaction/exchange',

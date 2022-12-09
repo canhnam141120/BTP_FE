@@ -1,8 +1,13 @@
 <template>
   <Layout>
     <main style="flex-grow: 1">
-      <LoadingDialog v-show="spinner" style="z-index: 999"></LoadingDialog>
       <div class="myFVR">
+        <b-alert style="position: absolute; right: 0; z-index: 999999" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          {{responseMessage}}
+        </b-alert>
+        <b-alert style="position: absolute; right: 0; z-index: 999999" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+          {{responseMessage}}
+        </b-alert>
         <div class="containerMF">
           <div class="left-contentMF">
             <SideBar_Personal></SideBar_Personal>
@@ -36,7 +41,7 @@
                         </div>
                       </div>
                     </template>
-                    <div class="gridMB">
+                    <div v-if="totalBook != 0" class="gridMB">
                       <div class="itemMB" v-for="item of listBook" :key="item.id">
                         <router-link class="active" :to="{ name: 'BookDetail', query: { id:item.bookId }}">
                           <img v-bind:src="item.book.image">
@@ -61,8 +66,9 @@
                         </div>
                       </div>
                     </div>
+                    <div v-else class="noBook">Danh sách trống!</div>
                   </b-skeleton-wrapper>
-                  <div class="pagingMB">
+                  <div v-if="totalBook != 0"  class="pagingMB">
                     <b-pagination class="page-numberMB" @input="getBookFavorite" v-model="pageBook"
                                   :total-rows="totalBook"
                                   :per-page="6">
@@ -100,7 +106,7 @@
                         </div>
                       </div>
                     </template>
-                    <div class="gridPostLike">
+                    <div v-if="totalPost != 0" class="gridPostLike">
                       <div class="itemPostLike" v-for="item of listPost" :key="item.id">
                         <router-link  :to="{ name: 'PostDetail', query: { id:item.postId }}">
                           <img class="post-image" v-bind:src="item.post.image">
@@ -119,8 +125,9 @@
                         </div>
                       </div>
                     </div>
+                    <div v-else class="noBook">Danh sách trống!</div>
                   </b-skeleton-wrapper>
-                  <div class="pagingMB">
+                  <div v-if="totalPost != 0" class="pagingMB">
                     <b-pagination class="page-numberMB" @input="getPostFavorite" v-model="pagePost"
                                   :total-rows="totalPost"
                                   :per-page="5">
@@ -155,7 +162,7 @@
                         </div>
                       </div>
                     </template>
-                    <div class="gridUser">
+                    <div v-if="totalUser != 0"  class="gridUser">
                       <div class="itemUser" v-for="item of listUser" :key="item.id">
                         <router-link class="active" :to="{ name: 'OtherPerson', query: { id:item.favoriteUserId}}">
                           <img v-bind:src="item.favoriteUser.avatar">
@@ -168,8 +175,9 @@
                         </div>
                       </div>
                     </div>
+                    <div v-else class="noBook">Danh sách trống!</div>
                   </b-skeleton-wrapper>
-                  <div class="pagingMB">
+                  <div v-if="totalUser != 0" class="pagingMB">
                     <b-pagination class="page-numberMB" @input="getUserFavorite" v-model="pageUser"
                                   :total-rows="totalUser"
                                   :per-page="8">
@@ -200,13 +208,17 @@ import apiFactory from "@/config/apiFactory";
 import {API_PERSONAL} from "@/constant/constant-api";
 import VueJwtDecode from "vue-jwt-decode";
 import {Icon} from '@iconify/vue2';
-import LoadingDialog from "@/components/LoadingDialog";
 
 export default {
   name: "MyFavorites",
-  components: {SideBar_Personal, Layout, Icon, LoadingDialog},
+  components: {SideBar_Personal, Layout, Icon},
   data(){
     return{
+      responseFlag: true,
+      responseMessage: '',
+      dismissSecs: 5,
+      dismissCountDown: 0,
+
       loading: false,
       searchBook: '',
       isSearchBook: false,
@@ -222,11 +234,13 @@ export default {
       isSearchUser: false,
       pageUser: 1,
       listUser: '',
-      totalUser: '',
-      spinner: false
+      totalUser: ''
     }
   },
   created() {
+    if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
     this.getBookFavorite(1)
     this.getPostFavorite(1)
     this.getUserFavorite(1)
@@ -234,8 +248,7 @@ export default {
   methods: {
     getBookFavorite(pageNumber){
       this.loading = true;
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.LIST_BOOK_FAVORITE + '?page=' + pageNumber, 'POST', {
         userId: this.userByToken.UserId
       }).then((res) => {
@@ -247,8 +260,7 @@ export default {
       });
     },
     getPostFavorite(pageNumber){
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.LIST_POST_FAVORITE + '?page=' + pageNumber, 'POST', {
         userId: this.userByToken.UserId
       }).then((res) => {
@@ -259,8 +271,7 @@ export default {
       });
     },
     getUserFavorite(pageNumber){
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.LIST_USER_FAVORITE + '?page=' + pageNumber, 'POST', {
         userId: this.userByToken.UserId
       }).then((res) => {
@@ -271,47 +282,54 @@ export default {
       });
     },
     HandleUnlikeBook(bookId){
-      this.spinner = true
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      window.scroll(0,0)
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.DELETE_BOOK_FAVORITE + bookId, 'DELETE', {
         userId: this.userByToken.UserId
       }).then((res) => {
         if(res.data.message == 'DELETE_SUCCESS'){
           this.getBookFavorite(this.pageBook)
-          this.spinner = false;
+          this.responseFlag = true
+          this.responseMessage = 'Hủy yêu thích sách - Thành công'
+          this.dismissCountDown = this.dismissSecs
         }
       }).catch(() => {
       });
     },
     HandleUnlikePost(postId){
-      this.spinner = true
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      window.scroll(0,0)
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.DELETE_POST_FAVORITE + postId, 'DELETE', {
         userId: this.userByToken.UserId
       }).then((res) => {
         if(res.data.message == 'DELETE_SUCCESS'){
           this.getPostFavorite(this.pagePost)
-          this.spinner = false;
+          this.responseFlag = true
+          this.responseMessage = 'Hủy yêu thích bài đăng - Thành công'
+          this.dismissCountDown = this.dismissSecs
         }
       }).catch(() => {
       });
     },
     HandleUnlikeUser(userId){
-      this.spinner = true
-      let token = this.$cookies.get('token');
-      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      window.scroll(0,0)
+      this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_PERSONAL.DELETE_USER_FAVORITE + userId, 'DELETE', {
         userId: this.userByToken.UserId
       }).then((res) => {
         if(res.data.message == 'DELETE_SUCCESS'){
           this.getUserFavorite(this.pageUser)
-          this.spinner = false;
+          this.responseFlag = true
+          this.responseMessage = 'Hủy yêu thích người dùng - Thành công'
+          this.dismissCountDown = this.dismissSecs
         }
       }).catch(() => {
       });
-    }
+    },
+
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
   },
   filters:{
     formatDate(value){
@@ -352,8 +370,8 @@ strong {
   background: #F0ECE4;
   border-radius: 10px;
   display: flex;
-  margin-bottom: 20px;
-  margin-top: 30px;
+  margin-bottom: 10px;
+  margin-top: 10px;
   padding-bottom: 100px;
   border: 1px solid #9D6B54;
 }
@@ -362,8 +380,8 @@ strong {
   background: #F0ECE4;
   border-radius: 10px;
   display: flex;
-  margin-bottom: 20px;
-  margin-top: 30px;
+  margin-bottom: 10px;
+  margin-top: 10px;
   border: 1px solid #9D6B54;
   display: block;
 }
@@ -380,10 +398,6 @@ strong {
   background-color: #F0ECE4;
   border: none;
   color: #9D6B54;
-}
-
-.groupTab{
-
 }
 
  .search {
@@ -641,5 +655,13 @@ strong {
   border-color: #9D6B54;
   background-color: #F0ECE4;
   color: #9D6B54;
+}
+
+.noBook{
+  text-align: center;
+  padding-top: 50px;
+  color: grey;
+  font-style: italic;
+  font-size: 26px;
 }
 </style>
