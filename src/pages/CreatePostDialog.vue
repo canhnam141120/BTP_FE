@@ -24,11 +24,12 @@ export default {
 }
 
 .dialogContent {
-  width: 1100px;
+  width: 1000px;
   background: #F0ECE4;
   height: auto;
   border-radius: 10px;
   margin: 90px auto auto auto;
+  margin-top: 5%;
 }
 
 .dialogBody{

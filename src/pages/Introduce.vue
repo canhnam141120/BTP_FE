@@ -37,8 +37,10 @@
       <div class="container">
       <div class="layer-4">
         <div class="text-divider">Thành viên</div>
-        <div class="admin-icon">
-
+          <div class="GridAvatar">
+          <div v-for="item of listAdmins" :key="item.id">
+              <img v-bind:src="item.avatar">
+          </div>
         </div>
       </div>
       </div>
@@ -48,10 +50,29 @@
 
 <script>
 import Layout from "../components/Layout";
+import {API_MANAGE_ADMIN} from "../constant/constant-api";
+import apiFactory from "../config/apiFactory";
 
 export default {
   name: "Introduce",
-  components: {Layout}
+  components: {Layout},
+  data() {
+    return {
+      listAdmins: '',
+      avatar: '',
+    }
+  },
+  created() {
+    this.getListAdmin()
+  },
+  methods: {
+    getListAdmin() {
+      apiFactory.callApi(API_MANAGE_ADMIN.LIST_ADMIN, 'GET', {}).then((res) => {
+        this.listAdmins = res.data.data
+      }).catch(() => {
+      });
+    }
+  },
 }
 </script>
 
@@ -93,6 +114,15 @@ margin-left: 10%;
   top: -107px;
   width: 100%;
   height: auto;
+  transition: transform .3s;
+}
+.layer-3 .inline-image img:hover{
+  -ms-transform: scale(1.1); /* IE 9 */
+  -webkit-transform: scale(1.0); /* Safari 3-8 */
+  transform: scale(1.1);
+}
+.layer-4{
+  margin-bottom: 3%;
 }
 .text-divider {
   display: flex;
@@ -114,5 +144,22 @@ margin-left: 10%;
 }
 .text-divider::after {
   margin-left: var(--text-divider-gap);
+}
+.GridAvatar{
+  display: flex;
+  justify-content: center;
+}
+.GridAvatar img {
+  margin-top: 10px;
+  height: 140px;
+  width: 140px;
+  border-radius: 70px;
+  margin-right: 20px;
+  transition: transform .3s;
+}
+.GridAvatar img:hover{
+  -ms-transform: scale(1.1); /* IE 9 */
+  -webkit-transform: scale(1.0); /* Safari 3-8 */
+  transform: scale(1.1);
 }
 </style>

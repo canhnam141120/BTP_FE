@@ -3,35 +3,43 @@
     <main style="flex-grow: 1;">
       <LoadingDialog v-show="spinner" style="z-index: 999999"></LoadingDialog>
       <CreatePostDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
-        <div>
-          <div class="dialogTitle">VIẾT BÀI</div>
+<!--        <div class="dialog-title">-->
+<!--          <div class="main-title">Viết lách</div>-->
+<!--        </div>-->
+        <div v-if="this.$cookies.get('token')" class="User-post">
+          <img class="userImageBI" v-bind:src="info.avatar">
+          <div class="infor-right">
+            <div class="user-name">
+              {{ info.fullname }}
+            </div>
+            <div class="public">
+              <Icon icon="material-symbols:public" color="#9d6b54"/>
+              <p>Công khai</p>
+            </div>
+          </div>
         </div>
-        <div class="dialogBody">
-          <b-row class="post-content">
-            <b-col class="input-label" cols="2">Tiêu đề:</b-col>
-            <b-col class="input-div" cols="9">
+        <div class="content-post">
+          <div class="input-left">
+            <div class="content-title">
               <input type="text" maxlength="500"
                      required placeholder="Nhập tiêu đề"
-                     v-model="title" class="input-text">
-            </b-col>
-          </b-row>
-          <div class="bottom-post">
-            <b-row class="post-content">
-              <b-col class="input-label" cols="2">Nội dung:</b-col>
-              <b-col class="input-div" cols="9">
-              <textarea type="text" maxlength="2000" required style="height: 400px; width: 550px;"
+                     v-model="title">
+            </div>
+            <div class="text-area">
+              <textarea type="text" maxlength="2000" required
                         placeholder="Nhập nội dung bài đăng"
-                        v-model="content"
-                        class="input-text">
-            </textarea></b-col>
-            </b-row>
-            <div>
-              <b-row class="post-content">
-                <b-col class="input-label" cols="2">Chọn ảnh:</b-col>
-                <b-col class="input-div" cols="6"><input type="file" title=" " class="input-text-short" name="image"
-                                                         @change="uploadImage"></b-col>
-              </b-row>
-              <img v-bind:src="imageSrc" style="width: 300px; height: 300px; object-fit: scale-down">
+                        v-model="content">
+              </textarea>
+            </div>
+          </div>
+          <div class="input-right">
+            <div class="background-import">
+              <label>Chọn ảnh:</label>
+              <input type="file" title=" " class="input-text-short" name="image"
+                     @change="uploadImage">
+            </div>
+            <div class="display-image">
+              <img v-bind:src="imageSrc" style="width: 100%; height: 100%;object-fit: scale-down">
             </div>
           </div>
         </div>
@@ -40,11 +48,13 @@
           <button class="dialogBtn" v-on:click="save">Đăng</button>
         </div>
       </CreatePostDialog>
-      <b-alert style="position: absolute; right: 0;" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
-        {{responseMessage}}
+      <b-alert style="position: absolute; right: 0;" v-if="responseFlag" :show="dismissCountDown" variant="success"
+               @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+        {{ responseMessage }}
       </b-alert>
-      <b-alert style="position: absolute; right: 0;" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
-        {{responseMessage}}
+      <b-alert style="position: absolute; right: 0;" v-else :show="dismissCountDown" variant="danger"
+               @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+        {{ responseMessage }}
       </b-alert>
 
       <div class="body-blog">
@@ -61,7 +71,9 @@
             <div class="search">
               <input type="text" v-model="search" placeholder="Nhập tiêu đề">
               <button v-on:click="HandleSearch">Tìm</button>
-            </div><br><hr>
+            </div>
+            <br>
+            <hr>
 
             <b-skeleton-wrapper :loading="loading">
               <template #loading>
@@ -84,13 +96,16 @@
 
               <div v-if="totalPost != 0" class="grid">
                 <div class="item" v-for="item of listPost" :key="item.id">
-                  <router-link  :to="{ name: 'PostDetail', query: { id:item.id }}">
+                  <router-link :to="{ name: 'PostDetail', query: { id:item.id }}">
                     <img class="post-image" v-bind:src="item.image">
                   </router-link>
                   <div class="info">
                     <div class="post-title">{{ item.title }}</div>
-                    <div><img src="../image/user.png" ><strong>{{ item.user.fullname }}</strong></div>
-                    <div class="createDate"><Icon class="iconTime" icon="ic:twotone-access-time"/>{{item.createdDate | formatDate}}</div>
+                    <div><img src="../image/user.png"><strong>{{ item.user.fullname }}</strong></div>
+                    <div class="createDate">
+                      <Icon class="iconTime" icon="ic:twotone-access-time"/>
+                      {{ item.createdDate | formatDate }}
+                    </div>
                     <label class="post-content">{{ item.content }}</label>
                   </div>
                 </div>
@@ -149,7 +164,7 @@ export default {
       showDialog: false,
       page: 1,
 
-      title:'',
+      title: '',
       content: '',
       imageSrc: ''
     }
@@ -210,7 +225,7 @@ export default {
     cancel() {
       this.showDialog = false
     },
-    save(){
+    save() {
       this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_POST.CREATE_POST, 'POST', {
         image: this.imageSrc,
@@ -221,8 +236,7 @@ export default {
         if (res.data.message === 'CREATE_SUCCESS') {
           this.responseFlag = true
           this.responseMessage = 'Bài viết của bạn đã được gửi cho QTV để duyệt!'
-        }
-        else{
+        } else {
           this.responseFlag = false
           this.responseMessage = 'Có lỗi xảy ra, vui lòng thử lại!!'
         }
@@ -252,10 +266,10 @@ export default {
       reader.readAsDataURL(file);
     },
 
-    async uploadImage(){
+    async uploadImage() {
       const image = document.querySelector('input[type=file]').files[0]
       const url = await generateURLUpload(image.name)
-      await  fetch(url,{
+      await fetch(url, {
         method: "PUT",
         headers: {
           "Content-Type": "image/jpeg"
@@ -263,16 +277,16 @@ export default {
         body: image
       })
 
-      const  url_uploaded = url.split("?")[0]
-      this.imageSrc  = url_uploaded
+      const url_uploaded = url.split("?")[0]
+      this.imageSrc = url_uploaded
     },
 
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown
     },
   },
-  filters:{
-    formatDate(value){
+  filters: {
+    formatDate(value) {
       return new Date(value).toLocaleString('en-GB')
     }
   }
@@ -293,12 +307,12 @@ strong {
   font-weight: 600;
 }
 
-.createDate{
+.createDate {
   color: #9D6B54;
   font-weight: 600;
 }
 
-.iconTime{
+.iconTime {
   margin-bottom: 5px;
   font-size: 20px;
   margin-right: 5px;
@@ -319,7 +333,100 @@ strong {
   border: 1px solid #9D6B54;
 }
 
-.userImageBI{
+.User-post {
+  display: flex;
+  background-color: white;
+  width: 837px;
+  height: 72px;
+  border-radius: 10px;
+  margin-left: 80px;
+  margin-top: 5%;
+}
+
+.User-post img {
+  width: 40px;
+  height: 40px;
+}
+
+.infor-right {
+  margin-top: 16px;
+}
+.dialog-title{
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+}
+/*.main-title{*/
+/*font-size: 40px;*/
+/*  font-weight: bold;*/
+/*  color: #9D6B54;*/
+/*  */
+/*}*/
+
+.public {
+  display: flex;
+  background-color: #F0ECE4;
+  border-radius: 3px;
+  width: 80px;
+  height: 16px;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.User-post .public p {
+  font-weight: bold;
+  font-size: 10px;
+  margin-left: 4px;
+}
+
+.content-post {
+  display: flex;
+  margin-left: 80px;
+  margin-top: 7px;
+}
+
+.input-left {
+  margin-right: 7px;
+}
+
+.content-title input{
+  width: 526px;
+  height: 49px;
+  margin-bottom: 7px;
+  border: none;
+  border-radius: 10px;
+  padding-left: 10px;
+}
+
+.text-area textarea {
+  width: 526px;
+  height: 307px;
+  border: none;
+  border-radius: 10px;
+  padding: 7px;
+  padding-left: 10px;
+}
+.background-import{
+  background-color: white;
+  border-radius: 10px;
+  width: 304px;
+  height: 49px;
+  margin-bottom: 7px;
+  padding-top: 10px;
+  padding-left: 5px;
+  font-weight: bold;
+}
+.display-image{
+  width: 304px;
+  height: 307px;
+  border: none;
+  border-radius: 10px;
+  background-color: white;
+}
+.display-image img{
+  border: none;
+}
+.userImageBI {
   margin: 20px;
   height: 60px;
   width: 60px;
@@ -327,7 +434,7 @@ strong {
   border: 2px outset #9D6B54;
 }
 
-.createPost{
+.createPost {
   width: 550px;
   height: 40px;
   border-radius: 15px;
@@ -339,7 +446,7 @@ strong {
   padding-right: 300px;
 }
 
-.iconBI{
+.iconBI {
   color: #9D6B54;
   margin-left: 10px;
   margin-top: auto;
@@ -348,7 +455,7 @@ strong {
   height: 30px;
 }
 
-.createPost:hover{
+.createPost:hover {
   color: #9D6B54;
   cursor: text;
 }
@@ -517,7 +624,7 @@ strong {
   padding-right: 15px;
 }
 
-.noPost{
+.noPost {
   height: 50vh;
   text-align: center;
   padding-top: 50px;
