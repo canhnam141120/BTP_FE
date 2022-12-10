@@ -4,35 +4,46 @@
       <div class="myPost">
         <LoadingDialog v-show="spinner" style="z-index: 999999"></LoadingDialog>
         <CreatePostDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
-          <div>
-            <div class="dialogTitle">SỬA BÀI VIẾT</div>
+          <div style="height: 0.1px"></div>
+          <div class="User-post" v-if="this.$cookies.get('token')" >
+            <img class="userImageBI" v-bind:src="info.avatar">
+            <div class="infor-right">
+              <div class="user-name">
+                {{ info.fullname }}
+              </div>
+              <div class="public">
+                <Icon icon="material-symbols:public" color="#9d6b54"/>
+                <p>Công khai</p>
+              </div>
+            </div>
+            <div class="main-title">
+              Sửa bài viết
+            </div>
+
           </div>
-          <div class="dialogBody">
-            <b-row class="post-content">
-              <b-col class="input-label" cols="2">Tiêu đề:</b-col>
-              <b-col class="input-div" cols="9">
+
+          <div class="content-post">
+            <div class="input-left">
+              <div class="content-title">
                 <input type="text" maxlength="500"
                        required placeholder="Nhập tiêu đề"
-                       v-model="post.title" class="input-text">
-              </b-col>
-            </b-row>
-            <div class="bottom-post">
-              <b-row class="post-content">
-                <b-col class="input-label" cols="2">Nội dung:</b-col>
-                <b-col class="input-div" cols="9">
-              <textarea type="text" maxlength="2000" required style="height: 400px; width: 550px;"
+                       v-model="post.title">
+              </div>
+              <div class="text-area">
+              <textarea type="text" maxlength="2000" required
                         placeholder="Nhập nội dung bài đăng"
-                        v-model="post.content"
-                        class="input-text">
-            </textarea></b-col>
-              </b-row>
-              <div>
-                <b-row class="post-content">
-                  <b-col class="input-label" cols="2">Chọn ảnh:</b-col>
-                  <b-col class="input-div" cols="6"><input type="file" title=" " class="input-text-short" name="image"
-                                                           @change="uploadImage"></b-col>
-                </b-row>
-                <img v-bind:src="post.image" style="width: 300px; height: 300px; object-fit: scale-down">
+                        v-model="post.content">
+              </textarea>
+              </div>
+            </div>
+            <div class="input-right">
+              <div class="background-import">
+                <label>Chọn ảnh:</label>
+                <input type="file" title=" " class="input-text-short" name="image"
+                       @change="uploadImage">
+              </div>
+              <div class="display-image">
+                <img v-bind:src="post.image" style="width: 100%; height: 100%;object-fit: scale-down">
               </div>
             </div>
           </div>
@@ -245,6 +256,7 @@ export default {
       this.$router.push({name: "404Page"})
     }
     this.getMyPosts(1)
+    this.getMyInformation()
   },
   methods: {
     onchange(e) {
@@ -289,6 +301,18 @@ export default {
         }).catch(() => {
         });
       }
+    },
+    getMyInformation() {
+      //this.loading = true
+      let token = this.$cookies.get('token');
+      this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+      apiFactory.callApi(API_PERSONAL.INFORMATION, 'POST', {
+        userId: this.userByToken.UserId
+      }).then((res) => {
+        this.info = res.data.data
+        //this.loading = false
+      }).catch(() => {
+      });
     },
     getMyPostsApproved(pageNumber) {
       window.scroll(0, 0)
@@ -625,7 +649,119 @@ strong {
   margin: 10px 0px 10px 15px;
   display: flex;
 }
+.User-post {
+  display: flex;
+  background-color: white;
+  width: 837px;
+  height: 72px;
+  border-radius: 10px;
+  margin-left: 80px;
+  margin-top: 5%;
+}
 
+.User-post img {
+  width: 40px;
+  height: 40px;
+}
+
+.infor-right {
+  margin-top: 10px;
+  margin-right: 500px;
+}
+.main-title{
+  color: #9D6B54;
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 10px;
+  text-decoration: underline;
+}
+.dialog-title {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+/*.main-title{*/
+/*font-size: 40px;*/
+/*  font-weight: bold;*/
+/*  color: #9D6B54;*/
+/*  */
+/*}*/
+
+.public {
+  display: flex;
+  background-color: #F0ECE4;
+  border-radius: 3px;
+  width: 80px;
+  height: 16px;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.User-post .public p {
+  font-weight: bold;
+  font-size: 10px;
+  margin-left: 4px;
+}
+
+.content-post {
+  display: flex;
+  margin-left: 80px;
+  margin-top: 7px;
+}
+
+.input-left {
+  margin-right: 7px;
+}
+
+.content-title input {
+  width: 526px;
+  height: 49px;
+  margin-bottom: 7px;
+  border: none;
+  border-radius: 10px;
+  padding-left: 10px;
+}
+
+.text-area textarea {
+  width: 526px;
+  height: 307px;
+  border: none;
+  border-radius: 10px;
+  padding: 7px;
+  padding-left: 10px;
+}
+
+.background-import {
+  background-color: white;
+  border-radius: 10px;
+  width: 304px;
+  height: 49px;
+  margin-bottom: 7px;
+  padding-top: 10px;
+  padding-left: 5px;
+  font-weight: bold;
+}
+
+.display-image {
+  width: 304px;
+  height: 307px;
+  border: none;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.display-image img {
+  border: none;
+}
+
+.userImageBI {
+  margin: 15px;
+  height: 60px;
+  width: 60px;
+  border-radius: 30px;
+  border: 2px outset #9D6B54;
+}
 .right-contentMP .grid .item:hover {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }

@@ -34,6 +34,16 @@ const routers = [
         component: () => import('@/pages/BlogIndex'),
     },
     {
+        path:'/Policy-Payment',
+        name:'Policy-Payment',
+        component: () => import('@/pages/Policy/Policy-Payment'),
+    },
+    {
+        path:'/TermOfUse',
+        name:'TermOfUse',
+        component: () => import('@/pages/Policy/TermOfUse'),
+    },
+    {
         path:'/Policy&Terms',
         name:'Policy&Terms',
         component: () => import('@/pages/Policy&Terms'),

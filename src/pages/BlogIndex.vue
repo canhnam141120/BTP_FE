@@ -3,10 +3,11 @@
     <main style="flex-grow: 1;">
       <LoadingDialog v-show="spinner" style="z-index: 999999"></LoadingDialog>
       <CreatePostDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
-<!--        <div class="dialog-title">-->
-<!--          <div class="main-title">Viết lách</div>-->
-<!--        </div>-->
-        <div v-if="this.$cookies.get('token')" class="User-post">
+        <!--        <div class="dialog-title">-->
+        <!--          <div class="main-title">Viết lách</div>-->
+        <!--        </div>-->
+        <div style="height: 0.1px"></div>
+        <div class="User-post" v-if="this.$cookies.get('token')" >
           <img class="userImageBI" v-bind:src="info.avatar">
           <div class="infor-right">
             <div class="user-name">
@@ -17,7 +18,12 @@
               <p>Công khai</p>
             </div>
           </div>
+          <div class="main-title">
+            Viết bài
+          </div>
+
         </div>
+
         <div class="content-post">
           <div class="input-left">
             <div class="content-title">
@@ -154,7 +160,6 @@ export default {
       responseMessage: '',
       dismissSecs: 5,
       dismissCountDown: 0,
-
       listPost: '',
       totalPost: '',
       info: '',
@@ -349,13 +354,22 @@ strong {
 }
 
 .infor-right {
-  margin-top: 16px;
+  margin-top: 10px;
+  margin-right: 500px;
 }
-.dialog-title{
+.main-title{
+  color: #9D6B54;
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 10px;
+  text-decoration: underline;
+}
+.dialog-title {
   display: flex;
   justify-content: center;
   margin-top: 5px;
 }
+
 /*.main-title{*/
 /*font-size: 40px;*/
 /*  font-weight: bold;*/
@@ -389,7 +403,7 @@ strong {
   margin-right: 7px;
 }
 
-.content-title input{
+.content-title input {
   width: 526px;
   height: 49px;
   margin-bottom: 7px;
@@ -406,7 +420,8 @@ strong {
   padding: 7px;
   padding-left: 10px;
 }
-.background-import{
+
+.background-import {
   background-color: white;
   border-radius: 10px;
   width: 304px;
@@ -416,18 +431,21 @@ strong {
   padding-left: 5px;
   font-weight: bold;
 }
-.display-image{
+
+.display-image {
   width: 304px;
   height: 307px;
   border: none;
   border-radius: 10px;
   background-color: white;
 }
-.display-image img{
+
+.display-image img {
   border: none;
 }
+
 .userImageBI {
-  margin: 20px;
+  margin: 15px;
   height: 60px;
   width: 60px;
   border-radius: 30px;

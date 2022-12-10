@@ -160,16 +160,16 @@
                 <h3 class="heading">HỖ TRỢ</h3>
                 <ul class="list">
                   <li class="item">
-                    <a href="" class="item-link">Chính sách kiểm duyệt</a>
+                    <router-link to="/Policy-Payment" class="item-link">Chính sách kiểm duyệt</router-link>
                   </li>
                   <li class="item">
-                    <a href="" class="item-link">Chính sách cọc - hoàn tiền</a>
+                    <router-link to="/Policy-Payment" class="item-link">Chính sách cọc - hoàn tiền</router-link>
                   </li>
                   <li class="item">
-                    <a href="" class="item-link">Chính sách bảo mật thanh toán</a>
+                    <router-link to="/Policy-Payment" class="item-link">Chính sách bảo mật thanh toán</router-link>
                   </li>
                   <li class="item">
-                    <a href="" class="item-link">Quy trình giao dịch</a>
+                    <router-link to="/Policy-Payment"  class="item-link">Quy trình giao dịch</router-link>
                   </li>
                   <li class="item">
                     <a href="" class="item-link">Trung tâm hỗ trợ</a>
@@ -183,13 +183,13 @@
                 <h3 class="heading">DỊCH VỤ</h3>
                 <ul class="list">
                   <li class="item">
-                    <a href="" class="item-link">Điều khoản sử dụng</a>
+                    <router-link to="/TermOfUse" class="item-link">Điều khoản sử dụng</router-link>
                   </li>
                   <li class="item">
                     <a href="" class="item-link">Chính sách bảo mật thông tin cá nhân</a>
                   </li>
                   <li class="item">
-                    <a href="" class="item-link">Chính sách bảo mật thanh toán</a>
+                    <router-link to="/Policy-Payment" class="item-link">Chính sách bảo mật thanh toán</router-link>
                   </li>
                   <li class="item">
                     <a href="" class="item-link">Phương thức thanh toán</a>
