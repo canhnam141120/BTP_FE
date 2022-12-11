@@ -27,6 +27,7 @@ export default {
   height: auto;
   border-radius: 10px;
   margin: 80px auto auto auto;
+  margin-top: 0%;
 }
 
 .dialogTitle{

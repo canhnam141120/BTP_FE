@@ -34,9 +34,34 @@ const routers = [
         component: () => import('@/pages/BlogIndex'),
     },
     {
+        path:'/Policy-Payment',
+        name:'Policy-Payment',
+        component: () => import('@/pages/Policy/Policy-Payment'),
+    },
+    {
+        path:'/TermOfUse',
+        name:'TermOfUse',
+        component: () => import('@/pages/Policy/TermOfUse'),
+    },
+    {
+        path:'/Policy-Refund',
+        name:'Policy-Refund',
+        component: () => import('@/pages/Policy/Policy-Refund'),
+    },
+    {
         path:'/Policy&Terms',
         name:'Policy&Terms',
         component: () => import('@/pages/Policy&Terms'),
+    },
+    {
+        path:'/Policy-Cencorship',
+        name:'Policy-Cencorship',
+        component: () => import('@/pages/Policy/Policy-Cencorship'),
+    },
+    {
+        path:'/Introduce',
+        name:'Introduce',
+        component: () => import('@/pages/Introduce'),
     },
     {
         path:'/PostDetail',
