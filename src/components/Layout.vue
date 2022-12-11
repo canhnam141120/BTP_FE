@@ -126,33 +126,32 @@
                 <a href="/">
                   <img src="../image/logo.png" alt="Logo Trạm Sách"/>
                 </a><br>
-                <span>Tất cả các giao dịch ở Trạm Sách được</span><br>
-                <span>chúng tôi đảm bảo kiểm duyệt qua </span><br>
-                <span>hình thức và giao hàng tận nơi trong </span><br>
-                 <span> địa bàn nội thành TP Hà Nội. Không</span><br>
-                <span>hỗ trợ giao dịch trực tiếp tại Trạm.</span>
+                <span>Tất cả các giao dịch ở Trạm Sách được chúng tôi đảm bảo kiểm
+                  duyệt qua hình thức và giao hàng tận nơi trong địa bàn nội thành TP Hà Nội. Không hỗ trợ giao dịch trực tiếp tại Trạm!
+                </span>
               </div>
               <div class="grid-column">
                 <h3 class="heading">TÀI KHOẢN</h3>
                 <ul class="list">
                   <li class="item">
-                    <a v-if="this.$cookies.get('token')" v-on:click="HandleLogout" class="item-link" style="cursor: pointer">Đăng xuất</a>
-                    <a v-else href="/login" class="item-link">Đăng nhập/Đăng ký</a>
+                    <router-link to="/MyBooks" class="item-link">Trang cá nhân</router-link>
                   </li>
                   <li class="item">
-                    <a href="" class="item-link">Thay đổi thông tin cá nhân</a>
+                    <router-link to="/MyTransaction" class="item-link">Giao dịch</router-link>
                   </li>
                   <li class="item">
-                    <a href="" class="item-link">Thay đổi thông tin giao hàng</a>
+                    <router-link to="/MyRequests" class="item-link">Yêu cầu</router-link>
                   </li>
                   <li class="item">
-                    <a href="" class="item-link">Tủ sách</a>
+                    <router-link to="/MyInformation" class="item-link">Thông tin cá nhân</router-link>
                   </li>
                   <li class="item">
-                    <a href="" class="item-link">Trang cá nhân</a>
+                    <router-link v-if="this.$cookies.get('token')" to=""  @click.native="HandleLogout" class="item-link" style="cursor: pointer">Đăng xuất</router-link>
+                    <router-link v-else to="/login" class="item-link">Đăng nhập/Đăng ký</router-link>
                   </li>
-                  <li class="item">
-                    <span class="contact_info">tramsachhn@gmail.com</span>
+                  <li class="item" style="display:flex; color: #9d6b54">
+                    <Icon icon="material-symbols:mail"/>
+                    <label class="contact_info">tramsachhn@gmail.com</label>
                   </li>
                 </ul>
               </div>
@@ -160,22 +159,23 @@
                 <h3 class="heading">HỖ TRỢ</h3>
                 <ul class="list">
                   <li class="item">
-                    <router-link to="/Policy-Payment" class="item-link">Chính sách kiểm duyệt</router-link>
+                    <router-link to="#" class="item-link">Chính sách kiểm duyệt</router-link>
                   </li>
                   <li class="item">
-                    <router-link to="/Policy-Payment" class="item-link">Chính sách cọc - hoàn tiền</router-link>
+                    <router-link to="/Policy-Refund" class="item-link">Chính sách cọc - hoàn tiền</router-link>
                   </li>
                   <li class="item">
-                    <router-link to="/Policy-Payment" class="item-link">Chính sách bảo mật thanh toán</router-link>
+                    <router-link to="/Policy-Cencorship" class="item-link">Chính sách bảo mật thanh toán</router-link>
                   </li>
                   <li class="item">
-                    <router-link to="/Policy-Payment"  class="item-link">Quy trình giao dịch</router-link>
+                    <router-link to="/#"  class="item-link">Quy trình giao dịch</router-link>
                   </li>
                   <li class="item">
-                    <a href="" class="item-link">Trung tâm hỗ trợ</a>
+                    <router-link to="/#"  class="item-link">Trung tâm hỗ trợ</router-link>
                   </li>
-                  <li class="item">
-                    <span class="contact_info">Hotline: 0961284654</span>
+                  <li class="item" style="display:flex; color: #9d6b54">
+                    <Icon icon="ic:round-phone-enabled"/>
+                    <label class="contact_info">Hotline: 0961284654</label>
                   </li>
                 </ul>
               </div>
@@ -195,10 +195,11 @@
                     <a href="" class="item-link">Phương thức thanh toán</a>
                   </li>
                   <li class="item">
-                    <a href="" class="item-link">Giới thiệu Trạm Sách</a>
+                    <router-link to="/Introduce" class="item-link">Giới thiệu Trạm sách</router-link>
                   </li>
-                  <li class="item">
-                    <span class="contact_info">Số 1 Đào Duy Anh, Đống Đa, Hà Nội</span>
+                  <li class="item" style="display:flex; color: #9d6b54">
+                    <Icon icon="material-symbols:location-on"/>
+                    <label class="contact_info">Số 1 Đào Duy Anh, Đống Đa, Hà Nội</label>
                   </li>
                 </ul>
               </div>

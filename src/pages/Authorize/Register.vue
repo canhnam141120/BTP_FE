@@ -50,7 +50,7 @@
             <label class="result" v-if="err.length">{{this.err}}</label>
             <div class="term">
               <label>Bằng việc đăng ký, bạn đồng ý với <strong>Trạm Sách</strong> về </label>
-              <label><label> </label> <router-link to="/"> Điều khoản dịch vụ</router-link> & <router-link to="/"> Các chính sách</router-link></label>
+              <label><label> </label> <router-link to="/Policy&Terms"> Điều khoản dịch vụ</router-link> & <router-link to="/Policy&Terms"> Các chính sách</router-link></label>
             </div>
             <div class="under">
               <router-link to="/login" class="link">Đã có tài khoản?</router-link>
