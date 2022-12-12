@@ -25,7 +25,9 @@
     "vue": "^2.7.13",
     "vue-axios": "^3.5.2",
     "vue-cookies": "^1.8.2",
+    "vue-input-number": "^0.1.5",
     "vue-jwt-decode": "^0.1.0",
+    "vue-numeric-input": "^2.0.0",
     "vue-show-more-text": "^2.0.2",
     "vue-slick-carousel": "^1.0.6"
   },

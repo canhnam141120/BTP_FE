@@ -10,16 +10,26 @@
         <div class="main">
           <div class="data">
             <label>Email</label>
+            <label v-if="!this.regxMail.test(this.email)" style="color: #ca0303;">&nbsp;*</label>
+            <label v-else style="color: green;">
+              <Icon icon="material-symbols:check-small-rounded"/>
+            </label>
             <input type="text" maxlength="50" placeholder="Email" v-model="email" required>
-            <label class="err" v-if="errMail.length">{{this.errMail}}</label>
+            <label class="err" v-if="!this.errMail || errMail.length">{{this.errMail}}</label>
           </div>
           <div class="data">
             <label>Mật khẩu</label>
+            <label v-if="!this.password" style="color: #ca0303;">&nbsp;*</label>
+            <label v-else style="color: green;">
+              <Icon icon="material-symbols:check-small-rounded"/>
+            </label>
             <input type="password" maxlength="50"  required placeholder="Mật khẩu" v-model="password">
-            <label class="err" v-if="errPass.length">{{this.errPass}}</label>
           </div>
-          <div class="btn">
-            <button v-on:click="HandleLogin">Đăng nhập</button>
+          <div v-if="this.regxMail.test(this.email) && this.password" class="btn">
+            <button class="enable" v-on:click="HandleLogin">Đăng nhập</button>
+          </div>
+          <div v-else class="btn" style="background-color: grey">
+            <button class="btnDisable" disabled>Đăng nhập</button>
           </div>
           <div class="result" v-if="err.length">{{this.err}}</div>
           <div class="under">
@@ -39,38 +49,25 @@ import apiFactory from "@/config/apiFactory";
 import {API_USER} from "@/constant/constant-api";
 import Header from "../../components/Header";
 import LoadingDialog from "@/components/LoadingDialog";
+import {Icon} from '@iconify/vue2';
 
 export default {
   name: "Login",
-  components: {Header, LoadingDialog},
+  components: {Header, LoadingDialog,Icon},
   data() {
     return {
       email: '',
       password: '',
       errMail: '',
-      errPass: '',
       err: '',
-      spinner: false
+      spinner: false,
+      regxMail: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
     }
   },
   methods: {
     HandleLogin() {
-      let regxMail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-      this.errMail = '';
-      this.errPass = '';
       this.err = ''
-      if(!this.email){
-        this.errMail = 'Vui lòng nhập email!'
-      }
-      else {
-        if(!regxMail.test(this.email)){
-          this.errMail = 'Email không đúng định dạng!'
-        }
-      }
-      if(!this.password){
-        this.errPass = 'Vui lòng nhập mật khẩu!'
-      }
-      if(regxMail.test(this.email) && this.password){
+      this.errMail = '';
         this.spinner = true
         apiFactory.callApi(API_USER.USER_LOGIN, 'POST', {
           email: this.email, password: this.password
@@ -95,12 +92,10 @@ export default {
           }
           this.spinner = false
         }).catch(() => {this.err = 'Có lỗi xảy ra, vui loòng thử lại!'});
-      }
     },
     HandleForgotPassword() {
       let regxMail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
       this.errMail = '';
-      this.errPass = '';
       this.err = ''
       if(!this.email){
         this.errMail = 'Vui lòng nhập email!'
@@ -110,7 +105,7 @@ export default {
           this.errMail = 'Email không đúng định dạng!'
         }
       }
-      if(this.email){
+      if(this.errMail === ''){
         this.spinner = true
         apiFactory.callApi(API_USER.FORGOT_PASSWORD, 'POST', {
           email: this.email
@@ -127,7 +122,7 @@ export default {
         }).catch(() => {this.err = 'Email chưa đăng ký!'});
       }
     }
-  }
+  },
 }
 </script>
 
@@ -216,7 +211,7 @@ body{
   background-color: #9D6B54;
 }
 
-.container .main .btn button{
+.container .main .btn .enable{
   height: 100%;
   width: 100%;
   background: none;
@@ -229,10 +224,22 @@ body{
   cursor: pointer;
 }
 
-.container .main .btn button:hover{
+.container .main .btn .enable:hover{
   border-color: #9D6B54;
   background-color: white;
   color: #9D6B54;
+}
+
+.btnDisable{
+  height: 100%;
+  width: 100%;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .container .main .result{

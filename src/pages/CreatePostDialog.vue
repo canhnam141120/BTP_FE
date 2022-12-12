@@ -29,7 +29,6 @@ export default {
   height: auto;
   border-radius: 10px;
   margin: 90px auto auto auto;
-  margin-top: 5%;
 }
 
 .dialogBody{

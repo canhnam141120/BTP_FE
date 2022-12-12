@@ -135,7 +135,7 @@
             <b-row class="book-content">
               <b-col class="input-label" style="width: 60px" cols="2">Tình trạng:</b-col>
               <b-col class="input-div" cols="9">
-              <textarea type="text" style="height: auto; width: 1200px"
+              <textarea type="text" style="height: 100px; width: 1200px"
                         maxlength="250" required placeholder="Nhập tình trạng sách"
                         v-model="book.statusBook" class="input-text">
               </textarea></b-col>
@@ -143,7 +143,7 @@
             <b-row class="book-content">
               <b-col class="input-label" style="width: 60px" cols="2">Nội dung:</b-col>
               <b-col class="input-div" cols="9">
-              <textarea type="text" disabled style="height: 150px; width: 1200px"
+              <textarea type="text" disabled style="height: 100px; width: 1200px"
                         v-model="book.description" class="input-text">
             </textarea></b-col>
             </b-row>
@@ -177,14 +177,13 @@
                   <button v-if="book.isReady && book.status == 'Approved' && !book.isTrade" class="hideBtn"
                           v-on:click="HandleHide(book.id)">Ẩn
                   </button>
+                  <button v-if="book.isReady == false && book.status == 'Approved' && !book.isTrade" class="hideBtn"
+                          v-on:click="HandleShow(book.id)">Hiện
+                  </button>
                 </div>
               </div>
               <div class="right">
                 <label class="titleBD"><strong>{{ book.title }}</strong></label>
-
-                <button v-if="book.isReady == false && book.status == 'Approved' && !book.isTrade" class="hideBtn"
-                        v-on:click="HandleShow(book.id)">Hiện
-                </button>
                 <div class="contentRight">
                   <div class="bookInfoBD">
                     <div>Thể loại: <span>{{ book.category.name }}</span></div>
@@ -215,7 +214,7 @@
               <div v-if="listRequestReceive != ''" class="gridMB">
                 <div class="itemMB" v-for="item of listRequestReceive" :key="item.id">
                   <router-link :to="{ name: 'BookDetail', query: { id:item.bookOfferId }}">
-                    <img v-bind:src="item.bookOffer.image">
+                    <img class="imgss" v-bind:src="item.bookOffer.image">
                   </router-link>
                   <div class="infoMB">
                     <div class="book-titleMB">{{ item.bookOffer.title }}</div>
@@ -641,7 +640,7 @@ strong {
 .extra .editBtn {
   border-radius: 10px;
   background-color: #9D6B54;
-  color: white;
+  color: #F0ECE4;
   border: none;
   height: 40px;
   width: 200px;
@@ -651,17 +650,16 @@ strong {
 }
 
 .extra .editBtn:hover {
-  border-color: #9D6B54;
   background: #F0ECE4;
   color: #9D6B54;
   border: 2px solid #9D6B54;
 }
 
 .hideBtn {
+  border: 2px solid #9D6B54;
   border-radius: 10px;
-  background-color: white;
-  color: #9D6B54;
-  border: none;
+  background-color: #9D6B54;
+  color: #F0ECE4;
   height: 40px;
   width: 200px;
   margin-right: 20px;
@@ -671,9 +669,9 @@ strong {
 }
 
 .hideBtn:hover {
-  /*border-color: #9D6B54;*/
-  background: #6C757D;
-  color: white;
+  border-color: #9D6B54;
+  background: #F0ECE4;
+  color: #9D6B54;
 }
 
 .title-bottom {
@@ -704,9 +702,9 @@ strong {
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2), 0px 5px 5px 1px rgba(0, 0, 0, 0.19);
 }
 
-.gridMB .itemMB img {
+.gridMB .itemMB .imgss {
   height: 290px;
-  width: 220px;
+  width: 217px;
   border-radius: 10px;
 }
 

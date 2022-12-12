@@ -3,25 +3,19 @@
     <main style="flex-grow: 1;">
       <LoadingDialog v-show="spinner" style="z-index: 999999"></LoadingDialog>
       <CreatePostDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
-        <!--        <div class="dialog-title">-->
-        <!--          <div class="main-title">Viết lách</div>-->
-        <!--        </div>-->
-        <div style="height: 0.1px"></div>
-        <div class="User-post" v-if="this.$cookies.get('token')" >
+        <div class="main-title" style="text-align: center; padding-top: 20px;">Viết bài</div>
+        <div style="display: flex; justify-content: center; padding-right: 100px;">
           <img class="userImageBI" v-bind:src="info.avatar">
-          <div class="infor-right">
-            <div class="user-name">
-              {{ info.fullname }}
+          <div style="padding-top: 10px;">
+            <div class="nema">
+              {{info.fullname}}
+              <Icon style="padding-bottom: 2px" icon="material-symbols:public" color="#9d6b54"/>
             </div>
-            <div class="public">
-              <Icon icon="material-symbols:public" color="#9d6b54"/>
-              <p>Công khai</p>
-            </div>
+            <button class="createPost">Chia sẻ bài viết của bạn...</button>
           </div>
-          <div class="main-title">
-            Viết bài
-          </div>
-
+          <Icon icon="jam:write-f" class="iconBI"/>
+          <Icon icon="ic:baseline-emoji-emotions" class="iconBI"/>
+          <Icon icon="material-symbols:image-rounded" class="iconBI"/>
         </div>
 
         <div class="content-post">
@@ -68,7 +62,13 @@
         <div class="container-blog">
           <div v-if="this.$cookies.get('token')" class="top">
             <img class="userImageBI" v-bind:src="info.avatar">
-            <button class="createPost" v-on:click="openDialog">Chia sẻ bài viết của bạn...</button>
+            <div style="padding-top: 10px;">
+              <div class="nema">
+                {{info.fullname}}
+                <Icon style="padding-bottom: 2px" icon="material-symbols:public" color="#9d6b54"/>
+                </div>
+              <button class="createPost" v-on:click="openDialog">Chia sẻ bài viết của bạn...</button>
+            </div>
             <Icon icon="jam:write-f" class="iconBI"/>
             <Icon icon="ic:baseline-emoji-emotions" class="iconBI"/>
             <Icon icon="material-symbols:image-rounded" class="iconBI"/>
@@ -362,8 +362,8 @@ strong {
   font-size: 30px;
   font-weight: bold;
   margin-top: 10px;
-  text-decoration: underline;
 }
+
 .dialog-title {
   display: flex;
   justify-content: center;
@@ -468,7 +468,7 @@ strong {
   color: #9D6B54;
   margin-left: 10px;
   margin-top: auto;
-  margin-bottom: auto;
+  margin-bottom: 22px;
   width: 30px;
   height: 30px;
 }
@@ -608,6 +608,12 @@ strong {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
+}
+
+.nema{
+  color: #9d6b54;
+  font-weight: 600;
+  margin-left: 10px;
 }
 
 /*.body-blog .container-blog .content .grid .action{

@@ -8,24 +8,42 @@
         <div class="top-form">
           <div class="left-form">
             <b-row class="book-content">
-              <b-col class="input-label" cols="2">Tiêu đề:</b-col>
-              <b-col class="input-div" cols="9"><input type="text" maxlength="50" required placeholder="Nhập tên sách"
+              <b-col class="input-label" cols="2">Tiêu đề
+                <label v-if="!title" style="color: #ca0303;">*</label>
+                <label v-else style="color: green;">
+                  <Icon icon="material-symbols:check-small-rounded"/>
+                </label>
+              </b-col>
+              <b-col class="input-div" cols="9"><input type="text" maxlength="100" required placeholder="Nhập tên sách"
                                                        v-model="title" class="input-text"></b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col class="input-label" cols="2">Tác giả:</b-col>
+              <b-col class="input-label" cols="2">Tác giả
+                <label v-if="!author" style="color: #ca0303;">*</label>
+                <label v-else style="color: green;">
+                  <Icon icon="material-symbols:check-small-rounded"/>
+                </label>
+              </b-col>
               <b-col class="input-div" cols="9"><input type="text" class="input-text" maxlength="50" required
                                                        placeholder="Nhập tên tác giả" v-model="author"></b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col class="input-label" cols="2">Thể loại:</b-col>
+              <b-col class="input-label" cols="2">Thể loại
+                <label v-if="!categoryId" style="color: #ca0303;">*</label>
+                <label v-else style="color: green;">
+                  <Icon icon="material-symbols:check-small-rounded"/>
+                </label></b-col>
               <b-col class="input-div" cols="9">
                 <select name="category" class="input-text" v-model="categoryId">
                   <option v-bind:value="item.id" v-for="item of listCategories" :key="item.id">{{ item.name }}</option>
                 </select></b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col class="input-label" cols="2">Ngôn ngữ:</b-col>
+              <b-col class="input-label" cols="2">Ngôn ngữ
+                <label v-if="!language" style="color: #ca0303;">*</label>
+                <label v-else style="color: green;">
+                  <Icon icon="material-symbols:check-small-rounded"/>
+                </label></b-col>
               <b-col class="input-div" cols="9">
                 <select name="category" class="input-text" v-model="language">
                   <option v-bind:value="language" v-for="language of listLanguage" :key="language">{{ language }}
@@ -34,7 +52,11 @@
               </b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col class="input-label" cols="2">Nhà XB:</b-col>
+              <b-col class="input-label" cols="2">Nhà XB
+                <label v-if="!publisher" style="color: #ca0303;">*</label>
+                <label v-else style="color: green;">
+                  <Icon icon="material-symbols:check-small-rounded"/>
+                </label></b-col>
               <b-col class="input-div" cols="9"><input type="text" maxlength="50" required
                                                        placeholder="Nhập nhà xuất bản"
                                                        v-model="publisher" class="input-text"></b-col>
@@ -42,47 +64,98 @@
           </div>
           <div class="mid-form">
             <b-row class="book-content">
-              <b-col class="input-label" cols="2">Năm XB:</b-col>
-              <b-col cols="6"><input type="number" maxlength="4" required placeholder="Nhập năm xuất bản"
-                                     v-model="year" class="input-text-short"></b-col>
+              <b-col class="input-label" style="width: 115px" cols="2">Năm XB
+                <label v-if="!year" style="color: #ca0303;">*</label>
+                <label v-else style="color: green;">
+                  <Icon icon="material-symbols:check-small-rounded"/>
+                </label>
+              </b-col>
+              <b-col cols="6">
+                <select class="input-text-short" v-model="year">
+                  <option v-bind:value="year" v-for="year of listYear" :key="year">{{ year }}
+                  </option>
+                </select>
+              </b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col class="input-label" cols="2">Số trang:</b-col>
-              <b-col cols="6"><input type="number" maxlength="50" required placeholder="Nhập số trang"
-                                     v-model="numberOfPage" class="input-text-short"></b-col>
+              <b-col class="input-label" style="width: 115px" cols="2">Số trang
+                <label v-if="!numberOfPage" style="color: #ca0303;">*</label>
+                <label v-else style="color: green;">
+                  <Icon icon="material-symbols:check-small-rounded"/>
+                </label></b-col>
+              <b-col cols="6">
+                    <input type="number" min="1" max="9999" step="1" required placeholder="Nhập số trang"
+                                                     v-model="numberOfPage" class="input-text-short" @input="checkNegative">
+              </b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col class="input-label" cols="2">Khối lượng:</b-col>
-              <b-col cols="6"><input type="number" maxlength="50" required placeholder="Nhập khối lượng"
-                                     v-model="weight" class="input-text-short"></b-col>
+              <b-col class="input-label" style="width: 116px" cols="2">Khối lượng(gr)
+                <label v-if="!weight" style="color: #ca0303;">*</label>
+                <label v-else style="color: green;">
+                  <Icon icon="material-symbols:check-small-rounded"/>
+                </label></b-col>
+              <b-col cols="6">
+                                <input type="number" min="100" max="9999" step="100" required placeholder="Nhập khối lượng"
+                                                     v-model="weight" class="input-text-short" @input="checkNegative">
+              </b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col class="input-label" cols="2">Chọn ảnh:</b-col>
+              <b-col class="input-label" style="width: 115px" cols="2">Chọn ảnh
+                <label v-if="imageSrc  === 'https://book-trading-platform.s3.ap-northeast-1.amazonaws.com/default_book_cover_2015.jpg'" style="color: #ca0303;">*</label>
+                <label v-else style="color: green;">
+                  <Icon icon="material-symbols:check-small-rounded"/>
+                </label></b-col>
               <b-col class="input-div" cols="6"><input type="file" title=" " class="input-text-short" name="image"
+                                                       style="width: 215px;"
                                                        @change="uploadImage"></b-col>
             </b-row>
           </div>
           <div class="right-form">
             <b-row class="book-content">
-              <b-col class="grCb" cols="9">
-                <input type="checkbox" value="true" class="checkB" v-model="isExchange">&ensp;Trao đổi&emsp;
-                <input type="checkbox" value="true" class="checkB" v-model="isRent">&ensp;Thuê
+              <div>
+
+                <b-col class="grCb" cols="9">
+                  <input type="checkbox" value="true" class="checkB" v-model="isExchange">&ensp;Trao đổi&emsp;
+                  <input type="checkbox" value="true" class="checkB" v-model="isRent">&ensp;Thuê
+                  <div v-if="!isExchange && !isRent" style="color: #ca0303; font-size: 12px; margin-left: 5px">Vui lòng chọn ít nhất 1 dịch
+                    vụ
+                  </div>
+                </b-col>
+              </div>
+            </b-row>
+            <b-row v-if="isExchange || isRent" class="book-content">
+              <b-col class="input-label" style="width: 115px" cols="2">Giá bìa(đ) <label v-if="!coverPrice" style="color: #ca0303;">*</label>
+                <label v-else style="color: green;">
+                  <Icon icon="material-symbols:check-small-rounded"/>
+                </label>
+              </b-col>
+              <b-col cols="6">
+                                <input type="number" min="10000" max="9999999" step="5000" maxlength="7" required placeholder="Nhập giá bìa"
+                                                     v-model="coverPrice" class="input-text-short" @input="checkNegative">
               </b-col>
             </b-row>
-            <b-row class="book-content">
-              <b-col class="input-label" cols="2">Giá bìa:</b-col>
-              <b-col cols="9"><input type="number" maxlength="50" required placeholder="Nhập giá bìa"
-                                     v-model="coverPrice" class="input-text-short"></b-col>
-            </b-row>
-            <b-row class="book-content">
-              <b-col class="input-label" cols="2">Giá đặt cọc:</b-col>
-              <b-col cols="9"><input type="number" maxlength="50" required placeholder="Nhập giá đặt cọc"
-                                     v-model="depositPrice" class="input-text-short"></b-col>
+            <b-row v-if="isExchange || isRent" class="book-content">
+              <b-col class="input-label" style="width: 115px" cols="2">Giá đặt cọc(đ)
+                <label v-if="!depositPrice" style="color: #ca0303;">*</label>
+                <label v-else style="color: green;">
+                  <Icon icon="material-symbols:check-small-rounded"/>
+                </label></b-col>
+              <b-col cols="6">
+                                <input type="number" min="10000" max="9999999" step="5000"  maxlength="7" required placeholder="Nhập giá đặt cọc"
+                                                     v-model="depositPrice" class="input-text-short" @input="checkNegative">
+              </b-col>
             </b-row>
             <b-row v-if="isRent" class="book-content">
-              <b-col class="input-label" cols="2">Giá thuê:</b-col>
-              <b-col cols=3><input type="number" maxlength="7" required placeholder="Giá thuê" v-model="rentFee"
-                                   class="input-text-short"></b-col>
+              <b-col class="input-label" style="width: 115px" cols="2">Giá thuê(đ)
+                <label v-if="!rentFee" style="color: #ca0303;">*</label>
+                <label v-else style="color: green;">
+                  <Icon icon="material-symbols:check-small-rounded"/>
+                </label>
+              </b-col>
+              <b-col cols=6>
+                                <input type="number" min="10000" max="9999999" step="5000"  maxlength="7" required placeholder="Nhập giá thuê" v-model="rentFee"
+                                                   class="input-text-short" @input="checkNegative">
+              </b-col>
             </b-row>
           </div>
           <div class="img-form">
@@ -91,7 +164,11 @@
         </div>
         <div class="bottom-form">
           <b-row class="book-content">
-            <b-col class="input-label" style="width: 60px" cols="2">Trạng thái:</b-col>
+            <b-col class="input-label" style="width: 85px" cols="2">Trạng thái
+              <label v-if="!statusBook" style="color: #ca0303;">*</label>
+              <label v-else style="color: green;">
+                <Icon icon="material-symbols:check-small-rounded"/>
+              </label></b-col>
             <b-col class="input-div" cols="9">
               <textarea type="text" style="height: 100px; width: 1200px"
                         maxlength="250" required placeholder="Nhập trạng thái"
@@ -99,7 +176,11 @@
               </textarea></b-col>
           </b-row>
           <b-row class="book-content">
-            <b-col class="input-label" style="width: 60px" cols="2">Nội dung:</b-col>
+            <b-col class="input-label" style="width: 85px" cols="2">Nội dung
+              <label v-if="!description" style="color: #ca0303;">*</label>
+              <label v-else style="color: green;">
+                <Icon icon="material-symbols:check-small-rounded"/>
+              </label></b-col>
             <b-col class="input-div" cols="9">
               <textarea type="text" required style="height: 100px; width: 1200px"
                         placeholder="Nhập mô tả nội dung sách"
@@ -109,14 +190,19 @@
         </div>
         <div class="dialogGroupBtn">
           <button class="dialogBtn" v-on:click="cancel">Hủy</button>
-          <button class="dialogBtn" v-on:click="save">Xác nhận</button>
+          <button v-if="title && author && categoryId && language && publisher && statusBook && description
+                  && year && numberOfPage && weight && imageSrc !== 'https://book-trading-platform.s3.ap-northeast-1.amazonaws.com/default_book_cover_2015.jpg'
+                  && coverPrice && depositPrice" class="dialogBtn" v-on:click="save">Xác nhận</button>
+          <button v-else disabled class="dialogBtnDisable">Xác nhận</button>
         </div>
       </CreateBookDialog>
-      <b-alert style="position: absolute; right: 0; z-index: 999999" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
-        {{responseMessage}}
+      <b-alert style="position: absolute; right: 0; z-index: 999999" v-if="responseFlag" :show="dismissCountDown"
+               variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+        {{ responseMessage }}
       </b-alert>
-      <b-alert style="position: absolute; right: 0; z-index: 999999" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
-        {{responseMessage}}
+      <b-alert style="position: absolute; right: 0; z-index: 999999" v-else :show="dismissCountDown" variant="danger"
+               @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+        {{ responseMessage }}
       </b-alert>
       <div class="MB">
         <div class="containerMB">
@@ -161,16 +247,20 @@
               </template>
               <div v-if="totalBook != 0" class="gridMB">
                 <div class="itemMB" v-for="item of listBook" :key="item.id">
-                  <router-link style="position: relative" v-if="item.isReady && item.status == 'Approved'" :to="{ name: 'ViewRequestBook', query: { id:item.id }}">
+                  <router-link style="position: relative" v-if="item.isReady && item.status == 'Approved'"
+                               :to="{ name: 'ViewRequestBook', query: { id:item.id }}">
                     <img class="book-image" v-bind:src="item.image">
                     <label class="laye1" v-if="item.isTrade">Đang giao dịch</label>
                     <label class="laye2" v-else>Sẵn sàng</label>
                   </router-link>
-                  <router-link v-else  style="position: relative" class="active" :to="{ name: 'ViewRequestBook', query: { id:item.id }}">
+                  <router-link v-else style="position: relative" class="active"
+                               :to="{ name: 'ViewRequestBook', query: { id:item.id }}">
                     <img class="book-image" v-bind:src="item.image">
                     <label v-if="!item.isReady && item.status == 'Approved'" class="labelHideBook">Đang ẩn</label>
-                    <label v-if="item.isReady && item.status == 'Waiting'" class="labelStatusBook">Đang đợi duyệt</label>
-                    <label v-if="item.isReady && item.status == 'Denied'" class="labelStatusBook">Không được duyệt</label>
+                    <label v-if="item.isReady && item.status == 'Waiting'" class="labelStatusBook">Đang đợi
+                      duyệt</label>
+                    <label v-if="item.isReady && item.status == 'Denied'" class="labelStatusBook">Không được
+                      duyệt</label>
                   </router-link>
                   <div class="infoMB">
                     <div class="book-titleMB"><strong>{{ item.title }}</strong></div>
@@ -179,13 +269,13 @@
                         item.depositPrice.toLocaleString()
                       }}đ</strong></label>
                     <label class="book-statusMB">{{ item.statusBook }}</label>
-<!--                    <label v-if="item.status == 'Approved'" class="book-statusMB">Trạng thái: <strong style="color: green">Đã được
-                      duyệt</strong></label>
-                    <label v-if="item.status == 'Denied'" class="book-statusMB">Trạng thái: <strong  style="color: #ca0303;">Không được duyệt</strong></label>
-                    <label v-if="item.status == 'Waiting'" class="book-statusMB">Trạng thái: <strong>Đang đợi
-                      duyệt</strong></label>
-                    <label class="book-statusMB" style="color: red; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
-                    <label class="book-statusMB" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>-->
+                    <!--                    <label v-if="item.status == 'Approved'" class="book-statusMB">Trạng thái: <strong style="color: green">Đã được
+                                          duyệt</strong></label>
+                                        <label v-if="item.status == 'Denied'" class="book-statusMB">Trạng thái: <strong  style="color: #ca0303;">Không được duyệt</strong></label>
+                                        <label v-if="item.status == 'Waiting'" class="book-statusMB">Trạng thái: <strong>Đang đợi
+                                          duyệt</strong></label>
+                                        <label class="book-statusMB" style="color: red; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
+                                        <label class="book-statusMB" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>-->
                   </div>
                 </div>
               </div>
@@ -280,7 +370,7 @@ export default {
       dismissSecs: 5,
       dismissCountDown: 0,
 
-      imageSrc: '',
+      imageSrc: 'https://book-trading-platform.s3.ap-northeast-1.amazonaws.com/default_book_cover_2015.jpg',
       listBook: '',
       totalBook: '',
       loading: false,
@@ -291,6 +381,9 @@ export default {
       listLanguage: ['Tiếng Việt', 'Tiếng Anh', 'Tiếng Hán', 'Tiếng Hàn', 'Tiếng Nhật',
         'Tiếng Tây Ban Nha', 'Tiếng Pháp', 'Tiếng Đức', 'Tiếng Nga', 'Tiếng Bồ Đào Nha',
         'Tiếng Hindi', 'Khác'],
+      listYear: ['2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015',
+        '2014', '2013', '2012', '2011', '2010', '2009', '2008', '2007', '2006', '2005', '2004', '2003', '2002', '2001', '2000', '1999',
+        '1998', '1997', '1996', '1995', '1994', '1993', '1992', '1991', '1990', '1989'],
       listFilter: ['Tất Cả', 'Đã Duyệt', 'Đã Hủy', 'Đang Đợi'],
       filter: 'Tất Cả',
       search: '',
@@ -312,11 +405,11 @@ export default {
       isExchange: false,
       isRent: false,
       rentFee: 0,
-      image: ''
+      image: '',
     }
   },
   created() {
-    if(!this.$cookies.get('token')){
+    if (!this.$cookies.get('token')) {
       this.$router.push({name: "404Page"})
     }
     this.getMyBooks(1)
@@ -347,18 +440,18 @@ export default {
           userId: this.userByToken.UserId,
           search: this.search
         }).then((res) => {
-            this.listBook = res.data.data
-            this.totalBook = res.data.numberOfRecords
-            this.loading = false;
+          this.listBook = res.data.data
+          this.totalBook = res.data.numberOfRecords
+          this.loading = false;
         }).catch(() => {
         });
       } else {
         apiFactory.callApi(API_PERSONAL.LIST_BOOK + '?page=' + pageNumber, 'POST', {
           userId: this.userByToken.UserId
         }).then((res) => {
-            this.listBook = res.data.data
-            this.totalBook = res.data.numberOfRecords
-            this.loading = false;
+          this.listBook = res.data.data
+          this.totalBook = res.data.numberOfRecords
+          this.loading = false;
         }).catch(() => {
         });
       }
@@ -446,8 +539,7 @@ export default {
           this.getMyBooks(1)
           this.responseFlag = true
           this.responseMessage = 'Sách của bạn đã được gửi cho QTV để duyệt!'
-        }
-        else{
+        } else {
           this.responseFlag = false
           this.responseMessage = 'Có lỗi xảy ra, vui lòng thử lại!!'
         }
@@ -478,10 +570,10 @@ export default {
       reader.readAsDataURL(file);
     },*/
 
-    async uploadImage(){
+    async uploadImage() {
       const image = document.querySelector('input[type=file]').files[0]
       const url = await generateURLUpload(image.name)
-      await  fetch(url,{
+      await fetch(url, {
         method: "PUT",
         headers: {
           "Content-Type": "image/jpeg"
@@ -489,16 +581,16 @@ export default {
         body: image
       })
 
-      const  url_uploaded = url.split("?")[0]
-      this.imageSrc  = url_uploaded
+      const url_uploaded = url.split("?")[0]
+      this.imageSrc = url_uploaded
     },
 
     HandleSearch() {
       if (!this.search) {
-        this.filter= 'Tất Cả'
+        this.filter = 'Tất Cả'
         this.isSearch = false;
       } else {
-        this.filter= ''
+        this.filter = ''
         this.isSearch = true;
       }
       return this.getMyBooks(1)
@@ -506,6 +598,11 @@ export default {
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown
     },
+    checkNegative(e){
+      if(e.target.value <= 1 || e.target.value >9999){
+        e.target.value = ''
+      }
+    }
   }
 }
 </script>
@@ -517,6 +614,15 @@ export default {
 
 main {
   background: #F0F0F0;
+}
+
+.v-input-number-input{
+  display: block;
+  border-radius: 8px;
+  border: none;
+  width: 150px;
+  height: 42px;
+  padding-left: 10px;
 }
 
 strong {
@@ -606,7 +712,7 @@ strong {
   margin-left: 10px;
 }
 
-.laye2{
+.laye2 {
   margin-left: 20px;
   position: absolute;
   left: 0;
@@ -616,7 +722,7 @@ strong {
   padding: 5px;
 }
 
-.laye1{
+.laye1 {
   margin-left: 20px;
   position: absolute;
   left: 0;
@@ -672,11 +778,11 @@ strong {
   padding-top: 100px;
 }
 
-.labelHideBook:hover{
+.labelHideBook:hover {
   cursor: pointer;
 }
 
-.labelStatusBook{
+.labelStatusBook {
   left: 0;
   object-fit: scale-down;
   margin-left: 20px;
@@ -693,7 +799,7 @@ strong {
   padding-right: 10px;
 }
 
-.labelStatusBook:hover{
+.labelStatusBook:hover {
   cursor: pointer;
 }
 
@@ -765,7 +871,7 @@ strong {
   color: white;
 }
 
-.noBook{
+.noBook {
   text-align: center;
   padding-top: 50px;
   color: grey;

@@ -22,12 +22,11 @@ export default {
 }
 
 .dialogContent {
-  width: 1300px;
+  width: 1400px;
   background: #F0ECE4;
   height: auto;
   border-radius: 10px;
-  margin: 80px auto auto auto;
-  margin-top: 0%;
+  margin: 50px auto auto auto;
 }
 
 .dialogTitle{
@@ -63,6 +62,7 @@ export default {
   margin-bottom: auto;
   font-size: 14px;
   padding: 0px;
+  width: 85px;
 }
 
 .input-div{
@@ -72,7 +72,7 @@ export default {
 .input-text{
   border-radius: 8px;
   border: none;
-  width: 300px;
+  width: 290px;
   height: 42px;
   padding-left: 10px;
 }
@@ -80,7 +80,7 @@ export default {
 .input-text-short{
   border-radius: 8px;
   border: none;
-  width: 215px;
+  width: 150px;
   height: 42px;
   padding-left: 10px;
 }
@@ -101,6 +101,7 @@ export default {
   font-size: 14px;
   line-height: 32px;
   margin-top: auto;
+  width: 340px;
   margin-bottom: auto;
 }
 
@@ -125,5 +126,14 @@ export default {
   border-color: #9D6B54;
   background: #F0ECE4;
   color: #9D6B54;
+}
+
+.dialogBtnDisable{
+  border-radius: 10px;
+  background-color: grey;
+  color: white;
+  border: 1px solid;
+  height: 50px;
+  width: 140px;
 }
 </style>

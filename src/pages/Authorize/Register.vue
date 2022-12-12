@@ -12,40 +12,61 @@
               <div class="column">
                 <div class="data">
                   <label>Email</label>
+                  <label v-if="!this.regxMail.test(this.email)" style="color: #ca0303;">&nbsp;*</label>
+                  <label v-else style="color: green;">
+                    <Icon icon="material-symbols:check-small-rounded"/>
+                  </label>
                   <input type="text" maxlength="30" required placeholder="Ví dụ: acb@gmail.com" v-model="email">
-                  <label class="err" v-if="errMail.length">{{this.errMail}}</label>
                 </div>
                 <div class="data">
                   <label>Mật khẩu</label>
+                  <label v-if="this.password.length < 8 || this.password.length > 30" style="color: #ca0303;">&nbsp;*</label>
+                  <label v-else style="color: green;">
+                    <Icon icon="material-symbols:check-small-rounded"/>
+                  </label>
                   <input type="password" maxlength="50" required placeholder="Nhập mật khẩu" v-model="password">
-                  <label class="err" v-if="errPass.length">{{this.errPass}}</label>
                 </div>
                 <div class="data">
                   <label>Xác nhận mật khẩu</label>
+                  <label v-if="!this.passwordCheck || this.password !== this.passwordCheck" style="color: #ca0303;">&nbsp;*</label>
+                  <label v-else style="color: green;">
+                    <Icon icon="material-symbols:check-small-rounded"/>
+                  </label>
                   <input type="password" maxlength="50" required placeholder="Xác nhận mật khẩu" v-model="passwordCheck">
-                  <label class="err" v-if="errPassCheck.length">{{this.errPassCheck}}</label>
                 </div>
               </div>
               <div class="column">
                 <div class="data">
                   <label>Họ và tên</label>
+                  <label v-if="this.fullname.length < 5 || this.fullname.length > 30" style="color: #ca0303;">&nbsp;*</label>
+                  <label v-else style="color: green;">
+                    <Icon icon="material-symbols:check-small-rounded"/>
+                  </label>
                   <input type="text" maxlength="30" required placeholder="Ví dụ: Nguyễn Văn A" v-model="fullname">
-                  <label class="err" v-if="errName.length">{{this.errName}}</label>
                 </div>
                 <div class="data">
                   <label>Số điện thoại</label>
+                  <label v-if="!this.regxPhone.test(this.phone)" style="color: #ca0303;">&nbsp;*</label>
+                  <label v-else style="color: green;">
+                    <Icon icon="material-symbols:check-small-rounded"/>
+                  </label>
                   <input type="text" maxlength="10" required placeholder="Ví dụ: 0123456789" v-model="phone">
-                  <label class="err" v-if="errPhone.length">{{this.errPhone}}</label>
                 </div>
                 <div class="data">
                   <label>Địa chỉ</label>
+                  <label v-if="this.address.length < 10 || this.address.length > 100" style="color: #ca0303;">&nbsp;*</label>
+                  <label v-else style="color: green;">
+                    <Icon icon="material-symbols:check-small-rounded"/>
+                  </label>
                   <input type="text" maxlength="100" required placeholder="Ví dụ: Số 1, Đào Duy Anh, Đống Đa, Hà Nội" v-model="address">
-                  <label class="err" v-if="errAddress.length">{{this.errAddress}}</label>
                 </div>
               </div>
             </div>
-            <div class="btn">
-              <button @click="HandleRegister">Đăng ký</button>
+            <div>
+              <button class="btn" v-if="this.regxMail.test(this.email) && (this.password.length >= 8 && this.password.length <= 30) && (this.fullname.length >= 5 && this.fullname.length <= 30)
+                && this.password === this.passwordCheck && this.regxPhone.test(this.phone) && (this.address.length >= 10 || this.address.length <= 100)"
+                  @click="HandleRegister">Đăng ký</button>
+              <button v-else class="btnDisable" disabled>Đăng ký</button>
             </div>
             <label class="result" v-if="err.length">{{this.err}}</label>
             <div class="term">
@@ -68,10 +89,11 @@ import apiFactory from "@/config/apiFactory";
 import {API_USER} from "@/constant/constant-api";
 import Header from "../../components/Header";
 import LoadingDialog from "@/components/LoadingDialog";
+import {Icon} from '@iconify/vue2';
 
 export default {
   name: "Register",
-  components: {Header, LoadingDialog},
+  components: {Header, LoadingDialog, Icon},
   data() {
     return {
       email: '',
@@ -80,62 +102,14 @@ export default {
       phone: '',
       fullname: '',
       address: '',
-      errMail: '',
-      errPass: '',
-      errPassCheck: '',
-      errName: '',
-      errPhone: '',
-      errAddress: '',
       err: '',
-      spinner: false
+      spinner: false,
+      regxMail: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+      regxPhone: /^(0|84)(2(0[3-9]|1[0-6|8|9]|2[0-2|5-9]|3[2-9]|4[0-9]|5[1|2|4-9]|6[0-3|9]|7[0-7]|8[0-9]|9[0-4|6|7|9])|3[2-9]|5[5|6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])([0-9]{7})$/
     }
   },
   methods: {
     HandleRegister() {
-      let regxMail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-      let regxPhone = /^(0|84)(2(0[3-9]|1[0-6|8|9]|2[0-2|5-9]|3[2-9]|4[0-9]|5[1|2|4-9]|6[0-3|9]|7[0-7]|8[0-9]|9[0-4|6|7|9])|3[2-9]|5[5|6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])([0-9]{7})$/;
-      this.errMail = '';
-      this.errPass = '';
-      this.errPassCheck = '';
-      this.errName = '';
-      this.errPhone = '';
-      this.errAddress = '';
-      this.err = '';
-      if(!this.email){
-        this.errMail = 'Vui lòng nhập email!'
-      }else {
-        if(!regxMail.test(this.email)){
-          this.errMail = 'Email không đúng định dạng!'
-        }
-      }
-      if(!this.password){
-        this.errPass = 'Vui lòng nhập mật khẩu!'
-      } else{
-        if(this.password.length < 8 || this.password > 30){
-          this.errPass = 'Mật khẩu phải có độ dài từ 8 - 30 ký tự!'
-        }
-      }
-      if(!this.passwordCheck){
-        this.errPassCheck = 'Vui lòng xác nhận mật khẩu!'
-      }else{
-        if(this.password !== this.passwordCheck){
-          this.errPassCheck = 'Không khớp với mật khẩu!'
-        }
-      }
-      if(!this.fullname){
-        this.errName = 'Vui lòng nhập tên đầy đủ!'
-      }
-      if(!this.phone){
-        this.errPhone = 'Vui lòng nhập số điện thoại!'
-      }else{
-        if(!regxPhone.test(this.phone)){
-          this.errPhone = 'Số điện thoại không hợp lệ!'
-        }
-      }
-      if(!this.address){
-        this.errAddress = 'Vui lòng nhập địa chỉ!'
-      }
-      if(this.errMail === ''  && this.errPass === ''  && this.errPassCheck === '' && this.errName === ''  && this.errPhone === ''  && this.errAddress === ''){
         this.spinner = true
         apiFactory.callApi(API_USER.USER_REGISTER, 'POST', {
           email: this.email,
@@ -152,7 +126,6 @@ export default {
           }
           this.spinner = false
         }).catch(() => {this.err = 'Đăng ký không thành công!'});
-      }
       }
     },
 }
@@ -253,25 +226,33 @@ body{
   width: 50%;
   position: relative;
   overflow: hidden;
-  background-color: #9D6B54;
-}
-
-.container .main .btn button{
-  height: 100%;
-  width: 100%;
-  background: none;
-  border: none;
-  color: #fff;
+  background: #9d6b54;
+  color: #F0ECE4;
   font-size: 15px;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 1px;
-  cursor: pointer;
+  border-radius: 10px;
 }
 
-.container .main .btn button:hover{
+.container .main .btnDisable{
+  border-radius: 10px;
+  margin: 20px 59px 5px 200px;
+  height: 45px;
+  width: 50%;
+  position: relative;
+  overflow: hidden;
+  background: grey;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.container .main .btn:hover{
   border-color: #9D6B54;
-  background-color: white;
+  background-color: #F0ECE4;
   color: #9D6B54;
 }
 

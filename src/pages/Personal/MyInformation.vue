@@ -72,12 +72,23 @@
               <div class="topMI">
                 <div class="infoMI">
                   <div v-if="!edit" class="nameMI">{{info.fullname}}</div>
-                  <div v-else class="nameMI"><input class="inputName" type="text" maxlength="50" v-model="info.fullname"></div>
+                  <div v-else class="nameMI"><input class="inputName" type="text" maxlength="50" v-model="info.fullname">
+                    <label v-if="errFullname" style="color: #ca0303; font-size: 14px; text-transform: none; font-weight: normal">{{this.errFullname}}</label></div>
                   <div class="divMI"><Icon icon="mdi:email"/><span >Email: {{info.email}}</span></div>
-                  <div v-if="!edit" class="divMI" ><Icon icon="material-symbols:call"/><span>Số điện thoại: {{info.phone}}</span></div>
-                  <div v-else class="divInput" ><Icon icon="material-symbols:call"/><input class="inputInfo" type="text" maxlength="10" placeholder="Nhập SĐT" v-model="info.phone"></div>
+                  <div v-if="!edit" class="divMI" >
+                    <Icon icon="material-symbols:call"/><span>Số điện thoại: {{info.phone}}</span>
+                  </div>
+                  <div v-else class="divInput" >
+                    <Icon icon="material-symbols:call"/>
+                    <input class="inputInfo" type="text" maxlength="10" placeholder="Nhập SĐT" v-model="info.phone">
+                    <label v-if="errPhone" style="color: #ca0303; font-size: 14px; margin-left: 10px;">{{this.errPhone}}</label>
+                  </div>
                   <div v-if="!edit" class="divMI"><Icon icon="material-symbols:location-on"/><span>Địa chỉ: {{info.addressMain}}</span></div>
-                  <div v-else class="divInput"><Icon icon="material-symbols:location-on"/><input class="inputInfo"  type="text" maxlength="50" placeholder="Nhập địa chỉ giao hàng" v-model="info.addressMain"></div>
+                  <div v-else class="divInput">
+                    <Icon icon="material-symbols:location-on"/>
+                    <input class="inputInfo"  type="text" maxlength="50" placeholder="Nhập địa chỉ giao hàng" v-model="info.addressMain">
+                    <label v-if="errAddress" style="color: #ca0303; font-size: 14px; margin-left: 10px;">{{this.errAddress}}</label>
+                  </div>
                   <button v-if="!edit" class="editMI" v-on:click="edit = true">
                     <Icon icon="uil:pen" style="width: 20px; height: 20px; margin-right: 2%"/>Thay đổi thông tin
                   </button>
@@ -161,6 +172,9 @@ export default {
       errPassNewCheck: '',
       spinner: false,
       err: '',
+      errPhone: '',
+      errAddress: '',
+      errFullname: '',
       info: '',
       infoShip: '',
       userId: '',
@@ -244,26 +258,46 @@ export default {
       this.showUpload = false
     },
     HandleEdit(){
-      this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
-      apiFactory.callApi(API_PERSONAL.EDIT_INFORMATION, 'PUT', {
-        userId: this.userByToken.UserId,
-        fullname: this.info.fullname,
-        phone: this.info.phone,
-        addressMain: this.info.addressMain,
-        avatar: this.info.avatar
-      }).then((res) => {
-        if(res.data.message === 'UPDATE_SUCCESS'){
-          this.responseFlag = true
-          this.responseMessage = 'Cập nhật thành công!'
-        }else{
-          this.responseFlag = false
-          this.responseMessage = 'Có lỗi xảy ra, vui lòng thử lại!!'
+      let regxPhone = /^(0|84)(2(0[3-9]|1[0-6|8|9]|2[0-2|5-9]|3[2-9]|4[0-9]|5[1|2|4-9]|6[0-3|9]|7[0-7]|8[0-9]|9[0-4|6|7|9])|3[2-9]|5[5|6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])([0-9]{7})$/;
+      this.errPhone = '';
+      this.errAddress = '';
+      this.errFullname = '';
+
+      if(!this.info.fullname){
+        this.errFullname = 'Vui lòng nhập tên đầy đủ!'
+      }
+      if(!this.info.phone){
+        this.errPhone = 'Vui lòng nhập số điện thoại!'
+      }else{
+        if(!regxPhone.test(this.info.phone)){
+          this.errPhone = 'Số điện thoại không hợp lệ!'
         }
-        this.dismissCountDown = this.dismissSecs
-        this.edit = false
-        this.showUpload = false
-      }).catch(() => {
-      });
+      }
+      if(!this.info.addressMain){
+        this.errAddress = 'Vui lòng nhập địa chỉ!'
+      }
+      if(this.errFullname === '' && this.errPhone === '' && this.errAddress === ''){
+        this.userByToken= VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+        apiFactory.callApi(API_PERSONAL.EDIT_INFORMATION, 'PUT', {
+          userId: this.userByToken.UserId,
+          fullname: this.info.fullname,
+          phone: this.info.phone,
+          addressMain: this.info.addressMain,
+          avatar: this.info.avatar
+        }).then((res) => {
+          if(res.data.message === 'UPDATE_SUCCESS'){
+            this.responseFlag = true
+            this.responseMessage = 'Cập nhật thành công!'
+          }else{
+            this.responseFlag = false
+            this.responseMessage = 'Có lỗi xảy ra, vui lòng thử lại!!'
+          }
+          this.dismissCountDown = this.dismissSecs
+          this.edit = false
+          this.showUpload = false
+        }).catch(() => {
+        });
+      }
     },
     handleFileUpload(e) {
       const file = document.querySelector('input[type=file]').files[0]
@@ -495,6 +529,7 @@ strong {
 }
 
 .imgBtn1{
+  transition: all 0.4s ease;
   position: absolute;
   width: 50px;
   height: 50px;
@@ -509,6 +544,7 @@ strong {
 }
 
 .imgBtn{
+  transition: all 0.4s ease;
   position: absolute;
   width: 50px;
   height: 50px;
@@ -590,7 +626,7 @@ strong {
   border: 1px solid #9D6B54;
   margin-top: 40px;
   font-weight: bold;
-  transition: all 0.2s ease;
+  transition: all 0.4s ease;
 }
 
 .btnUpdate:hover{
