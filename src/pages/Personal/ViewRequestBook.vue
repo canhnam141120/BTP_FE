@@ -60,7 +60,8 @@
             <div class="left-form">
               <b-row class="book-content">
                 <b-col class="input-label" cols="2">Tiêu đề:</b-col>
-                <b-col class="input-div" cols="9"><input type="text" disabled v-model="book.title" class="input-text">
+                <b-col class="input-div" cols="9">
+                  <input type="text" disabled v-model="book.title" class="input-text">
                 </b-col>
               </b-row>
               <b-row class="book-content">
@@ -100,7 +101,7 @@
               </b-row>
               <b-row class="book-content">
                 <b-col class="input-label" cols="2">Chọn ảnh:</b-col>
-                <b-col class="input-div" cols="6"><input type="file" title=" " class="input-text-short"
+                <b-col class="input-div" cols="6"><input type="file" style="width: 215px;" class="input-text-short"
                                                          @change="uploadImage"></b-col>
               </b-row>
             </div>
@@ -109,22 +110,38 @@
                 <b-col class="grCb" cols="9">
                   <input type="checkbox" value="true" class="checkB" v-model="book.isExchange">&ensp;Trao đổi&emsp;
                   <input type="checkbox" value="true" class="checkB" v-model="book.isRent">&ensp;Thuê
+                  <div v-if="!book.isExchange && !book.isRent" style="color: #ca0303; font-size: 12px; margin-left: 5px">Vui lòng chọn ít nhất 1 dịch
+                    vụ
+                  </div>
                 </b-col>
               </b-row>
-              <b-row class="book-content">
-                <b-col class="input-label" cols="2">Giá bìa:</b-col>
-                <b-col cols="9"><input type="number" maxlength="50" required placeholder="Nhập giá bìa"
-                                       v-model="book.coverPrice" class="input-text-short"></b-col>
+
+              <b-row v-if="book.isExchange || book.isRent" class="book-content">
+                <b-col class="input-label" style="width: 115px" cols="2">Giá bìa(đ)</b-col>
+                <b-col cols="6"><input type="number" disabled v-model="book.coverPrice" class="input-text-short"></b-col>
               </b-row>
-              <b-row class="book-content">
-                <b-col class="input-label" cols="2">Giá đặt cọc:</b-col>
-                <b-col cols="9"><input type="number" maxlength="50" required placeholder="Nhập giá đặt cọc"
-                                       v-model="book.depositPrice" class="input-text-short"></b-col>
+              <b-row v-if="book.isExchange || book.isRent" class="book-content">
+                <b-col class="input-label" style="width: 115px" cols="2">Giá đặt cọc(đ)
+                  <label v-if="!book.depositPrice" style="color: #ca0303;">*</label>
+                  <label v-else style="color: green;">
+                    <Icon icon="material-symbols:check-small-rounded"/>
+                  </label></b-col>
+                <b-col cols="6">
+                  <input type="number" min="10000" max="9999999" step="5000"  maxlength="7" required placeholder="Ví dụ: 199000"
+                         v-model="book.depositPrice" class="input-text-short" @input="checkNegative">
+                </b-col>
               </b-row>
               <b-row v-if="book.isRent" class="book-content">
-                <b-col class="input-label" cols="2">Giá thuê:</b-col>
-                <b-col cols=3><input type="number" maxlength="7" required placeholder="Giá thuê" v-model="book.rentFee"
-                                     class="input-text-short"></b-col>
+                <b-col class="input-label" style="width: 115px" cols="2">Giá thuê(đ)
+                  <label v-if="!book.rentFee" style="color: #ca0303;">*</label>
+                  <label v-else style="color: green;">
+                    <Icon icon="material-symbols:check-small-rounded"/>
+                  </label>
+                </b-col>
+                <b-col cols=6>
+                  <input type="number" min="10000" max="9999999" step="5000"  maxlength="7" required placeholder="Ví dụ: 99000" v-model="book.rentFee"
+                         class="input-text-short" @input="checkNegative">
+                </b-col>
               </b-row>
             </div>
             <div class="img-form">
@@ -133,15 +150,19 @@
           </div>
           <div class="bottom-form">
             <b-row class="book-content">
-              <b-col class="input-label" style="width: 60px" cols="2">Tình trạng:</b-col>
+              <b-col class="input-label" style="width: 85px" cols="2">Trạng thái
+                <label v-if="!book.statusBook" style="color: #ca0303;">*</label>
+                <label v-else style="color: green;">
+                  <Icon icon="material-symbols:check-small-rounded"/>
+                </label></b-col>
               <b-col class="input-div" cols="9">
               <textarea type="text" style="height: 100px; width: 1200px"
-                        maxlength="250" required placeholder="Nhập tình trạng sách"
+                        maxlength="250" required placeholder="Nhập trạng thái"
                         v-model="book.statusBook" class="input-text">
               </textarea></b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col class="input-label" style="width: 60px" cols="2">Nội dung:</b-col>
+              <b-col class="input-label" style="width: 85px" cols="2">Nội dung:</b-col>
               <b-col class="input-div" cols="9">
               <textarea type="text" disabled style="height: 100px; width: 1200px"
                         v-model="book.description" class="input-text">
@@ -150,7 +171,8 @@
           </div>
           <div class="dialogGroupBtn">
             <button class="dialogBtn" v-on:click="cancel">Hủy</button>
-            <button class="dialogBtn" v-on:click="save">Lưu</button>
+            <button v-if="book.coverPrice && book.depositPrice && book.statusBook && (book.isExchange || book.isRent)" class="dialogBtn" v-on:click="save">Lưu</button>
+            <button v-else disabled class="dialogBtnDisable">Lưu</button>
           </div>
         </CreateBookDialog>
         <div class="containerVR">
@@ -356,6 +378,7 @@ export default {
       this.showDialog = true
     },
     cancel() {
+      this.getBookById()
       this.showDialog = false
     },
     save() {
@@ -385,26 +408,12 @@ export default {
           this.responseFlag = false
           this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại!'
         }
+        this.getBookById()
         this.dismissCountDown = this.dismissSecs
         this.showDialog = false
       }).catch(() => {
       });
     },
-    /*    handleFileUpload(e) {
-          const file = document.querySelector('input[type=file]').files[0]
-          var files = e.target.files
-          if (!files[0]) {
-            return
-          }
-          const reader = new FileReader()
-
-          var rawImg;
-          reader.onloadend = () => {
-            rawImg = reader.result;
-            this.book.image = rawImg
-          }
-          reader.readAsDataURL(file);
-        },*/
 
     async uploadImage() {
       const image = document.querySelector('input[type=file]').files[0]
@@ -482,6 +491,11 @@ export default {
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown
     },
+    checkNegative(e){
+      if(e.target.value <= 1 || e.target.value >9999){
+        e.target.value = ''
+      }
+    }
   }
 }
 </script>

@@ -29,7 +29,7 @@
             >Chính sách & điều khoản
             </router-link>
             <router-link
-                to="/users-management"
+                to="/Process"
                 class="Main__list__item musers-management"
                 active-color="#9D6B54"
             >Quy trình
@@ -149,9 +149,9 @@
                     <router-link v-if="this.$cookies.get('token')" to=""  @click.native="HandleLogout" class="item-link" style="cursor: pointer">Đăng xuất</router-link>
                     <router-link v-else to="/login" class="item-link">Đăng nhập/Đăng ký</router-link>
                   </li>
-                  <li class="item" style="display:flex; color: #9d6b54">
-                    <Icon icon="material-symbols:mail"/>
-                    <label class="contact_info">tramsachhn@gmail.com</label>
+                  <li class="item" style="display:flex; color: #9d6b54;">
+                    <Icon style="height: 30px" icon="material-symbols:mail"/>
+                    <label style="height: 27px"  class="contact_info">tramsachhn@gmail.com</label>
                   </li>
                 </ul>
               </div>
@@ -174,8 +174,8 @@
                     <router-link to="/#"  class="item-link">Trung tâm hỗ trợ</router-link>
                   </li>
                   <li class="item" style="display:flex; color: #9d6b54">
-                    <Icon icon="ic:round-phone-enabled"/>
-                    <label class="contact_info">Hotline: 0961284654</label>
+                    <Icon style="height: 30px"  icon="ic:round-phone-enabled"/>
+                    <label style="height: 27px"  class="contact_info">Hotline: 0961284654</label>
                   </li>
                 </ul>
               </div>
@@ -198,8 +198,8 @@
                     <router-link to="/Introduce" class="item-link">Giới thiệu Trạm sách</router-link>
                   </li>
                   <li class="item" style="display:flex; color: #9d6b54">
-                    <Icon icon="material-symbols:location-on"/>
-                    <label class="contact_info">Số 1 Đào Duy Anh, Đống Đa, Hà Nội</label>
+                    <Icon style="height: 30px"  icon="material-symbols:location-on"/>
+                    <label style="height: 27px"  class="contact_info">Số 1 Đào Duy Anh, Đống Đa, HN</label>
                   </li>
                 </ul>
               </div>

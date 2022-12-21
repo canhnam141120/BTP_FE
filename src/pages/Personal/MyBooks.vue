@@ -113,7 +113,6 @@
           <div class="right-form">
             <b-row class="book-content">
               <div>
-
                 <b-col class="grCb" cols="9">
                   <input type="checkbox" value="true" class="checkB" v-model="isExchange">&ensp;Trao đổi&emsp;
                   <input type="checkbox" value="true" class="checkB" v-model="isRent">&ensp;Thuê
@@ -130,7 +129,7 @@
                 </label>
               </b-col>
               <b-col cols="6">
-                                <input type="number" min="10000" max="9999999" step="5000" maxlength="7" required placeholder="Nhập giá bìa"
+                                <input type="number" min="10000" max="9999999" step="5000" maxlength="7" required placeholder="Ví dụ: 199000"
                                                      v-model="coverPrice" class="input-text-short" @input="checkNegative">
               </b-col>
             </b-row>
@@ -141,7 +140,7 @@
                   <Icon icon="material-symbols:check-small-rounded"/>
                 </label></b-col>
               <b-col cols="6">
-                                <input type="number" min="10000" max="9999999" step="5000"  maxlength="7" required placeholder="Nhập giá đặt cọc"
+                                <input type="number" min="10000" max="9999999" step="5000"  maxlength="7" required placeholder="Ví dụ: 199000"
                                                      v-model="depositPrice" class="input-text-short" @input="checkNegative">
               </b-col>
             </b-row>
@@ -153,7 +152,7 @@
                 </label>
               </b-col>
               <b-col cols=6>
-                                <input type="number" min="10000" max="9999999" step="5000"  maxlength="7" required placeholder="Nhập giá thuê" v-model="rentFee"
+                                <input type="number" min="10000" max="9999999" step="5000"  maxlength="7" required placeholder="Ví dụ: 99000" v-model="rentFee"
                                                    class="input-text-short" @input="checkNegative">
               </b-col>
             </b-row>
@@ -191,7 +190,7 @@
         <div class="dialogGroupBtn">
           <button class="dialogBtn" v-on:click="cancel">Hủy</button>
           <button v-if="title && author && categoryId && language && publisher && statusBook && description
-                  && year && numberOfPage && weight && imageSrc !== 'https://book-trading-platform.s3.ap-northeast-1.amazonaws.com/default_book_cover_2015.jpg'
+                  && (isExchange || isRent) && year && numberOfPage && weight && imageSrc !== 'https://book-trading-platform.s3.ap-northeast-1.amazonaws.com/default_book_cover_2015.jpg'
                   && coverPrice && depositPrice" class="dialogBtn" v-on:click="save">Xác nhận</button>
           <button v-else disabled class="dialogBtnDisable">Xác nhận</button>
         </div>
@@ -545,6 +544,23 @@ export default {
         }
         this.dismissCountDown = this.dismissSecs
         this.showDialog = false
+
+        this.imageSrc = 'https://book-trading-platform.s3.ap-northeast-1.amazonaws.com/default_book_cover_2015.jpg'
+        this.title = ''
+        this.description = ''
+        this.categoryId = ''
+        this.author = ''
+        this.publisher = ''
+        this.year = ''
+        this.language = ''
+        this.numberOfPage = ''
+        this.weight= ''
+        this.coverPrice = ''
+        this.depositPrice = ''
+        this.statusBook = ''
+        this.isExchange = false
+        this.isRent = false
+        this.rentFee = 0
       }).catch(() => {
         this.dismissCountDown = this.dismissSecs
         this.responseFlag = false

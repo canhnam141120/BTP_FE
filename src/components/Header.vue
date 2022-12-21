@@ -29,13 +29,13 @@
             >Chính sách & điều khoản
             </router-link>
             <router-link
-                to="/users-management"
+                to="/Process"
                 class="Main__list__item musers-management"
                 active-color="#9D6B54"
             >Quy trình
             </router-link>
             <router-link
-                to="/users-management"
+                to="/Introduce"
                 class="Main__list__item musers-management"
                 active-color="#9D6B54"
             >Giới thiệu
@@ -53,7 +53,7 @@
                 <template v-slot:button-content>
                   <Icon class="icon" icon="tabler:bell-ringing-2"/><div class="countNoti">{{count}}</div>
                 </template>
-                <div class="titleNoti">Thông Báo</div>
+                <div class="titleNoti">THÔNG BÁO</div>
                 <div v-if="noti != ''">
                   <div v-for="item of noti" :key="item.id" class="notification">
                     <div v-if="!item.isRead" style="background-color: #F0ECE4; border-radius: 5px; padding: 5px 10px;">{{item.content}}</div>
@@ -76,12 +76,24 @@
                 </div>
                 <hr style="margin: 5px" />
                 <router-link to="/MyBooks" class="dropdown-item">
-                  <Icon class="iconPerson" icon="ic:round-person-pin"/> Trang cá nhân
+                  <Icon class="iconPerson" icon="ph:folder-user-bold"/> Quản lý cá nhân
+                </router-link>
+                <hr style="margin: 5px" />
+                <router-link to="/MyTransaction" class="dropdown-item">
+                  <Icon class="iconPerson" icon="uil:transaction"/> Giao dịch
+                </router-link>
+                <hr style="margin: 5px" />
+                <router-link to="/MyRequests" class="dropdown-item">
+                  <Icon class="iconPerson" icon="bx:mail-send"/> Yêu cầu đã gửi
+                </router-link>
+                <hr style="margin: 5px" />
+                <router-link to="/MyInformation" class="dropdown-item">
+                  <Icon class="iconPerson" icon="mdi:user-card-details-outline"/> Thông tin cá nhân
                 </router-link>
                 <hr style="margin: 5px" />
                 <div v-if="user.roleId == 1 || user.roleId == 2">
                   <router-link  to="/ManageIndex" class="dropdown-item">
-                    <Icon class="iconPerson" icon="bi:list-task"/> Quản trị
+                    <Icon class="iconPerson" icon="material-symbols:format-list-bulleted-rounded"/> Quản trị
                   </router-link>
                   <hr style="margin: 5px" />
                 </div>
