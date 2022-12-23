@@ -51,7 +51,7 @@
               <div class="item-bookMR">
                 <div>
                   <div style="color: #9d6b54; font-weight: 600; text-align: center;">Sách của tôi</div>
-                  <router-link :to="{ name: 'BookDetail', query: { id:item.bookOfferId}}">
+                  <router-link v-b-popover.hover.bottom="item.bookOffer.title" :to="{ name: 'BookDetail', query: { id:item.bookOfferId}}">
                     <img class="imgMR" v-bind:src="item.bookOffer.image">
                   </router-link>
                   <div class="infoMR">
@@ -60,7 +60,7 @@
                 </div>
                 <div>
                   <div style="color: #9d6b54; font-weight: 600; text-align: center;">Sách trao đổi</div>
-                  <router-link :to="{ name: 'BookDetail', query: { id:item.bookId }}">
+                  <router-link v-b-popover.hover.bottom="item.book.title" :to="{ name: 'BookDetail', query: { id:item.bookId }}">
                     <img class="imgMR" v-bind:src="item.book.image">
                   </router-link>
                   <div class="infoMR">

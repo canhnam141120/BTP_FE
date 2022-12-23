@@ -126,7 +126,7 @@
                 <a href="/">
                   <img src="../image/logo.png" alt="Logo Trạm Sách"/>
                 </a><br>
-                <span>Tất cả các giao dịch ở Trạm Sách được chúng tôi đảm bảo kiểm
+                <span style="color: grey">Tất cả các giao dịch ở Trạm Sách được chúng tôi đảm bảo kiểm
                   duyệt qua hình thức và giao hàng tận nơi trong địa bàn nội thành TP Hà Nội. Không hỗ trợ giao dịch trực tiếp tại Trạm!
                 </span>
               </div>
@@ -309,7 +309,7 @@ export default {
     position: sticky;
     top: 0;
     background: white;
-    height: 75px;
+    height: 80px;
     &__container {
       //max-width: 1230px;
       margin-left: auto;
@@ -326,11 +326,11 @@ export default {
 
   &__logo {
     padding-right: 20px;
-    height: 55px;
+    height: 60px;
   }
 
   &__logo img {
-    width: 160px;
+    width: 180px;
     height: auto;
     position: unset;
     padding-bottom: 10px;

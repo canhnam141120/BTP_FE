@@ -246,13 +246,13 @@
               </template>
               <div v-if="totalBook != 0" class="gridMB">
                 <div class="itemMB" v-for="item of listBook" :key="item.id">
-                  <router-link style="position: relative" v-if="item.isReady && item.status == 'Approved'"
+                  <router-link v-b-popover.hover.bottom="item.title" style="position: relative" v-if="item.isReady && item.status == 'Approved'"
                                :to="{ name: 'ViewRequestBook', query: { id:item.id }}">
                     <img class="book-image" v-bind:src="item.image">
                     <label class="laye1" v-if="item.isTrade">Đang giao dịch</label>
                     <label class="laye2" v-else>Sẵn sàng</label>
                   </router-link>
-                  <router-link v-else style="position: relative" class="active"
+                  <router-link v-b-popover.hover.bottom="item.title" v-else style="position: relative" class="active"
                                :to="{ name: 'ViewRequestBook', query: { id:item.id }}">
                     <img class="book-image" v-bind:src="item.image">
                     <label v-if="!item.isReady && item.status == 'Approved'" class="labelHideBook">Đang ẩn</label>

@@ -92,7 +92,7 @@
 
               <div v-if="totalBook != 0" class="grid">
                 <div class="item" v-for="item of listBook" :key="item.id">
-                  <router-link style="position: relative" :to="{ name: 'BookDetail', query: { id:item.id }}">
+                  <router-link v-b-popover.hover.bottom="item.title"  style="position: relative" :to="{ name: 'BookDetail', query: { id:item.id }}">
                     <img v-bind:src="item.image">
                     <label v-if="item.isTrade" class="layerR">Đang giao dịch</label>
                     <label v-else class="layerG">Sẵn sàng</label>

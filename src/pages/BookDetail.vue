@@ -247,7 +247,7 @@
               </template>
               <div class="grid-book">
                 <div class="item-book" v-for="item of book6user" :key="item.id">
-                  <router-link style="position: relative" @click.native="loadPage" :to="{ name: 'BookDetail', query: { id:item.id }}">
+                  <router-link v-b-popover.hover.bottom="item.title"  style="position: relative" @click.native="loadPage" :to="{ name: 'BookDetail', query: { id:item.id }}">
                     <img v-bind:src="item.image">
                     <label class="lay1" v-if="item.isTrade">Đang giao dịch</label>
                     <label class="lay2" v-else>Sẵn sàng</label>
@@ -283,7 +283,7 @@
               </template>
               <div class="grid-book">
                 <div class="item-book" v-for="item of book6category" :key="item.id">
-                  <router-link style="position: relative" @click.native="loadPage" :to="{ name: 'BookDetail', query: { id:item.id }}">
+                  <router-link v-b-popover.hover.bottom="item.title"  style="position: relative" @click.native="loadPage" :to="{ name: 'BookDetail', query: { id:item.id }}">
                     <img v-bind:src="item.image">
                     <label class="lay1" v-if="item.isTrade">Đang giao dịch</label>
                     <label class="lay2" v-else>Sẵn sàng</label>

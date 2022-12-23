@@ -43,8 +43,10 @@
                     </template>
                     <div v-if="totalBook != 0" class="gridMB">
                       <div class="itemMB" v-for="item of listBook" :key="item.id">
-                        <router-link class="active" :to="{ name: 'BookDetail', query: { id:item.bookId }}">
+                        <router-link v-b-popover.hover.bottom="item.book.title" class="active" :to="{ name: 'BookDetail', query: { id:item.bookId }}">
                           <img v-bind:src="item.book.image">
+                          <label class="laye1" v-if="item.book.isTrade">Đang giao dịch</label>
+                          <label class="laye2" v-else>Sẵn sàng</label>
                         </router-link>
                         <button class="dislikeBook" v-on:click="HandleUnlikeBook(item.bookId)"><Icon icon="ant-design:dislike-filled"/></button>
                         <div class="infoMB">
@@ -61,8 +63,6 @@
                             hủy</strong></label>
                           <label v-if="item.status == 'Waiting'" class="book-statusMB">Trạng thái: <strong>Đang đợi
                             duyệt</strong></label>
-                          <label class="book-statusMB" style="color: red; font-weight: bold" v-if="item.isTrade">Đang giao dịch</label>
-                          <label class="book-statusMB" style="color: green; font-weight: bold" v-else>Sẵn sàng</label>
                         </div>
                       </div>
                     </div>
@@ -108,7 +108,7 @@
                     </template>
                     <div v-if="totalPost != 0" class="gridPostLike">
                       <div class="itemPostLike" v-for="item of listPost" :key="item.id">
-                        <router-link  :to="{ name: 'PostDetail', query: { id:item.postId }}">
+                        <router-link v-b-popover.hover.bottom="item.post.title"  :to="{ name: 'PostDetail', query: { id:item.postId }}">
                           <img class="post-image" v-bind:src="item.post.image">
                         </router-link>
                         <div class="info">
@@ -350,6 +350,7 @@ main {
 
 strong {
   color: #9D6B54;
+  font-weight: 600;
 }
 
 .myFVR {
@@ -663,5 +664,25 @@ strong {
   color: grey;
   font-style: italic;
   font-size: 26px;
+}
+
+.laye2 {
+  margin-left: 20px;
+  position: absolute;
+  left: 0;
+  background-color: green;
+  font-size: 12px;
+  color: #F0ECE4;
+  padding: 5px;
+}
+
+.laye1 {
+  margin-left: 20px;
+  position: absolute;
+  left: 0;
+  font-size: 12px;
+  background-color: #ca0303;
+  color: #F0ECE4;
+  padding: 5px;
 }
 </style>

@@ -102,7 +102,7 @@
 
               <div v-if="totalPost != 0" class="grid">
                 <div class="item" v-for="item of listPost" :key="item.id">
-                  <router-link :to="{ name: 'PostDetail', query: { id:item.id }}">
+                  <router-link v-b-popover.hover.bottom="item.title"  :to="{ name: 'PostDetail', query: { id:item.id }}">
                     <img class="post-image" v-bind:src="item.image">
                   </router-link>
                   <div class="info">

@@ -1,26 +1,24 @@
 <template>
   <Layout>
     <main style="flex-grow: 1;">
-      <!--    <div class="container">-->
       <div class="layer-1">
         <img src="../image/anhbia1.png">
       </div>
-      <!--    </div>-->
       <div class="container">
-        <div class="title">
-          <h1>Trạm sách</h1>
+        <div class="title" style="color: #9d6b54">
+          <h1>Trạm Sách</h1>
           <p>Hiện nay xã hội và con người ngày càng phát triển. Việc tiếp nhận và học hỏi kiến thức ngày càng được chú
             trọng hơn. Chúng ta luôn tìm kiếm những nguồn tri thức mới, là hành trang cho cuộc sống để luôn bắt kịp xu
             thế thời đại. Đứng giữa những cách tiếp nhận kiến thức nhiều luồng trên mạng internet thì sách vẫn là một
             cách tiếp nhận và học hỏi kiến thức rất trực quan và dễ dàng. Và thế hệ trẻ hiện nay cũng nắm rất rõ điều đó
-            và không ngừng học hỏi thông qua những cuốn sách hay. Vì thế trạm sách được phát triển với mục đích là cầu
+            và không ngừng học hỏi thông qua những cuốn sách hay. Vì thế <strong>Trạm Sách</strong> được phát triển với mục đích là cầu
             nối giữa những người đam mê sách với nhau, cùng chia sẻ và tiếp nhận những kiến thức mới thông qua việc trao
             đổi những cuốn sách.</p>
         </div>
       </div>
       <div class="layer-3">
-        <div class="description">
-          <h4>Hãy đến với "Trạm sách"</h4>
+        <div class="description" style="color: #9d6b54">
+          <h4>Hãy đến với chúng tôi!</h4>
           <p>Ai cũng có những câu chuyện, những bài học mình đã trải qua. Ai cũng có những cuốn sách hay giúp mình tích
             luỹ những kiến thức có ích. Ai cũng có những thành công và và những thất bại trong cuộc đời. Kiến thức cũng
             như những bài học hoặc chỉ đơn giản là những câu chuyện hay làm cho cuộc sống chúng ta không bị nhàm chán.
@@ -36,11 +34,26 @@
         </div>
       <div class="container">
       <div class="layer-4">
-        <div class="text-divider">Thành viên</div>
+        <div class="text-divider" style="color: #9d6b54;">Đội Ngũ Phát Triển</div>
           <div class="GridAvatar">
-          <div v-for="item of listAdmins" :key="item.id">
-              <img v-bind:src="item.avatar">
+          <div>
+            <img src="https://book-trading-platform.s3.ap-northeast-1.amazonaws.com/AT.jpg">
+            <img src="https://book-trading-platform.s3.ap-northeast-1.amazonaws.com/TD.jpg">
+            <img src="https://book-trading-platform.s3.ap-northeast-1.amazonaws.com/cnam1.jpg">
+            <img src="https://book-trading-platform.s3.ap-northeast-1.amazonaws.com/IMG_4272.jpg">
+            <img src="https://book-trading-platform.s3.ap-northeast-1.amazonaws.com/82560810_2526962184208070_5952673528061886464_n.jpg">
           </div>
+        </div>
+        <div class="title" style="color: #9d6b54">
+          <h1>SWP490 - G46</h1>
+          <p>Mang trong mình nguồn năng lượng trẻ trung tràn đầy nhiệt huyết kèm theo những hoài bão to lớn đã ấp ủ từ lâu. 5 thành viên nhóm đồ án G46 được dẫn dắt bời thầy Bùi Đình Chiến - Chủ nhiệm bộ
+            môn Kỹ thuật phần mềm Trường Đại Học FPT đã miệt mài dày công nghiên cứu, thiết kế và sản xuất ra sản phẩm có thể coi là xịn xò đầu tay nhất từ trước đến nay. Trải qua suốt hơn 15 tuần vừa học vừa làm, mặc
+            dù thời gian của nhóm cũng không mấy thuận lợi để sắp xếp công việc nhưng với tinh thần ham học, ham làm, không bỏ cuộc và cố gắng từng giây từng phút để hoàn thành và làm theo những gì mà nhóm đã đề ra.
+            Cuối cùng thì <strong>Trạm Sách</strong> - nền tảng giao dịch, trao đổi sách cũng đã được hoàn thiện và có thể đi vào sử dụng. Tuy trong quá trình phát triển phần mềm, nhóm cũng đã có nhiều vấn đề khác nhau đã gặp phải, nền tảng cũng
+            chưa chắc chắn 100% sẽ hoạt động chỉn chu. Nhưng nhóm cũng xin cảm ơn những gì mà các bạn sử dụng cũng như trải nghiệm trên nền tảng. Và quan trọng hơn hết, nhóm cũng xin phép được nhận các góp ý đến từ mọi người về nền tảng
+            để phần nào có thể giúp nhóm hiểu được nhu cầu, hành vi của người dùng hơn, tìm ra các lỗi ẩn và khắc phục những điểm yếu còn tồn tại. Mọi đóng góp mọi người có thể liên hệ qua hotline <strong>0961284654</strong> hoặc gửi mail tới hòm thư <strong>tramsachhn@gmail.com</strong>.
+            Thay mặt nhóm G46, mình là <strong>Cảnh Nam</strong> xin gửi lời cám ơn tới mọi người. Hy vọng mọi người sẽ có những quãng thời gian trải nghiệm thú vị tại <strong>Trạm Sách!</strong>
+          </p>
         </div>
       </div>
       </div>

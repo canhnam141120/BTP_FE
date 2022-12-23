@@ -68,7 +68,7 @@
                     </template>
                     <div v-if="totalBook != 0" class="grid-bookOP">
                       <div class="item-bookOP" v-for="item of listBook" :key="item.id">
-                        <router-link style="position: relative" :to="{ name: 'BookDetail', query: { id:item.id }}">
+                        <router-link v-b-popover.hover.bottom="item.title" style="position: relative" :to="{ name: 'BookDetail', query: { id:item.id }}">
                           <img v-bind:src="item.image">
                           <label class="layer1OP" v-if="item.isTrade">Đang giao dịch</label>
                           <label class="layer2OP"  v-else>Sẵn sàng</label>
@@ -122,7 +122,7 @@
                     </template>
                     <div v-if="totalPost != 0" class="gridPost">
                       <div class="itemPost" v-for="item of listPost" :key="item.id">
-                        <router-link :to="{ name: 'PostDetail', query: { id:item.id }}">
+                        <router-link v-b-popover.hover.bottom="item.title" :to="{ name: 'PostDetail', query: { id:item.id }}">
                           <img class="imagePost" v-bind:src="item.image">
                         </router-link>
                         <button class="actionPost">Xem chi tiết</button>

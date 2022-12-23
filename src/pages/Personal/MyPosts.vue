@@ -116,7 +116,7 @@
 
               <div v-if="totalPost != 0" class="grid">
                 <div class="item" v-for="item of listPosts" :key="item.id">
-                  <router-link v-if="!item.isHide && item.status == 'Approved'"
+                  <router-link v-b-popover.hover.bottom="item.title" v-if="!item.isHide && item.status == 'Approved'"
                                :to="{ name: 'PostDetail', query: { id:item.id }}">
                     <img class="post-image" v-bind:src="item.image">
                   </router-link>
