@@ -3,7 +3,7 @@
     <b-carousel
         id="carousel-fade"
         v-model="slide"
-        :interval="3000"
+        :interval="4000"
         style="text-shadow: 0px 0px 2px #000"
         fade
         indicators
@@ -17,7 +17,7 @@
               class="d-block img-fluid w-100"
               width="1024"
               height="480"
-              src="../image/banner.png"
+              src="../image/ts.png"
               alt="image slot"
           >
         </template>
@@ -28,7 +28,7 @@
               class="d-block img-fluid w-100"
               width="1024"
               height="480"
-              src="../image/banner1.png"
+              src="../image/tree.png"
               alt="image slot"
           >
         </template>
@@ -39,7 +39,7 @@
               class="d-block img-fluid w-100"
               width="1024"
               height="480"
-              src="../image/banner2.png"
+              src="../image/co2.png"
               alt="image slot"
           >
         </template>
@@ -50,12 +50,44 @@
               class="d-block img-fluid w-100"
               width="1024"
               height="480"
-              src="../image/banner3.png"
+              src="../image/money.png"
               alt="image slot"
           >
         </template>
       </b-carousel-slide>
-
+      <b-carousel-slide>
+        <template #img>
+          <img
+              class="d-block img-fluid w-100"
+              width="1024"
+              height="480"
+              src="../image/zone.png"
+              alt="image slot"
+          >
+        </template>
+      </b-carousel-slide>
+      <b-carousel-slide>
+        <template #img>
+          <img
+              class="d-block img-fluid w-100"
+              width="1024"
+              height="480"
+              src="../image/limit.png"
+              alt="image slot"
+          >
+        </template>
+      </b-carousel-slide>
+      <b-carousel-slide>
+        <template #img>
+          <img
+              class="d-block img-fluid w-100"
+              width="1024"
+              height="480"
+              src="../image/commu.png"
+              alt="image slot"
+          >
+        </template>
+      </b-carousel-slide>
     </b-carousel>
     <br>
   </div>

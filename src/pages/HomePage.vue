@@ -125,12 +125,11 @@
             <div class="grid-so">
               <div class="item-so">
                 <Icon class="icon-so" icon="ph:mouse-simple-bold"/>
-                <div class="head-so">Đơn giản</div>
-                <div class="des-so">Trạm Sách là nền tảng đơn giản, dễ dàng sử dụng cho những người yêu sách ở mọi lứa
-                  tuổi
-                  Hãy sử dụng một cuốn sách của bạn để có thể đọc thêm được một cuốn sách khác.
+                <div class="head-so">Đơn giản & An toàn</div>
+                <div class="des-so"><strong>Trạm Sách</strong>  là nền tảng đơn giản, dễ dàng sử dụng cho những người yêu sách ở mọi lứa
+                  tuổi. Hãy sử dụng một cuốn sách của bạn để có thể đọc thêm được một cuốn sách khác bằng cách thông qua <strong>Trạm Sách</strong> và sẽ được đảm bảo an toàn tuyệt đối.
                 </div>
-                <div class="des-so">"Trao đổi với quy trình rất đơn giản!"</div>
+                <div class="des-so">"Trao đổi với quy trình rất đơn giản và an toàn!"</div>
               </div>
               <div class="item-so">
                 <Icon class="icon-so" icon="tabler:pig-money"/>

@@ -8,7 +8,7 @@
         <div class="dialogBody">
           <label class="labelFee">Code Phí: </label><span>{{fee.code}}</span><br>
           <label class="labelFee">Tên Phí: </label><span>{{fee.name}}</span><br>
-          <label class="labelFee">Giá: </label><input class="inputFee" maxlength="6" type="number" required placeholder="Nhập giá mới" v-model="fee.price">đ
+          <label class="labelFee">Giá: </label><input class="inputFee" @input="checkNegative" maxlength="7" type="number" required placeholder="Ví dụ: 99000" v-model="fee.price">đ
         </div>
       </CreateFeeDialog>
      <div class="col-lg-6">
@@ -123,6 +123,11 @@ export default {
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown
     },
+    checkNegative(e){
+      if(e.target.value <= 1 || e.target.value >9999){
+        e.target.value = ''
+      }
+    }
   }
 }
 </script>

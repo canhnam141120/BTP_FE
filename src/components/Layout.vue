@@ -186,13 +186,13 @@
                     <router-link to="/TermOfUse" class="item-link">Điều khoản sử dụng</router-link>
                   </li>
                   <li class="item">
-                    <a href="" class="item-link">Chính sách bảo mật thông tin cá nhân</a>
+                    <router-link to="/Policy-Infomation" class="item-link">Chính sách bảo mật thông tin cá nhân</router-link>
                   </li>
                   <li class="item">
                     <router-link to="/Policy-Payment" class="item-link">Chính sách bảo mật thanh toán</router-link>
                   </li>
                   <li class="item">
-                    <a href="" class="item-link">Phương thức thanh toán</a>
+                    <router-link to="/Guide-Payment" class="item-link">Phương thức thanh toán</router-link>
                   </li>
                   <li class="item">
                     <router-link to="/Introduce" class="item-link">Giới thiệu Trạm sách</router-link>

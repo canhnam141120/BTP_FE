@@ -9,6 +9,16 @@ const routers = [
         component: () => import('@/pages/404Page'),
     },
     {
+        path:'/Policy-Infomation',
+        name:'Policy-Infomation',
+        component: () => import('@/pages/Policy/Policy-Infomation'),
+    },
+    {
+        path:'/Guide-Payment',
+        name:'Guide-Payment',
+        component: () => import('@/pages/Policy/Guide-Payment'),
+    },
+    {
         path:'/ResultPayment',
         name:'ResultPayment',
         component: () => import('@/pages/ResultPayment'),
