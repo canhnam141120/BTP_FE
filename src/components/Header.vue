@@ -40,6 +40,12 @@
                 active-color="#9D6B54"
             >Giới thiệu
             </router-link>
+            <router-link
+                to="/Q&A"
+                class="Main__list__item musers-management"
+                active-color="#9D6B54"
+            >Q&A
+            </router-link>
           </nav>
         </div>
         <ul class="Main__account">
@@ -107,6 +113,7 @@
       </div>
     </header>
     <slot/>
+
   </div>
 </template>
 

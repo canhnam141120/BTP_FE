@@ -59,19 +59,34 @@ const routers = [
         component: () => import('@/pages/Policy/TermOfUse'),
     },
     {
-        path:'/Policy-Refund',
-        name:'Policy-Refund',
-        component: () => import('@/pages/Policy/Policy-Refund'),
-    },
-    {
         path:'/Policy&Terms',
         name:'Policy&Terms',
         component: () => import('@/pages/Policy&Terms'),
     },
     {
+        path:'/Q&A',
+        name:'Q&A',
+        component: () => import('@/pages/Q&A'),
+    },
+    {
         path:'/Policy-Cencorship',
         name:'Policy-Cencorship',
         component: () => import('@/pages/Policy/Policy-Cencorship'),
+    },
+    {
+        path:'/Policy-Support',
+        name:'Policy-Support',
+        component: () => import('@/pages/Policy/Policy-Support'),
+    },
+    {
+        path:'/Policy-Comp',
+        name:'Policy-Comp',
+        component: () => import('@/pages/Policy/Policy-Comp'),
+    },
+    {
+        path:'/Policy-Accept',
+        name:'Policy-Accept',
+        component: () => import('@/pages/Policy/Policy-Accept'),
     },
     {
         path:'/Introduce',

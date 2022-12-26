@@ -40,6 +40,12 @@
                 active-color="#9D6B54"
             >Giới thiệu
             </router-link>
+            <router-link
+                to="/Q&A"
+                class="Main__list__item musers-management"
+                active-color="#9D6B54"
+            >Q&A
+            </router-link>
           </nav>
         </div>
         <ul class="Main__account">
@@ -123,12 +129,10 @@
           <div class="grid">
             <div class="grid-row">
               <div class="grid-column">
-                <a href="/">
-                  <img src="../image/logo.png" alt="Logo Trạm Sách"/>
-                </a><br>
-                <span style="color: grey">Tất cả các giao dịch ở Trạm Sách được chúng tôi đảm bảo kiểm
+                <div style="text-align: center"><img style="width: 150px;" src="../image/deliver.png" alt="Logo Trạm Sách"/></div>
+                <label style="margin-top: 10px; color: grey; font-size: 16px; text-align: justify">Tất cả các giao dịch ở Trạm Sách được chúng tôi đảm bảo kiểm
                   duyệt qua hình thức và giao hàng tận nơi trong địa bàn nội thành TP Hà Nội. Không hỗ trợ giao dịch trực tiếp tại Trạm!
-                </span>
+                </label>
               </div>
               <div class="grid-column">
                 <h3 class="heading">TÀI KHOẢN</h3>
@@ -145,10 +149,7 @@
                   <li class="item">
                     <router-link to="/MyInformation" class="item-link">Thông tin cá nhân</router-link>
                   </li>
-                  <li class="item">
-                    <router-link v-if="this.$cookies.get('token')" to=""  @click.native="HandleLogout" class="item-link" style="cursor: pointer">Đăng xuất</router-link>
-                    <router-link v-else to="/login" class="item-link">Đăng nhập/Đăng ký</router-link>
-                  </li>
+                  <h3 class="heading" style="margin-top: 10px">LIÊN HỆ</h3>
                   <li class="item" style="display:flex; color: #9d6b54;">
                     <Icon style="height: 30px" icon="material-symbols:mail"/>
                     <label style="height: 27px"  class="contact_info">tramsachhn@gmail.com</label>
@@ -159,20 +160,18 @@
                 <h3 class="heading">HỖ TRỢ</h3>
                 <ul class="list">
                   <li class="item">
-                    <router-link to="#" class="item-link">Chính sách kiểm duyệt</router-link>
+                    <router-link to="/Policy-Accept" class="item-link">Chính sách kiểm duyệt</router-link>
                   </li>
                   <li class="item">
-                    <router-link to="/Policy-Refund" class="item-link">Chính sách cọc - hoàn tiền</router-link>
+                    <router-link to="/Policy-Cencorship" class="item-link">Chính sách vận chuyển & dịch vụ</router-link>
                   </li>
                   <li class="item">
-                    <router-link to="/Policy-Cencorship" class="item-link">Chính sách bảo mật thanh toán</router-link>
+                    <router-link to="/Policy-Comp" class="item-link">Chính sách đền bù</router-link>
                   </li>
                   <li class="item">
-                    <router-link to="/#"  class="item-link">Quy trình giao dịch</router-link>
+                    <router-link to="/Policy-Support"  class="item-link">Trung tâm hỗ trợ & liên hệ</router-link>
                   </li>
-                  <li class="item">
-                    <router-link to="/#"  class="item-link">Trung tâm hỗ trợ</router-link>
-                  </li>
+                  <h3 class="heading" style="margin-top: 10px">&nbsp;</h3>
                   <li class="item" style="display:flex; color: #9d6b54">
                     <Icon style="height: 30px"  icon="ic:round-phone-enabled"/>
                     <label style="height: 27px"  class="contact_info">Hotline: 0961284654</label>
@@ -194,9 +193,7 @@
                   <li class="item">
                     <router-link to="/Guide-Payment" class="item-link">Phương thức thanh toán</router-link>
                   </li>
-                  <li class="item">
-                    <router-link to="/Introduce" class="item-link">Giới thiệu Trạm sách</router-link>
-                  </li>
+                  <h3 class="heading" style="margin-top: 10px">&nbsp;</h3>
                   <li class="item" style="display:flex; color: #9d6b54">
                     <Icon style="height: 30px"  icon="material-symbols:location-on"/>
                     <label style="height: 27px"  class="contact_info">Số 1 Đào Duy Anh, Đống Đa, HN</label>
