@@ -84,12 +84,12 @@
             <div>TT Thanh toán: Đã thanh toán</div>
             <div>Thanh toán lúc: {{ billExchange.paidDate | format}}</div>
             <div>Phương thức: {{ billExchange.payments }}</div>
+            <div v-if="billExchange.isRefund">
+              <div>TT Hoàn tiền: Đã hoàn tiền</div>
+              <div>Ngày hoàn tiền: {{ billExchange.refundDate | formatDate}}</div>
+            </div>
+            <div v-else>Trạng thái hoàn tiền: Chưa hoàn tiền</div>
           </div>
-          <div v-if="billExchange.isRefund">
-            <div>TT Hoàn tiền: Đã hoàn tiền</div>
-            <div>Ngày hoàn tiền: {{ billExchange.refundDate | formatDate}}</div>
-          </div>
-          <div v-else>Trạng thái thanh toán: Chưa thanh toán</div>
         </div>
         <div v-if="!billExchange.isPaid" class="dialogGroupBtn">
           <button class="dialogBtn" v-on:click="payExchange(billExchange.id)">Thanh toán</button>
