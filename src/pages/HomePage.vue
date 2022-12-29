@@ -308,7 +308,6 @@
 import apiFactory from "@/config/apiFactory";
 import {API_BOOK, API_POST, API_MANAGE_USER} from "@/constant/constant-api";
 import Layout from "@/components/Layout";
-// import VueSlickCarousel from 'vue-slick-carousel'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 import SlidePicture from "../components/SlidePicture";
@@ -325,20 +324,6 @@ export default {
       listBook: '',
       listPost: '',
       listUser: '',
-      slide: 'false',
-      settings: {
-        "dots": true,
-        "infinite": true,
-        "slidesToShow": 1,
-        "slidesToScroll": 1,
-        "pauseOnDotsHover": true,
-        "autoplay": true,
-        "autoplaySpeed": 2000,
-        "pauseOnFocus": true,
-        "pauseOnHover": true,
-        "centerMode": true,
-        "variableWidth": true
-      }
     }
   },
   created() {
@@ -371,12 +356,10 @@ export default {
       }).catch(() => {
       });
     },
-    onSlideStart(slide) {
-      console.log(slide)
+    onSlideStart() {
       this.sliding = true
     },
-    onSlideEnd(slide) {
-      console.log(slide)
+    onSlideEnd() {
       this.sliding = false
     }
   },

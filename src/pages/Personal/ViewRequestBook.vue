@@ -59,66 +59,153 @@
           <div class="top-form">
             <div class="left-form">
               <b-row class="book-content">
-                <b-col class="input-label" cols="2">Tiêu đề:</b-col>
+                <b-col class="input-label" cols="2">Tiêu đề
+                  <label v-if="!book.title" style="color: #ca0303;">*</label>
+                  <label v-else style="color: green;">
+                    <Icon icon="material-symbols:check-small-rounded"/>
+                  </label>
+                </b-col>
+                <b-col class="input-div" cols="9"><input type="text" maxlength="100" required placeholder="Nhập tên sách"
+                                                        v-model="book.title" class="input-text"></b-col>
+              </b-row>
+              <b-row class="book-content">
+                <b-col class="input-label" cols="2">Tác giả
+                  <label v-if="!book.author" style="color: #ca0303;">*</label>
+                  <label v-else style="color: green;">
+                    <Icon icon="material-symbols:check-small-rounded"/>
+                  </label>
+                </b-col>
+                <b-col class="input-div" cols="9"><input type="text" class="input-text" maxlength="50" required
+                                                         placeholder="Nhập tên tác giả" v-model="book.author"></b-col>
+              </b-row>
+              <b-row class="book-content">
+<!--                <b-col class="input-label" cols="2">Thể loại:</b-col>
+                <b-col class="input-div" cols="9"><input type="text" class="input-text" disabled
+                                                         v-model="book.category.name"></b-col>-->
+                <b-col class="input-label" cols="2">Thể loại
+                  <label v-if="!book.categoryId" style="color: #ca0303;">*</label>
+                  <label v-else style="color: green;">
+                    <Icon icon="material-symbols:check-small-rounded"/>
+                  </label></b-col>
                 <b-col class="input-div" cols="9">
-                  <input type="text" disabled v-model="book.title" class="input-text">
+                  <select class="input-text" v-model="book.categoryId">
+                    <option v-bind:value="item.id" v-for="item of listCategories" :key="item.id">{{ item.name }}</option>
+                  </select></b-col>
+              </b-row>
+              <b-row class="book-content">
+<!--                <b-col class="input-label" cols="2">Ngôn ngữ:</b-col>
+                <b-col class="input-div" cols="9"><input type="text" class="input-text" disabled
+                                                         v-model="book.language"></b-col>-->
+                <b-col class="input-label" cols="2">Ngôn ngữ
+                  <label v-if="!book.language" style="color: #ca0303;">*</label>
+                  <label v-else style="color: green;">
+                    <Icon icon="material-symbols:check-small-rounded"/>
+                  </label></b-col>
+                <b-col class="input-div" cols="9">
+                  <select name="category" class="input-text" v-model="book.language">
+                    <option v-bind:value="language" v-for="language of listLanguage" :key="language">{{ language }}
+                    </option>
+                  </select>
                 </b-col>
               </b-row>
               <b-row class="book-content">
-                <b-col class="input-label" cols="2">Tác giả:</b-col>
-                <b-col class="input-div" cols="9"><input type="text" class="input-text" disabled v-model="book.author">
-                </b-col>
-              </b-row>
-              <b-row class="book-content">
-                <b-col class="input-label" cols="2">Thể loại:</b-col>
-                <b-col class="input-div" cols="9"><input type="text" class="input-text" disabled
-                                                         v-model="book.category.name"></b-col>
-              </b-row>
-              <b-row class="book-content">
-                <b-col class="input-label" cols="2">Ngôn ngữ:</b-col>
-                <b-col class="input-div" cols="9"><input type="text" class="input-text" disabled
-                                                         v-model="book.language"></b-col>
-              </b-row>
-              <b-row class="book-content">
-                <b-col class="input-label" cols="2">Nhà XB:</b-col>
+<!--                <b-col class="input-label" cols="2">Nhà XB:</b-col>
                 <b-col class="input-div" cols="9"><input type="text" disabled v-model="book.publisher"
-                                                         class="input-text"></b-col>
+                                                         class="input-text"></b-col>-->
+                <b-col class="input-label" cols="2">Nhà XB
+                  <label v-if="!book.publisher" style="color: #ca0303;">*</label>
+                  <label v-else style="color: green;">
+                    <Icon icon="material-symbols:check-small-rounded"/>
+                  </label></b-col>
+                <b-col class="input-div" cols="9"><input type="text" maxlength="50" required
+                                                         placeholder="Nhập nhà xuất bản"
+                                                         v-model="book.publisher" class="input-text"></b-col>
               </b-row>
             </div>
             <div class="mid-form">
               <b-row class="book-content">
-                <b-col class="input-label" cols="2">Năm XB:</b-col>
-                <b-col cols="6"><input type="number" v-model="book.year" disabled class="input-text-short"></b-col>
-              </b-row>
-              <b-row class="book-content">
-                <b-col class="input-label" cols="2">Số trang:</b-col>
-                <b-col cols="6"><input type="number" disabled v-model="book.numberOfPages" class="input-text-short">
+<!--                <b-col class="input-label" cols="2">Năm XB:</b-col>
+                <b-col cols="6"><input type="number" v-model="book.year" disabled class="input-text-short"></b-col>-->
+                <b-col class="input-label" style="width: 115px" cols="2">Năm XB
+                  <label v-if="!book.year" style="color: #ca0303;">*</label>
+                  <label v-else style="color: green;">
+                    <Icon icon="material-symbols:check-small-rounded"/>
+                  </label>
+                </b-col>
+                <b-col cols="6">
+                  <select class="input-text-short" v-model="book.year">
+                    <option v-bind:value="year" v-for="year of listYear" :key="year">{{ year }}
+                    </option>
+                  </select>
                 </b-col>
               </b-row>
               <b-row class="book-content">
-                <b-col class="input-label" cols="2">Khối lượng:</b-col>
-                <b-col cols="6"><input type="number" disabled v-model="book.weight" class="input-text-short"></b-col>
+<!--                <b-col class="input-label" cols="2">Số trang:</b-col>
+                <b-col cols="6"><input type="number" v-model="book.numberOfPages" class="input-text-short">
+                </b-col>-->
+                <b-col class="input-label" style="width: 115px" cols="2">Số trang
+                  <label v-if="!book.numberOfPages" style="color: #ca0303;">*</label>
+                  <label v-else style="color: green;">
+                    <Icon icon="material-symbols:check-small-rounded"/>
+                  </label></b-col>
+                <b-col cols="6">
+                  <input type="number" min="1" max="9999" step="1" required placeholder="Nhập số trang"
+                         v-model="book.numberOfPages" class="input-text-short" @input="checkNegative">
+                </b-col>
               </b-row>
               <b-row class="book-content">
-                <b-col class="input-label" cols="2">Chọn ảnh:</b-col>
+<!--                <b-col class="input-label" cols="2">Khối lượng:</b-col>
+                <b-col cols="6"><input type="number" disabled v-model="book.weight" class="input-text-short"></b-col>-->
+                <b-col class="input-label" style="width: 116px" cols="2">Khối lượng(gr)
+                  <label v-if="!book.weight" style="color: #ca0303;">*</label>
+                  <label v-else style="color: green;">
+                    <Icon icon="material-symbols:check-small-rounded"/>
+                  </label></b-col>
+                <b-col cols="6">
+                  <input type="number" min="100" max="9999" step="100" required placeholder="Nhập khối lượng"
+                         v-model="book.weight" class="input-text-short" @input="checkNegative">
+                </b-col>
+              </b-row>
+              <b-row class="book-content">
+<!--                <b-col class="input-label" cols="2">Chọn ảnh:</b-col>
                 <b-col class="input-div" cols="6"><input type="file" style="width: 215px;" class="input-text-short"
+                                                         @change="uploadImage"></b-col>-->
+                <b-col class="input-label" style="width: 115px" cols="2">Chọn ảnh</b-col>
+                <b-col class="input-div" cols="6"><input type="file" title=" " class="input-text-short" name="image"
+                                                         style="width: 215px;"
                                                          @change="uploadImage"></b-col>
               </b-row>
             </div>
             <div class="right-form">
               <b-row class="book-content">
-                <b-col class="grCb" cols="9">
+                <div>
+                  <b-col class="grCb" cols="9">
+                    <input type="checkbox" value="true" class="checkB" v-model="book.isExchange">&ensp;Trao đổi&emsp;
+                    <input type="checkbox" value="true" class="checkB" v-model="book.isRent">&ensp;Thuê
+                    <div v-if="!book.isExchange && !book.isRent" style="color: #ca0303; font-size: 12px; margin-left: 5px">Vui lòng chọn ít nhất 1 dịch
+                      vụ
+                    </div>
+                  </b-col>
+                </div>
+<!--                <b-col class="grCb" cols="9">
                   <input type="checkbox" value="true" class="checkB" v-model="book.isExchange">&ensp;Trao đổi&emsp;
                   <input type="checkbox" value="true" class="checkB" v-model="book.isRent">&ensp;Thuê
                   <div v-if="!book.isExchange && !book.isRent" style="color: #ca0303; font-size: 12px; margin-left: 5px">Vui lòng chọn ít nhất 1 dịch
                     vụ
                   </div>
-                </b-col>
+                </b-col>-->
               </b-row>
 
               <b-row v-if="book.isExchange || book.isRent" class="book-content">
-                <b-col class="input-label" style="width: 115px" cols="2">Giá bìa(đ)</b-col>
-                <b-col cols="6"><input type="number" disabled v-model="book.coverPrice" class="input-text-short"></b-col>
+                <b-col class="input-label" style="width: 115px" cols="2">Giá bìa(đ) <label v-if="!book.coverPrice" style="color: #ca0303;">*</label>
+                  <label v-else style="color: green;">
+                    <Icon icon="material-symbols:check-small-rounded"/>
+                  </label>
+                </b-col>
+                <b-col cols="6">
+                  <input type="number" min="10000" max="9999999" step="5000" maxlength="7" required placeholder="Ví dụ: 199000"
+                         v-model="book.coverPrice" class="input-text-short" @input="checkNegative">
+                </b-col>
               </b-row>
               <b-row v-if="book.isExchange || book.isRent" class="book-content">
                 <b-col class="input-label" style="width: 115px" cols="2">Giá đặt cọc(đ)
@@ -150,28 +237,40 @@
           </div>
           <div class="bottom-form">
             <b-row class="book-content">
-              <b-col class="input-label" style="width: 85px" cols="2">Trạng thái
-                <label v-if="!book.statusBook" style="color: #ca0303;">*</label>
-                <label v-else style="color: green;">
-                  <Icon icon="material-symbols:check-small-rounded"/>
-                </label></b-col>
-              <b-col class="input-div" cols="9">
+            <b-col class="input-label" style="width: 85px" cols="2">Trạng thái
+              <label v-if="!book.statusBook" style="color: #ca0303;">*</label>
+              <label v-else style="color: green;">
+                <Icon icon="material-symbols:check-small-rounded"/>
+              </label></b-col>
+            <b-col class="input-div" cols="9">
               <textarea type="text" style="height: 100px; width: 1200px"
                         maxlength="250" required placeholder="Nhập trạng thái"
                         v-model="book.statusBook" class="input-text">
               </textarea></b-col>
             </b-row>
             <b-row class="book-content">
-              <b-col class="input-label" style="width: 85px" cols="2">Nội dung:</b-col>
+              <b-col class="input-label" style="width: 85px" cols="2">Nội dung
+                <label v-if="!book.description" style="color: #ca0303;">*</label>
+                <label v-else style="color: green;">
+                  <Icon icon="material-symbols:check-small-rounded"/>
+                </label></b-col>
               <b-col class="input-div" cols="9">
-              <textarea type="text" disabled style="height: 100px; width: 1200px"
+              <textarea type="text" required style="height: 100px; width: 1200px"
+                        placeholder="Nhập mô tả nội dung sách"
                         v-model="book.description" class="input-text">
             </textarea></b-col>
             </b-row>
           </div>
           <div class="dialogGroupBtn">
-            <button class="dialogBtn" v-on:click="cancel">Hủy</button>
+<!--            <button class="dialogBtn" v-on:click="cancel">Hủy</button>
             <button v-if="book.coverPrice && book.depositPrice && book.statusBook && (book.isExchange || book.isRent)" class="dialogBtn" v-on:click="save">Lưu</button>
+            <button v-else disabled class="dialogBtnDisable">Lưu</button>-->
+
+            <button class="dialogBtn" v-on:click="cancel">Hủy</button>
+            <button v-if="book.title && book.author && book.categoryId && book.language && book.publisher && book.
+            statusBook && book.description
+                  && (book.isExchange || book.isRent) && book.year && book.numberOfPages  && book.weight
+                  && book.coverPrice && book.depositPrice" class="dialogBtn" v-on:click="save">Lưu</button>
             <button v-else disabled class="dialogBtnDisable">Lưu</button>
           </div>
         </CreateBookDialog>
@@ -268,7 +367,7 @@
 <script>
 import SideBar_Personal from "@/components/SideBar_Personal";
 import Layout from "@/components/Layout";
-import {API_BOOK, API_MANAGE_BOOK, API_PERSONAL, API_REQUEST} from "@/constant/constant-api";
+import {API_BOOK, API_MANAGE_BOOK, API_MANAGE_CATEGORY, API_PERSONAL, API_REQUEST} from "@/constant/constant-api";
 import apiFactory from "@/config/apiFactory";
 import VueJwtDecode from "vue-jwt-decode";
 import LoadingDialog from "@/components/LoadingDialog";
@@ -290,6 +389,13 @@ export default {
       showConfirmDialogHide: false,
       showConfirmDialogShow: false,
 
+      listLanguage: ['Tiếng Việt', 'Tiếng Anh', 'Tiếng Hán', 'Tiếng Hàn', 'Tiếng Nhật',
+        'Tiếng Tây Ban Nha', 'Tiếng Pháp', 'Tiếng Đức', 'Tiếng Nga', 'Tiếng Bồ Đào Nha',
+        'Tiếng Hindi', 'Khác'],
+      listYear: ['2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015',
+        '2014', '2013', '2012', '2011', '2010', '2009', '2008', '2007', '2006', '2005', '2004', '2003', '2002', '2001', '2000', '1999',
+        '1998', '1997', '1996', '1995', '1994', '1993', '1992', '1991', '1990', '1989'],
+      listCategories: '',
       book: '',
       listRequestReceive: '',
       loading: false,
@@ -306,8 +412,15 @@ export default {
     }
     this.getBookById()
     this.getRequestReceived()
+    this.getCategories()
   },
   methods: {
+    getCategories() {
+      apiFactory.callApi(API_MANAGE_CATEGORY.All_CATEGORY, 'GET', {}).then((res) => {
+        this.listCategories = res.data.data
+      }).catch(() => {
+      });
+    },
     getBookById() {
       const url = API_MANAGE_BOOK.DETAIL_BOOK + this.$route.query.id
       apiFactory.callApi(url, 'GET', {}).then((res) => {
@@ -390,7 +503,7 @@ export default {
         publisher: this.book.publisher,
         year: this.book.year,
         language: this.book.language,
-        numberOfPages: this.book.numberOfPage,
+        numberOfPages: this.book.numberOfPages,
         weight: this.book.weight,
         coverPrice: this.book.coverPrice,
         image: this.book.image,

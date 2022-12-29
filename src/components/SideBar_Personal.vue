@@ -2,31 +2,31 @@
   <div class="menu-sidebarPS">
     <div class="title">TRANG CÁ NHÂN</div>
     <div class="group-btn">
-      <button class="btn">
+      <button class="btn" v-if="userByToken.role == 3">
         <button class="btn-icon">
           <Icon icon="material-symbols:menu-book-outline-rounded"/>
         </button>
-        <router-link  class="side-btn" to="/MyBooks">Tủ sách</router-link>
+        <router-link class="side-btn" to="/MyBooks">Tủ sách</router-link>
       </button>
-      <div class="btn">
+      <div class="btn" v-if="userByToken.role == 3">
         <button class="btn-icon">
           <Icon icon="mdi:post-outline"/>
         </button>
         <router-link class="side-btn" to="/MyPosts">Bài đăng</router-link>
       </div>
-      <div class="btn">
+      <div class="btn" v-if="userByToken.role == 3">
         <button class="btn-icon">
           <Icon icon="mdi:cards-heart-outline"/>
         </button>
         <router-link class="side-btn" to="/MyFavorites">Danh sách yêu thích</router-link>
       </div>
-      <div class="btn">
+      <div class="btn" v-if="userByToken.role == 3">
         <button class="btn-icon">
           <Icon icon="mdi:chat-question-outline"/>
         </button>
         <router-link class="side-btn" to="/MyRequests">Yêu cầu đã gửi</router-link>
       </div>
-      <div class="btn">
+      <div class="btn" v-if="userByToken.role == 3">
         <button class="btn-icon">
           <Icon icon="ic:outline-swap-horizontal-circle"/>
         </button>
@@ -44,9 +44,18 @@
 
 <script>
 import {Icon} from '@iconify/vue2';
+import VueJwtDecode from "vue-jwt-decode";
 export default {
   name: 'SideBar_Personal',
   components: {Icon},
+  data(){
+    return{
+      userByToken: ''
+    }
+  },
+  created() {
+    this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+  },
 }
 </script>
 

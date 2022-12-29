@@ -81,18 +81,18 @@
                   <div style="color: grey">{{user.email}}</div>
                 </div>
                 <hr style="margin: 5px" />
-                <router-link to="/MyBooks" class="dropdown-item">
+                <router-link v-if="user.roleId === 3" to="/MyBooks" class="dropdown-item">
                   <Icon class="iconPerson" icon="ph:folder-user-bold"/> Quản lý cá nhân
                 </router-link>
-                <hr style="margin: 5px" />
-                <router-link to="/MyTransaction" class="dropdown-item">
+                <hr v-if="user.roleId === 3" style="margin: 5px" />
+                <router-link v-if="user.roleId === 3" to="/MyTransaction" class="dropdown-item">
                   <Icon class="iconPerson" icon="uil:transaction"/> Giao dịch
                 </router-link>
-                <hr style="margin: 5px" />
-                <router-link to="/MyRequests" class="dropdown-item">
+                <hr v-if="user.roleId === 3" style="margin: 5px" />
+                <router-link v-if="user.roleId === 3" to="/MyRequests" class="dropdown-item">
                   <Icon class="iconPerson" icon="bx:mail-send"/> Yêu cầu đã gửi
                 </router-link>
-                <hr style="margin: 5px" />
+                <hr style="margin: 5px" v-if="user.roleId === 3" />
                 <router-link to="/MyInformation" class="dropdown-item">
                   <Icon class="iconPerson" icon="mdi:user-card-details-outline"/> Thông tin cá nhân
                 </router-link>

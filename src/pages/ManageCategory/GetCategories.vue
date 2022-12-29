@@ -1,5 +1,5 @@
 <template>
-  <Side_Bar>
+  <Side_Bar v-if="userByToken.role == 1">
     <div class="ml">
       <LoadingDialog v-show="spinner" style="z-index: 1;"></LoadingDialog>
       <Dashboard></Dashboard>
@@ -64,6 +64,71 @@
       </div>
     </div>
   </Side_Bar>
+  <Side_BarAdmin v-else>
+    <div class="ml">
+      <LoadingDialog v-show="spinner" style="z-index: 1;"></LoadingDialog>
+      <Dashboard></Dashboard>
+      <div class="row">
+        <CreateCategoryDialog :show="showDialog" :cancel="cancel" :save="save" v-if="showDialog" class="modal">
+          <div class="dialogBody">
+            <label class="labelFee">Tên thể loại: </label><input class="inputFee" maxlength="50" type="text" required placeholder="Nhập thể loại mới" v-model="categoryName">
+          </div>
+        </CreateCategoryDialog>
+        <EditCategoryDialog :show="showDialogEdit" :cancelEdit="cancelEdit" :confirm="confirm" v-if="showDialogEdit" class="modal">
+          <div class="dialogBody">
+            <input type="hidden" v-model="category.id">
+            <label class="labelFee">Tên thể loại: </label><input class="inputFee" maxlength="50" type="text" required placeholder="Nhập thể loại" v-model="category.name">
+          </div>
+        </EditCategoryDialog>
+        <ConfirmDialog :show="showConfirmDialog" v-if="showConfirmDialog" class="modal">
+          <div>
+            <div class="dialogTitle">XÁC NHẬN</div>
+            <div style="color: #9d6b54; text-align: center;">Xác nhận xóa thể loại!</div>
+            <div class="dialogGroupBtn">
+              <button class="dialogBtn" v-on:click="cancelConfirmDialog">Hủy</button>
+              <button class="dialogBtn" v-on:click="HandleConfirm">Xác nhận</button>
+            </div>
+          </div>
+        </ConfirmDialog>
+        <div class="col-lg-6">
+          <b-alert style="position: absolute; right: 0; margin-top: 10px; z-index: 999999" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+            {{responseMessage}}
+          </b-alert>
+          <b-alert style="position: absolute; right: 0; margin-top: 10px; z-index: 999999" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+            {{responseMessage}}
+          </b-alert>
+          <div class="user-data m-b-30">
+            <div class="titleMB">QUẢN LÝ THỂ LOẠI</div>
+            <div>
+              <button class="addBtnCate" v-on:click="openDialog()">
+                <Icon style="margin-bottom: 5px; margin-right: 10px" icon="material-symbols:add-circle-outline-rounded"/>Thêm mới
+              </button>
+            </div>
+            <div class="table-responsive table-data">
+              <table class="table">
+                <thead>
+                <tr>
+                  <td>Mã thể loại</td>
+                  <td>Tên thể loại</td>
+                  <td>Chỉnh sửa</td>
+                  <td>Xóa</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="item of listCategories" :key="item.id">
+                  <td>{{ item.id }}</td>
+                  <td>{{ item.name }}</td>
+                  <td style="padding-left: 20px"><button class="tableBtnAction" v-on:click="openDialogEdit(item.id)"><Icon icon="uiw:setting"/></button></td>
+                  <td><button class="tableBtnAction" v-on:click="HandleDelete(item.id)"><Icon icon="ion:trash-bin"/></button></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Side_BarAdmin>
 </template>
 
 <script>
@@ -76,10 +141,12 @@ import EditCategoryDialog from "@/pages/ManageCategory/EditCategoryDialog";
 import {Icon} from '@iconify/vue2';
 import Dashboard from "@/components/Dashboard";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import VueJwtDecode from "vue-jwt-decode";
+import Side_BarAdmin from "@/components/Side_BarAdmin";
 
 export default {
   name: "GetCategories",
-  components: {Side_Bar,Dashboard, LoadingDialog, CreateCategoryDialog, Icon, EditCategoryDialog, ConfirmDialog},
+  components: {Side_Bar,Dashboard, Side_BarAdmin, LoadingDialog, CreateCategoryDialog, Icon, EditCategoryDialog, ConfirmDialog},
   data() {
     return {
       responseFlag: true,
@@ -88,6 +155,7 @@ export default {
       dismissCountDown: 0,
       showConfirmDialog: false,
       tmpId: '',
+      userByToken: '',
 
       listCategories: '',
       category: '',
@@ -99,6 +167,11 @@ export default {
   },
   created() {
     if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
+    let token = this.$cookies.get('token');
+    this.userByToken= VueJwtDecode.decode(token, 'utf-8');
+    if(this.userByToken.role == 3){
       this.$router.push({name: "404Page"})
     }
     this.getCategories()

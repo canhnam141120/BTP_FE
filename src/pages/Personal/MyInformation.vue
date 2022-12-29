@@ -113,7 +113,7 @@
                 </div>
               </div>
             </b-skeleton-wrapper>
-            <div class="bottomMI">
+            <div class="bottomMI" v-if="userByToken.role == 3">
               <div class="titleBottom">Thông tin vận chuyển</div>
               <div class="infoBottom">
                 <div class="info2">

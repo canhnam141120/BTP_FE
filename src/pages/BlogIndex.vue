@@ -60,7 +60,7 @@
       <div class="body-blog">
         <div class="title">TRẠM ĐỌC</div>
         <div class="container-blog">
-          <div v-if="this.$cookies.get('token')" class="top">
+          <div v-if="this.$cookies.get('token') && info.roleId == 3" class="top">
             <img class="userImageBI" v-bind:src="info.avatar">
             <div style="padding-top: 10px;">
               <div class="nema">
@@ -544,8 +544,6 @@ strong {
 }
 
 .body-blog .container-blog .content .grid .item {
-  /*background-color: white;*/
-  background-color: #f5f5f5;
   color: #9d6b54;
   border-radius: 10px;
   width: 593px;

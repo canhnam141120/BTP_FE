@@ -131,18 +131,21 @@
                 </div>
               </div>
               <div v-if="userByToken && userByToken.UserId != book.user?.id">
-                <div v-if="!book.isTrade" class="btn-tran">
-                  <button v-if="book.isExchange" class="active" v-on:click="openDialog">Trao đổi</button>
-                  <button v-else class="disable">Trao đổi</button>
-                  <button v-if="book.isRent" class="active" v-on:click="HandleRent">Thuê</button>
-                  <button v-else class="disable">Thuê</button>
+                <div v-if="userByToken.role == 3">
+                  <div v-if="!book.isTrade" class="btn-tran">
+                    <button v-if="book.isExchange" class="active" v-on:click="openDialog">Trao đổi</button>
+                    <button v-else class="disable">Trao đổi</button>
+                    <button v-if="book.isRent" class="active" v-on:click="HandleRent">Thuê</button>
+                    <button v-else class="disable">Thuê</button>
+                  </div>
+                  <div v-else class="btn-tran">
+                    <button class="disable">Trao đổi</button>
+                    <button class="disable">Thuê</button>
+                  </div>
                 </div>
-                <div v-else class="btn-tran">
-                  <button class="disable">Trao đổi</button>
-                  <button class="disable">Thuê</button>
-                </div>
+                <div v-else><label class="admin">Quản trị viên không thể giao dịch!</label></div>
               </div>
-              <router-link  v-if="userByToken == ''" class="notLogin" to="/Login">Đăng nhập để có thể giao dịch!</router-link>
+              <router-link  v-if="userByToken === ''" class="notLogin" to="/Login">Đăng nhập để có thể giao dịch!</router-link>
             </div>
           </div>
           <div class="bookdetail-mid">
@@ -456,10 +459,16 @@ export default {
         }
         else{
           this.responseFlag = false
-          if(res.data.message == 'SHIP_INFO_EMPTY'){
+          if(res.data.message === 'SHIP_INFO_EMPTY'){
             this.responseMessage = 'Vui lòng cập nhật thông tin vận chuyển của bạn trước khi gửi yêu cầu!'
-          }else{
-            this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
+          }
+          else{
+            if(res.data.message === 'FAILED'){
+              this.responseMessage = 'Sách đã được trao đổi với người khác trong thời gian bạn thao tác!'
+            }
+            else{
+              this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
+            }
           }
         }
         this.dismissCountDown = this.dismissSecs
@@ -493,10 +502,16 @@ export default {
         }
         else{
           this.responseFlag = false
-          if(res.data.message == 'SHIP_INFO_EMPTY'){
+          if(res.data.message === 'SHIP_INFO_EMPTY'){
             this.responseMessage = 'Vui lòng cập nhật thông tin vận chuyển của bạn trước khi dùng dịch vụ!'
-          }else {
-            this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
+          }
+          else{
+            if(res.data.message === 'BOOK_NOT_EXIST'){
+              this.responseMessage = 'Sách đã được thuê trong thời gian bạn thao tác!'
+            }
+            else {
+              this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
+            }
           }
         }
         this.dismissCountDown = this.dismissSecs
@@ -1131,5 +1146,18 @@ strong {
   background-color: #F0ECE4;
   color: #9d6b54;
   border: 1px solid #9d6b54;
+}
+
+.admin{
+  text-decoration: none;
+  border-radius: 10px;
+  height: 50px;
+  background-color: #9d6b54;
+  color: #F0ECE4;
+  text-align: center;
+  font-size: 18px;
+  padding: 10px 10px;
+  border: 1px solid #9d6b54;
+  font-weight: 600;
 }
 </style>

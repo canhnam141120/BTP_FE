@@ -70,7 +70,6 @@ export default {
       type: String,
       default: '0px'
     },
-
     //! Menu items
     menuItems: {
       type: Array,

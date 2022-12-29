@@ -299,7 +299,7 @@
                       <tbody v-for="item of listExchanges" :key="item.id">
                       <tr v-if="filterDataExchange && item.status == filterDataExchange" class="rowData">
                         <td class="tdBtn">
-                          <button class="tableBtn" v-on:click="openDialogExchangeDetail(item.id, item.userId1 )">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogExchangeDetail(item.id, item.userId1 )">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -363,25 +363,25 @@
                           {{ item.refundDate1 | formatDate }}
                         </td>
 
-                        <td>{{ item.date }}</td>
-                        <td v-if="item.status == 'Trading'"><label class="trading">ĐANG GD</label></td>
-                        <td v-if="item.status == 'Complete'"><label class="complete">HOÀN THÀNH</label></td>
-                        <td v-if="item.status == 'Cancel'"><label class="cancel">ĐÃ HỦY</label></td>
-                        <td v-if="item.status == 'Waiting'"><label class="waiting">ĐANG ĐỢI</label></td>
+                        <td>{{ item.date | formatDate}}</td>
+                        <td v-if="item.status === 'Trading'"><label class="trading">ĐANG GD</label></td>
+                        <td v-if="item.status === 'Complete'"><label class="complete">HOÀN THÀNH</label></td>
+                        <td v-if="item.status === 'Cancel'"><label class="cancel">ĐÃ HỦY</label></td>
+                        <td v-if="item.status === 'Waiting'"><label class="waiting">ĐANG ĐỢI</label></td>
                         <td class="tdBtn">
-                          <button class="tableBtn" v-on:click="openDialogExchangeBill(item.id)">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogExchangeBill(item.id)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
                         <td class="tdBtn">
-                          <button v-if="item.status == 'Waiting'" class="tableBtn" v-on:click="CancelExchange(item.id)">
+                          <button v-if="item.status === 'Waiting'" class="tableBtn" v-on:click="CancelExchange(item.id)">
                             <Icon icon="material-symbols:cancel-presentation"/>
                           </button>
                         </td>
                       </tr>
                       <tr v-if="!filterDataExchange" class="rowData">
                         <td class="tdBtn">
-                          <button class="tableBtn" v-on:click="openDialogExchangeDetail(item.id, item.userId1 )">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogExchangeDetail(item.id, item.userId1 )">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -445,13 +445,13 @@
                           {{ item.refundDate1 | formatDate }}
                         </td>
 
-                        <td>{{ item.date }}</td>
+                        <td>{{ item.date | formatDate}}</td>
                         <td v-if="item.status == 'Trading'"><label class="trading">ĐANG GD</label></td>
                         <td v-if="item.status == 'Complete'"><label class="complete">HOÀN THÀNH</label></td>
                         <td v-if="item.status == 'Cancel'"><label class="cancel">ĐÃ HỦY</label></td>
                         <td v-if="item.status == 'Waiting'"><label class="waiting">ĐANG ĐỢI</label></td>
-                        <td class="tdBtn">
-                          <button class="tableBtn" v-on:click="openDialogExchangeBill(item.id)">
+                        <td class="tdBtn" >
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogExchangeBill(item.id)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -463,7 +463,7 @@
                       </tr>
                       <tr v-if="filterDataExchange == 'Search' && item.id == searchExchange" class="rowData">
                         <td class="tdBtn">
-                          <button class="tableBtn" v-on:click="openDialogExchangeDetail(item.id, item.userId1 )">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogExchangeDetail(item.id, item.userId1 )">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -527,13 +527,13 @@
                           {{ item.refundDate1 | formatDate }}
                         </td>
 
-                        <td>{{ item.date }}</td>
+                        <td>{{ item.date | formatDate}}</td>
                         <td v-if="item.status == 'Trading'"><label class="trading">ĐANG GD</label></td>
                         <td v-if="item.status == 'Complete'"><label class="complete">HOÀN THÀNH</label></td>
                         <td v-if="item.status == 'Cancel'"><label class="cancel">ĐÃ HỦY</label></td>
                         <td v-if="item.status == 'Waiting'"><label class="waiting">ĐANG ĐỢI</label></td>
                         <td class="tdBtn">
-                          <button class="tableBtn" v-on:click="openDialogExchangeBill(item.id)">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogExchangeBill(item.id)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -575,7 +575,7 @@
                       <tbody v-for="item of listRents" :key="item.id">
                       <tr v-if="filterDataRent && item.status == filterDataRent" class="rowData">
                         <td style="padding-left: 10px">
-                          <button class="tableBtn" v-on:click="openDialogRentDetail(item.id, item.renterId)">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogRentDetail(item.id, item.renterId)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -588,13 +588,13 @@
                         <td v-if="item.storageStatus == 'Received'">ĐÃ NHẬN - {{ item.receiveDate | formatDate }}</td>
                         <td v-if="item.storageStatus == 'Recall'">ĐÃ THU HỒI - {{ item.recallDate | formatDate }}</td>
                         <td v-if="item.storageStatus == 'Refund'">ĐÃ HOÀN TRẢ - {{ item.refundDate | formatDate }}</td>
-                        <td>{{ item.date }}</td>
+                        <td>{{ item.date | formatDate}}</td>
                         <td v-if="item.status == 'Trading'"><label class="trading">ĐANG GD</label></td>
                         <td v-if="item.status == 'Complete'"><label class="complete">HOÀN THÀNH</label></td>
                         <td v-if="item.status == 'Cancel'"><label class="cancel">ĐÃ HỦY</label></td>
                         <td v-if="item.status == 'Waiting'"><label class="waiting">ĐANG ĐỢI</label></td>
                         <td style="padding-left: 16px">
-                          <button class="tableBtn" v-on:click="openDialogRentBill(item.id)">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogRentBill(item.id)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -606,7 +606,7 @@
                       </tr>
                       <tr v-if="!filterDataRent" class="rowData">
                         <td style="padding-left: 10px">
-                          <button class="tableBtn" v-on:click="openDialogRentDetail(item.id, item.renterId)">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogRentDetail(item.id, item.renterId)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -619,13 +619,13 @@
                         <td v-if="item.storageStatus == 'Received'">ĐÃ NHẬN - {{ item.receiveDate | formatDate }}</td>
                         <td v-if="item.storageStatus == 'Recall'">ĐÃ THU HỒI - {{ item.recallDate | formatDate }}</td>
                         <td v-if="item.storageStatus == 'Refund'">ĐÃ HOÀN TRẢ - {{ item.refundDate | formatDate }}</td>
-                        <td>{{ item.date }}</td>
+                        <td>{{ item.date | formatDate}}</td>
                         <td v-if="item.status == 'Trading'"><label class="trading">ĐANG GD</label></td>
                         <td v-if="item.status == 'Complete'"><label class="complete">HOÀN THÀNH</label></td>
                         <td v-if="item.status == 'Cancel'"><label class="cancel">ĐÃ HỦY</label></td>
                         <td v-if="item.status == 'Waiting'"><label class="waiting">ĐANG ĐỢI</label></td>
                         <td style="padding-left: 16px">
-                          <button class="tableBtn" v-on:click="openDialogRentBill(item.id)">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogRentBill(item.id)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -637,7 +637,7 @@
                       </tr>
                       <tr v-if="filterDataRent == 'Search' && item.id == searchRent" class="rowData">
                         <td style="padding-left: 10px">
-                          <button class="tableBtn" v-on:click="openDialogRentDetail(item.id, item.renterId)">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogRentDetail(item.id, item.renterId)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -650,18 +650,18 @@
                         <td v-if="item.storageStatus == 'Received'">ĐÃ NHẬN - {{ item.receiveDate | formatDate }}</td>
                         <td v-if="item.storageStatus == 'Recall'">ĐÃ THU HỒI - {{ item.recallDate | formatDate }}</td>
                         <td v-if="item.storageStatus == 'Refund'">ĐÃ HOÀN TRẢ - {{ item.refundDate | formatDate }}</td>
-                        <td>{{ item.date }}</td>
+                        <td>{{ item.date | formatDate}}</td>
                         <td v-if="item.status == 'Trading'"><label class="trading">ĐANG GD</label></td>
                         <td v-if="item.status == 'Complete'"><label class="complete">HOÀN THÀNH</label></td>
                         <td v-if="item.status == 'Cancel'"><label class="cancel">ĐÃ HỦY</label></td>
                         <td v-if="item.status == 'Waiting'"><label class="waiting">ĐANG ĐỢI</label></td>
                         <td style="padding-left: 16px">
-                          <button class="tableBtn" v-on:click="openDialogRentBill(item.id)">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogRentBill(item.id)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
                         <td style="padding-left: 3px">
-                          <button v-if="item.status == 'Waiting'" class="tableBtn" v-on:click="CancelRent(item.id)">
+                          <button v-if="item.status === 'Waiting'" class="tableBtn" v-on:click="CancelRent(item.id)">
                             <Icon icon="material-symbols:cancel-presentation"/>
                           </button>
                         </td>

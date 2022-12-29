@@ -73,6 +73,7 @@ import Side_Bar from "../../components/Side_Bar";
 import {Icon} from '@iconify/vue2';
 import Dashboard from "@/components/Dashboard";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "GetAdmins",
@@ -85,6 +86,7 @@ export default {
       dismissCountDown: 0,
       showConfirmDialog: false,
       tmpId: '',
+      userByToken: '',
 
       listAdmins: '',
       search: '',
@@ -93,6 +95,10 @@ export default {
   },
   created() {
     if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
+    this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
+    if(this.userByToken.role == 3 || this.userByToken.role == 2){
       this.$router.push({name: "404Page"})
     }
     this.getAdmins()

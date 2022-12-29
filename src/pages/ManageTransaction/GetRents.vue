@@ -1,5 +1,5 @@
 <template>
-  <Side_Bar>
+  <Side_Bar v-if="userByToken.role == 1">
     <div class="ml">
       <LoadingDialog v-show="spinner" style="z-index: 1;"></LoadingDialog>
       <Dashboard></Dashboard>
@@ -285,6 +285,292 @@
       </div>
     </div>
   </Side_Bar>
+  <Side_BarAdmin v-else>
+    <div class="ml">
+      <LoadingDialog v-show="spinner" style="z-index: 1;"></LoadingDialog>
+      <Dashboard></Dashboard>
+      <div class="row">
+        <div class="col-lg-6">
+          <ExchangeDetailDialog :show="showDialogRD"
+                                :cancel="cancelDialogDetail"
+                                v-if="showDialogRD" class="modal">
+            <table class="table">
+              <thead>
+              <tr class="header">
+                <td>Mã</td>
+                <td>Sách</td>
+                <td>TT Sách trước GD</td>
+                <td>TT Sách sau GD</td>
+                <td>Thời gian tạo</td>
+                <td>Hạn GD</td>
+                <td>Trạng thái</td>
+                <td v-if="!showEditRD">Hủy</td>
+                <td v-if="showEditRD">Lưu</td>
+              </tr>
+              </thead>
+              <tbody v-for="item of listRentDetail" :key="item.id">
+              <tr v-if="!showEditRD">
+                <td>{{ item.id}}</td>
+                <td style="display: flex; width: 150px;">
+                  <img class="imageBook" v-bind:src="item.book.image">
+                  <div style="margin-left: 5px;">{{ item.book.title}}</div>
+                </td>
+                <td v-if="item.beforeStatusBook==null">Chưa cập nhật</td>
+                <td v-else>{{ item.beforeStatusBook}}</td>
+                <td v-if="item.afterStatusBook==null">Chưa cập nhật</td>
+                <td v-else>{{ item.afterStatusBook}}</td>
+                <td>{{ item.requestTime |  format}}</td>
+                <td>{{ item.expiredDate |  formatDate}}</td>
+                <td v-if="item.status == 'Trading'" ><span class="role trading">ĐANG GD</span></td>
+                <td v-if="item.status == 'Complete'" ><span class="role complete">HOÀN THÀNH</span></td>
+                <td v-if="item.status == 'Cancel'" ><span class="role cancel">ĐÃ HỦY</span></td>
+                <td v-if="item.status == 'Waiting'" ><span class="role waiting">ĐANG ĐỢI</span></td>
+                <td v-if="item.status == 'Waiting'"><button class="tableBtnAction" v-on:click="HandleCancelRentDetail(item.id, item.rentId)"><Icon icon="mdi:cancel-box"/></button></td>
+                <td v-else><button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="mdi:cancel-box"/></button></td>
+
+              </tr>
+              <tr v-if="showEditRD && item.status != 'Cancel' && item.status != 'Waiting'" >
+                <td>{{ item.id}}</td>
+                <td style="display: flex; width: 150px;">
+                  <img class="imageBook" v-bind:src="item.book.image">
+                  <div style="margin-left: 5px;">{{ item.book.title}}</div>
+                </td>
+                <td><textarea type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" style="width: 200px" v-model="item.beforeStatusBook"></textarea></td>
+                <td><textarea type="text" maxlength="50" placeholder="Nhập tình trạng sách" class="editInput" style="width: 200px" v-model="item.afterStatusBook"></textarea></td>
+                <td>{{ item.requestTime |  format}}</td>
+                <td>{{ item.expiredDate |  formatDate}}</td>
+                <td v-if="item.status == 'Trading'" ><span class="role trading">ĐANG GD</span></td>
+                <td v-if="item.status == 'Complete'" ><span class="role complete">HOÀN THÀNH</span></td>
+                <td v-if="item.status == 'Cancel'" ><span class="role cancel">ĐÃ HỦY</span></td>
+                <td v-if="item.status == 'Waiting'" ><span class="role waiting">ĐANG ĐỢI</span></td>
+                <td><button class="tableBtnAction" v-on:click="editRentDetail(item.id, item.rentId)"><Icon icon="dashicons:cloud-saved"/></button></td>
+              </tr>
+              </tbody>
+            </table>
+            <div class="divBtn">
+              <button v-if="!showEditRD" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router btnUpdate" v-on:click="showEditRD = true">Cập nhật</button>
+              <button v-if="showEditRD" class="au-btn au-btn-icon au-btn--brown au-btn--small btn-router btnUpdate" v-on:click="showEditRD = false">Xong</button>
+            </div>
+          </ExchangeDetailDialog>
+          <ExchangeBillDialog :show="showDialogBD"
+                              :cancel="cancelDialogBill"
+                              v-if="showDialogBD" class="modal">
+            <table class="table">
+              <thead>
+              <tr class="header">
+                <td>Mã hóa đơn</td>
+                <td>Mã/Tên KH</td>
+                <td>Tổng sách</td>
+                <td>Phí cọc</td>
+                <td>Phí ship</td>
+                <td>Phí dịch vụ</td>
+                <td>Tổng tiền</td>
+                <td>TT Thanh toán</td>
+                <td>Ngày thanh toán</td>
+                <td>Phương thức thanh toán</td>
+                <td>TT Hoàn Tiền</td>
+                <td>Ngày Hoàn Tiền</td>
+              </tr>
+              </thead>
+              <tbody v-for="item of listRentBills" :key="item.id">
+              <tr>
+                <td>{{ item.id}}</td>
+                <td>{{item.userId}}/{{item.user.fullname}}</td>
+                <td>{{item.totalBook}}</td>
+                <td>{{item.depositFee.toLocaleString()}}đ</td>
+                <td>{{item.feeId1Navigation.price.toLocaleString()}}đ</td>
+                <td v-if="item.feeId3Navigation">{{item.feeId2Navigation.price.toLocaleString()}}đ + {{item.totalBook-1}}x{{item.feeId3Navigation.price}}đ</td>
+                <td v-else>{{item.feeId2Navigation.price.toLocaleString()}}đ</td>
+                <td>{{item.totalAmount}}</td>
+                <td v-if="item.isPaid"><span class="role paid">ĐÃ THANH TOÁN</span></td>
+                <td v-else><span class="role notPaid">CHƯA THANH TOÁN</span></td>
+                <td v-if="item.paidDate">{{item.paidDate}}</td>
+                <td v-else>Chưa thanh toán</td>
+                <td>{{item.payment}}</td>
+                <td v-if="item.isRefund"><span class="role paid">ĐÃ HOÀN TIỀN</span></td>
+                <td v-else><span class="role notPaid">CHƯA HOÀN TIỀN</span></td>
+                <td v-if="item.refundDate">{{item.refundDate}}</td>
+                <td v-else>Chưa hoàn tiền</td>
+              </tr>
+              </tbody>
+            </table>
+          </ExchangeBillDialog>
+          <UpdateExchangeDialog :show="showDialogUR" v-if="showDialogUR" class="modal">
+            <div class="topDialog">
+              <div class="dialogTitle">CẬP NHẬT GIAO DỊCH THUÊ SỐ {{rent.id}}</div>
+              <button class="dialogExit" v-on:click="cancelDialogUE">X</button>
+            </div>
+            <div class="updateBodyRent">
+              <label class="labelFee">TT Vận Chuyển: </label>
+              <select class="sl" v-model="rent.storageStatus">
+                <option v-bind:value="item.id" v-for="item of listStatus" :key="item.id">{{ item.name }}</option>
+              </select><br>
+              <br>
+              <label class="labelFee">Ngày nhận: </label>
+              <input v-if="rent.storageStatus == 'Received'" type="date" class="sl" required v-model="rent.receiveDate">
+              <input v-else type="date" disabled class="sl" required v-model="rent.receiveDate"><br>
+              <br>
+              <label class="labelFee">Ngày gửi: </label>
+              <input v-if="rent.storageStatus == 'Sent'" type="date" class="sl" required v-model="rent.sendDate">
+              <input v-else type="date" class="sl" disabled required v-model="rent.sendDate"><br>
+              <br>
+              <label class="labelFee">Ngày thu hồi: </label>
+              <input v-if="rent.storageStatus == 'Recall'" type="date" class="sl" required v-model="rent.recallDate">
+              <input v-else type="date" class="sl" disabled required v-model="rent.recallDate"><br>
+              <br>
+              <label class="labelFee">Ngày hoàn trả: </label>
+              <input v-if="rent.storageStatus == 'Refund'"  type="date" class="sl" required v-model="rent.refundDate">
+              <input v-else type="date" class="sl" disabled required v-model="rent.refundDate"><br>
+            </div>
+            <div  class="divBtn">
+              <button v-if="rent.storageStatus == 'Refund'" class="dialogBtn" v-on:click="HandleComplete(rent.id)">Hoàn Thành</button>
+              <button v-else  class="dialogBtn" v-on:click="saveUR">Cập Nhật</button>
+            </div>
+          </UpdateExchangeDialog>
+          <b-alert style="position: absolute; right: 0; margin-top: 10px; z-index: 999999" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+            {{responseMessage}}
+          </b-alert>
+          <b-alert style="position: absolute; right: 0; margin-top: 10px; z-index: 999999" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+            {{responseMessage}}
+          </b-alert>
+          <div class="user-data m-b-30">
+            <div class="titleMB">QUẢN LÝ GIAO DỊCH THUÊ</div>
+            <div class="search-transaction">
+              <button class="autoTrading" v-on:click="autoTrading">Duyệt GD hợp lệ</button>
+              <select class="selectCss" v-model="filter" @change="onchange($event)">
+                <option v-bind:value="item" v-for="item of listFilter" :key="item">{{ item }}</option>
+              </select>
+              <div>
+                <input type="number" v-model="search" placeholder="Nhập mã giao dịch">
+                <button class="btnSearch" v-on:click="HandleSearch">Tìm</button>
+              </div>
+            </div>
+            <div v-if="totalRents==0 && filter == ''" class="table-responsive table-data noResult">
+              Không tìm thấy giao dịch tương ứng!
+            </div>
+            <div v-else class="table-responsive table-data">
+              <table class="table">
+                <thead>
+                <tr>
+                  <td>Chi tiết</td>
+                  <td>Mã GD</td>
+                  <td>Chủ sách</td>
+                  <td>Người mượn</td>
+                  <td>Vận đơn</td>
+                  <td>Ngày tạo</td>
+                  <td>Trạng thái</td>
+                  <td>Hóa đơn</td>
+                  <td>Cập nhật</td>
+                </tr>
+                </thead>
+                <tbody v-for="item of listRents" :key="item.id">
+                <tr>
+                  <td style="padding-left: 12px"><button class="tableBtnAction" v-on:click="openDialogDetail(item.id)"><Icon icon="ic:baseline-remove-red-eye"/></button></td>
+                  <td>{{ item.id }}</td>
+                  <td>{{ item.ownerId }} - {{ item.owner.fullname }}</td>
+                  <td>{{ item.renterId }} - {{ item.renter.fullname }}</td>
+                  <td v-if="item.storageStatus == 'Waiting'" ><span class="role tradingWaiting">ĐANG ĐỢI</span></td>
+                  <td v-if="item.storageStatus == 'Received'" ><span class="role tradingStatus">ĐÃ NHẬN - {{item.receiveDate|formatDate}}</span></td>
+                  <td v-if="item.storageStatus == 'Sent'" ><span class="role tradingStatus">ĐÃ GỬI - {{item.sendDate|formatDate}}</span></td>
+                  <td v-if="item.storageStatus == 'Recall'" ><span class="role tradingStatus">ĐÃ THU HÔI - {{item.recallDate|formatDate}}</span></td>
+                  <td v-if="item.storageStatus == 'Refund'" ><span class="role tradingStatus">ĐÃ HOÀN TRẢ - {{item.refundDate|formatDate}}</span></td>
+                  <td>{{ item.date | formatDate}}</td>
+                  <td v-if="item.status == 'Trading'"><span class="role trading">ĐANG GD</span></td>
+                  <td v-if="item.status == 'Complete'"><span class="role complete">HOÀN THÀNH</span></td>
+                  <td v-if="item.status == 'Cancel'"><span class="role cancel">ĐÃ HỦY</span></td>
+                  <td v-if="item.status == 'Waiting'"><span class="role waiting">ĐANG ĐỢI</span></td>
+                  <td>
+                    <button class="tableBtnAction" v-on:click="openDialogBill(item.id)"><Icon icon="ic:baseline-remove-red-eye"/></button>
+                  </td>
+                  <td v-if="item.status == 'Waiting'">
+                    <button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="material-symbols:edit-document-rounded"/></button>
+                    <button class="tableBtnAction" v-on:click="HandleCanCelRent(item.id)"><Icon icon="mdi:cancel-box"/></button>
+                  </td>
+                  <td v-if="item.status == 'Complete' || item.status == 'Cancel'">
+                    <button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="material-symbols:edit-document-rounded"/></button>
+                    <button disabled style="font-size: 30px; cursor: not-allowed"><Icon icon="mdi:cancel-box"/></button>
+                  </td>
+                  <td v-if="item.status == 'Trading'">
+                    <button class="tableBtnAction" v-on:click="openDialogUR(item.id)"><Icon icon="material-symbols:edit-document-rounded"/></button>
+                    <button class="tableBtnAction" v-on:click="HandleCanCelRent(item.id)"><Icon icon="mdi:cancel-box"/></button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+              <div class="paging-transaction">
+                <b-pagination v-if="filter==''" class="page-number" @input="getRents" v-model="page" :total-rows="totalRents"
+                              :per-page="10">
+                  <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                  <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                  <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                  <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                  <template #page="{ page, active }">
+                    <b v-if="active" style="color: white;">{{ page }} </b>
+                    <b v-else style="color: #9D6B54;">{{ page }}</b>
+                  </template>
+                </b-pagination>
+                <b-pagination v-if="filter=='Tất Cả'" class="page-number" @input="getRents" v-model="page" :total-rows="totalRents"
+                              :per-page="10">
+                  <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                  <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                  <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                  <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                  <template #page="{ page, active }">
+                    <b v-if="active" style="color: white;">{{ page }} </b>
+                    <b v-else style="color: #9D6B54;">{{ page }}</b>
+                  </template>
+                </b-pagination>
+                <b-pagination v-if="filter=='Đang Đợi'" class="page-number" @input="getRentWaiting" v-model="page" :total-rows="totalRents"
+                              :per-page="10">
+                  <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                  <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                  <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                  <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                  <template #page="{ page, active }">
+                    <b v-if="active" style="color: white;">{{ page }} </b>
+                    <b v-else style="color: #9D6B54;">{{ page }}</b>
+                  </template>
+                </b-pagination>
+                <b-pagination v-if="filter=='Đang Giao Dịch'" class="page-number" @input="getRentTrading" v-model="page" :total-rows="totalRents"
+                              :per-page="10">
+                  <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                  <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                  <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                  <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                  <template #page="{ page, active }">
+                    <b v-if="active" style="color: white;">{{ page }} </b>
+                    <b v-else style="color: #9D6B54;">{{ page }}</b>
+                  </template>
+                </b-pagination>
+                <b-pagination v-if="filter=='Đã Hoàn Thành'" class="page-number" @input="getRentComplete" v-model="page" :total-rows="totalRents"
+                              :per-page="10">
+                  <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                  <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                  <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                  <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                  <template #page="{ page, active }">
+                    <b v-if="active" style="color: white;">{{ page }} </b>
+                    <b v-else style="color: #9D6B54;">{{ page }}</b>
+                  </template>
+                </b-pagination>
+                <b-pagination v-if="filter=='Đã Hủy'" class="page-number" @input="getRentCancel" v-model="page" :total-rows="totalRents"
+                              :per-page="10">
+                  <template #first-text><span style="color: #9D6B54;">&lsaquo;&lsaquo;</span></template>
+                  <template #prev-text><span style="color: #9D6B54;">&lsaquo;</span></template>
+                  <template #next-text><span style="color: #9D6B54;">&rsaquo;</span></template>
+                  <template #last-text><span style="color: #9D6B54;">&rsaquo;&rsaquo;</span></template>
+                  <template #page="{ page, active }">
+                    <b v-if="active" style="color: white;">{{ page }} </b>
+                    <b v-else style="color: #9D6B54;">{{ page }}</b>
+                  </template>
+                </b-pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Side_BarAdmin>
 </template>
 
 <script>
@@ -297,10 +583,12 @@ import ExchangeBillDialog from "@/pages/ManageTransaction/ExchangeBillDialog";
 import UpdateExchangeDialog from "@/pages/ManageTransaction/UpdateExchangeDialog";
 import {Icon} from '@iconify/vue2';
 import Dashboard from "@/components/Dashboard";
+import Side_BarAdmin from "@/components/Side_BarAdmin";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "GetExchanges",
-  components: {Side_Bar,Dashboard, LoadingDialog, ExchangeDetailDialog, ExchangeBillDialog, UpdateExchangeDialog, Icon},
+  components: {Side_Bar,Dashboard, LoadingDialog, ExchangeDetailDialog, Side_BarAdmin, ExchangeBillDialog, UpdateExchangeDialog, Icon},
   data() {
     return {
       responseFlag: true,
@@ -325,11 +613,17 @@ export default {
       showDialogUR: false,
       showEditRD: false,
       beforeStatusBook: '',
-      afterStatusBook: ''
+      afterStatusBook: '',
+      userByToken: ''
     }
   },
   created() {
     if(!this.$cookies.get('token')){
+      this.$router.push({name: "404Page"})
+    }
+    let token = this.$cookies.get('token');
+    this.userByToken = VueJwtDecode.decode(token, 'utf-8');
+    if(this.userByToken.role == 3){
       this.$router.push({name: "404Page"})
     }
     this.isSearch = false
