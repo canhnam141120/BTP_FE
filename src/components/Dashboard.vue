@@ -3,7 +3,7 @@
     <div class="countUser">
       <Icon class="iconDB" icon="mdi:user-group"/>
       <div>
-        <div class="quarter"> Tổng số người dùng</div>
+        <div class="quarter"> Tổng người dùng</div>
         <label class="numberDB">{{countUser}} tài khoản</label>
       </div>
     </div>
@@ -28,6 +28,11 @@
         <label class="numberDB">{{countMoney.toLocaleString()}}đ</label>
       </div>
     </div>
+    <div style="padding-top: 30px">
+      <select style="background-color: #9d6b54; color: white; padding: 5px; font-weight: 600; border-radius: 10px" v-model="filter" @change="onchange($event)">
+      <option v-bind:value="item" v-for="item of listFilter" :key="item">{{item}}</option>
+    </select>
+    </div>
   </div>
 </template>
 
@@ -44,7 +49,9 @@ export default {
       countBook: 0,
       countUser: 0,
       countMoney: 0,
-      countTrans: 0
+      countTrans: 0,
+      listFilter: ['Quý 1', 'Quý 2', 'Quý 3', 'Quý 4'],
+      filter: '',
     }
   },
   created() {
@@ -52,6 +59,44 @@ export default {
     this.countDashboard()
   },
   methods: {
+    onchange(e){
+      if(e.target.value === 'Quý 1'){
+        apiFactory.callApi(API_MANAGE_TRANSACTION.DASHBOARD, 'POST', {
+          id: 1
+        }).then((res) => {
+          this.countMoney = res.data.data
+          this.countTrans = res.data.numberOfRecords
+        }).catch(() => {
+        });
+      }
+      if(e.target.value=== 'Quý 2'){
+        apiFactory.callApi(API_MANAGE_TRANSACTION.DASHBOARD, 'POST', {
+          id: 2
+        }).then((res) => {
+          this.countMoney = res.data.data
+          this.countTrans = res.data.numberOfRecords
+        }).catch(() => {
+        });
+      }
+      if(e.target.value === 'Quý 3'){
+        apiFactory.callApi(API_MANAGE_TRANSACTION.DASHBOARD, 'POST', {
+          id: 3
+        }).then((res) => {
+          this.countMoney = res.data.data
+          this.countTrans = res.data.numberOfRecords
+        }).catch(() => {
+        });
+      }
+      if(e.target.value === 'Quý 4'){
+        apiFactory.callApi(API_MANAGE_TRANSACTION.DASHBOARD, 'POST', {
+          id: 4
+        }).then((res) => {
+          this.countMoney = res.data.data
+          this.countTrans = res.data.numberOfRecords
+        }).catch(() => {
+        });
+      }
+    },
     countBookAndUser(){
       apiFactory.callApi(API_MANAGE_BOOK.DASHBOARD, 'GET', {}).then((res) => {
         this.countBook = res.data.data
@@ -62,6 +107,7 @@ export default {
     countDashboard(){
       var today = new Date();
       var quarter = Math.floor((today.getMonth() + 3) / 3);
+      this.filter = 'Quý ' + quarter
       apiFactory.callApi(API_MANAGE_TRANSACTION.DASHBOARD, 'POST', {
         id: quarter
       }).then((res) => {
@@ -100,7 +146,7 @@ export default {
   justify-content: center;
   margin: 20px;
   padding: 20px;
-  width: 22%;
+  width: 24%;
   border-radius: 10px;
   background-color: #DFD5CB;
 }
@@ -110,7 +156,7 @@ export default {
   justify-content: center;
   margin: 20px;
   padding: 20px;
-  width: 22%;
+  width: 24%;
   border-radius: 10px;
   background-color: #DFD5CB;
 }
@@ -120,7 +166,7 @@ export default {
   justify-content: center;
   margin: 20px;
   padding: 20px;
-  width: 22%;
+  width: 23%;
   border-radius: 10px;
   background-color: #DFD5CB;
 }

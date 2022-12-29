@@ -294,7 +294,7 @@
                   <label v-if="book.isReady && book.status == 'Denied'" class="status">Không được duyệt</label>
                 </div>
                 <div class="extra">
-                  <button class="editBtn" v-on:click="openDialog">Chỉnh sửa</button>
+                  <button class="editBtn" v-on:click="openDialog" v-if="!book.isTrade">Chỉnh sửa</button>
                   <button v-if="book.isReady && book.status == 'Approved' && !book.isTrade" class="hideBtn"
                           v-on:click="HandleHide(book.id)">Ẩn
                   </button>
@@ -350,8 +350,9 @@
                     <label class="book-statusMB">{{ item.bookOffer.statusBook }}</label>
                   </div>
                   <div class="actionVR">
-                    <button class="active" v-on:click="HandleApproved(item.id)">Chấp nhận</button>
-                    <button class="active" v-on:click="HandleDenied(item.id)">Từ chối</button>
+                    <button class="active" v-if="!book.isTrade" v-on:click="HandleApproved(item.id)">Chấp nhận</button>
+                    <button class="active" v-if="!book.isTrade" v-on:click="HandleDenied(item.id)">Từ chối</button>
+                    <div style="text-align: center; font-size: 14px; background-color: grey; border-radius: 10px; padding: 10px; color: white;" v-if="book.isTrade">Sách của bạn đang giao dịch</div>
                   </div>
                 </div>
               </div>
