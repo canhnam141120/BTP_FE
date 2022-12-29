@@ -84,18 +84,19 @@
                 <td>Phương thức thanh toán</td>
                 <td>TT Hoàn Tiền</td>
                 <td>Ngày Hoàn Tiền</td>
+                <td>Hoàn Tiền</td>
               </tr>
               </thead>
               <tbody v-for="item of listRentBills" :key="item.id">
               <tr>
-                <td>{{ item.id}}</td>
+                <td>20{{ item.id}}</td>
                 <td>{{item.userId}}/{{item.user.fullname}}</td>
                 <td>{{item.totalBook}}</td>
                 <td>{{item.depositFee.toLocaleString()}}đ</td>
                 <td>{{item.feeId1Navigation.price.toLocaleString()}}đ</td>
                 <td v-if="item.feeId3Navigation">{{item.feeId2Navigation.price.toLocaleString()}}đ + {{item.totalBook-1}}x{{item.feeId3Navigation.price}}đ</td>
                 <td v-else>{{item.feeId2Navigation.price.toLocaleString()}}đ</td>
-                <td>{{item.totalAmount}}</td>
+                <td>{{item.totalAmount.toLocaleString()}}đ</td>
                 <td v-if="item.isPaid"><span class="role paid">ĐÃ THANH TOÁN</span></td>
                 <td v-else><span class="role notPaid">CHƯA THANH TOÁN</span></td>
                 <td v-if="item.paidDate">{{item.paidDate}}</td>
@@ -105,6 +106,11 @@
                 <td v-else><span class="role notPaid">CHƯA HOÀN TIỀN</span></td>
                 <td v-if="item.refundDate">{{item.refundDate}}</td>
                 <td v-else>Chưa hoàn tiền</td>
+                <td v-if="item.isPaid && !item.isRefund">
+                  <button class="tableBtnAction" v-on:click="HandleRefund(item.id, item.rentId)">
+                    <Icon icon="ri:refund-2-line"/>
+                  </button>
+                </td>
               </tr>
               </tbody>
             </table>
@@ -155,7 +161,7 @@
                 <option v-bind:value="item" v-for="item of listFilter" :key="item">{{ item }}</option>
               </select>
               <div>
-                <input type="number" v-model="search" placeholder="Nhập mã giao dịch">
+                <input type="number" v-model="search" placeholder="Nhập mã giao dịch (phần số)">
                 <button class="btnSearch" v-on:click="HandleSearch">Tìm</button>
               </div>
             </div>
@@ -180,7 +186,7 @@
                 <tbody v-for="item of listRents" :key="item.id">
                 <tr>
                   <td style="padding-left: 12px"><button class="tableBtnAction" v-on:click="openDialogDetail(item.id)"><Icon icon="ic:baseline-remove-red-eye"/></button></td>
-                  <td>{{ item.id }}</td>
+                  <td>T{{ item.id }}</td>
                   <td>{{ item.ownerId }} - {{ item.owner.fullname }}</td>
                   <td>{{ item.renterId }} - {{ item.renter.fullname }}</td>
                   <td v-if="item.storageStatus == 'Waiting'" ><span class="role tradingWaiting">ĐANG ĐỢI</span></td>
@@ -370,18 +376,19 @@
                 <td>Phương thức thanh toán</td>
                 <td>TT Hoàn Tiền</td>
                 <td>Ngày Hoàn Tiền</td>
+                <td>Hoàn Tiền</td>
               </tr>
               </thead>
               <tbody v-for="item of listRentBills" :key="item.id">
               <tr>
-                <td>{{ item.id}}</td>
+                <td>20{{ item.id}}</td>
                 <td>{{item.userId}}/{{item.user.fullname}}</td>
                 <td>{{item.totalBook}}</td>
                 <td>{{item.depositFee.toLocaleString()}}đ</td>
                 <td>{{item.feeId1Navigation.price.toLocaleString()}}đ</td>
                 <td v-if="item.feeId3Navigation">{{item.feeId2Navigation.price.toLocaleString()}}đ + {{item.totalBook-1}}x{{item.feeId3Navigation.price}}đ</td>
                 <td v-else>{{item.feeId2Navigation.price.toLocaleString()}}đ</td>
-                <td>{{item.totalAmount}}</td>
+                <td>{{item.totalAmount.toLocaleString()}}đ</td>
                 <td v-if="item.isPaid"><span class="role paid">ĐÃ THANH TOÁN</span></td>
                 <td v-else><span class="role notPaid">CHƯA THANH TOÁN</span></td>
                 <td v-if="item.paidDate">{{item.paidDate}}</td>
@@ -391,6 +398,11 @@
                 <td v-else><span class="role notPaid">CHƯA HOÀN TIỀN</span></td>
                 <td v-if="item.refundDate">{{item.refundDate}}</td>
                 <td v-else>Chưa hoàn tiền</td>
+                <td v-if="item.isPaid && !item.isRefund">
+                  <button class="tableBtnAction" v-on:click="HandleRefund(item.id, item.rentId)">
+                    <Icon icon="ri:refund-2-line"/>
+                  </button>
+                </td>
               </tr>
               </tbody>
             </table>
@@ -441,7 +453,7 @@
                 <option v-bind:value="item" v-for="item of listFilter" :key="item">{{ item }}</option>
               </select>
               <div>
-                <input type="number" v-model="search" placeholder="Nhập mã giao dịch">
+                <input type="number" v-model="search" placeholder="Nhập mã giao dịch (phần số)">
                 <button class="btnSearch" v-on:click="HandleSearch">Tìm</button>
               </div>
             </div>
@@ -466,7 +478,7 @@
                 <tbody v-for="item of listRents" :key="item.id">
                 <tr>
                   <td style="padding-left: 12px"><button class="tableBtnAction" v-on:click="openDialogDetail(item.id)"><Icon icon="ic:baseline-remove-red-eye"/></button></td>
-                  <td>{{ item.id }}</td>
+                  <td>T{{ item.id }}</td>
                   <td>{{ item.ownerId }} - {{ item.owner.fullname }}</td>
                   <td>{{ item.renterId }} - {{ item.renter.fullname }}</td>
                   <td v-if="item.storageStatus == 'Waiting'" ><span class="role tradingWaiting">ĐANG ĐỢI</span></td>
@@ -829,6 +841,17 @@ export default {
         if (res.data.message === 'SUCCESS') {
           this.getRentDetail(rentId)
         }
+      }).catch(() => {
+      });
+    },
+    HandleRefund(billId, rentId){
+      apiFactory.callApi(API_MANAGE_TRANSACTION.UPDATE_REFUND_RENT + billId, 'PUT', {}).then((res) => {
+        if (res.data.message === 'UPDATE_SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật trạng thái hoàn tiền thành công!'
+          this.getRentBill(rentId)
+        }
+        this.dismissCountDown = this.dismissSecs
       }).catch(() => {
       });
     },

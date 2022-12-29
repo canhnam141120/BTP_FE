@@ -121,11 +121,12 @@
                 <td>Phương thức thanh toán</td>
                 <td>TT Hoàn Tiền</td>
                 <td>Ngày Hoàn Tiền</td>
+                <td>Hoàn tiền</td>
               </tr>
               </thead>
               <tbody v-for="item of listExchangeBills" :key="item.id">
               <tr>
-                <td>{{ item.id }}</td>
+                <td>10{{ item.id }}</td>
                 <td>{{ item.userId }}/{{ item.user.fullname }}</td>
                 <td>{{ item.totalBook }}</td>
                 <td>{{ item.depositFee.toLocaleString() }}đ</td>
@@ -134,7 +135,7 @@
                   {{ item.totalBook - 1 }}x{{ item.feeId3Navigation.price }}đ
                 </td>
                 <td v-else>{{ item.feeId2Navigation.price.toLocaleString() }}đ</td>
-                <td>{{ item.totalAmount }}</td>
+                <td>{{ item.totalAmount.toLocaleString() }}đ</td>
                 <td v-if="item.isPaid"><span class="role paid">ĐÃ THANH TOÁN</span></td>
                 <td v-else><span class="role notPaid">CHƯA THANH TOÁN</span></td>
                 <td v-if="item.paidDate">{{ item.paidDate | format }}</td>
@@ -144,6 +145,11 @@
                 <td v-else><span class="role notPaid">CHƯA HOÀN TIỀN</span></td>
                 <td v-if="item.refundDate">{{ item.refundDate | formatDate }}</td>
                 <td v-else>Chưa hoàn tiền</td>
+                <td v-if="item.isPaid && !item.isRefund">
+                  <button class="tableBtnAction" v-on:click="HandleRefund(item.id, item.exchangeId)">
+                    <Icon icon="ri:refund-2-line"/>
+                  </button>
+                </td>
               </tr>
               </tbody>
             </table>
@@ -234,7 +240,7 @@
                 <option v-bind:value="item" v-for="item of listFilter" :key="item">{{ item }}</option>
               </select>
               <div>
-                <input type="number" v-model="search" placeholder="Nhập mã giao dịch">
+                <input type="number" v-model="search" placeholder="Nhập mã giao dịch (phần số)">
                 <button class="btnSearch" v-on:click="HandleSearch">Tìm</button>
               </div>
             </div>
@@ -265,7 +271,7 @@
                       <Icon icon="ic:baseline-remove-red-eye"/>
                     </button>
                   </td>
-                  <td>{{ item.id }}</td>
+                  <td>TD{{ item.id }}</td>
                   <td>{{ item.userId1 }} - {{ item.userId1Navigation.fullname }}</td>
                   <td v-if="item.storageStatus1 == 'Waiting'"><span class="role tradingWaiting">ĐANG ĐỢI</span></td>
                   <td v-if="item.storageStatus1 == 'Received'"><span
@@ -710,11 +716,12 @@
                 <td>Phương thức thanh toán</td>
                 <td>TT Hoàn Tiền</td>
                 <td>Ngày Hoàn Tiền</td>
+                <td>Hoàn Tiền</td>
               </tr>
               </thead>
               <tbody v-for="item of listExchangeBills" :key="item.id">
               <tr>
-                <td>{{ item.id }}</td>
+                <td>10{{ item.id }}</td>
                 <td>{{ item.userId }}/{{ item.user.fullname }}</td>
                 <td>{{ item.totalBook }}</td>
                 <td>{{ item.depositFee.toLocaleString() }}đ</td>
@@ -723,7 +730,7 @@
                   {{ item.totalBook - 1 }}x{{ item.feeId3Navigation.price }}đ
                 </td>
                 <td v-else>{{ item.feeId2Navigation.price.toLocaleString() }}đ</td>
-                <td>{{ item.totalAmount }}</td>
+                <td>{{ item.totalAmount.toLocaleString() }}đ</td>
                 <td v-if="item.isPaid"><span class="role paid">ĐÃ THANH TOÁN</span></td>
                 <td v-else><span class="role notPaid">CHƯA THANH TOÁN</span></td>
                 <td v-if="item.paidDate">{{ item.paidDate | format }}</td>
@@ -733,6 +740,11 @@
                 <td v-else><span class="role notPaid">CHƯA HOÀN TIỀN</span></td>
                 <td v-if="item.refundDate">{{ item.refundDate | formatDate }}</td>
                 <td v-else>Chưa hoàn tiền</td>
+                <td v-if="item.isPaid && !item.isRefund">
+                  <button class="tableBtnAction" v-on:click="HandleRefund(item.id, item.exchangeId)">
+                    <Icon icon="ri:refund-2-line"/>
+                  </button>
+                </td>
               </tr>
               </tbody>
             </table>
@@ -823,7 +835,7 @@
                 <option v-bind:value="item" v-for="item of listFilter" :key="item">{{ item }}</option>
               </select>
               <div>
-                <input type="number" v-model="search" placeholder="Nhập mã giao dịch">
+                <input type="number" v-model="search" placeholder="Nhập mã giao dịch (phần số)">
                 <button class="btnSearch" v-on:click="HandleSearch">Tìm</button>
               </div>
             </div>
@@ -854,7 +866,7 @@
                       <Icon icon="ic:baseline-remove-red-eye"/>
                     </button>
                   </td>
-                  <td>{{ item.id }}</td>
+                  <td>TD{{ item.id }}</td>
                   <td>{{ item.userId1 }} - {{ item.userId1Navigation.fullname }}</td>
                   <td v-if="item.storageStatus1 == 'Waiting'"><span class="role tradingWaiting">ĐANG ĐỢI</span></td>
                   <td v-if="item.storageStatus1 == 'Received'"><span
@@ -1359,6 +1371,17 @@ export default {
       }
       return this.getExchanges(1)
     },
+    HandleRefund(billId, exchangeId){
+      apiFactory.callApi(API_MANAGE_TRANSACTION.UPDATE_REFUND_EXCHANGE + billId, 'PUT', {}).then((res) => {
+        if (res.data.message === 'UPDATE_SUCCESS') {
+          this.responseFlag = true
+          this.responseMessage = 'Cập nhật trạng thái hoàn tiền thành công!'
+          this.getExchangeBill(exchangeId)
+        }
+        this.dismissCountDown = this.dismissSecs
+      }).catch(() => {
+      });
+    },
     HandleTrading(exchangeId) {
       apiFactory.callApi(API_MANAGE_TRANSACTION.HANDLE_TRADE_EXCHANGE + exchangeId, 'PUT', {}).then((res) => {
         if (res.data.message === 'UPDATE_SUCCESS') {
@@ -1532,9 +1555,8 @@ export default {
       }).catch(() => {
       });
 
-
-      if (this.exchangeDetailInvoice !== '' && this.exchangeInvoice !== '' &&
-      this.infoUser1 !== '' && this.infoUser2 !== '') {
+      if (this.exchangeDetailInvoice  && this.exchangeInvoice  &&
+      this.infoUser1  && this.infoUser2 ) {
         var prtContent = document.getElementById("print");
         var WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
         WinPrint.document.write(prtContent.innerHTML);

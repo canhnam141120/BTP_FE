@@ -76,13 +76,13 @@
                   style="padding: 4px;border: 1px solid black;
                   vertical-align: middle; text-align: center; width: 60px;">
                 <div style="font-weight: bold; font-size: 13px">Mã GD</div>
-                <div style="font-size: 11px; margin-bottom: 5px">10{{ billExchange.exchangeId }}</div>
+                <div style="font-size: 11px; margin-bottom: 5px">TD{{ billExchange.exchangeId }}</div>
               </td>
               <td colspan="5" rowspan="1"
                   style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 380px;">
                 <div style="font-weight: bold; font-size: 17px; text-align: center">HÓA ĐƠN GIAO DỊCH
                 </div>
-                <div style="font-size: 13px; text-align: center">Mã hóa đơn: {{ billExchange.id }}
+                <div style="font-size: 13px; text-align: center">Mã hóa đơn: 10{{ billExchange.id }}
                 </div>
               </td>
             </tr>
@@ -268,13 +268,13 @@
                   style="padding: 4px;border: 1px solid black;
                   vertical-align: middle; text-align: center; width: 60px;">
                 <div style="font-weight: bold; font-size: 13px">Mã GD</div>
-                <div style="font-size: 11px; margin-bottom: 5px">20{{ billRent.rentId }}</div>
+                <div style="font-size: 11px; margin-bottom: 5px">T{{ billRent.rentId }}</div>
               </td>
               <td colspan="5" rowspan="1"
                   style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 380px;">
                 <div style="font-weight: bold; font-size: 17px; text-align: center">HÓA ĐƠN GIAO DỊCH
                 </div>
-                <div style="font-size: 13px; text-align: center">Mã hóa đơn: {{ billRent.id }}
+                <div style="font-size: 13px; text-align: center">Mã hóa đơn: 20{{ billRent.id }}
                 </div>
               </td>
             </tr>
@@ -354,7 +354,7 @@
                 <div v-if="billRent.isPaid">
                   <div style="font-size: 13px;">Trạng thái Thanh toán: Đã thanh toán</div>
                   <div style="font-size: 13px;">Thanh toán lúc: {{ billRent.paidDate | format }}</div>
-                  <div style="font-size: 13px;">Phương thức: {{ billRent.payments }}</div>
+                  <div style="font-size: 13px;">Phương thức: {{ billRent.payment }}</div>
                 </div>
                 <div v-else>
                   <div style="font-size: 13px;">Trạng thái thanh toán: Chưa thanh toán</div>
@@ -462,7 +462,7 @@
                       <option v-bind:value="item" v-for="item of listFilterExchange" :key="item">{{ item }}</option>
                     </select>
                     <div>
-                      <input class="inputMP" type="text" v-model="searchExchange" placeholder="Nhập mã giao dịch">
+                      <input class="inputMP" type="text" v-model="searchExchange" placeholder="Nhập mã giao dịch(phần số)">
                       <button class="btnMP" v-on:click="SearchExchange">Tìm</button>
                     </div>
                   </div>
@@ -489,7 +489,7 @@
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
-                        <td>{{ item.id }}</td>
+                        <td>TD{{ item.id }}</td>
                         <td v-if="userByToken.UserId == item.userId1 && item.storageStatus1 == 'Waiting'">ĐANG ĐỢI</td>
                         <td v-if="userByToken.UserId == item.userId2 && item.storageStatus2 == 'Waiting'">ĐANG ĐỢI</td>
                         <td v-if="userByToken.UserId == item.userId1 && item.storageStatus1 == 'Sent'">ĐÃ GỬI -
@@ -574,7 +574,7 @@
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
-                        <td>{{ item.id }}</td>
+                        <td>TD{{ item.id }}</td>
                         <td v-if="userByToken.UserId == item.userId1 && item.storageStatus1 == 'Waiting'">ĐANG ĐỢI</td>
                         <td v-if="userByToken.UserId == item.userId2 && item.storageStatus2 == 'Waiting'">ĐANG ĐỢI</td>
                         <td v-if="userByToken.UserId == item.userId1 && item.storageStatus1 == 'Sent'">ĐÃ GỬI -
@@ -658,7 +658,7 @@
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
-                        <td>{{ item.id }}</td>
+                        <td>TD item.id }}</td>
                         <td v-if="userByToken.UserId == item.userId1 && item.storageStatus1 == 'Waiting'">ĐANG ĐỢI</td>
                         <td v-if="userByToken.UserId == item.userId2 && item.storageStatus2 == 'Waiting'">ĐANG ĐỢI</td>
                         <td v-if="userByToken.UserId == item.userId1 && item.storageStatus1 == 'Sent'">ĐÃ GỬI -
@@ -746,7 +746,7 @@
                       <option v-bind:value="item" v-for="item of listFilterRent" :key="item">{{ item }}</option>
                     </select>
                     <div>
-                      <input class="inputMP" type="text" v-model="searchRent" placeholder="Nhập mã giao dịch">
+                      <input class="inputMP" type="text" v-model="searchRent" placeholder="Nhập mã giao dịch (phần số)">
                       <button class="btnMP" v-on:click="SearchRent">Tìm</button>
                     </div>
                   </div>
@@ -772,10 +772,9 @@
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
-                        <td>{{ item.id }}</td>
+                        <td>T{{ item.id }}</td>
                         <td v-if="userByToken.UserId == item.renterId">{{ item.ownerId }}/{{ item.owner.fullname }}</td>
                         <td v-else>{{ item.renterId }}/{{ item.renter.fullname }}</td>
-
                         <td v-if="item.storageStatus == 'Waiting'">ĐANG ĐỢI</td>
                         <td v-if="item.storageStatus == 'Sent'">ĐÃ GỬI - {{ item.sendDate | formatDate }}</td>
                         <td v-if="item.storageStatus == 'Received'">ĐÃ NHẬN - {{ item.receiveDate | formatDate }}</td>
@@ -805,7 +804,7 @@
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
-                        <td>{{ item.id }}</td>
+                        <td>T{{ item.id }}</td>
                         <td v-if="userByToken.UserId == item.renterId">{{ item.ownerId }}/{{ item.owner.fullname }}</td>
                         <td v-else>{{ item.renterId }}/{{ item.renter.fullname }}</td>
 
@@ -838,7 +837,7 @@
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
-                        <td>{{ item.id }}</td>
+                        <td>T{{ item.id }}</td>
                         <td v-if="userByToken.UserId == item.renterId">{{ item.ownerId }}/{{ item.owner.fullname }}</td>
                         <td v-else>{{ item.renterId }}/{{ item.renter.fullname }}</td>
 

@@ -5,7 +5,8 @@
         <div class="containerRP">
           <div class="result">
             <div class="titleResultPay">KẾT QUẢ GIAO DỊCH</div>
-            <div class="resultPay">{{ result }}</div>
+            <div class="resultPay" v-if="flag">{{ result }}</div>
+            <div class="resultPay" v-else style="color: #ca0303;">{{ result }}</div>
             <router-link class="backToMyTrans" to="/MyTransaction">Quay về giao dịch</router-link>
           </div>
         </div>
@@ -25,7 +26,8 @@ export default {
   components: {Layout},
   data() {
     return {
-      result: ''
+      result: '',
+      flag: ''
     }
   },
   created() {
@@ -37,9 +39,11 @@ export default {
       const url = API_TRANSACTION.UPDATE_PAY_RENT + uri[1]
       apiFactory.callApi(url, 'GET', {}).then((res) => {
         if (res.data.message === 'SUCCESS') {
+          this.flag = true
           this.result = 'Thanh toán thành công!'
         }
         else{
+          this.flag = false
           this.result = 'Thanh toán không thành công! Vui lòng thử lại'
         }
       }).catch(() => {

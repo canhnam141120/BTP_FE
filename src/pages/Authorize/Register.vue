@@ -54,17 +54,32 @@
                 </div>
                 <div class="data">
                   <label>Địa chỉ</label>
-                  <label v-if="this.address.length < 10 || this.address.length > 100" style="color: #ca0303;">&nbsp;*</label>
+                  <label v-if="this.addressDetail.length < 10 || this.addressDetail.length > 50" style="color: #ca0303;">&nbsp;*</label>
                   <label v-else style="color: green;">
                     <Icon icon="material-symbols:check-small-rounded"/>
                   </label>
-                  <input type="text" maxlength="100" required placeholder="Ví dụ: Số 1, Đào Duy Anh, Đống Đa, Hà Nội" v-model="address">
+
+                  <input type="text" maxlength="100" required placeholder="Ví dụ: Số 1, Đào Duy Anh" v-model="addressDetail">
+
+                  <div style="margin-top: 5px">
+                    <label style="margin-left: 5px; margin-right: 5px;">Phường:</label>
+                    <select style="width: 100px; border-radius: 5px" class="input-text-short" v-model="addressPhuong" >
+                      <option v-bind:value="name" v-for="name of listPhuong" :key="name">{{ name }}
+                      </option>
+                    </select>
+                    <label style="margin-left: 10px; margin-right: 5px;">Quận:</label>
+                    <select style="width: 100px; border-radius: 5px" class="input-text-short" v-model="addressQuan" @change="onchange($event)">
+                      <option v-bind:value="name" v-for="name of listQuan" :key="name">{{ name }}
+                      </option>
+                    </select>
+                  </div>
+
                 </div>
               </div>
             </div>
             <div>
               <button class="btn" v-if="this.regxMail.test(this.email) && (this.password.length >= 8 && this.password.length <= 30) && (this.fullname.length >= 5 && this.fullname.length <= 30)
-                && this.password === this.passwordCheck && this.regxPhone.test(this.phone) && (this.address.length >= 10 || this.address.length <= 100)"
+                && this.password === this.passwordCheck && this.regxPhone.test(this.phone) && (this.addressDetail.length >= 10 && this.addressDetail.length <= 50)"
                   @click="HandleRegister">Đăng ký</button>
               <button v-else class="btnDisable" disabled>Đăng ký</button>
             </div>
@@ -96,6 +111,12 @@ export default {
   components: {Header, LoadingDialog, Icon},
   data() {
     return {
+      addressDetail: '',
+      addressQuan: '',
+      addressPhuong: '',
+      listQuan: ['Ba Đình', 'Hoàn Kiếm', 'Đống Đa', 'Thanh Xuân', 'Cầu Giấy', 'Hoàng Mai', 'Hai Bà Trưng', 'Tây Hồ'],
+      listPhuong: '',
+
       email: '',
       password: '',
       passwordCheck: '',
@@ -109,8 +130,38 @@ export default {
     }
   },
   methods: {
+    onchange(e){
+      if(e.target.value === 'Ba Đình'){
+        this.listPhuong = ['Phúc Xá', 'Trúc Bạch', 'Vĩnh Phúc','Cống Vị','Liễu Giai','Nguyễn Trung Trực','Quán Thánh','Ngọc Hà','Điện Biên','Đội Cấn','Ngọc Khánh','Kim Mã','Giảng Võ','Thành Công']
+      }
+      if(e.target.value=== 'Hoàn Kiếm'){
+        this.listPhuong = ['Phúc Tân','Đồng Xuân','Hàng Mã','Hàng Buồm','Hàng Đào','Hàng Bồ','Cửa Đông','Lý Thái Tổ','Hàng Bạc','Hàng Gai','Chương Dương Độ',
+          'Hàng Trống','Cửa Nam','Hàng Bông','Tràng Tiền','Trần Hưng Đạo','Phan Chu Trinh','Hàng Bài']
+      }
+      if(e.target.value === 'Đống Đa'){
+        this.listPhuong = ['Cát Linh','Văn Miếu','Quốc Tử Giám','Láng Thượng','Ô Chợ Dừa','Văn Chương','Hàng Bột','Láng Hạ','Khâm Thiên','Thổ Quan','Nam Đồng','Trung Phụng','Quang Trung',
+          'Trung Liệt','Phương Liên','Thịnh Quang','Trung Tự','Kim Liên','Phương Mai','Ngã Tư Sở','Khương Thượng']
+      }
+      if(e.target.value === 'Thanh Xuân'){
+        this.listPhuong = ['Nhân Chính','Thượng Đình','Khương Trung','Khương Mai','Thanh Xuân Trung','Phương Liệt','Hạ Đình','Khương Đình','Thanh Xuân Bắc','Thanh Xuân Nam','Kim Giang']
+      }
+      if(e.target.value === 'Cầu Giấy'){
+        this.listPhuong = ['Nghĩa Đô','Nghĩa Tân','Mai Dịch','Dịch Vọng','Dịch Vọng Hậu','Quan Hoa','Yên Hoà','Trung Hoà']
+      }
+      if(e.target.value === 'Hoàng Mai'){
+        this.listPhuong = ['Thanh Trì','Vĩnh Hưng','Định Công','Mai Động','Tương Mai','Đại Kim','Tân Mai','Hoàng Văn Thụ','Giáp Bát','Lĩnh Nam','Thịnh Liệt','Trần Phú','Hoàng Liệt','Yên Sở']
+      }
+      if(e.target.value === 'Hai Bà Trưng'){
+        this.listPhuong = ['Nguyễn Du','Bạch Đằng','Phạm Đình Hổ','Bùi Thị Xuân','Ngô Thì Nhậm','Lê Đại Hành',
+          'Đồng Nhân','Phố Huế','Đống Mác','Thanh Lương','Thanh Nhàn','Cầu Dền','Bách Khoa','Đồng Tâm','Vĩnh Tuy','Bạch Mai','Quỳnh Mai','Quỳnh Lôi','Minh Khai','Trương Định']
+      }
+      if(e.target.value === 'Tây Hồ'){
+        this.listPhuong = ['Phú Thượng','Nhật Tân','Tứ Liên','Quảng An','Xuân La','Yên Phụ','Bưởi','Thụy Khuê']
+      }
+    },
     HandleRegister() {
         this.spinner = true
+        this.address = this.addressDetail + ' - ' + this.addressPhuong + ' - ' + this.addressQuan
         apiFactory.callApi(API_USER.USER_REGISTER, 'POST', {
           email: this.email,
           phone: this.phone,

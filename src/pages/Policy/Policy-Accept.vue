@@ -5,8 +5,22 @@
         <div class="title">CHÍNH SÁCH KIỂM DUYỆT</div>
         <div class="container">
           <div class="content">
+            <p>Để hạn chế tối đa số lượng thông tin hiển thị trên nền tảng không chính xác, chính sách kiểm duyệt là quy trình tất yếu để bắt buộc người dùng phải có
+            trách nhiệm trong quá trình sử dụng, phải thật thà sử dụng những thông tin thực tế, không giả mạo. Ngoài ra, sẽ có một số trường hợp mặc dù thông tin người
+            dùng đăng tải có thể chính xác, nhưng nó vi phạm điều khoản cộng đồng nên không thể dược phê duyệt!</p>
             <span>1. Quy Trình Kiểm Duyệt</span>
-
+            <ul>
+              <li>B1: Người dùng chuẩn bị sẵn ảnh, thông tin cần thiết để có thể đăng tải nội dung lên nền tảng</li>
+              <li>B2: Sau khi hoàn tất thủ tục nhập liệu, người dùng xác nhận và sẽ được chuyển sang trạng thái phê duyệt</li>
+              <li>B3: Trong lúc chờ dợi, Quản trị viên sẽ xem xét thông tin và tính hợp lệ để có thể duyệt hay không</li>
+              <li>B4: Với mỗi thông tin được chỉnh sửa, đồng nghĩa với việc bạn sẽ cần phải đợi duyệt lại</li>
+            </ul>
+            <span>2. Các thể loại sách không thể đăng tải</span>
+            <p>Một số thể loại sách cấm đăng tải lên nền tảng như: Sách giả, sách xuyên tạc, các đầu sách không được lưu hành trên thị trường. Sách, báo, tạp chí 18+,...
+            </p>
+            <span>3. Các bài dăng không thể đăng tải</span>
+            <p>Chỉ được phép đăng các bài đăng liên quan về sách, các đầu sách không nằm trong danh mục sách bị cấm. Sử dụng những từ ngữ dựa theo chuẩn thuần phong đạo đức.
+            Không xuyên tạc, đề cập một cách tiêu cực đến cụ thể một tổ chức nào hết...</p>
           </div>
         </div>
       </div>

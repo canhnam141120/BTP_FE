@@ -5,7 +5,24 @@
         <div class="title">CHÍNH SÁCH ĐỀN BÙ</div>
         <div class="container">
           <div class="content">
+            <span>1. Trường hợp sách bị hư hỏng so với trạng thái ban đầu</span>
+            <p>
+              Giá trị đền bù sẽ được xác định dựa trên các mức độ và yếu tố gây tổn hại về sách, nội dung sách so
+              với trạng thái sách ban đầu, sẽ được thỏa thuận trực tiếp trao đổi giữa nhân viên vận chuyển của Trạm và người sử dụng.
+              Số tiền đền bù sẽ được trích xuất trừ vào số tiền mà người dùng đã đặt cọc
+            </p>
+            <p>Cụ thể các mức đền bù và số tiền phải đền bù như sau:</p>
 
+            <ul>
+              <li>Sách bị nhàu, gấp quá mức: 10% tiền đặt cọc</li>
+              <li>Sách bị vẽ vời, tô màu, viết chữ nhiều quá mức: 5% tiền đặt cọc với 1 lỗi</li>
+              <li>Sách bị rách, cháy, ướt (không ảnh hưởng đến nội dung): 5% tiền đặt cọc với 1 lỗi</li>
+              <li>Sách bị rách, cháy, ướt (ảnh hưởng đến nội dung): Thỏa thuận với chủ cuốn sách</li>
+              <li>Sách không thể sử dụng tiếp: 100% tiền đặt cọc</li>
+            </ul>
+
+            <span>2. Trường hợp mất sách hoặc không nhân viên của Trạm không thể liên hệ thu hồi sách (trong vòng 1 tuần kể từ ngày hết hạn)</span>
+            <p>Trong trường hợp này, người dùng sẽ phải dùng 100% số tiền cọc mà mình đã đặt để bồi thường cho người còn lại!</p>
           </div>
         </div>
       </div>

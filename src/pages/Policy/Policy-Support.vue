@@ -5,7 +5,14 @@
         <div class="title">TRUNG TÂM HỖ TRỢ & LIÊN HỆ</div>
         <div class="container">
           <div class="content">
-
+            <span>Mọi thắc mắc và vấn đề bạn gặp phải trong quá trình sử dụng nền tảng xin vui lòng liên hệ với chúng tôi qua các phương thức sau:</span>
+            <ul>
+              <li>Hòm thư điện tử: tramsachhn@gmail.com</li>
+              <li>Hotline: 0961284654</li>
+              <li>Địa chỉ: Số 1, Đào Duy Anh, Đống Đa, Hà Nội</li>
+            </ul>
+            <p>Chúng tôi sẽ xin phép chỉ tiếp nhận yêu cầu trong giờ hành chính, ngoài ra, vào các ngày nghỉ lễ, chúng tôi sẽ sớm phản hồi cho các bạn sau khi quay trở lại làm việc.</p>
+            <p>TRẠM SÁCH XIN CẢM ƠN!</p>
           </div>
         </div>
       </div>
