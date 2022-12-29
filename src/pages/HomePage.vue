@@ -1,12 +1,108 @@
 <template>
   <Layout>
     <main style="flex-grow: 1;">
-      <SlidePicture></SlidePicture>
+      <div>
+        <b-carousel
+            id="carousel-fade"
+            v-model="slidex"
+            :interval="4000"
+            style="text-shadow: 0px 0px 2px #000"
+            @sliding-start="onSlideStart"
+            @sliding-end="onSlideEnd"
+            fade
+            indicators
+            background="#ababab"
+            img-width="1024"
+            img-height="510"
+        >
+          <b-carousel-slide>
+            <template #img>
+              <img
+                  class="d-block img-fluid w-100"
+                  width="1024"
+                  height="480"
+                  src="../image/ts.png"
+                  alt="image slot"
+              >
+            </template>
+          </b-carousel-slide>
+          <b-carousel-slide>
+            <template #img>
+              <img
+                  class="d-block img-fluid w-100"
+                  width="1024"
+                  height="480"
+                  src="../image/tree.png"
+                  alt="image slot"
+              >
+            </template>
+          </b-carousel-slide>
+          <b-carousel-slide>
+            <template #img>
+              <img
+                  class="d-block img-fluid w-100"
+                  width="1024"
+                  height="480"
+                  src="../image/co2.png"
+                  alt="image slot"
+              >
+            </template>
+          </b-carousel-slide>
+          <b-carousel-slide>
+            <template #img>
+              <img
+                  class="d-block img-fluid w-100"
+                  width="1024"
+                  height="480"
+                  src="../image/money.png"
+                  alt="image slot"
+              >
+            </template>
+          </b-carousel-slide>
+          <b-carousel-slide>
+            <template #img>
+              <img
+                  class="d-block img-fluid w-100"
+                  width="1024"
+                  height="480"
+                  src="../image/zone.png"
+                  alt="image slot"
+              >
+            </template>
+          </b-carousel-slide>
+          <b-carousel-slide>
+            <template #img>
+              <img
+                  class="d-block img-fluid w-100"
+                  width="1024"
+                  height="480"
+                  src="../image/limit.png"
+                  alt="image slot"
+              >
+            </template>
+          </b-carousel-slide>
+          <b-carousel-slide>
+            <template #img>
+              <img
+                  class="d-block img-fluid w-100"
+                  width="1024"
+                  height="480"
+                  src="../image/commu.png"
+                  alt="image slot"
+              >
+            </template>
+          </b-carousel-slide>
+        </b-carousel>
+        <br>
+      </div>
       <!--==============body=============-->
       <div class="homepage">
         <div class="container">
           <div class="listBook">
-            <div class="home-title">SÁCH MỚI NHẤT
+            <div class="home-title">
+              <Icon style="padding-bottom: 5px" icon="mingcute:book-4-line"/>
+              SÁCH MỚI NHẤT
+              <Icon style="padding-bottom: 5px" icon="mingcute:book-4-line"/>
               <router-link to="/AllBooks" class="moreBook">[Xem tất cả]</router-link>
             </div>
             <hr style="margin-top: 0px">
@@ -49,7 +145,10 @@
             </b-skeleton-wrapper>
           </div>
           <div class="listPost">
-            <div class="home-title2">BÀI VIẾT MỚI NHẤT
+            <div class="home-title2">
+              <Icon style="padding-bottom: 5px" icon="bi:file-earmark-post-fill"/>
+              BÀI VIẾT MỚI NHẤT
+              <Icon style="padding-bottom: 5px" icon="bi:file-earmark-post-fill"/>
               <router-link to="/BlogIndex" class="moreBook">[Xem tất cả]</router-link>
             </div>
             <hr style="margin-top: 0px">
@@ -88,7 +187,9 @@
             </b-skeleton-wrapper>
           </div>
           <div class="listUserHP">
-            <div class="home-title3">TOP NGƯỜI DÙNG ĐƯỢC YÊU THÍCH</div>
+            <div class="home-title3">
+              <Icon style="padding-bottom: 5px" icon="mdi:user-heart-outline"/>TOP NGƯỜI DÙNG ĐƯỢC YÊU THÍCH
+              <Icon style="padding-bottom: 5px" icon="mdi:user-heart-outline"/></div>
             <hr style="margin-top: 0px">
             <b-skeleton-wrapper :loading="loading">
               <template #loading>
@@ -202,7 +303,7 @@
             <div class="addLeft">
               <b-carousel
                   v-model="slidex"
-                  :interval="3000"
+                  :interval="4000"
                   @sliding-start="onSlideStart"
                   @sliding-end="onSlideEnd"
               >
@@ -310,14 +411,14 @@ import {API_BOOK, API_POST, API_MANAGE_USER} from "@/constant/constant-api";
 import Layout from "@/components/Layout";
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
-import SlidePicture from "../components/SlidePicture";
 import {Icon} from '@iconify/vue2';
 
 export default {
   name: "HomePage",
-  components: {SlidePicture, Layout, Icon},
+  components: {Layout, Icon},
   data() {
     return {
+      slide: '',
       slidex: 0,
       sliding: null,
       loading: false,

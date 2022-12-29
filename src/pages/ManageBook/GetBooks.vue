@@ -245,7 +245,7 @@ export default {
       showDialogBD: false,
       listFilter: ['Tất Cả', 'Đã Duyệt', 'Đã Hủy', 'Đang Đợi'],
       filter: 'Tất Cả',
-      page: ''
+      page: '1'
     }
   },
   created() {
@@ -275,7 +275,7 @@ export default {
     getBooksAll(pageNumber) {
       window.scroll(0,0)
       if (this.isSearch) {
-        apiFactory.callApi(API_MANAGE_BOOK.SEARCH_BOOK + pageNumber, 'POST', {
+        apiFactory.callApi(API_MANAGE_BOOK.SEARCH_BOOK+ '?page=' + pageNumber, 'POST', {
           search: this.search
         }).then((res) => {
           this.listBooks = res.data.data
@@ -285,7 +285,7 @@ export default {
         });
       }
       else {
-        apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK + pageNumber, 'GET', {}).then((res) => {
+        apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK + '?page=' + pageNumber, 'GET', {}).then((res) => {
           this.listBooks = res.data.data
           this.totalBook = res.data.numberOfRecords
           this.page = pageNumber
@@ -296,7 +296,7 @@ export default {
     getBooksApproved(pageNumber) {
       window.scroll(0,0)
       this.isSearch = false;
-      apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK_APPROVED + pageNumber, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK_APPROVED + '?page=' + pageNumber, 'GET', {}).then((res) => {
         this.listBooks = res.data.data
         this.totalBook = res.data.numberOfRecords
         this.page = pageNumber
@@ -306,7 +306,7 @@ export default {
     getBooksDenied(pageNumber) {
       window.scroll(0,0)
       this.isSearch = false;
-      apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK_DENIED + pageNumber, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK_DENIED + '?page=' + pageNumber, 'GET', {}).then((res) => {
         this.listBooks = res.data.data
         this.totalBook = res.data.numberOfRecords
         this.page = pageNumber
@@ -316,7 +316,7 @@ export default {
     getBooksWaiting(pageNumber) {
       window.scroll(0,0)
       this.isSearch = false;
-      apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK_WAITING + pageNumber, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_BOOK.LIST_BOOK_WAITING + '?page=' + pageNumber, 'GET', {}).then((res) => {
         this.listBooks = res.data.data
         this.totalBook = res.data.numberOfRecords
         this.page = pageNumber

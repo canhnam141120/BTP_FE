@@ -90,11 +90,11 @@
               <tbody v-for="item of listRentBills" :key="item.id">
               <tr>
                 <td>20{{ item.id}}</td>
-                <td>{{item.userId}}/{{item.user.fullname}}</td>
+                <td>{{item.userId}}/{{item.user?.fullname}}</td>
                 <td>{{item.totalBook}}</td>
                 <td>{{item.depositFee.toLocaleString()}}đ</td>
                 <td>{{item.feeId1Navigation.price.toLocaleString()}}đ</td>
-                <td v-if="item.feeId3Navigation">{{item.feeId2Navigation.price.toLocaleString()}}đ + {{item.totalBook-1}}x{{item.feeId3Navigation.price}}đ</td>
+                <td v-if="item.feeId3Navigation">{{item.feeId2Navigation.price.toLocaleString()}}đ + {{item.totalBook-1}}x{{item.feeId3Navigation?.price}}đ</td>
                 <td v-else>{{item.feeId2Navigation.price.toLocaleString()}}đ</td>
                 <td>{{item.totalAmount.toLocaleString()}}đ</td>
                 <td v-if="item.isPaid"><span class="role paid">ĐÃ THANH TOÁN</span></td>
@@ -187,8 +187,8 @@
                 <tr>
                   <td style="padding-left: 12px"><button class="tableBtnAction" v-on:click="openDialogDetail(item.id)"><Icon icon="ic:baseline-remove-red-eye"/></button></td>
                   <td>T{{ item.id }}</td>
-                  <td>{{ item.ownerId }} - {{ item.owner.fullname }}</td>
-                  <td>{{ item.renterId }} - {{ item.renter.fullname }}</td>
+                  <td>{{ item.ownerId }} - {{ item.owner?.fullname }}</td>
+                  <td>{{ item.renterId }} - {{ item.renter?.fullname }}</td>
                   <td v-if="item.storageStatus == 'Waiting'" ><span class="role tradingWaiting">ĐANG ĐỢI</span></td>
                   <td v-if="item.storageStatus == 'Received'" ><span class="role tradingStatus">ĐÃ NHẬN - {{item.receiveDate|formatDate}}</span></td>
                   <td v-if="item.storageStatus == 'Sent'" ><span class="role tradingStatus">ĐÃ GỬI - {{item.sendDate|formatDate}}</span></td>
@@ -382,7 +382,7 @@
               <tbody v-for="item of listRentBills" :key="item.id">
               <tr>
                 <td>20{{ item.id}}</td>
-                <td>{{item.userId}}/{{item.user.fullname}}</td>
+                <td>{{item.userId}}/{{item.user?.fullname}}</td>
                 <td>{{item.totalBook}}</td>
                 <td>{{item.depositFee.toLocaleString()}}đ</td>
                 <td>{{item.feeId1Navigation.price.toLocaleString()}}đ</td>
@@ -479,8 +479,8 @@
                 <tr>
                   <td style="padding-left: 12px"><button class="tableBtnAction" v-on:click="openDialogDetail(item.id)"><Icon icon="ic:baseline-remove-red-eye"/></button></td>
                   <td>T{{ item.id }}</td>
-                  <td>{{ item.ownerId }} - {{ item.owner.fullname }}</td>
-                  <td>{{ item.renterId }} - {{ item.renter.fullname }}</td>
+                  <td>{{ item.ownerId }} - {{ item.owner?.fullname }}</td>
+                  <td>{{ item.renterId }} - {{ item.renter?.fullname }}</td>
                   <td v-if="item.storageStatus == 'Waiting'" ><span class="role tradingWaiting">ĐANG ĐỢI</span></td>
                   <td v-if="item.storageStatus == 'Received'" ><span class="role tradingStatus">ĐÃ NHẬN - {{item.receiveDate|formatDate}}</span></td>
                   <td v-if="item.storageStatus == 'Sent'" ><span class="role tradingStatus">ĐÃ GỬI - {{item.sendDate|formatDate}}</span></td>
@@ -619,7 +619,7 @@ export default {
       filter: 'Tất Cả',
       listFilter: ['Tất Cả', 'Đang Đợi', 'Đang Giao Dịch', 'Đã Hoàn Thành', 'Đã Hủy'],
       listStatus: [{id: 'Waiting', name: 'Đang Đợi'},{id: 'Received', name: 'Đã Nhận'},{id: 'Sent', name: 'Đã Gửi'},{id: 'Recall', name: 'Đã Thu Hồi'},{id: 'Refund', name: 'Đã Hoàn Trả'}],
-      page: '',
+      page: '1',
       showDialogRD: false,
       showDialogBD: false,
       showDialogUR: false,
@@ -663,7 +663,7 @@ export default {
     },
     getRents(pageNumber) {
       if(this.isSearch){
-        apiFactory.callApi(API_MANAGE_TRANSACTION.SEARCH_RENT + pageNumber, 'POST', {
+        apiFactory.callApi(API_MANAGE_TRANSACTION.SEARCH_RENT + '?page=' + pageNumber, 'POST', {
           id: this.search
         }).then((res) => {
           this.listRents = res.data.data
@@ -672,7 +672,7 @@ export default {
         }).catch(() => {
         });
       }else{
-        apiFactory.callApi(API_MANAGE_TRANSACTION.LIST_RENT + pageNumber, 'GET', {}).then((res) => {
+        apiFactory.callApi(API_MANAGE_TRANSACTION.LIST_RENT + '?page=' + pageNumber, 'GET', {}).then((res) => {
           this.listRents = res.data.data
           this.totalRents = res.data.numberOfRecords
           this.page = pageNumber
@@ -681,7 +681,7 @@ export default {
       }
     },
     getRentWaiting(pageNumber){
-      apiFactory.callApi(API_MANAGE_TRANSACTION.WAITING_RENT + pageNumber, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_TRANSACTION.WAITING_RENT + '?page=' + pageNumber, 'GET', {}).then((res) => {
         this.listRents = res.data.data
         this.totalRents = res.data.numberOfRecords
         this.page = pageNumber
@@ -689,7 +689,7 @@ export default {
       });
     },
     getRentTrading(pageNumber){
-      apiFactory.callApi(API_MANAGE_TRANSACTION.TRADING_RENT + pageNumber, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_TRANSACTION.TRADING_RENT + '?page=' + pageNumber, 'GET', {}).then((res) => {
         this.listRents = res.data.data
         this.totalRents = res.data.numberOfRecords
         this.page = pageNumber
@@ -697,7 +697,7 @@ export default {
       });
     },
     getRentComplete(pageNumber){
-      apiFactory.callApi(API_MANAGE_TRANSACTION.COMPLETE_RENT + pageNumber, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_TRANSACTION.COMPLETE_RENT + '?page=' + pageNumber, 'GET', {}).then((res) => {
         this.listRents = res.data.data
         this.totalRents = res.data.numberOfRecords
         this.page = pageNumber
@@ -705,7 +705,7 @@ export default {
       });
     },
     getRentCancel(pageNumber){
-      apiFactory.callApi(API_MANAGE_TRANSACTION.CANCEL_RENT + pageNumber, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_TRANSACTION.CANCEL_RENT + '?page=' + pageNumber, 'GET', {}).then((res) => {
         this.listRents = res.data.data
         this.totalRents = res.data.numberOfRecords
         this.page = pageNumber

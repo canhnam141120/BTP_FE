@@ -4,7 +4,7 @@
       <div class="Main__header__container">
         <div class="Main__logo">
           <a href="/">
-            <img src="../image/logo.png" alt="Logo Trạm Sách"/>
+            <img src="../image/lggd.png" alt="Logo Trạm Sách"/>
           </a>
         </div>
         <div>
@@ -23,7 +23,7 @@
             >Trạm đọc
             </router-link>
             <router-link
-                to="/Policy&Terms"
+                to="/PolicyTerms"
                 class="Main__list__item musers-management"
                 active-color="#9D6B54"
             >Chính sách & điều khoản
@@ -41,7 +41,7 @@
             >Giới thiệu
             </router-link>
             <router-link
-                to="/Q&A"
+                to="/QA"
                 class="Main__list__item musers-management"
                 active-color="#9D6B54"
             >Q&A
@@ -227,9 +227,11 @@ export default {
     }
   },
   created() {
-    this.getUserInfoByToken()
-    this.getNotifications()
-    this.getNotificationsNotRead()
+    if(this.$cookies.get('token')){
+      this.getUserInfoByToken()
+      this.getNotifications()
+      this.getNotificationsNotRead()
+    }
   },
   methods:{
     getUserInfoByToken(){
@@ -323,11 +325,11 @@ export default {
 
   &__logo {
     padding-right: 20px;
-    height: 60px;
+    height: 40px;
   }
 
   &__logo img {
-    width: 180px;
+    width: 150px;
     height: auto;
     position: unset;
     padding-bottom: 10px;

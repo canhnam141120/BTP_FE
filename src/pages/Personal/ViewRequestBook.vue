@@ -307,7 +307,7 @@
                 <label class="titleBD"><strong>{{ book.title }}</strong></label>
                 <div class="contentRight">
                   <div class="bookInfoBD">
-                    <div>Thể loại: <span>{{ book.category.name }}</span></div>
+                    <div>Thể loại: <span>{{ book.category?.name }}</span></div>
                     <div>Tác giả: <span>{{ book.author }}</span></div>
                     <div>Nhà xuất bản: <span>{{ book.publisher }}</span></div>
                     <div>Năm xuất bản: <span>{{ book.year }}</span></div>
@@ -320,9 +320,9 @@
                       duyệt</strong></div>
                     <div v-if="book.status == 'Denied'">Trạng thái: <strong style="color: red;">Đã bị hủy</strong></div>
                     <div v-if="book.status == 'Waiting'">Trạng thái: <strong>Đang đợi duyệt</strong></div>
-                    <div>Giá bìa: <span class="cover">{{ book.coverPrice.toLocaleString() }}đ</span></div>
-                    <div>Phí đặt cọc: <span class="deposit">{{ book.depositPrice.toLocaleString() }}đ</span></div>
-                    <div v-if="book.isRent">Phí thuê: <span class="rent">{{ book.rentFee.toLocaleString() }}đ</span>
+                    <div>Giá bìa: <span class="cover">{{ book.coverPrice?.toLocaleString() }}đ</span></div>
+                    <div>Phí đặt cọc: <span class="deposit">{{ book.depositPrice?.toLocaleString() }}đ</span></div>
+                    <div v-if="book.isRent">Phí thuê: <span class="rent">{{ book.rentFee?.toLocaleString() }}đ</span>
                     </div>
                   </div>
                 </div>
@@ -343,9 +343,9 @@
                         item.bookOffer.user.fullname
                       }}
                     </div>
-                    <div class="book-statusMB">{{ item.bookOffer.category.name }}</div>
+                    <div class="book-statusMB">{{ item.bookOffer.category?.name }}</div>
                     <label class="book-statusMB">Giá bìa: <strong>{{
-                        item.bookOffer.coverPrice.toLocaleString()
+                        item.bookOffer.coverPrice?.toLocaleString()
                       }}đ</strong></label>
                     <label class="book-statusMB">{{ item.bookOffer.statusBook }}</label>
                   </div>

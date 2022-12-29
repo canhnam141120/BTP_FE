@@ -307,7 +307,7 @@ export default {
       spinner: false,
       listFilter: ['Tất Cả', 'Đã Duyệt', 'Đã Hủy', 'Đang Đợi'],
       filter: 'Tất Cả',
-      page: ''
+      page: '1'
     }
   },
   created() {
@@ -340,7 +340,7 @@ export default {
     },
     getPostsAll(pageNumber) {
       if(this.search){
-        apiFactory.callApi(API_MANAGE_POST.SEARCH_POST + pageNumber, 'POST', {
+        apiFactory.callApi(API_MANAGE_POST.SEARCH_POST + '?page=' + pageNumber, 'POST', {
           search: this.search
         }).then((res) => {
           this.listPosts = res.data.data
@@ -350,7 +350,7 @@ export default {
         });
       }
       else{
-        apiFactory.callApi(API_MANAGE_POST.LIST_POST + pageNumber, 'GET', {}).then((res) => {
+        apiFactory.callApi(API_MANAGE_POST.LIST_POST + '?page=' + pageNumber, 'GET', {}).then((res) => {
           this.listPosts = res.data.data
           this.totalPosts = res.data.numberOfRecords
           this.page = pageNumber
@@ -360,7 +360,7 @@ export default {
     },
     getPostsApproved(pageNumber) {
       this.isSearch = false;
-      apiFactory.callApi(API_MANAGE_POST.LIST_POST_APPROVED + pageNumber, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_POST.LIST_POST_APPROVED+ '?page=' + pageNumber, 'GET', {}).then((res) => {
         this.listPosts = res.data.data
         this.totalPosts = res.data.numberOfRecords
         this.page = pageNumber
@@ -369,7 +369,7 @@ export default {
     },
     getPostsDenied(pageNumber) {
       this.isSearch = false;
-      apiFactory.callApi(API_MANAGE_POST.LIST_POST_DENIED + pageNumber, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_POST.LIST_POST_DENIED + '?page=' + pageNumber, 'GET', {}).then((res) => {
         this.listPosts = res.data.data
         this.totalPosts = res.data.numberOfRecords
         this.page = pageNumber
@@ -378,7 +378,7 @@ export default {
     },
     getPostsWaiting(pageNumber) {
       this.isSearch = false;
-      apiFactory.callApi(API_MANAGE_POST.LIST_POST_WAITING + pageNumber, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_POST.LIST_POST_WAITING + '?page=' + pageNumber, 'GET', {}).then((res) => {
         this.listPosts = res.data.data
         this.totalPosts = res.data.numberOfRecords
         this.page = pageNumber

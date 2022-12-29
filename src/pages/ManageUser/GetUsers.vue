@@ -375,7 +375,7 @@ export default {
       search: '',
       isSearch: false,
       spinner: false,
-      page: '',
+      page: '1',
       filter: 'Tất Cả',
       listFilter: ['Tất Cả', 'Đang Hoạt Động', 'Đang Khóa'],
       showDialog: false,
@@ -409,7 +409,7 @@ export default {
     },
     getUsersAll(pageNumber) {
       if(this.search){
-        apiFactory.callApi(API_MANAGE_USER.SEARCH_USER + pageNumber, 'POST', {
+        apiFactory.callApi(API_MANAGE_USER.SEARCH_USER + '?page=' + pageNumber, 'POST', {
           search: this.search
         }).then((res) => {
           this.listUsers = res.data.data
@@ -419,7 +419,7 @@ export default {
         });
       }
       else{
-        apiFactory.callApi(API_MANAGE_USER.LIST_USER + pageNumber, 'GET', {}).then((res) => {
+        apiFactory.callApi(API_MANAGE_USER.LIST_USER + '?page='  + pageNumber, 'GET', {}).then((res) => {
           this.listUsers = res.data.data
           this.totalUsers = res.data.numberOfRecords
           this.page = pageNumber
@@ -428,7 +428,7 @@ export default {
       }
     },
     getUsersBan(pageNumber) {
-      apiFactory.callApi(API_MANAGE_USER.LIST_BAN_USER + pageNumber, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_USER.LIST_BAN_USER + '?page='  + pageNumber, 'GET', {}).then((res) => {
         this.listUsers = res.data.data
         this.totalUsers = res.data.numberOfRecords
         this.page = pageNumber
@@ -436,7 +436,7 @@ export default {
       });
     },
     getUsersActive(pageNumber) {
-      apiFactory.callApi(API_MANAGE_USER.LIST_ACTIVE_USER + pageNumber, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_USER.LIST_ACTIVE_USER + '?page='  + pageNumber, 'GET', {}).then((res) => {
         this.listUsers = res.data.data
         this.totalUsers = res.data.numberOfRecords
         this.page = pageNumber

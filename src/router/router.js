@@ -59,14 +59,14 @@ const routers = [
         component: () => import('@/pages/Policy/TermOfUse'),
     },
     {
-        path:'/Policy&Terms',
-        name:'Policy&Terms',
-        component: () => import('@/pages/Policy&Terms'),
+        path:'/PolicyTerms',
+        name:'PolicyTerms',
+        component: () => import('@/pages/PolicyTerms'),
     },
     {
-        path:'/Q&A',
-        name:'Q&A',
-        component: () => import('@/pages/Q&A'),
+        path:'/QA',
+        name:'QA',
+        component: () => import('@/pages/QA'),
     },
     {
         path:'/Policy-Cencorship',

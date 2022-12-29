@@ -127,7 +127,7 @@
               <tbody v-for="item of listExchangeBills" :key="item.id">
               <tr>
                 <td>10{{ item.id }}</td>
-                <td>{{ item.userId }}/{{ item.user.fullname }}</td>
+                <td>{{ item.userId }}/{{ item.user?.fullname }}</td>
                 <td>{{ item.totalBook }}</td>
                 <td>{{ item.depositFee.toLocaleString() }}đ</td>
                 <td>{{ item.feeId1Navigation.price.toLocaleString() }}đ</td>
@@ -161,7 +161,7 @@
             </div>
             <div class="updateBody">
               <div class="updateLeft">
-                <div class="customer">Khách hàng: {{ exchange.userId1 }}/{{ exchange.userId1Navigation.fullname }}</div>
+                <div class="customer">Khách hàng: {{ exchange.userId1 }}/{{ exchange.userId1Navigation?.fullname }}</div>
                 <label class="labelFee">TT Vận Chuyển: </label>
                 <select class="sl" v-model="exchange.storageStatus1">
                   <option v-bind:value="item.id" v-for="item of listStatus" :key="item.id">{{ item.name }}</option>
@@ -188,7 +188,7 @@
                 <input v-else type="date" class="sl" disabled required v-model="exchange.refundDate1"><br>
               </div>
               <div class="updateRight">
-                <div class="customer">Khách hàng: {{ exchange.userId2 }}/{{ exchange.userId2Navigation.fullname }}</div>
+                <div class="customer">Khách hàng: {{ exchange.userId2 }}/{{ exchange.userId2Navigation?.fullname }}</div>
                 <label class="labelFee">TT Vận Chuyển: </label>
                 <select class="sl" v-model="exchange.storageStatus2">
                   <option v-bind:value="item.id" v-for="item of listStatus" :key="item.id">{{ item.name }}</option>
@@ -272,7 +272,7 @@
                     </button>
                   </td>
                   <td>TD{{ item.id }}</td>
-                  <td>{{ item.userId1 }} - {{ item.userId1Navigation.fullname }}</td>
+                  <td>{{ item.userId1 }} - {{ item.userId1Navigation?.fullname }}</td>
                   <td v-if="item.storageStatus1 == 'Waiting'"><span class="role tradingWaiting">ĐANG ĐỢI</span></td>
                   <td v-if="item.storageStatus1 == 'Received'"><span
                       class="role tradingStatus">ĐÃ NHẬN - {{ item.receiveDate1|formatDate }}</span></td>
@@ -282,7 +282,7 @@
                       class="role tradingStatus">ĐÃ THU HỒI - {{ item.recallDate1|formatDate }}</span></td>
                   <td v-if="item.storageStatus1 == 'Refund'"><span
                       class="role tradingStatus">ĐÃ HOÀN TRẢ - {{ item.refundDate1|formatDate }}</span></td>
-                  <td>{{ item.userId2 }} - {{ item.userId2Navigation.fullname }}</td>
+                  <td>{{ item.userId2 }} - {{ item.userId2Navigation?.fullname }}</td>
                   <td v-if="item.storageStatus2 == 'Waiting'"><span class="role tradingWaiting">ĐANG ĐỢI</span></td>
                   <td v-if="item.storageStatus2 == 'Received'"><span
                       class="role tradingStatus">ĐÃ NHẬN - {{ item.receiveDate2|formatDate }}</span></td>
@@ -361,8 +361,8 @@
                             <div style="font-weight: bold; font-size: 15px;">Mã KH1: <label style="font-weight: normal">
                               {{ exchangeInvoice.userId1 }} </label>
                               <label style="font-weight: bold; font-size: 15px;">Tên KH1: </label><label style="font-weight: normal">{{ exchangeInvoice.userId1Navigation?.fullname }}</label><br>
-                              <label style="font-weight: bold; font-size: 15px;">SĐT: </label><label style="font-weight: normal">{{ infoUser1.phone }}</label><br>
-                              <label style="font-weight: bold; font-size: 15px;">ĐC: </label><label style="font-weight: normal">{{ infoUser1.addressMain }}</label>
+                              <label style="font-weight: bold; font-size: 15px;">SĐT: </label><label style="font-weight: normal">{{ infoUser1?.phone }}</label><br>
+                              <label style="font-weight: bold; font-size: 15px;">ĐC: </label><label style="font-weight: normal">{{ infoUser1?.addressMain }}</label>
                             </div>
                           </td>
                           <td colspan="1" rowspan="1"
@@ -374,8 +374,8 @@
                             <div style="font-weight: bold; font-size: 15px;">Mã KH2: <label style="font-weight: normal">
                               {{ exchangeInvoice.userId2 }} </label>
                               <label style="font-weight: bold; font-size: 15px;">Tên KH2: </label><label style="font-weight: normal">{{ exchangeInvoice.userId2Navigation?.fullname }}</label><br>
-                              <label style="font-weight: bold; font-size: 15px;">SĐT: </label><label style="font-weight: normal">{{ infoUser2.phone }}</label><br>
-                              <label style="font-weight: bold; font-size: 15px;">ĐC: </label><label style="font-weight: normal">{{ infoUser2.addressMain }}</label>
+                              <label style="font-weight: bold; font-size: 15px;">SĐT: </label><label style="font-weight: normal">{{ infoUser2?.phone }}</label><br>
+                              <label style="font-weight: bold; font-size: 15px;">ĐC: </label><label style="font-weight: normal">{{ infoUser2?.addressMain }}</label>
                             </div>
                           </td>
                           <td colspan="1" rowspan="1"
@@ -722,7 +722,7 @@
               <tbody v-for="item of listExchangeBills" :key="item.id">
               <tr>
                 <td>10{{ item.id }}</td>
-                <td>{{ item.userId }}/{{ item.user.fullname }}</td>
+                <td>{{ item.userId }}/{{ item.user?.fullname }}</td>
                 <td>{{ item.totalBook }}</td>
                 <td>{{ item.depositFee.toLocaleString() }}đ</td>
                 <td>{{ item.feeId1Navigation.price.toLocaleString() }}đ</td>
@@ -756,7 +756,7 @@
             </div>
             <div class="updateBody">
               <div class="updateLeft">
-                <div class="customer">Khách hàng: {{ exchange.userId1 }}/{{ exchange.userId1Navigation.fullname }}</div>
+                <div class="customer">Khách hàng: {{ exchange.userId1 }}/{{ exchange.userId1Navigation?.fullname }}</div>
                 <label class="labelFee">TT Vận Chuyển: </label>
                 <select class="sl" v-model="exchange.storageStatus1">
                   <option v-bind:value="item.id" v-for="item of listStatus" :key="item.id">{{ item.name }}</option>
@@ -783,7 +783,7 @@
                 <input v-else type="date" class="sl" disabled required v-model="exchange.refundDate1"><br>
               </div>
               <div class="updateRight">
-                <div class="customer">Khách hàng: {{ exchange.userId2 }}/{{ exchange.userId2Navigation.fullname }}</div>
+                <div class="customer">Khách hàng: {{ exchange.userId2 }}/{{ exchange.userId2Navigation?.fullname }}</div>
                 <label class="labelFee">TT Vận Chuyển: </label>
                 <select class="sl" v-model="exchange.storageStatus2">
                   <option v-bind:value="item.id" v-for="item of listStatus" :key="item.id">{{ item.name }}</option>
@@ -867,7 +867,7 @@
                     </button>
                   </td>
                   <td>TD{{ item.id }}</td>
-                  <td>{{ item.userId1 }} - {{ item.userId1Navigation.fullname }}</td>
+                  <td>{{ item.userId1 }} - {{ item.userId1Navigation?.fullname }}</td>
                   <td v-if="item.storageStatus1 == 'Waiting'"><span class="role tradingWaiting">ĐANG ĐỢI</span></td>
                   <td v-if="item.storageStatus1 == 'Received'"><span
                       class="role tradingStatus">ĐÃ NHẬN - {{ item.receiveDate1|formatDate }}</span></td>
@@ -877,7 +877,7 @@
                       class="role tradingStatus">ĐÃ THU HỒI - {{ item.recallDate1|formatDate }}</span></td>
                   <td v-if="item.storageStatus1 == 'Refund'"><span
                       class="role tradingStatus">ĐÃ HOÀN TRẢ - {{ item.refundDate1|formatDate }}</span></td>
-                  <td>{{ item.userId2 }} - {{ item.userId2Navigation.fullname }}</td>
+                  <td>{{ item.userId2 }} - {{ item.userId2Navigation?.fullname }}</td>
                   <td v-if="item.storageStatus2 == 'Waiting'"><span class="role tradingWaiting">ĐANG ĐỢI</span></td>
                   <td v-if="item.storageStatus2 == 'Received'"><span
                       class="role tradingStatus">ĐÃ NHẬN - {{ item.receiveDate2|formatDate }}</span></td>
@@ -956,8 +956,8 @@
                             <div style="font-weight: bold; font-size: 15px;">Mã KH1: <label style="font-weight: normal">
                               {{ exchangeInvoice.userId1 }} </label>
                               <label style="font-weight: bold; font-size: 15px;">Tên KH1: </label><label style="font-weight: normal">{{ exchangeInvoice.userId1Navigation?.fullname }}</label><br>
-                              <label style="font-weight: bold; font-size: 15px;">SĐT: </label><label style="font-weight: normal">{{ infoUser1.phone }}</label><br>
-                              <label style="font-weight: bold; font-size: 15px;">ĐC: </label><label style="font-weight: normal">{{ infoUser1.addressMain }}</label>
+                              <label style="font-weight: bold; font-size: 15px;">SĐT: </label><label style="font-weight: normal">{{ infoUser1?.phone }}</label><br>
+                              <label style="font-weight: bold; font-size: 15px;">ĐC: </label><label style="font-weight: normal">{{ infoUser1?.addressMain }}</label>
                             </div>
                           </td>
                           <td colspan="1" rowspan="1"
@@ -969,8 +969,8 @@
                             <div style="font-weight: bold; font-size: 15px;">Mã KH2: <label style="font-weight: normal">
                               {{ exchangeInvoice.userId2 }} </label>
                               <label style="font-weight: bold; font-size: 15px;">Tên KH2: </label><label style="font-weight: normal">{{ exchangeInvoice.userId2Navigation?.fullname }}</label><br>
-                              <label style="font-weight: bold; font-size: 15px;">SĐT: </label><label style="font-weight: normal">{{ infoUser2.phone }}</label><br>
-                              <label style="font-weight: bold; font-size: 15px;">ĐC: </label><label style="font-weight: normal">{{ infoUser2.addressMain }}</label>
+                              <label style="font-weight: bold; font-size: 15px;">SĐT: </label><label style="font-weight: normal">{{ infoUser2?.phone }}</label><br>
+                              <label style="font-weight: bold; font-size: 15px;">ĐC: </label><label style="font-weight: normal">{{ infoUser2?.addressMain }}</label>
                             </div>
                           </td>
                           <td colspan="1" rowspan="1"
@@ -1239,7 +1239,7 @@ export default {
         id: 'Sent',
         name: 'Đã Gửi'
       }, {id: 'Recall', name: 'Đã Thu Hồi'}, {id: 'Refund', name: 'Đã Hoàn Trả'}],
-      page: '',
+      page: '1',
       showDialogED: false,
       showDialogBD: false,
       showDialogUE: false,
@@ -1291,7 +1291,7 @@ export default {
     },
     getExchanges(pageNumber) {
       if (this.isSearch) {
-        apiFactory.callApi(API_MANAGE_TRANSACTION.SEARCH_EXCHANGE + pageNumber, 'POST', {
+        apiFactory.callApi(API_MANAGE_TRANSACTION.SEARCH_EXCHANGE+ '?page=' + pageNumber, 'POST', {
           id: this.search
         }).then((res) => {
           this.listExchanges = res.data.data
@@ -1300,7 +1300,7 @@ export default {
         }).catch(() => {
         });
       } else {
-        apiFactory.callApi(API_MANAGE_TRANSACTION.LIST_EXCHANGE + pageNumber, 'GET', {}).then((res) => {
+        apiFactory.callApi(API_MANAGE_TRANSACTION.LIST_EXCHANGE + '?page=' + pageNumber, 'GET', {}).then((res) => {
           this.listExchanges = res.data.data
           this.totalExchanges = res.data.numberOfRecords
           this.page = pageNumber
@@ -1309,7 +1309,7 @@ export default {
       }
     },
     getExchangeWaiting(pageNumber) {
-      apiFactory.callApi(API_MANAGE_TRANSACTION.WAITING_EXCHANGE + pageNumber, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_TRANSACTION.WAITING_EXCHANGE + '?page=' + pageNumber, 'GET', {}).then((res) => {
         this.listExchanges = res.data.data
         this.totalExchanges = res.data.numberOfRecords
         this.page = pageNumber
@@ -1317,7 +1317,7 @@ export default {
       });
     },
     getExchangeTrading(pageNumber) {
-      apiFactory.callApi(API_MANAGE_TRANSACTION.TRADING_EXCHANGE + pageNumber, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_TRANSACTION.TRADING_EXCHANGE + '?page=' + pageNumber, 'GET', {}).then((res) => {
         this.listExchanges = res.data.data
         this.totalExchanges = res.data.numberOfRecords
         this.page = pageNumber
@@ -1325,7 +1325,7 @@ export default {
       });
     },
     getExchangeComplete(pageNumber) {
-      apiFactory.callApi(API_MANAGE_TRANSACTION.COMPLETE_EXCHANGE + pageNumber, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_TRANSACTION.COMPLETE_EXCHANGE + '?page=' + pageNumber, 'GET', {}).then((res) => {
         this.listExchanges = res.data.data
         this.totalExchanges = res.data.numberOfRecords
         this.page = pageNumber
@@ -1333,7 +1333,7 @@ export default {
       });
     },
     getExchangeCancel(pageNumber) {
-      apiFactory.callApi(API_MANAGE_TRANSACTION.CANCEL_EXCHANGE + pageNumber, 'GET', {}).then((res) => {
+      apiFactory.callApi(API_MANAGE_TRANSACTION.CANCEL_EXCHANGE + '?page=' + pageNumber, 'GET', {}).then((res) => {
         this.listExchanges = res.data.data
         this.totalExchanges = res.data.numberOfRecords
         this.page = pageNumber
