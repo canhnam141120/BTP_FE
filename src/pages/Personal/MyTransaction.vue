@@ -24,7 +24,7 @@
           <tr class="rowData">
             <td style="display: flex; width: 150px;">
               <img class="imageBook" v-bind:src="item.book1.image">
-              <div style="margin-left: 5px;">{{ item.book1.title}}</div>
+              <div style="margin-left: 5px;">{{ item.book1.title }}</div>
             </td>
             <td v-if="item.beforeStatusBook1==null">Chưa cập nhật</td>
             <td v-else>{{ item.beforeStatusBook1 }}</td>
@@ -32,7 +32,7 @@
             <td v-else>{{ item.afterStatusBook1 }}</td>
             <td style="display: flex; width: 150px;">
               <img class="imageBook" v-bind:src="item.book2.image">
-              <div style="margin-left: 5px;">{{ item.book2.title}}</div>
+              <div style="margin-left: 5px;">{{ item.book2.title }}</div>
             </td>
             <td v-if="item.beforeStatusBook2==null">Chưa cập nhật</td>
             <td v-else>{{ item.beforeStatusBook2 }}</td>
@@ -70,26 +70,102 @@
           <button class="dialogExit" v-on:click="cancelDialogExchangeBill">X</button>
         </div>
         <div style="padding-bottom: 10px">
-          <div>Hóa đơn số: {{ billExchange.id }}</div>
-          <div>Giao dịch: {{ billExchange.exchangeId }}</div>
-          <div>Số lượng sách giao dịch: {{ billExchange.totalBook }}</div>
-          <div>Phí đặt cọc: {{ billExchange.depositFee.toLocaleString() }}đ</div>
-          <div>Phí ship: {{ billExchange.feeId1Navigation.price.toLocaleString() }}đ</div>
-          <div v-if="billExchange.feeId3 != 0">Phí dịch vụ: {{ billExchange.feeId2Navigation.price.toLocaleString() }}đ
-            + {{ billExchange.totalBook - 1 }} x {{ billExchange.feeId3Navigation.price.toLocaleString() }}đ
-          </div>
-          <div v-else>Phí dịch vụ: {{ billExchange.feeId2Navigation.price.toLocaleString() }}đ</div>
-          <div>Tổng chi phí: {{ billExchange.totalAmount.toLocaleString() }}đ</div>
-          <div v-if="billExchange.isPaid">
-            <div>TT Thanh toán: Đã thanh toán</div>
-            <div>Thanh toán lúc: {{ billExchange.paidDate | format}}</div>
-            <div>Phương thức: {{ billExchange.payments }}</div>
-            <div v-if="billExchange.isRefund">
-              <div>TT Hoàn tiền: Đã hoàn tiền</div>
-              <div>Ngày hoàn tiền: {{ billExchange.refundDate | formatDate}}</div>
-            </div>
-            <div v-else>Trạng thái hoàn tiền: Chưa hoàn tiền</div>
-          </div>
+          <table style="border-spacing: 0;border-collapse: collapse; margin-right: auto">
+            <tr style="height: 50px">
+              <td colspan="1" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;
+                  vertical-align: middle; text-align: center; width: 60px;">
+                <div style="font-weight: bold; font-size: 13px">Mã GD</div>
+                <div style="font-size: 11px; margin-bottom: 5px">10{{ billExchange.exchangeId }}</div>
+              </td>
+              <td colspan="5" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 380px;">
+                <div style="font-weight: bold; font-size: 17px; text-align: center">HÓA ĐƠN GIAO DỊCH
+                </div>
+                <div style="font-size: 13px; text-align: center">Mã hóa đơn: {{ billExchange.id }}
+                </div>
+              </td>
+            </tr>
+            <tr style="height: 20px">
+              <td colspan="5" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 50px;">
+                <div style="font-size: 13px;">Tổng số lượng sách GD (cuốn)</div>
+              </td>
+              <td colspan="1" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;font-size: 13px;vertical-align: middle;width: 150px;">
+                {{ billExchange.totalBook }}
+              </td>
+            </tr>
+            <tr style="height: 20px">
+              <td colspan="5" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 50px;">
+                <div style="font-size: 13px;">Phí đặt cọc</div>
+              </td>
+              <td colspan="1" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;font-size: 13px;vertical-align: middle;width: 150px;">
+                {{ billExchange.depositFee.toLocaleString() }}đ
+              </td>
+            </tr>
+            <tr style="height: 20px">
+              <td colspan="5" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 50px;">
+                <div style="font-size: 13px;">Phí ship</div>
+              </td>
+              <td colspan="1" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;font-size: 13px;vertical-align: middle;width: 150px;">
+                {{ billExchange.feeId1Navigation.price.toLocaleString() }}đ
+              </td>
+            </tr>
+            <tr style="height: 20px">
+              <td colspan="5" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 50px;">
+                <div style="font-size: 13px;">Phí dịch vụ</div>
+              </td>
+              <td colspan="1" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;font-size: 13px;vertical-align: middle;width: 50px;">
+                {{ billExchange.feeId2Navigation.price.toLocaleString() }}đ
+              </td>
+            </tr>
+            <tr style="height: 20px">
+              <td colspan="5" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 50px;">
+                <div style="font-size: 13px;">Phí dịch vụ với mỗi cuốn sách thêm</div>
+              </td>
+              <td colspan="1" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;font-size: 13px;vertical-align: middle;width: 150px;">
+                {{ billExchange.totalBook - 1 }} x {{ billExchange.feeId3Navigation.price.toLocaleString() }}đ
+              </td>
+            </tr>
+            <tr style="height: 20px">
+              <td colspan="5" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 50px;">
+                <div style="font-size: 13px;">Tổng tiền</div>
+              </td>
+              <td colspan="1" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;font-size: 13px;vertical-align: middle;width: 150px;">
+                {{ billExchange.totalAmount.toLocaleString() }}đ
+              </td>
+            </tr>
+            <tr style="height: 20px">
+              <td colspan="6" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 50px;">
+                <div v-if="billExchange.isPaid">
+                  <div style="font-size: 13px;">Trạng thái Thanh toán: Đã thanh toán</div>
+                  <div style="font-size: 13px;">Thanh toán lúc: {{ billExchange.paidDate | format }}</div>
+                  <div style="font-size: 13px;">Phương thức: {{ billExchange.payments }}</div>
+                </div>
+                <div v-else>
+                  <div style="font-size: 13px;">Trạng thái thanh toán: Chưa thanh toán</div>
+                </div>
+
+                <div v-if="billExchange.isRefund">
+                  <div style="font-size: 13px;">Trạng thái Hoàn tiền: Đã hoàn tiền</div>
+                  <div style="font-size: 13px;">Ngày hoàn tiền: {{ billExchange.refundDate | formatDate }}</div>
+                </div>
+                <div v-else style="font-size: 13px;">Trạng thái hoàn tiền: Chưa hoàn tiền</div>
+              </td>
+            </tr>
+          </table>
         </div>
         <div v-if="!billExchange.isPaid" class="dialogGroupBtn">
           <button class="dialogBtn" v-on:click="payExchange(billExchange.id)">Thanh toán</button>
@@ -114,7 +190,7 @@
           <tr class="rowData">
             <td style="display: flex; width: 150px;">
               <img class="imageBook" v-bind:src="item.book.image">
-              <div style="margin-left: 5px;">{{ item.book.title}}</div>
+              <div style="margin-left: 5px;">{{ item.book.title }}</div>
             </td>
             <td v-if="item.beforeStatusBook==null">Chưa cập nhật</td>
             <td v-else>{{ item.beforeStatusBook }}</td>
@@ -141,15 +217,16 @@
         </table>
       </ExchangeDetailDialog>
       <FeedbackDialog :show="showDialogFeedback"
-                  :cancel="cancelDialogFeedback"
-                  :feedback="feedback"
-                  v-if="showDialogFeedback" class="modal">
+                      :cancel="cancelDialogFeedback"
+                      :feedback="feedback"
+                      v-if="showDialogFeedback" class="modal">
         <div class="topDialog">
           <div class="dialogTitle">ĐÁNH GIÁ SÁCH</div>
           <button class="dialogExit" v-on:click="cancelDialogFeedback">X</button>
         </div>
         <div>
-          <textarea class="inputFB" type="text" required placeholder="Nhập đánh giá của bạn" v-model="feedbackContent"></textarea>
+          <textarea class="inputFB" type="text" required placeholder="Nhập đánh giá của bạn"
+                    v-model="feedbackContent"></textarea>
         </div>
         <div class="dialogGroupBtn">
           <button class="dialogBtn" v-on:click="feedback">Đánh giá</button>
@@ -164,11 +241,11 @@
           <button class="dialogExit" v-on:click="cancelDialogRentBill">X</button>
         </div>
         <div style="padding-bottom: 10px">
-          <div>Hóa đơn số: {{ billRent.id }}</div>
+<!--          <div>Hóa đơn số: </div>
           <div>Giao dịch: {{ billRent.rentId }}</div>
           <div>Số lượng sách giao dịch: {{ billRent.totalBook }}</div>
           <div>Phí đặt cọc: {{ billRent.depositFee.toLocaleString() }}đ</div>
-          <div>Phí thuê: {{ billRent.rentFee.toLocaleString() }}đ</div>
+          <div>Phí thuê:</div>
           <div>Phí ship: {{ billRent.feeId1Navigation.price.toLocaleString() }}đ</div>
           <div v-if="billRent.feeId3 != 0">Phí dịch vụ: {{ billRent.feeId2Navigation.price.toLocaleString() }}đ +
             {{ billRent.totalBook - 1 }} x {{ billRent.feeId3Navigation.price.toLocaleString() }}đ
@@ -177,15 +254,121 @@
           <div>Tổng chi phí: {{ billRent.totalAmount.toLocaleString() }}đ</div>
           <div v-if="billRent.isPaid">
             <div>TT Thanh toán: Đã thanh toán</div>
-            <div>Thanh toán lúc: {{ billRent.paidDate | format}}</div>
+            <div>Thanh toán lúc: {{ billRent.paidDate | format }}</div>
             <div>Phương thức: {{ billRent.payment }}</div>
           </div>
           <div v-else>Trạng thái thanh toán: Chưa thanh toán</div>
           <div v-if="billRent.isRefund">
             <div>TT Hoàn tiền: Đã hoàn tiền</div>
-            <div>Ngày hoàn tiền: {{ billRent.refundDate | formatDate}}</div>
-          </div>
+            <div>Ngày hoàn tiền: {{ billRent.refundDate | formatDate }}</div>
+          </div>-->
+          <table style="border-spacing: 0;border-collapse: collapse; margin-right: auto">
+            <tr style="height: 50px">
+              <td colspan="1" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;
+                  vertical-align: middle; text-align: center; width: 60px;">
+                <div style="font-weight: bold; font-size: 13px">Mã GD</div>
+                <div style="font-size: 11px; margin-bottom: 5px">20{{ billRent.rentId }}</div>
+              </td>
+              <td colspan="5" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 380px;">
+                <div style="font-weight: bold; font-size: 17px; text-align: center">HÓA ĐƠN GIAO DỊCH
+                </div>
+                <div style="font-size: 13px; text-align: center">Mã hóa đơn: {{ billRent.id }}
+                </div>
+              </td>
+            </tr>
+            <tr style="height: 20px">
+              <td colspan="5" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 50px;">
+                <div style="font-size: 13px;">Tổng số lượng sách GD</div>
+              </td>
+              <td colspan="1" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;font-size: 13px;vertical-align: middle;width: 150px;">
+                {{ billRent.totalBook }} cuốn
+              </td>
+            </tr>
+            <tr style="height: 20px">
+              <td colspan="5" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 50px;">
+                <div style="font-size: 13px;">Phí đặt cọc</div>
+              </td>
+              <td colspan="1" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;font-size: 13px;vertical-align: middle;width: 150px;">
+                {{ billRent.depositFee.toLocaleString() }}đ
+              </td>
+            </tr>
+            <tr style="height: 20px">
+              <td colspan="5" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 50px;">
+                <div style="font-size: 13px;">Phí thuê</div>
+              </td>
+              <td colspan="1" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;font-size: 13px;vertical-align: middle;width: 150px;">
+                {{ billRent.rentFee.toLocaleString() }}đ
+              </td>
+            </tr>
+            <tr style="height: 20px">
+              <td colspan="5" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 50px;">
+                <div style="font-size: 13px;">Phí ship</div>
+              </td>
+              <td colspan="1" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;font-size: 13px;vertical-align: middle;width: 150px;">
+                {{ billRent.feeId1Navigation.price.toLocaleString() }}đ
+              </td>
+            </tr>
+            <tr style="height: 20px">
+              <td colspan="5" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 50px;">
+                <div style="font-size: 13px;">Phí dịch vụ</div>
+              </td>
+              <td colspan="1" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;font-size: 13px;vertical-align: middle;width: 50px;">
+                {{ billRent.feeId2Navigation.price.toLocaleString() }}đ
+              </td>
+            </tr>
+            <tr style="height: 20px">
+              <td colspan="5" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 50px;">
+                <div style="font-size: 13px;">Phí dịch vụ với mỗi cuốn sách thêm</div>
+              </td>
+              <td colspan="1" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;font-size: 13px;vertical-align: middle;width: 150px;">
+                {{ billRent.totalBook - 1 }} x {{ billRent.feeId3Navigation.price.toLocaleString() }}đ
+              </td>
+            </tr>
+            <tr style="height: 20px">
+              <td colspan="5" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 50px;">
+                <div style="font-size: 13px;">Tổng tiền</div>
+              </td>
+              <td colspan="1" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;font-size: 13px;vertical-align: middle;width: 150px;">
+                {{ billRent.totalAmount.toLocaleString() }}đ
+              </td>
+            </tr>
+            <tr style="height: 20px">
+              <td colspan="6" rowspan="1"
+                  style="padding: 4px;border: 1px solid black;vertical-align: middle;width: 50px;">
+                <div v-if="billRent.isPaid">
+                  <div style="font-size: 13px;">Trạng thái Thanh toán: Đã thanh toán</div>
+                  <div style="font-size: 13px;">Thanh toán lúc: {{ billRent.paidDate | format }}</div>
+                  <div style="font-size: 13px;">Phương thức: {{ billRent.payments }}</div>
+                </div>
+                <div v-else>
+                  <div style="font-size: 13px;">Trạng thái thanh toán: Chưa thanh toán</div>
+                </div>
+                <div v-if="billRent.isRefund">
+                  <div style="font-size: 13px;">Trạng thái hoàn tiền: Đã hoàn tiền</div>
+                  <div style="font-size: 13px;">Ngày hoàn tiền: {{ billRent.refundDate | formatDate }}</div>
+                </div>
+                <div v-else style="font-size: 13px;">Trạng thái hoàn tiền: Chưa hoàn tiền</div>
+              </td>
+            </tr>
+          </table>
         </div>
+
         <div v-if="!billRent.isPaid" class="dialogGroupBtn">
           <button class="dialogBtn" v-on:click="payRent(billRent.id)">Thanh toán</button>
         </div>
@@ -251,11 +434,13 @@
           </div>
         </div>
       </ConfirmDialog>
-      <b-alert style="position: absolute; right: 0; z-index: 999999" v-if="responseFlag" :show="dismissCountDown" variant="success" @dismissed="dismissCountDown=0"
+      <b-alert style="position: absolute; right: 0; z-index: 999999" v-if="responseFlag" :show="dismissCountDown"
+               variant="success" @dismissed="dismissCountDown=0"
                @dismiss-count-down="countDownChanged">
         {{ responseMessage }}
       </b-alert>
-      <b-alert style="position: absolute; right: 0; z-index: 999999" v-else :show="dismissCountDown" variant="danger" @dismissed="dismissCountDown=0"
+      <b-alert style="position: absolute; right: 0; z-index: 999999" v-else :show="dismissCountDown" variant="danger"
+               @dismissed="dismissCountDown=0"
                @dismiss-count-down="countDownChanged">
         {{ responseMessage }}
       </b-alert>
@@ -299,7 +484,8 @@
                       <tbody v-for="item of listExchanges" :key="item.id">
                       <tr v-if="filterDataExchange && item.status == filterDataExchange" class="rowData">
                         <td class="tdBtn">
-                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogExchangeDetail(item.id, item.userId1 )">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'"
+                                  v-on:click="openDialogExchangeDetail(item.id, item.userId1 )">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -363,25 +549,28 @@
                           {{ item.refundDate1 | formatDate }}
                         </td>
 
-                        <td>{{ item.date | formatDate}}</td>
+                        <td>{{ item.date | formatDate }}</td>
                         <td v-if="item.status === 'Trading'"><label class="trading">ĐANG GD</label></td>
                         <td v-if="item.status === 'Complete'"><label class="complete">HOÀN THÀNH</label></td>
                         <td v-if="item.status === 'Cancel'"><label class="cancel">ĐÃ HỦY</label></td>
                         <td v-if="item.status === 'Waiting'"><label class="waiting">ĐANG ĐỢI</label></td>
                         <td class="tdBtn">
-                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogExchangeBill(item.id)">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'"
+                                  v-on:click="openDialogExchangeBill(item.id)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
                         <td class="tdBtn">
-                          <button v-if="item.status === 'Waiting'" class="tableBtn" v-on:click="CancelExchange(item.id)">
+                          <button v-if="item.status === 'Waiting'" class="tableBtn"
+                                  v-on:click="CancelExchange(item.id)">
                             <Icon icon="material-symbols:cancel-presentation"/>
                           </button>
                         </td>
                       </tr>
                       <tr v-if="!filterDataExchange" class="rowData">
                         <td class="tdBtn">
-                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogExchangeDetail(item.id, item.userId1 )">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'"
+                                  v-on:click="openDialogExchangeDetail(item.id, item.userId1 )">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -445,13 +634,14 @@
                           {{ item.refundDate1 | formatDate }}
                         </td>
 
-                        <td>{{ item.date | formatDate}}</td>
+                        <td>{{ item.date | formatDate }}</td>
                         <td v-if="item.status == 'Trading'"><label class="trading">ĐANG GD</label></td>
                         <td v-if="item.status == 'Complete'"><label class="complete">HOÀN THÀNH</label></td>
                         <td v-if="item.status == 'Cancel'"><label class="cancel">ĐÃ HỦY</label></td>
                         <td v-if="item.status == 'Waiting'"><label class="waiting">ĐANG ĐỢI</label></td>
-                        <td class="tdBtn" >
-                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogExchangeBill(item.id)">
+                        <td class="tdBtn">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'"
+                                  v-on:click="openDialogExchangeBill(item.id)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -463,7 +653,8 @@
                       </tr>
                       <tr v-if="filterDataExchange == 'Search' && item.id == searchExchange" class="rowData">
                         <td class="tdBtn">
-                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogExchangeDetail(item.id, item.userId1 )">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'"
+                                  v-on:click="openDialogExchangeDetail(item.id, item.userId1 )">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -527,13 +718,14 @@
                           {{ item.refundDate1 | formatDate }}
                         </td>
 
-                        <td>{{ item.date | formatDate}}</td>
+                        <td>{{ item.date | formatDate }}</td>
                         <td v-if="item.status == 'Trading'"><label class="trading">ĐANG GD</label></td>
                         <td v-if="item.status == 'Complete'"><label class="complete">HOÀN THÀNH</label></td>
                         <td v-if="item.status == 'Cancel'"><label class="cancel">ĐÃ HỦY</label></td>
                         <td v-if="item.status == 'Waiting'"><label class="waiting">ĐANG ĐỢI</label></td>
                         <td class="tdBtn">
-                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogExchangeBill(item.id)">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'"
+                                  v-on:click="openDialogExchangeBill(item.id)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -575,7 +767,8 @@
                       <tbody v-for="item of listRents" :key="item.id">
                       <tr v-if="filterDataRent && item.status == filterDataRent" class="rowData">
                         <td style="padding-left: 10px">
-                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogRentDetail(item.id, item.renterId)">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'"
+                                  v-on:click="openDialogRentDetail(item.id, item.renterId)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -588,13 +781,14 @@
                         <td v-if="item.storageStatus == 'Received'">ĐÃ NHẬN - {{ item.receiveDate | formatDate }}</td>
                         <td v-if="item.storageStatus == 'Recall'">ĐÃ THU HỒI - {{ item.recallDate | formatDate }}</td>
                         <td v-if="item.storageStatus == 'Refund'">ĐÃ HOÀN TRẢ - {{ item.refundDate | formatDate }}</td>
-                        <td>{{ item.date | formatDate}}</td>
+                        <td>{{ item.date | formatDate }}</td>
                         <td v-if="item.status == 'Trading'"><label class="trading">ĐANG GD</label></td>
                         <td v-if="item.status == 'Complete'"><label class="complete">HOÀN THÀNH</label></td>
                         <td v-if="item.status == 'Cancel'"><label class="cancel">ĐÃ HỦY</label></td>
                         <td v-if="item.status == 'Waiting'"><label class="waiting">ĐANG ĐỢI</label></td>
                         <td style="padding-left: 16px">
-                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogRentBill(item.id)">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'"
+                                  v-on:click="openDialogRentBill(item.id)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -606,7 +800,8 @@
                       </tr>
                       <tr v-if="!filterDataRent" class="rowData">
                         <td style="padding-left: 10px">
-                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogRentDetail(item.id, item.renterId)">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'"
+                                  v-on:click="openDialogRentDetail(item.id, item.renterId)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -619,13 +814,14 @@
                         <td v-if="item.storageStatus == 'Received'">ĐÃ NHẬN - {{ item.receiveDate | formatDate }}</td>
                         <td v-if="item.storageStatus == 'Recall'">ĐÃ THU HỒI - {{ item.recallDate | formatDate }}</td>
                         <td v-if="item.storageStatus == 'Refund'">ĐÃ HOÀN TRẢ - {{ item.refundDate | formatDate }}</td>
-                        <td>{{ item.date | formatDate}}</td>
+                        <td>{{ item.date | formatDate }}</td>
                         <td v-if="item.status == 'Trading'"><label class="trading">ĐANG GD</label></td>
                         <td v-if="item.status == 'Complete'"><label class="complete">HOÀN THÀNH</label></td>
                         <td v-if="item.status == 'Cancel'"><label class="cancel">ĐÃ HỦY</label></td>
                         <td v-if="item.status == 'Waiting'"><label class="waiting">ĐANG ĐỢI</label></td>
                         <td style="padding-left: 16px">
-                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogRentBill(item.id)">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'"
+                                  v-on:click="openDialogRentBill(item.id)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -637,7 +833,8 @@
                       </tr>
                       <tr v-if="filterDataRent == 'Search' && item.id == searchRent" class="rowData">
                         <td style="padding-left: 10px">
-                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogRentDetail(item.id, item.renterId)">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'"
+                                  v-on:click="openDialogRentDetail(item.id, item.renterId)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -650,13 +847,14 @@
                         <td v-if="item.storageStatus == 'Received'">ĐÃ NHẬN - {{ item.receiveDate | formatDate }}</td>
                         <td v-if="item.storageStatus == 'Recall'">ĐÃ THU HỒI - {{ item.recallDate | formatDate }}</td>
                         <td v-if="item.storageStatus == 'Refund'">ĐÃ HOÀN TRẢ - {{ item.refundDate | formatDate }}</td>
-                        <td>{{ item.date | formatDate}}</td>
+                        <td>{{ item.date | formatDate }}</td>
                         <td v-if="item.status == 'Trading'"><label class="trading">ĐANG GD</label></td>
                         <td v-if="item.status == 'Complete'"><label class="complete">HOÀN THÀNH</label></td>
                         <td v-if="item.status == 'Cancel'"><label class="cancel">ĐÃ HỦY</label></td>
                         <td v-if="item.status == 'Waiting'"><label class="waiting">ĐANG ĐỢI</label></td>
                         <td style="padding-left: 16px">
-                          <button class="tableBtn" v-if="item.status !== 'Cancel'" v-on:click="openDialogRentBill(item.id)">
+                          <button class="tableBtn" v-if="item.status !== 'Cancel'"
+                                  v-on:click="openDialogRentBill(item.id)">
                             <Icon icon="ic:baseline-remove-red-eye"/>
                           </button>
                         </td>
@@ -695,7 +893,16 @@ import FeedbackDialog from "@/pages/Personal/FeedbackDialog";
 
 export default {
   name: "MyTransaction",
-  components: {SideBar_Personal, Layout, BillDialog, Icon, FeedbackDialog, LoadingDialog, ExchangeDetailDialog, ConfirmDialog},
+  components: {
+    SideBar_Personal,
+    Layout,
+    BillDialog,
+    Icon,
+    FeedbackDialog,
+    LoadingDialog,
+    ExchangeDetailDialog,
+    ConfirmDialog
+  },
   data() {
     return {
       responseFlag: true,
@@ -742,7 +949,7 @@ export default {
     }
   },
   created() {
-    if(!this.$cookies.get('token')){
+    if (!this.$cookies.get('token')) {
       this.$router.push({name: "404Page"})
     }
     this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
@@ -870,17 +1077,16 @@ export default {
       this.tmpId = billId
       this.showConfirmDialogPayExchange = true
     },
-    cancelConfirmDialogPayExchange(){
+    cancelConfirmDialogPayExchange() {
       this.showConfirmDialogPayExchange = false
     },
-    HandleConfirmPayExchange(){
+    HandleConfirmPayExchange() {
       this.responseFlag = ''
       apiFactory.callApi(API_TRANSACTION.CREATE_URL_PAY + this.tmpId, 'POST', {}).then((res) => {
         if (res.data.message === 'CREATE_SUCCESS') {
           let url = res.data.data
           window.location.href = url;
-        }
-        else{
+        } else {
           this.responseFlag = false
           this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
         }
@@ -925,7 +1131,7 @@ export default {
     },
     openDialogRentDetail(rentId) {
       this.tmpUserId =
-      this.showDialogRD = true;
+          this.showDialogRD = true;
       this.getRentDetail(rentId)
     },
     cancelDialogRentDetail() {
@@ -1009,17 +1215,16 @@ export default {
       this.tmpId = billId
       this.showConfirmDialogPayRent = true
     },
-    cancelConfirmDialogPayRent(){
+    cancelConfirmDialogPayRent() {
       this.showConfirmDialogPayRent = false
     },
-    HandleConfirmPayRent(){
+    HandleConfirmPayRent() {
       this.responseFlag = ''
       apiFactory.callApi(API_TRANSACTION.CREATE_URL_PAY_RENT + this.tmpId, 'POST', {}).then((res) => {
         if (res.data.message === 'CREATE_SUCCESS') {
           let url = res.data.data
           window.location.href = url;
-        }
-        else{
+        } else {
           this.responseFlag = false
           this.responseMessage = 'Có lỗi xảy ra! Vui lòng thử lại sau!'
         }
@@ -1028,14 +1233,14 @@ export default {
       }).catch(() => {
       });
     },
-    FeedbackBook(bookId){
+    FeedbackBook(bookId) {
       this.tmpId = bookId
       this.showDialogFeedback = true
     },
-    cancelDialogFeedback(){
+    cancelDialogFeedback() {
       this.showDialogFeedback = false
     },
-    feedback(){
+    feedback() {
       this.userByToken = VueJwtDecode.decode(this.$cookies.get('token'), 'utf-8');
       apiFactory.callApi(API_BOOK.FEEDBACK_BOOK + this.tmpId, 'POST', {
         userId: this.userByToken.UserId,
@@ -1044,8 +1249,7 @@ export default {
         if (res.data.message === 'SUCCESS') {
           this.responseFlag = true
           this.responseMessage = 'Đánh giá sách thành công!'
-        }
-        else{
+        } else {
           this.responseFlag = false
           this.responseMessage = 'Có lỗi xảy ra, vui lòng thử lại!!'
         }
@@ -1248,7 +1452,7 @@ strong {
   border-radius: 5px;
 }
 
-.noBook{
+.noBook {
   text-align: center;
   padding-top: 50px;
   color: grey;
@@ -1256,7 +1460,7 @@ strong {
   font-size: 26px;
 }
 
-.imageBook{
+.imageBook {
   width: 50px;
   height: auto;
 }
