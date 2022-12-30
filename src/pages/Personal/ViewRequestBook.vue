@@ -293,7 +293,7 @@
                   <label v-if="book.isReady && book.status == 'Waiting'" class="status">Đang đợi duyệt</label>
                   <label v-if="book.isReady && book.status == 'Denied'" class="status">Không được duyệt</label>
                 </div>
-                <div class="extra">
+                <div v-if="listRequestReceive == ''" class="extra">
                   <button class="editBtn" v-on:click="openDialog" v-if="!book.isTrade">Chỉnh sửa</button>
                   <button v-if="book.isReady && book.status == 'Approved' && !book.isTrade" class="hideBtn"
                           v-on:click="HandleHide(book.id)">Ẩn
@@ -404,7 +404,7 @@ export default {
       userByToken: '',
       spinner: false,
       showDialog: false,
-      tmpId: ''
+      tmpId: '',
     }
   },
   created() {
@@ -437,6 +437,7 @@ export default {
         userId: this.userByToken.UserId
       }).then((res) => {
         this.listRequestReceive = res.data.data
+        console.log(this.listRequestReceive)
       }).catch(() => {
       });
     },
